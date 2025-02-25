@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcMenusTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcMenusTblListForm">
+                <p:panel header="#{bundle.ListRnGcMenusTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcMenusTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcMenusTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="25"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton funcionesMenuButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton funcionesMenuButton"/>
+
+                        <p:column sortBy="#{item.menuNombre}" filterBy="#{item.menuNombre}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcMenusTblTitle_menuNombre}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.menuNombre}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.descripcion}" filterMatchMode="contains">
+                            <f:facet name="header" >
+                                <h:outputText value="#{bundle.ListRnGcMenusTblTitle_descripcion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.descripcion}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.estado}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcMenusTblTitle_estado}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.estado}"/>
+                        </p:column>
+                        <f:facet name="header">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcMenusTblController.prepareCreate}" update=":RnGcMenusTblCreateForm" oncomplete="PF('RnGcMenusTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcMenusTblViewForm" oncomplete="PF('RnGcMenusTblViewDialog').show()" disabled="#{empty rnGcMenusTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcMenusTblEditForm" oncomplete="PF('RnGcMenusTblEditDialog').show()" disabled="#{empty rnGcMenusTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcMenusTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcMenusTblController.selected}"/>
+                            <p:commandButton id="funcionesMenuButton" icon="ui-icon-contact" value="Asignar Funciones" actionListener="#{rnGcMenuslineasTblController.prepararItemMenu(rnGcMenusTblController.selected)}" update=":RnGcMenuslineasTblListForm:datalist" oncomplete="PF('RnGcMenuslineasTblListDialog').show()" disabled="#{empty rnGcMenusTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+
+            <!--Lista de Funciones por Menu-->
+            <p:dialog id="RnGcMenuslineasTblListDlg" style="width: 750px" widgetVar="RnGcMenuslineasTblListDialog" 
+                      modal="true" resizable="false" 
+                      appendTo="@(body)" header="Crear Nueva Función Para El Menú #{rnGcMenusTblController.selected.menuNombre}">
+                <h:form id="RnGcMenuslineasTblListForm">
+                    <p:panel header="Menús Líneas">
+                        <p:dataTable id="datalist" value="#{rnGcMenuslineasTblController.itemsMenu}" var="item"
+                                     selectionMode="single" selection="#{rnGcMenuslineasTblController.selected}"
+                                     paginator="true"
+                                     rowKey="#{item.id}"
+                                     rows="10"
+                                     rowsPerPageTemplate="10,20,30,40,50"
+                                     >
+
+                            <p:ajax event="rowSelect"   update="createButton1 viewButton editButton deleteButton"/>
+                            <p:ajax event="rowUnselect" update="createButton1 viewButton editButton deleteButton"/>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ListRnGcMenuslineasTblTitle_noSecuencia}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.noSecuencia}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ListRnGcMenuslineasTblTitle_funcionesId}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.funcionesId.funcionNombre}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ListRnGcMenuslineasTblTitle_menuId}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.menuId.menuNombre}"/>
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <p:commandButton id="createButton1" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcMenuslineasTblController.prepareCreate}" update=":RnGcMenuslineasTblCreateForm" oncomplete="PF('RnGcMenuslineasTblCreateDialog').show()"/>
+                                <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcMenuslineasTblViewForm" oncomplete="PF('RnGcMenuslineasTblViewDialog').show()" disabled="#{empty rnGcMenuslineasTblController.selected}"/>
+                                <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcMenuslineasTblEditForm" oncomplete="PF('RnGcMenuslineasTblEditDialog').show()" disabled="#{empty rnGcMenuslineasTblController.selected}"/>
+                                <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcMenuslineasTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcMenuslineasTblController.selected}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            <!--Lista de Funciones por Menu-->
+
+            <!--Crear Funciones por Menu-->
+            <p:dialog id="RnGcMenuslineasTblCreateDlg" widgetVar="RnGcMenuslineasTblCreateDialog"
+                      modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcMenuslineasTblTitle}">
+                <h:form id="RnGcMenuslineasTblCreateForm">
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="2" rendered="#{rnGcMenuslineasTblController.selected != null}">
+                            <p:outputLabel value="#{bundle.CreateRnGcMenuslineasTblLabel_noSecuencia}" for="noSecuencia" />
+                            <p:inputText id="noSecuencia" style="width: 160px" value="#{rnGcMenuslineasTblController.selected.noSecuencia}" title="#{bundle.CreateRnGcMenuslineasTblTitle_noSecuencia}" required="true" requiredMessage="#{bundle.CreateRnGcMenuslineasTblRequiredMessage_noSecuencia}"/>
+                            <p:outputLabel value="#{bundle.CreateRnGcMenuslineasTblLabel_funcionesId}" for="funcionesId" />
+                            <p:selectOneMenu id="funcionesId" style="width: 145px" filter="true" filterMatchMode="contains" value="#{rnGcMenuslineasTblController.selected.funcionesId}" required="true" requiredMessage="#{bundle.EditRnGcMenuslineasTblRequiredMessage_funcionesId}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcFuncionesTblController.itemsAvailableSelectOne}"
+                                               var="funcionesId"
+                                               itemLabel="#{funcionesId.funcionNombre}"
+                                               itemValue="#{funcionesIdItem}"/>
+                            </p:selectOneMenu>   
+                            <p:outputLabel value="#{bundle.CreateRnGcMenuslineasTblLabel_menuId}" for="menuId" />
+                            <p:selectOneMenu id="menuId" value="#{rnGcMenuslineasTblController.selected.menuId}" required="true" requiredMessage="#{bundle.EditRnGcMenuslineasTblRequiredMessage_menuId}">
+                                <f:selectItem itemLabel="#{rnGcMenusTblController.selected.menuNombre}"
+                                              itemValue="#{rnGcMenusTblController.selected}"/>
+                            </p:selectOneMenu>    
+                        </p:panelGrid>
+                        <p:commandButton actionListener="#{rnGcMenuslineasTblController.create}" value="#{bundle.Save}" update="display, RnGcMenuslineasTblListForm:datalist :RnGcMenuslineasTblCreateForm, :RnGcMenuslineasTblListForm:datalist,:growl, :RnGcMenusTblListForm:datalist, :growl" oncomplete="handleSubmit(args,'RnGcMenuslineasTblCreateDialog');"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="RnGcMenuslineasTblCreateDialog.hide()"/>
+                    </h:panelGroup>
+
+                </h:form>
+            </p:dialog>
+
+            <!--Crear Funciones por Menu-->
+
+            <!--Edita Funciones por Menu-->
+            <p:dialog id="RnGcMenuslineasTblEditDlg" widgetVar="RnGcMenuslineasTblEditDialog"
+                      modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcMenuslineasTblTitle}">
+                <h:form id="RnGcMenuslineasTblEditForm">
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="2" rendered="#{rnGcMenuslineasTblController.selected != null}">
+                            <p:outputLabel value="#{bundle.EditRnGcMenuslineasTblLabel_noSecuencia}" for="noSecuencia" />
+                            <p:inputText id="noSecuencia" value="#{rnGcMenuslineasTblController.selected.noSecuencia}" title="#{bundle.EditRnGcMenuslineasTblTitle_noSecuencia}" required="true" requiredMessage="#{bundle.EditRnGcMenuslineasTblRequiredMessage_noSecuencia}"/>
+                            <p:outputLabel value="#{bundle.EditRnGcMenuslineasTblLabel_funcionesId}" for="funcionesId" />
+                            <p:selectOneMenu id="funcionesId" value="#{rnGcMenuslineasTblController.selected.funcionesId}" required="true" 
+                                             requiredMessage="#{bundle.EditRnGcMenuslineasTblRequiredMessage_funcionesId}" filterMatchMode="contains" filter="true">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcFuncionesTblController.itemsAvailableSelectOne}"
+                                               var="funcionesId"
+                                               itemLabel="#{funcionesId.funcionNombre}"
+                                               itemValue="#{funcionesIdItem}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="#{bundle.EditRnGcMenuslineasTblLabel_menuId}" for="menuId" />
+                            <p:selectOneMenu id="menuId" value="#{rnGcMenuslineasTblController.selected.menuId}" required="true" requiredMessage="#{bundle.EditRnGcMenuslineasTblRequiredMessage_menuId}">
+                                <f:selectItem itemLabel="#{rnGcMenusTblController.selected.menuNombre}"
+                                              itemValue="#{rnGcMenusTblController.selected}"/>
+                            </p:selectOneMenu> 
+                        </p:panelGrid>
+                        <p:commandButton actionListener="#{rnGcMenuslineasTblController.update}" value="#{bundle.Save}" update="display, :RnGcMenuslineasTblEditForm, :RnGcMenuslineasTblListForm:datalist, :growl, :RnGcMenuslineasTblListForm:datalist" oncomplete="handleSubmit(args, 'RnGcMenuslineasTblEditDialog');"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="RnGcMenuslineasTblEditDialog.hide()"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+            <!--Edita Funciones por Menu-->
+
+            <!--Ver Funciones por Menu-->
+            <p:dialog id="RnGcMenuslineasTblViewDlg" widgetVar="RnGcMenuslineasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcMenuslineasTblTitle}">
+                <h:form id="RnGcMenuslineasTblViewForm">
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="2" rendered="#{rnGcMenuslineasTblController.selected != null}">
+                            <h:outputText value="#{bundle.ViewRnGcMenuslineasTblLabel_noSecuencia}"/>
+                            <h:outputText value="#{rnGcMenuslineasTblController.selected.noSecuencia}" title="#{bundle.ViewRnGcMenuslineasTblTitle_noSecuencia}"/>
+                            <h:outputText value="#{bundle.ViewRnGcMenuslineasTblLabel_funcionesId}"/>
+                            <h:outputText value="#{rnGcMenuslineasTblController.selected.funcionesId.funcionNombre}" title="#{bundle.ViewRnGcMenuslineasTblTitle_funcionesId}"/>
+                            <h:outputText value="#{bundle.ViewRnGcMenuslineasTblLabel_menuId}"/>
+                            <h:outputText value="#{rnGcMenuslineasTblController.selected.menuId.menuNombre}" title="#{bundle.ViewRnGcMenuslineasTblTitle_menuId}"/>
+                        </p:panelGrid>
+                        <p:commandButton value="#{bundle.Close}" onclick="RnGcMenuslineasTblViewDialog.hide()"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+            <!--Ver Funciones por Menu-->
+        </ui:define>
+    </ui:composition>
+
+</html>

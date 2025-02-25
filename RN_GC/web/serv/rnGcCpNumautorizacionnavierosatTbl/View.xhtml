@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpNumautorizacionnavierosatTblViewDlg" widgetVar="RnGcCpNumautorizacionnavierosatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblTitle}">
+            <h:form id="RnGcCpNumautorizacionnavierosatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpNumautorizacionnavierosatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpNumautorizacionnavierosatTblController.selected.id}" title="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblLabel_numAutorizacion}"/>
+                        <h:outputText value="#{rnGcCpNumautorizacionnavierosatTblController.selected.numAutorizacion}" title="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblTitle_numAutorizacion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpNumautorizacionnavierosatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcCpNumautorizacionnavierosatTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpNumautorizacionnavierosatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpNumautorizacionnavierosatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpNumautorizacionnavierosatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpNumautorizacionnavierosatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpNumautorizacionnavierosatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpNumautorizacionnavierosatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

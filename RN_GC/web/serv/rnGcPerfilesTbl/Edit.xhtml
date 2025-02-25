@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPerfilesTblEditDlg" widgetVar="RnGcPerfilesTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcPerfilesTblTitle}">
+            <h:form id="RnGcPerfilesTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPerfilesTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcPerfilesTblLabel_perfilNombre}" for="perfilNombre" />
+                        <p:inputText id="perfilNombre" value="#{rnGcPerfilesTblController.selected.perfilNombre}" title="#{bundle.EditRnGcPerfilesTblTitle_perfilNombre}" required="true" requiredMessage="#{bundle.EditRnGcPerfilesTblRequiredMessage_perfilNombre}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcPerfilesTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcPerfilesTblController.selected.descripcion}" title="#{bundle.EditRnGcPerfilesTblTitle_descripcion}" required="true" requiredMessage="#{bundle.EditRnGcPerfilesTblRequiredMessage_descripcion}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcPerfilesTblLabel_fechaInicial}" for="fechaInicial" />
+                        <p:calendar id="fechaInicial" pattern="dd/MM/yyyy" value="#{rnGcPerfilesTblController.selected.fechaInicial}" title="#{bundle.EditRnGcPerfilesTblTitle_fechaInicial}" required="true" requiredMessage="#{bundle.EditRnGcPerfilesTblRequiredMessage_fechaInicial}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcPerfilesTblLabel_fechaFinal}" for="fechaFinal" />
+                        <p:calendar id="fechaFinal" pattern="dd/MM/yyyy" value="#{rnGcPerfilesTblController.selected.fechaFinal}" title="#{bundle.EditRnGcPerfilesTblTitle_fechaFinal}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcPerfilesTblLabel_menuId}" for="menuId" />
+                        <p:selectOneMenu id="menuId" value="#{rnGcPerfilesTblController.selected.menuId}" required="true" 
+                                         requiredMessage="#{bundle.EditRnGcPerfilesTblRequiredMessage_menuId1}" filterMatchMode="contains" filter="true">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcMenusTblController.itemsAvailableSelectOne}"
+                                           var="menuIdItem"
+                                           itemLabel="#{menuIdItem.menuNombre}"
+                                           itemValue="#{menuId1Item}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Tipo Perfil" for="tipoPerfil" />
+                        <p:selectOneMenu id="tipoPerfil" style="width: 145px" value="#{rnGcPerfilesTblController.selected.tipoPerfil}" required="true" requiredMessage="Tipo Perfil es requerido">
+                            <f:selectItems value="#{rnGcUsuariosTblController.listaTiposUsuarios}"
+                                           var="tiposPerfiles"
+                                           itemLabel="#{tiposPerfiles}"
+                                           itemValue="#{tiposPerfiles}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Estado" for="estado" />
+                        <p:selectOneMenu id="estado" value="#{rnGcPerfilesTblController.selected.estado}" title="Estado" required="true" requiredMessage="Estado es requerido para crear un Perfil" style="width: 140px">
+                            <f:selectItem itemLabel="Activo" itemValue="A" />
+                            <f:selectItem itemLabel="Inactivo" itemValue="I" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcPerfilesTblController.update}" value="#{bundle.Save}" update="display,:RnGcPerfilesTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcPerfilesTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcPerfilesTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

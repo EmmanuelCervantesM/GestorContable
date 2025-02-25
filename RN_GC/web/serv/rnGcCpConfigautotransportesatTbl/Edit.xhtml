@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpConfigautotransportesatTblEditDlg" widgetVar="RnGcCpConfigautotransportesatTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpConfigautotransportesatTblTitle}">
+            <h:form id="RnGcCpConfigautotransportesatTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpConfigautotransportesatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigautotransportesatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpConfigautotransportesatTblController.selected.id}" title="#{bundle.EditRnGcCpConfigautotransportesatTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcCpConfigautotransportesatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigautotransportesatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpConfigautotransportesatTblController.selected.clave}" title="#{bundle.EditRnGcCpConfigautotransportesatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigautotransportesatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpConfigautotransportesatTblController.selected.descripcion}" title="#{bundle.EditRnGcCpConfigautotransportesatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigautotransportesatTblLabel_numeroEjes}" for="numeroEjes" />
+                        <p:inputText id="numeroEjes" value="#{rnGcCpConfigautotransportesatTblController.selected.numeroEjes}" title="#{bundle.EditRnGcCpConfigautotransportesatTblTitle_numeroEjes}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigautotransportesatTblLabel_numeroLlantas}" for="numeroLlantas" />
+                        <p:inputText id="numeroLlantas" value="#{rnGcCpConfigautotransportesatTblController.selected.numeroLlantas}" title="#{bundle.EditRnGcCpConfigautotransportesatTblTitle_numeroLlantas}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigautotransportesatTblLabel_remolque}" for="remolque" />
+                        <p:inputText id="remolque" value="#{rnGcCpConfigautotransportesatTblController.selected.remolque}" title="#{bundle.EditRnGcCpConfigautotransportesatTblTitle_remolque}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigautotransportesatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpConfigautotransportesatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpConfigautotransportesatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigautotransportesatTblLabel_fechaFin}" for="fechaFin" />
+                        <p:calendar id="fechaFin" pattern="MM/dd/yyyy" value="#{rnGcCpConfigautotransportesatTblController.selected.fechaFin}" title="#{bundle.EditRnGcCpConfigautotransportesatTblTitle_fechaFin}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigautotransportesatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpConfigautotransportesatTblController.selected.creadoPor}" title="#{bundle.EditRnGcCpConfigautotransportesatTblTitle_creadoPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigautotransportesatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpConfigautotransportesatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpConfigautotransportesatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpConfigautotransportesatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigautotransportesatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpConfigautotransportesatTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcCpConfigautotransportesatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigautotransportesatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpConfigautotransportesatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpConfigautotransportesatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpConfigautotransportesatTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpConfigautotransportesatTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpConfigautotransportesatTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpConfigautotransportesatTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

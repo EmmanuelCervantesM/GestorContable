@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomBancosTblEditDlg" widgetVar="RnGcNomBancosTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcNomBancosTblTitle}">
+            <h:form id="RnGcNomBancosTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomBancosTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcNomBancosTblLabel_cveBanco}" for="cveBanco" />
+                        <p:inputText id="cveBanco" value="#{rnGcNomBancosTblController.selected.cveBanco}" title="#{bundle.EditRnGcNomBancosTblTitle_cveBanco}" required="true" requiredMessage="#{bundle.EditRnGcNomBancosTblRequiredMessage_cveBanco}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomBancosTblLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{rnGcNomBancosTblController.selected.nombre}" title="#{bundle.EditRnGcNomBancosTblTitle_nombre}" />
+                        <p:outputLabel value="#{bundle.EditRnGcNomBancosTblLabel_version}" for="version" />
+                        <p:inputText id="version" value="#{rnGcNomBancosTblController.selected.version}" title="#{bundle.EditRnGcNomBancosTblTitle_version}" required="true" requiredMessage="#{bundle.EditRnGcNomBancosTblRequiredMessage_version}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomBancosTblLabel_revision}" for="revision" />
+                        <p:inputText id="revision" value="#{rnGcNomBancosTblController.selected.revision}" title="#{bundle.EditRnGcNomBancosTblTitle_revision}" required="true" requiredMessage="#{bundle.EditRnGcNomBancosTblRequiredMessage_revision}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomBancosTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomBancosTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcNomBancosTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcNomBancosTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomBancosTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomBancosTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcNomBancosTblTitle_fechaFinVigencia}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomBancosTblController.update}" value="#{bundle.Save}" update="display,:RnGcNomBancosTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcNomBancosTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomBancosTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

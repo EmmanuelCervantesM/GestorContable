@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpDerechospasosatTblCreateDlg" widgetVar="RnGcCpDerechospasosatTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCpDerechospasosatTblTitle}">
+            <h:form id="RnGcCpDerechospasosatTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpDerechospasosatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCpDerechospasosatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpDerechospasosatTblController.selected.id}" title="#{bundle.CreateRnGcCpDerechospasosatTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcCpDerechospasosatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpDerechospasosatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpDerechospasosatTblController.selected.clave}" title="#{bundle.CreateRnGcCpDerechospasosatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpDerechospasosatTblLabel_derechoDePaso}" for="derechoDePaso" />
+                        <p:inputText id="derechoDePaso" value="#{rnGcCpDerechospasosatTblController.selected.derechoDePaso}" title="#{bundle.CreateRnGcCpDerechospasosatTblTitle_derechoDePaso}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpDerechospasosatTblLabel_entre}" for="entre" />
+                        <p:inputText id="entre" value="#{rnGcCpDerechospasosatTblController.selected.entre}" title="#{bundle.CreateRnGcCpDerechospasosatTblTitle_entre}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpDerechospasosatTblLabel_hasta}" for="hasta" />
+                        <p:inputText id="hasta" value="#{rnGcCpDerechospasosatTblController.selected.hasta}" title="#{bundle.CreateRnGcCpDerechospasosatTblTitle_hasta}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpDerechospasosatTblLabel_otorgaRecibe}" for="otorgaRecibe" />
+                        <p:inputText id="otorgaRecibe" value="#{rnGcCpDerechospasosatTblController.selected.otorgaRecibe}" title="#{bundle.CreateRnGcCpDerechospasosatTblTitle_otorgaRecibe}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpDerechospasosatTblLabel_concesionario}" for="concesionario" />
+                        <p:inputText id="concesionario" value="#{rnGcCpDerechospasosatTblController.selected.concesionario}" title="#{bundle.CreateRnGcCpDerechospasosatTblTitle_concesionario}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpDerechospasosatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpDerechospasosatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpDerechospasosatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpDerechospasosatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpDerechospasosatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpDerechospasosatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpDerechospasosatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpDerechospasosatTblController.selected.creadoPor}" title="#{bundle.CreateRnGcCpDerechospasosatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcCpDerechospasosatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpDerechospasosatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpDerechospasosatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpDerechospasosatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpDerechospasosatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpDerechospasosatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpDerechospasosatTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcCpDerechospasosatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpDerechospasosatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpDerechospasosatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpDerechospasosatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpDerechospasosatTblController.create}" value="#{bundle.Save}" update="display,:RnGcCpDerechospasosatTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCpDerechospasosatTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpDerechospasosatTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpContenedorsatTblViewDlg" widgetVar="RnGcCpContenedorsatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpContenedorsatTblTitle}">
+            <h:form id="RnGcCpContenedorsatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpContenedorsatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpContenedorsatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpContenedorsatTblController.selected.id}" title="#{bundle.ViewRnGcCpContenedorsatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpContenedorsatTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpContenedorsatTblController.selected.clave}" title="#{bundle.ViewRnGcCpContenedorsatTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpContenedorsatTblLabel_tipoContenedor}"/>
+                        <h:outputText value="#{rnGcCpContenedorsatTblController.selected.tipoContenedor}" title="#{bundle.ViewRnGcCpContenedorsatTblTitle_tipoContenedor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpContenedorsatTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpContenedorsatTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpContenedorsatTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpContenedorsatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpContenedorsatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpContenedorsatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpContenedorsatTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcCpContenedorsatTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcCpContenedorsatTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpContenedorsatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpContenedorsatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpContenedorsatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpContenedorsatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpContenedorsatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpContenedorsatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpContenedorsatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpContenedorsatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpContenedorsatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpContenedorsatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpContenedorsatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpContenedorsatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpContenedorsatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

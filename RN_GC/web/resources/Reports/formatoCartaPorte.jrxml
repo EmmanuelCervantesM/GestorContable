@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="formatoCartaPorte" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a1bda66f-2ce2-4999-befa-583d3404d619">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\maxoc\\Documents\\NetBeansProjects\\Materiales\\RN_ERP_Repo\\RN_MSL\\web\\resources\\Reports\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="distancia" class="java.lang.String"/>
+	<parameter name="idOrigen" class="java.lang.String"/>
+	<parameter name="idDestino" class="java.lang.String"/>
+	<parameter name="rfcRemitente" class="java.lang.String"/>
+	<parameter name="rfcDestinatario" class="java.lang.String"/>
+	<parameter name="nombreRemitente" class="java.lang.String"/>
+	<parameter name="nombreDestinatario" class="java.lang.String"/>
+	<parameter name="fechaSalida" class="java.util.Date"/>
+	<parameter name="fechaLlegada" class="java.util.Date"/>
+	<parameter name="domicilioRemitente" class="java.lang.String"/>
+	<parameter name="domicilioDestinatario" class="java.lang.String"/>
+	<parameter name="permiso" class="java.lang.String"/>
+	<parameter name="nPermiso" class="java.lang.String"/>
+	<parameter name="aseguradora" class="java.lang.String"/>
+	<parameter name="configuracion" class="java.lang.String"/>
+	<parameter name="poliza" class="java.lang.String"/>
+	<parameter name="placa" class="java.lang.String"/>
+	<parameter name="modelo" class="java.lang.String"/>
+	<parameter name="referencia" class="java.lang.String"/>
+	<parameter name="rfcOperador" class="java.lang.String"/>
+	<parameter name="nombreOperador" class="java.lang.String"/>
+	<parameter name="licencia" class="java.lang.String"/>
+	<parameter name="residenciaOperador" class="java.lang.String"/>
+	<parameter name="totalMerc" class="java.lang.String"/>
+	<parameter name="unidad" class="java.lang.String"/>
+	<parameter name="pesoNeto" class="java.lang.String"/>
+	<parameter name="prima" class="java.lang.String"/>
+	<parameter name="listaDetalle" class="java.util.Collection"/>
+	<parameter name="Logo" class="java.lang.String"/>
+	<parameter name="QR" class="java.lang.String"/>
+	<parameter name="Uso_CFDI" class="java.lang.String"/>
+	<parameter name="Folio_Fiscal" class="java.lang.String"/>
+	<parameter name="NoSerie_CSD" class="java.lang.String"/>
+	<parameter name="CodigoPostal" class="java.lang.String"/>
+	<parameter name="FechaHora_Emision" class="java.lang.String"/>
+	<parameter name="EfectoComprobante" class="java.lang.String"/>
+	<parameter name="RegimenFiscal" class="java.lang.String"/>
+	<parameter name="listaDetalle_1" class="java.util.Collection" isForPrompting="false"/>
+	<parameter name="Uuid" class="java.lang.String"/>
+	<parameter name="sello_CFDI" class="java.lang.String"/>
+	<parameter name="sello_SAT" class="java.lang.String"/>
+	<parameter name="cadenaOriginal" class="java.lang.String"/>
+	<parameter name="noCertificadoSAT" class="java.lang.String"/>
+	<parameter name="fechaCertificacion" class="java.lang.String"/>
+	<parameter name="CFDIsRelacionados" class="java.util.Collection"/>
+	<parameter name="rfcProvCertif" class="java.lang.String"/>
+	<parameter name="uuid" class="java.lang.String"/>
+	<parameter name="tipoRelacion" class="java.lang.String"/>
+	<parameter name="direccionSucursal" class="java.lang.String"/>
+	<parameter name="direccionCliente" class="java.lang.String"/>
+	<parameter name="Nombre_Emisor" class="java.lang.String"/>
+	<parameter name="RFC_Emisor" class="java.lang.String"/>
+	<parameter name="Nombre_Receptor" class="java.lang.String"/>
+	<parameter name="RFC_Receptor" class="java.lang.String"/>
+	<parameter name="figura" class="java.lang.String"/>
+	<parameter name="partesTrans" class="java.lang.String"/>
+	<group name="cartaPorte">
+		<groupExpression><![CDATA[$V{PAGE_NUMBER}]]></groupExpression>
+		<groupHeader>
+			<band height="116">
+				<break>
+					<reportElement x="0" y="112" width="100" height="1" uuid="0f6a942d-8571-4712-b441-32e4cf3bcb21"/>
+				</break>
+				<subreport>
+					<reportElement x="0" y="0" width="200" height="100" uuid="89d3d93d-42cb-4bcd-9cbe-c6b2b68eaa9d"/>
+					<subreportParameter name="Uuid">
+						<subreportParameterExpression><![CDATA[$P{Uuid}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="RegimenFiscal">
+						<subreportParameterExpression><![CDATA[$P{RegimenFiscal}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="Logo">
+						<subreportParameterExpression><![CDATA[$P{Logo}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="Subtotal"/>
+					<subreportParameter name="rfcProvCertif">
+						<subreportParameterExpression><![CDATA[$P{rfcProvCertif}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="listaDetalle">
+						<subreportParameterExpression><![CDATA[$P{listaDetalle_1}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="CFDIsRelacionados">
+						<subreportParameterExpression><![CDATA[$P{CFDIsRelacionados}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="RFC_Emisor">
+						<subreportParameterExpression><![CDATA[$P{RFC_Emisor}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="noCertificadoSAT">
+						<subreportParameterExpression><![CDATA[$P{noCertificadoSAT}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="nombre5"/>
+					<subreportParameter name="FormaPago"/>
+					<subreportParameter name="totalDescuento"/>
+					<subreportParameter name="EfectoComprobante">
+						<subreportParameterExpression><![CDATA[$P{EfectoComprobante}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="nombre2"/>
+					<subreportParameter name="nombre1"/>
+					<subreportParameter name="nombre4"/>
+					<subreportParameter name="QR">
+						<subreportParameterExpression><![CDATA[$P{QR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="nombre3"/>
+					<subreportParameter name="direccionSucursal">
+						<subreportParameterExpression><![CDATA[$P{direccionSucursal}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="tipoDocumento"/>
+					<subreportParameter name="Nombre_Emisor">
+						<subreportParameterExpression><![CDATA[$P{Nombre_Emisor}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="tipoCambio"/>
+					<subreportParameter name="ImpuestosTrasladados"/>
+					<subreportParameter name="CodigoPostal">
+						<subreportParameterExpression><![CDATA[$P{CodigoPostal}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="MetodoPago"/>
+					<subreportParameter name="fechaCertificacion">
+						<subreportParameterExpression><![CDATA[$P{fechaCertificacion}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="tipoRelacion">
+						<subreportParameterExpression><![CDATA[$P{tipoRelacion}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="NoSerie_CSD">
+						<subreportParameterExpression><![CDATA[$P{NoSerie_CSD}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="Moneda"/>
+					<subreportParameter name="Nombre_Receptor">
+						<subreportParameterExpression><![CDATA[$P{Nombre_Receptor}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="importeLetra"/>
+					<subreportParameter name="sello_SAT">
+						<subreportParameterExpression><![CDATA[$P{sello_SAT}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="RFC_Receptor">
+						<subreportParameterExpression><![CDATA[$P{RFC_Receptor}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="Uso_CFDI">
+						<subreportParameterExpression><![CDATA[$P{Uso_CFDI}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="direccionCliente">
+						<subreportParameterExpression><![CDATA[$P{direccionCliente}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="cargo5"/>
+					<subreportParameter name="FechaHora_Emision">
+						<subreportParameterExpression><![CDATA[$P{FechaHora_Emision}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="cargo4"/>
+					<subreportParameter name="cargo3"/>
+					<subreportParameter name="ImpuestosRetenidos"/>
+					<subreportParameter name="cargo2"/>
+					<subreportParameter name="cargo1"/>
+					<subreportParameter name="uuid">
+						<subreportParameterExpression><![CDATA[$P{Uuid}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="Total"/>
+					<subreportParameter name="cadenaOriginal">
+						<subreportParameterExpression><![CDATA[$P{cadenaOriginal}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="sello_CFDI">
+						<subreportParameterExpression><![CDATA[$P{sello_CFDI}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="Folio_Fiscal">
+						<subreportParameterExpression><![CDATA[$P{Folio_Fiscal}]]></subreportParameterExpression>
+					</subreportParameter>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource()]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "comprobanteCartaPorte.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="110">
+				<subreport>
+					<reportElement x="0" y="0" width="200" height="100" uuid="183f1b47-bc45-484d-bc30-aba3d062edae"/>
+					<subreportParameter name="aseguradora">
+						<subreportParameterExpression><![CDATA[$P{aseguradora}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="configuracion">
+						<subreportParameterExpression><![CDATA[$P{configuracion}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="pesoNeto">
+						<subreportParameterExpression><![CDATA[$P{pesoNeto}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="nombreRemitente">
+						<subreportParameterExpression><![CDATA[$P{nombreRemitente}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="poliza">
+						<subreportParameterExpression><![CDATA[$P{poliza}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="nPermiso">
+						<subreportParameterExpression><![CDATA[$P{nPermiso}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="listaDetalle">
+						<subreportParameterExpression><![CDATA[$P{listaDetalle}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="fechaSalida">
+						<subreportParameterExpression><![CDATA[$P{fechaSalida}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="domicilioDestinatario">
+						<subreportParameterExpression><![CDATA[$P{domicilioDestinatario}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="distancia">
+						<subreportParameterExpression><![CDATA[$P{distancia}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="permiso">
+						<subreportParameterExpression><![CDATA[$P{permiso}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="rfcOperador">
+						<subreportParameterExpression><![CDATA[$P{rfcOperador}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="figura">
+						<subreportParameterExpression><![CDATA[$P{figura}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="residenciaOperador">
+						<subreportParameterExpression><![CDATA[$P{residenciaOperador}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="placa">
+						<subreportParameterExpression><![CDATA[$P{placa}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="unidad">
+						<subreportParameterExpression><![CDATA[$P{unidad}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="idOrigen">
+						<subreportParameterExpression><![CDATA[$P{idOrigen}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="rfcDestinatario">
+						<subreportParameterExpression><![CDATA[$P{rfcDestinatario}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="nombreDestinatario">
+						<subreportParameterExpression><![CDATA[$P{nombreDestinatario}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="idDestino">
+						<subreportParameterExpression><![CDATA[$P{idDestino}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="totalMerc">
+						<subreportParameterExpression><![CDATA[$P{totalMerc}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="licencia">
+						<subreportParameterExpression><![CDATA[$P{licencia}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="referencia">
+						<subreportParameterExpression><![CDATA[$P{referencia}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="SUBREPORT_DIR">
+						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="serie">
+						<subreportParameterExpression><![CDATA[$P{NoSerie_CSD}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="fechaLlegada">
+						<subreportParameterExpression><![CDATA[$P{fechaLlegada}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="rfcRemitente">
+						<subreportParameterExpression><![CDATA[$P{rfcRemitente}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="prima">
+						<subreportParameterExpression><![CDATA[$P{prima}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="folio">
+						<subreportParameterExpression><![CDATA[$P{Folio_Fiscal}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="partesTrans">
+						<subreportParameterExpression><![CDATA[$P{partesTrans}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="modelo">
+						<subreportParameterExpression><![CDATA[$P{modelo}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="nombreOperador">
+						<subreportParameterExpression><![CDATA[$P{nombreOperador}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="domicilioRemitente">
+						<subreportParameterExpression><![CDATA[$P{domicilioRemitente}]]></subreportParameterExpression>
+					</subreportParameter>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource()]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "complementoCartaPorte.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupFooter>
+	</group>
+	<pageFooter>
+		<band height="17" splitType="Stretch">
+			<textField>
+				<reportElement x="476" y="5" width="56" height="12" uuid="c5de1763-9dfe-4159-b855-d13b4aebeadf"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="533" y="5" width="39" height="12" uuid="03acfad1-8f7b-4980-ba0d-e5497fad3756"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

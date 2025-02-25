@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="Recibidos"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcCfdisFacturasTblListForm">
+                <p:panel header="Recibidos">
+                    <p:dataTable id="datalist" value="#{rnGcCfdisTblController.obtenerRecibidos()}" var="item"
+                                 selectionMode="single" selection="#{rnGcCfdisLineasTblController.cfdiId}"
+                                 paginator="true" scrollable="true"
+                                 rowKey="#{item.id}" resizableColumns="true"
+                                 widgetVar="egresosTable"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,15,20,25,30,35,40,45,50"
+                                 emptyMessage="No se encontraron facturas con esos criterios"
+                                 sortBy="#{item.fechaExpedicion}"
+                                 filteredValue="#{rnGcCfdisTblController.filteredRecibidos}"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="viewButton reenviarDocs descargarXml descagaPdf" />
+                        <p:ajax event="rowUnselect" update="viewButton reenviarDocs descargarXml descagaPdf"/>
+                        
+                        <f:facet name="header">   <!--______________Busqueda Global____________-->
+                            <p:outputPanel>
+                                <h:outputText value="Buscar en todos lo campos: "/>
+                                <p:inputText id="globalFilter" onkeyup="PF('egresosTable').filter()" style="width: 150px" placeholder="Ingresa el texto" />
+                            </p:outputPanel>
+                        </f:facet>                        
+
+                        <p:column filterBy="#{item.uuid}" headerText="uuid" footerText="contiene" filterMatchMode="contains" sortBy="#{item.uuid}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_uuid}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.uuid}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.nombreEmisor}" headerText="nombreEmisor" footerText="contiene" filterMatchMode="contains" sortBy="#{item.nombreEmisor}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_nombreEmisor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombreEmisor}"/>
+                        </p:column>                        
+                        <p:column filterBy="#{item.rfcEmisor}" headerText="rfcEmisor" footerText="contiene" filterMatchMode="contains" sortBy="#{item.rfcEmisor}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_rfcEmisor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rfcEmisor}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.folio}" headerText="folio" footerText="contiene" filterMatchMode="contains" sortBy="#{item.folio}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_folio}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.folio}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.formaPago}" headerText="formaPago" footerText="contiene" filterMatchMode="contains" sortBy="#{item.formaPago}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_formaPago}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.formaPago}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.metodoPago}" headerText="metodoPago" footerText="contiene" filterMatchMode="contains" sortBy="#{item.metodoPago}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_metodoPago}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.metodoPago}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.tipoComprobante}" headerText="tipoComprobante" footerText="contiene" filterMatchMode="contains" sortBy="#{item.tipoComprobante}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_tipoComprobante}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoComprobante}"/>
+                        </p:column>
+                        <!-- __________________________________________________________ -->
+                        <p:column headerText="fechaExpedicion" filterBy="#{item.fechaExpedicion}" filterFunction="#{rnGcCfdisTblController.filterByFecha}" sortBy="#{item.fechaExpedicion}">
+                            <f:facet name="filter">
+                                <h:inputHidden id="filter"/>
+                            </f:facet>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_fechaExpedicion}"/>
+                                <br/>
+                                <p:calendar id="from" pattern="dd/MM/yyyy" style="width: 100px">
+                                    <p:ajax event="dateSelect" onstart="$(PrimeFaces.escapeClientId('#{p:component('filter')}'))[0].value = $(PrimeFaces.escapeClientId('#{p:component('from')}_input'))[0].value + '-' + $(PrimeFaces.escapeClientId('#{p:component('to')}_input'))[0].value" oncomplete="PF('egresosTable').filter()" />
+                                </p:calendar>
+                                <br/>
+                                <p:calendar id="to" pattern="dd/MM/yyyy" style="width: 100px">                                    
+                                    <p:ajax event="dateSelect" onstart="$(PrimeFaces.escapeClientId('#{p:component('filter')}'))[0].value = $(PrimeFaces.escapeClientId('#{p:component('from')}_input'))[0].value + '-' + $(PrimeFaces.escapeClientId('#{p:component('to')}_input'))[0].value" oncomplete="PF('egresosTable').filter()" />
+                                </p:calendar>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaExpedicion}">
+                                <f:convertDateTime type="date" dateStyle="medium" />
+                            </h:outputText>
+                        </p:column>
+                        <!-- __________________________________________________________ -->
+                        <p:column filterBy="#{item.usoCfdi}" headerText="usoCfdi" footerText="contiene" filterMatchMode="contains" sortBy="#{item.usoCfdi}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_usoCfdi}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.usoCfdi}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.moneda}" headerText="moneda" footerText="contiene" filterMatchMode="contains" sortBy="#{item.moneda}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_moneda}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.moneda}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.importe}" headerText="importe" footerText="contiene" filterMatchMode="contains" sortBy="#{item.importe}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_importe}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.importe}">
+                                <f:convertNumber type="currency" currencySymbol="$"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column style="width: 45px" headerText="Pago">
+                            <p:link outcome="complementoPago" value="Pagar">
+                                <f:param name="personas" value="#{facturarContoller.buscarPersona(item)}"/>
+                            </p:link>
+                        </p:column>
+                        
+                        <p:contextMenu for="datalist" widgetVar="cMenu">
+                            <p:menuitem value="Ver Factura" icon="ui-icon-search" onclick="PF('RnGcCfdisFacturasTblViewDialog').show()" actionListener="#{rnGcCfdisLineasTblController.prepareLineas(rnGcCfdisTblController.selected)}" update="RnGcCfdisFacturasTblViewForm"/>
+                        </p:contextMenu>
+                        <f:facet name="header">                            
+                            <p:commandButton id="viewButton" icon="ui-icon-search" value="#{bundle.View}" actionListener="#{rnGcCfdisLineasTblController.prepareLineas(rnGcCfdisLineasTblController.cfdiId)}" update="RnGcCfdisFacturasTblViewForm" oncomplete="PF('RnGcCfdisFacturasTblViewDialog').show()" disabled="#{rnGcCfdisLineasTblController.cfdiId.uuid == null}"/>                            
+                            <p:commandButton id="reenviarDocs" icon="ui-icon-transferthick-e-w" value="Reeviar Factura" update="reenviarDocsForm" actionListener="#{rnGcArchivosTblController.prepareDocs(rnGcCfdisLineasTblController.cfdiId)}" oncomplete="PF('reenviarDocsDialog').show()" disabled="#{rnGcCfdisLineasTblController.cfdiId.uuid == null}" />
+                            <p:commandButton id="descargarXml" icon="ui-icon-arrowthickstop-1-s" value="Descargar XML" actionListener="#{rnGcCfdisLineasTblController.descargaXml(rnGcCfdisLineasTblController.cfdiId)}" ajax="false" update="RnGcCfdisTblListForm" disabled="#{rnGcCfdisLineasTblController.cfdiId.uuid == null}">
+                                <p:fileDownload value="#{rnGcCfdisLineasTblController.downLoadFile}" />
+                            </p:commandButton>
+                            <p:commandButton id="descagaPdf" icon="ui-icon-arrowthickstop-1-s" value="Descargar PDF" actionListener="#{rnGcCfdisLineasTblController.descargaPdf(rnGcCfdisLineasTblController.cfdiId)}" ajax="false" update="RnGcCfdisTblListForm" disabled="#{rnGcCfdisLineasTblController.cfdiId.uuid == null}">
+                                <p:fileDownload value="#{rnGcCfdisLineasTblController.downLoadFile}"/>
+                            </p:commandButton>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="egresos_View.xhtml"/>
+            <ui:include src="reenviarDocs.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

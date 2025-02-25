@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="Catalogo de Cuentas"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcCatalogoCuentasTblListForm">
+                <p:growl id="mssg" life="5000" showDetail="true"/>
+                <p:panel header="#{bundle.ListRnGcCatalogoCuentasTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcCatalogoCuentasTblController.obtenerCuentasPorUsuario()}" var="item" scrollable="true"
+                                 selectionMode="single" selection="#{rnGcCatalogoCuentasTblController.selected}" paginator="true"
+                                 rowKey="#{item.id}" rows="10" widgetVar="catalogoCuentasTable" rowsPerPageTemplate="10,20,30,40,50">
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton cargaMasivaButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton cargaMasivaButton"/>
+
+                        <f:facet name="header">
+                            <p:outputPanel>
+                                <h:outputText value="Buscar en todos los campos:" />
+                                <p:inputText id="globalFilter" onkeyup="PF('catalogoCuentasTable').filter()" style="width:150px" placeholder="Ingresa el texto"/>
+                            </p:outputPanel>
+                        </f:facet>
+                        <p:column filterBy="#{item.numeroCuenta}" width="75" headerText="Número de cuenta" footerText="contiene" filterMatchMode="contains" sortBy="#{item.numeroCuenta}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_numeroCuenta}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.numeroCuenta}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.descripcionCuenta}" width="250" headerText="Descripción de cuenta" footerText="contiene" filterMatchMode="contains" sortBy="#{item.descripcionCuenta}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_descripcionCuenta}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.descripcionCuenta}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.adicional2}" width="50" headerText="Nivel de cuenta" footerText="contiene" filterMatchMode="contains" sortBy="#{item.adicional2}">
+                            <f:facet name="header">
+                                <h:outputText value="Nivel"/>
+                            </f:facet>
+                            <h:outputText value="#{item.adicional2}"/>
+                        </p:column>
+                        <p:column  filterBy="#{item.codigoAgrupadorSatId}" width="100" headerText="Código Agrupador" footerText="exact" filterMatchMode="exact" sortBy="#{item.codigoAgrupadorSatId.codigoAgrupador}">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('catalogoCuentasTable').filter()" styleClass="custom-filter" 
+                                                 filter="true"
+                                                 filterMatchMode="contains"
+                                                 style="width:200px" 
+                                                 panelStyle="width:200px"
+                                                 >
+                                    <f:selectItem itemLabel="Selecciona Uno" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItems value="#{rnGcCodigoAgrupadorSatTblController.itemsAvailableSelectOne}"
+                                                   var="codigoAgrupadorSatIdItem"
+                                                   itemLabel="#{codigoAgrupadorSatIdItem.codigoAgrupador}  -  #{codigoAgrupadorSatIdItem.nombreCuenta}"
+                                                   itemValue="#{codigoAgrupadorSatIdItem}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <h:outputText value="#{item.codigoAgrupadorSatId.codigoAgrupador}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.naturaleza}" headerText="Naturaleza" width="100" footerText="contiene" filterMatchMode="contains" sortBy="#{item.naturaleza}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_naturaleza}"/>
+                            </f:facet>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:selectOneMenu id="naturaleza" value="#{item.naturaleza}" style="width:75px" disabled="true">
+                                    <f:selectItem itemLabel="Deudora" itemValue="D" />
+                                    <f:selectItem itemLabel="Acreedora" itemValue="A" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>    
+                        </p:column>
+                        <p:column filterBy="#{item.monedaId.CMoneda}" width="75" headerText="Moneda" footerText="contiene" filterMatchMode="contains" sortBy="#{item.monedaId.CMoneda}">
+                            <f:facet name="header">
+                                <h:outputText value="Moneda"/>
+                            </f:facet>
+                            <h:outputText value="#{item.monedaId.CMoneda}"/>
+                        </p:column>
+                        <p:column width="75">
+                            <f:facet name="header">
+                                <h:outputText value="DIOT"/>
+                            </f:facet>
+                            <p:outputPanel layout="inline" styleClass="fa fa-check" rendered="#{item.adicional1}" />
+                            <p:outputPanel layout="inline" styleClass="fa fa-times" rendered="#{!item.adicional1}" />
+                        </p:column>
+                        <p:column filterBy="#{item.rfc}" width="75" headerText="RFC" footerText="contiene" filterMatchMode="contains" sortBy="#{item.rfc}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_rfc}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rfc}"/>
+                        </p:column>     
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcCatalogoCuentasTblController.prepareCreate}" update=":RnGcCatalogoCuentasTblCreateForm" oncomplete="PF('RnGcCatalogoCuentasTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcCatalogoCuentasTblViewForm" oncomplete="PF('RnGcCatalogoCuentasTblViewDialog').show()" disabled="#{empty rnGcCatalogoCuentasTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcCatalogoCuentasTblEditForm" oncomplete="PF('RnGcCatalogoCuentasTblEditDialog').show()" disabled="#{empty rnGcCatalogoCuentasTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcCatalogoCuentasTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcCatalogoCuentasTblController.selected}"/>
+                            <p:commandButton id="cargaMasivaButton"   icon="ui-icon-folder-open" value="Cargar Cuentas" update=":CargaMasivaFormGeneral:CargaMasivaForm" oncomplete="PF('CargaMasivaDialog').show()"/>
+                            <p:commandButton value="Exportar en excel" ajax="false" actionListener="#{rnGcCatalogoCuentasTblController.exportarExcel(ActionEvent)}"/>
+                            <p:commandButton value="Exportar en pdf" ajax="false" actionListener="#{rnGcCatalogoCuentasTblController.exportarPdf()}">
+                                <p:fileDownload value="#{rnGcCatalogoCuentasTblController.downLoadFile}" />
+                            </p:commandButton>
+                            <p:commandButton value="Exportar en XML" ajax="false" icon="pi pi-arrow-down"><p:fileDownload value="#{rnGcCatalogoCuentasTblController.downLoadFile}"/></p:commandButton> 
+                            <p:commandButton value="Descargar Plantilla" ajax="false" actionListener="#{rnGcCatalogoCuentasTblController.decargarPlantilla1()}">
+                                <p:fileDownload value="#{rnGcCatalogoCuentasTblController.downLoadFileP}" />
+                            </p:commandButton>
+                            <!--<p:commandButton value="CargosAbonos" ajax="false" actionListener="#//{rnGcCatalogoCuentasTblController.metodoPolizas()}"/>-->
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+            <ui:include src="CargaMasivaCuentas.xhtml"/>
+
+            <p:dialog id="CuentasDlgError" style="width: 200px" widgetVar="CuentasDlgErrorDialogo" modal="true" resizable="false" appendTo="@(body)" header="Alerta">
+                <h:form id="RnGcCatalogoCuentasTblListForm3">
+                    <p:panel header="Debe de ingresar todos los campos obligatorios">
+                        <f:facet name="footer">
+                            <p:commandButton id="cancelar" icon="ui-icon-close"   value="Cerrar" onclick="PF('CuentasDlgErrorDialogo').hide()" />
+                        </f:facet>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+
+</html>

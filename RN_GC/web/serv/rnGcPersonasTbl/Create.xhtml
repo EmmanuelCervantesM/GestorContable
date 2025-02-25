@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPersonasTblCreateDlg" widgetVar="RnGcPersonasTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcPersonasTblTitle}">
+            <h:form id="RnGcPersonasTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcPersonasTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{rnGcPersonasTblController.selected.nombre}" title="#{bundle.CreateRnGcPersonasTblTitle_nombre}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_nombre}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_domicilio}" for="domicilio" />
+                        <p:inputText id="domicilio" value="#{rnGcPersonasTblController.selected.domicilio}" title="#{bundle.CreateRnGcPersonasTblTitle_domicilio}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_domicilio}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_pais}" for="pais" />
+                        <p:inputText id="pais" value="#{rnGcPersonasTblController.selected.pais}" title="#{bundle.CreateRnGcPersonasTblTitle_pais}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_pais}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_estado}" for="estado" />
+                        <p:inputText id="estado" value="#{rnGcPersonasTblController.selected.estado}" title="#{bundle.CreateRnGcPersonasTblTitle_estado}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_estado}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_ciudad}" for="ciudad" />
+                        <p:inputText id="ciudad" value="#{rnGcPersonasTblController.selected.ciudad}" title="#{bundle.CreateRnGcPersonasTblTitle_ciudad}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_ciudad}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_edad}" for="edad" />
+                        <p:inputText id="edad" value="#{rnGcPersonasTblController.selected.edad}" title="#{bundle.CreateRnGcPersonasTblTitle_edad}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_edad}"/>                        
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcPersonasTblController.create}" value="#{bundle.Save}" update="display,:RnGcPersonasTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcPersonasTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcPersonasTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

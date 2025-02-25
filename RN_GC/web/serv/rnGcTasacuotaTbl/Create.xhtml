@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTasacuotaTblCreateDlg" widgetVar="RnGcTasacuotaTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcTasacuotaTblTitle}">
+            <h:form id="RnGcTasacuotaTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcTasacuotaTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcTasacuotaTblLabel_rangoofijo}" for="rangoofijo" />
+                        <p:inputText id="rangoofijo" value="#{rnGcTasacuotaTblController.selected.rangoofijo}" title="#{bundle.CreateRnGcTasacuotaTblTitle_rangoofijo}" required="true" requiredMessage="#{bundle.CreateRnGcTasacuotaTblRequiredMessage_rangoofijo}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTasacuotaTblLabel_valorMaximo}" for="valorMaximo" />
+                        <p:inputText id="valorMaximo" value="#{rnGcTasacuotaTblController.selected.valorMaximo}" title="#{bundle.CreateRnGcTasacuotaTblTitle_valorMaximo}" required="true" requiredMessage="#{bundle.CreateRnGcTasacuotaTblRequiredMessage_valorMaximo}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTasacuotaTblLabel_impuesto}" for="impuesto" />
+                        <p:inputText id="impuesto" value="#{rnGcTasacuotaTblController.selected.impuesto}" title="#{bundle.CreateRnGcTasacuotaTblTitle_impuesto}" required="true" requiredMessage="#{bundle.CreateRnGcTasacuotaTblRequiredMessage_impuesto}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTasacuotaTblLabel_factor}" for="factor" />
+                        <p:inputText id="factor" value="#{rnGcTasacuotaTblController.selected.factor}" title="#{bundle.CreateRnGcTasacuotaTblTitle_factor}" required="true" requiredMessage="#{bundle.CreateRnGcTasacuotaTblRequiredMessage_factor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTasacuotaTblLabel_traslado}" for="traslado" />
+                        <p:inputText id="traslado" value="#{rnGcTasacuotaTblController.selected.traslado}" title="#{bundle.CreateRnGcTasacuotaTblTitle_traslado}" required="true" requiredMessage="#{bundle.CreateRnGcTasacuotaTblRequiredMessage_traslado}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTasacuotaTblLabel_retencion}" for="retencion" />
+                        <p:inputText id="retencion" value="#{rnGcTasacuotaTblController.selected.retencion}" title="#{bundle.CreateRnGcTasacuotaTblTitle_retencion}" required="true" requiredMessage="#{bundle.CreateRnGcTasacuotaTblRequiredMessage_retencion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTasacuotaTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="dd/MM/yyyy" value="#{rnGcTasacuotaTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcTasacuotaTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcTasacuotaTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTasacuotaTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:inputText id="fechaFinVigencia" value="#{rnGcTasacuotaTblController.selected.fechaFinVigencia}" title="#{bundle.CreateRnGcTasacuotaTblTitle_fechaFinVigencia}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcTasacuotaTblController.create}" value="#{bundle.Save}" update="display,:RnGcTasacuotaTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcTasacuotaTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcTasacuotaTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

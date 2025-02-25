@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPagosRelacionadosTblCreateDlg" widgetVar="RnGcPagosRelacionadosTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcPagosRelacionadosTblTitle}">
+            <h:form id="RnGcPagosRelacionadosTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPagosRelacionadosTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcPagosRelacionadosTblController.selected.id}" title="#{bundle.CreateRnGcPagosRelacionadosTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcPagosRelacionadosTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_idDocumento}" for="idDocumento" />
+                        <p:inputText id="idDocumento" value="#{rnGcPagosRelacionadosTblController.selected.idDocumento}" title="#{bundle.CreateRnGcPagosRelacionadosTblTitle_idDocumento}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_serie}" for="serie" />
+                        <p:inputText id="serie" value="#{rnGcPagosRelacionadosTblController.selected.serie}" title="#{bundle.CreateRnGcPagosRelacionadosTblTitle_serie}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_folio}" for="folio" />
+                        <p:inputText id="folio" value="#{rnGcPagosRelacionadosTblController.selected.folio}" title="#{bundle.CreateRnGcPagosRelacionadosTblTitle_folio}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_moneda}" for="moneda" />
+                        <p:inputText id="moneda" value="#{rnGcPagosRelacionadosTblController.selected.moneda}" title="#{bundle.CreateRnGcPagosRelacionadosTblTitle_moneda}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_tipoCambio}" for="tipoCambio" />
+                        <p:inputText id="tipoCambio" value="#{rnGcPagosRelacionadosTblController.selected.tipoCambio}" title="#{bundle.CreateRnGcPagosRelacionadosTblTitle_tipoCambio}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_metodoPago}" for="metodoPago" />
+                        <p:inputText id="metodoPago" value="#{rnGcPagosRelacionadosTblController.selected.metodoPago}" title="#{bundle.CreateRnGcPagosRelacionadosTblTitle_metodoPago}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_numeroParcialidad}" for="numeroParcialidad" />
+                        <p:inputText id="numeroParcialidad" value="#{rnGcPagosRelacionadosTblController.selected.numeroParcialidad}" title="#{bundle.CreateRnGcPagosRelacionadosTblTitle_numeroParcialidad}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_importeSaldoAnterior}" for="importeSaldoAnterior" />
+                        <p:inputText id="importeSaldoAnterior" value="#{rnGcPagosRelacionadosTblController.selected.importeSaldoAnterior}" title="#{bundle.CreateRnGcPagosRelacionadosTblTitle_importeSaldoAnterior}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_importePagado}" for="importePagado" />
+                        <p:inputText id="importePagado" value="#{rnGcPagosRelacionadosTblController.selected.importePagado}" title="#{bundle.CreateRnGcPagosRelacionadosTblTitle_importePagado}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_importeInsoluto}" for="importeInsoluto" />
+                        <p:inputText id="importeInsoluto" value="#{rnGcPagosRelacionadosTblController.selected.importeInsoluto}" title="#{bundle.CreateRnGcPagosRelacionadosTblTitle_importeInsoluto}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcPagosRelacionadosTblController.selected.creadoPor}" title="#{bundle.CreateRnGcPagosRelacionadosTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcPagosRelacionadosTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcPagosRelacionadosTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcPagosRelacionadosTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcPagosRelacionadosTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcPagosRelacionadosTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcPagosRelacionadosTblTitle_ultimaActualizacionPor}" required="true" requiredMessage="#{bundle.CreateRnGcPagosRelacionadosTblRequiredMessage_ultimaActualizacionPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcPagosRelacionadosTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcPagosRelacionadosTblTitle_ultimaFechaActualizacion}" required="true" requiredMessage="#{bundle.EditRnGcPagosRelacionadosTblRequiredMessage_ultimaFechaActualizacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosRelacionadosTblLabel_cfdisId}" for="cfdisId" />
+                        <p:selectOneMenu id="cfdisId" value="#{rnGcPagosRelacionadosTblController.selected.cfdisId}" >
+                            <f:selectItems value="#{rnGcCfdisTblController.itemsAvailableSelectOne}"
+                                           var="cfdisIdItem"
+                                           itemValue="#{cfdisIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcPagosRelacionadosTblController.create}" value="#{bundle.Save}" update="display,:RnGcPagosRelacionadosTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcPagosRelacionadosTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcPagosRelacionadosTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

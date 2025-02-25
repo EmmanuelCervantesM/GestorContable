@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpClavetipocargasatTblEditDlg" widgetVar="RnGcCpClavetipocargasatTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpClavetipocargasatTblTitle}">
+            <h:form id="RnGcCpClavetipocargasatTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpClavetipocargasatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpClavetipocargasatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpClavetipocargasatTblController.selected.id}" title="#{bundle.EditRnGcCpClavetipocargasatTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcCpClavetipocargasatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpClavetipocargasatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpClavetipocargasatTblController.selected.clave}" title="#{bundle.EditRnGcCpClavetipocargasatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpClavetipocargasatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpClavetipocargasatTblController.selected.descripcion}" title="#{bundle.EditRnGcCpClavetipocargasatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpClavetipocargasatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpClavetipocargasatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpClavetipocargasatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpClavetipocargasatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpClavetipocargasatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpClavetipocargasatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpClavetipocargasatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpClavetipocargasatTblController.selected.creadoPor}" title="#{bundle.EditRnGcCpClavetipocargasatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.EditRnGcCpClavetipocargasatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpClavetipocargasatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpClavetipocargasatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpClavetipocargasatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpClavetipocargasatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpClavetipocargasatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpClavetipocargasatTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcCpClavetipocargasatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpClavetipocargasatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpClavetipocargasatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpClavetipocargasatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpClavetipocargasatTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpClavetipocargasatTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpClavetipocargasatTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpClavetipocargasatTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

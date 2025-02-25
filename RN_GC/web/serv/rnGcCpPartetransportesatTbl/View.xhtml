@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpPartetransportesatTblViewDlg" widgetVar="RnGcCpPartetransportesatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpPartetransportesatTblTitle}">
+            <h:form id="RnGcCpPartetransportesatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpPartetransportesatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpPartetransportesatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpPartetransportesatTblController.selected.id}" title="#{bundle.ViewRnGcCpPartetransportesatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPartetransportesatTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpPartetransportesatTblController.selected.clave}" title="#{bundle.ViewRnGcCpPartetransportesatTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPartetransportesatTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpPartetransportesatTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpPartetransportesatTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPartetransportesatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpPartetransportesatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpPartetransportesatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpPartetransportesatTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcCpPartetransportesatTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcCpPartetransportesatTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpPartetransportesatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpPartetransportesatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpPartetransportesatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPartetransportesatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpPartetransportesatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpPartetransportesatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpPartetransportesatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpPartetransportesatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpPartetransportesatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPartetransportesatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpPartetransportesatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpPartetransportesatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpPartetransportesatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

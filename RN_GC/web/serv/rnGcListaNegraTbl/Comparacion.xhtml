@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+          
+    <ui:composition template="/templateRN.xhtml">
+        
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcListaNegraTblTitle}"></h:outputText>
+        </ui:define>
+        
+        <ui:define name="body">
+            <h:form id="RnGcListaNegraTblListFormAuto">
+                <p:panel header="#{bundle.ListRnGcListaNegraTblTitle} Búsqueda Manual" collapsed="true" toggleable="true">
+                    <p:dataTable id="datalist" value="#{rnGcListaNegraTblController.busqeudaManual}" var="item"
+                                 selectionMode="single" selection="#{rnGcListaNegraTblController.selectedManual}"
+                                 paginator="true"  scrollable="true"
+                                 rowKey="#{item.id}"
+                                 rows="10" resizableColumns="true"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+                        
+                        <p:column filterBy="#{item.nombreContribuyente}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="Nombre"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombreContribuyente}" />
+                        </p:column>
+                        <p:column filterBy="#{item.rfc}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="RFC"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rfc}" />
+                        </p:column>
+                        <p:column filterBy="#{item.idTipoLista.tipoLista}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="Tipo Lista"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idTipoLista.tipoLista}" />
+                        </p:column>
+                        <p:column filterBy="#{item.idTipoLista.fechaPublicacion}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="Fecha Publicacion"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idTipoLista.fechaPublicacion}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column filterBy="#{item.idTipoLista.folioPublicacion}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="Tipo Lista"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idTipoLista.folioPublicacion}" />
+                        </p:column>
+                    
+                        <f:facet name="header">
+                            <p:outputLabel value="Búsqueda por RFC: "/>
+                            <p:inputText value="#{rnGcListaNegraTblController.rfc}" style="width: 150px"/>
+                            <p:outputLabel value="Búsqueda por Nombre: "/>
+                            <p:inputText value="#{rnGcListaNegraTblController.nombre}" style="width: 450px"/>
+                            <p:commandButton value="Buscar" icon="ui-icon-search" update="RnGcListaNegraTblListFormAuto:datalist" actionListener="#{rnGcListaNegraTblController.busqueda()}"/>
+                        </f:facet>
+                    
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+            <p:separator/>
+            <h:form id="RnGcListaNegraTblListForm">
+                <p:panel header="#{bundle.ListRnGcListaNegraTblTitle} Búsqueda Automática">
+                    <p:dataTable id="datalist" value="#{rnGcListaNegraTblController.listaPersonaLN}" var="item"
+                                 selectionMode="single" selection="#{rnGcListaNegraTblController.personaLN}"
+                                 paginator="true"  scrollable="true"
+                                 rowKey="#{item.persona}"
+                                 rows="10" resizableColumns="true"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+                        
+                        <p:column filterBy="#{item.persona.tipoPersona}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="Tipo Persona"/>
+                            </f:facet>
+                            <h:outputText value="#{item.persona.tipoPersona}" />
+                        </p:column>
+                        <p:column filterBy="#{item.persona.nombre}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="Nombre"/>
+                            </f:facet>
+                            <h:outputText value="#{item.persona.nombre}" />
+                        </p:column>
+                        <p:column filterBy="#{item.persona.rfc}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="RFC"/>
+                            </f:facet>
+                            <h:outputText value="#{item.persona.rfc}" />
+                        </p:column>
+                        <p:column filterBy="#{item.listaNegra.idTipoLista.tipoLista}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="Tipo Lista"/>
+                            </f:facet>
+                            <h:outputText value="#{item.listaNegra.idTipoLista.tipoLista}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Fecha Publicación"/>
+                            </f:facet>
+                            <h:outputText value="#{item.listaNegra.idTipoLista.fechaPublicacion}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column filterBy="#{item.listaNegra.idTipoLista.folioPublicacion}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="Folio Publicación"/>
+                            </f:facet>
+                            <h:outputText value="#{item.listaNegra.idTipoLista.folioPublicacion}" />
+                        </p:column>
+                        
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+        </ui:define>
+        
+    </ui:composition>
+</html>

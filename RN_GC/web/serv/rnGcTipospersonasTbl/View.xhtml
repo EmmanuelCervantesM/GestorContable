@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTipospersonasTblViewDlg" widgetVar="RnGcTipospersonasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcTipospersonasTblTitle}">
+            <h:form id="RnGcTipospersonasTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcTipospersonasTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcTipospersonasTblLabel_id}"/>
+                        <h:outputText value="#{rnGcTipospersonasTblController.selected.id}" title="#{bundle.ViewRnGcTipospersonasTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTipospersonasTblLabel_tipoPersonaId}"/>
+                        <h:outputText value="#{rnGcTipospersonasTblController.selected.tipoPersonaId}" title="#{bundle.ViewRnGcTipospersonasTblTitle_tipoPersonaId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTipospersonasTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcTipospersonasTblController.selected.creadoPor}" title="#{bundle.ViewRnGcTipospersonasTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTipospersonasTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcTipospersonasTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcTipospersonasTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcTipospersonasTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcTipospersonasTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcTipospersonasTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTipospersonasTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcTipospersonasTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcTipospersonasTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcTipospersonasTblLabel_personaId}"/>
+                        <h:outputText value="#{rnGcTipospersonasTblController.selected.personaId}" title="#{bundle.ViewRnGcTipospersonasTblTitle_personaId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcTipospersonasTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

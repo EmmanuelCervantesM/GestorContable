@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcLocalidadesTblViewDlg" widgetVar="RnGcLocalidadesTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcLocalidadesTblTitle}">
+            <h:form id="RnGcLocalidadesTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcLocalidadesTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcLocalidadesTblLabel_id}"/>
+                        <h:outputText value="#{rnGcLocalidadesTblController.selected.id}" title="#{bundle.ViewRnGcLocalidadesTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcLocalidadesTblLabel_CLocalidad}"/>
+                        <h:outputText value="#{rnGcLocalidadesTblController.selected.CLocalidad}" title="#{bundle.ViewRnGcLocalidadesTblTitle_CLocalidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcEstadosTblLabel_CEstado}"/>
+                        <h:outputText value="#{rnGcLocalidadesTblController.selected.estadoId.CEstado}" title="#{bundle.ViewRnGcEstadosTblTitle_CEstado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcLocalidadesTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcLocalidadesTblController.selected.descripcion}" title="#{bundle.ViewRnGcLocalidadesTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcLocalidadesTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcLocalidadesTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcLocalidadesTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcLocalidadesTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcLocalidadesTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcLocalidadesTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcLocalidadesTblLabel_versionCFDI}"/>
+                        <h:outputText value="#{rnGcLocalidadesTblController.selected.versionCFDI}" title="#{bundle.ViewRnGcLocalidadesTblTitle_versionCFDI}"/>
+                        <h:outputText value="#{bundle.ViewRnGcLocalidadesTblLabel_versionCatalogo}"/>
+                        <h:outputText value="#{rnGcLocalidadesTblController.selected.versionCatalogo}" title="#{bundle.ViewRnGcLocalidadesTblTitle_versionCatalogo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcLocalidadesTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcLocalidadesTblController.selected.creadoPor}" title="#{bundle.ViewRnGcLocalidadesTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcLocalidadesTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcLocalidadesTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcLocalidadesTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcLocalidadesTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcLocalidadesTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcLocalidadesTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcLocalidadesTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcLocalidadesTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcLocalidadesTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcLocalidadesTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

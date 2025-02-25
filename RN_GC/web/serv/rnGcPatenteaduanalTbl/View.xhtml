@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPatenteaduanalTblViewDlg" widgetVar="RnGcPatenteaduanalTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcPatenteaduanalTblTitle}">
+            <h:form id="RnGcPatenteaduanalTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPatenteaduanalTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcPatenteaduanalTblLabel_id}"/>
+                        <h:outputText value="#{rnGcPatenteaduanalTblController.selected.id}" title="#{bundle.ViewRnGcPatenteaduanalTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPatenteaduanalTblLabel_CPatenteAduanal}"/>
+                        <h:outputText value="#{rnGcPatenteaduanalTblController.selected.CPatenteAduanal}" title="#{bundle.ViewRnGcPatenteaduanalTblTitle_CPatenteAduanal}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPatenteaduanalTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcPatenteaduanalTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcPatenteaduanalTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPatenteaduanalTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcPatenteaduanalTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcPatenteaduanalTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPatenteaduanalTblLabel_versionCFDI}"/>
+                        <h:outputText value="#{rnGcPatenteaduanalTblController.selected.versionCFDI}" title="#{bundle.ViewRnGcPatenteaduanalTblTitle_versionCFDI}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPatenteaduanalTblLabel_versionCatalogo}"/>
+                        <h:outputText value="#{rnGcPatenteaduanalTblController.selected.versionCatalogo}" title="#{bundle.ViewRnGcPatenteaduanalTblTitle_versionCatalogo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPatenteaduanalTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcPatenteaduanalTblController.selected.creadoPor}" title="#{bundle.ViewRnGcPatenteaduanalTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPatenteaduanalTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcPatenteaduanalTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcPatenteaduanalTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPatenteaduanalTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcPatenteaduanalTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcPatenteaduanalTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPatenteaduanalTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcPatenteaduanalTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcPatenteaduanalTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcPatenteaduanalTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

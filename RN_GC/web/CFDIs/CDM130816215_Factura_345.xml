@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cfdi:Comprobante xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd" Version="3.3" Folio="345" Fecha="2018-07-13T17:08:55" Sello="NwYdEPJPScBPL8FapIwKpLd++ctZhWMelnt8wAyNj8ItXL/S4f9Imii/T1//fOJe0IrARUwYajOC2P367RqIp3ekiEq+uC+CvfuZxG38zz3Q3wzck9L8e3nCDTuShj/6GEmDSDo7ber4stSRUuImFRmfsEQo/uQZ+TILW9+B615Zee4zUV6OnwSJbM4o81DsDyuPn5Bri0UlW+y+ArERFnaXaCYPMs4ET1HWZ3880ZywcZ37ylHq9q+IpYIVsau/OPJ2JjmV0AjpuaGenyyq4BE+CRyd/8SD2/roH3OZsY8kNymXfDNvBAObQpkd5qMZm418XUq4kQnBTX+QoENm/Q==" FormaPago="03" NoCertificado="00001000000407418682" Certificado="MIIGoTCCBImgAwIBAgIUMDAwMDEwMDAwMDA0MDc0MTg2ODIwDQYJKoZIhvcNAQELBQAwggGyMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29kc0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVycmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMV0wWwYJKoZIhvcNAQkCDE5SZXNwb25zYWJsZTogQWRtaW5pc3RyYWNpw7NuIENlbnRyYWwgZGUgU2VydmljaW9zIFRyaWJ1dGFyaW9zIGFsIENvbnRyaWJ1eWVudGUwHhcNMTcwOTAxMjI0MDMxWhcNMjEwOTAxMjI0MDMxWjCCAUAxSTBHBgNVBAMTQENFTlRSTyBERSBESVNUUklCVUNJT04gREUgTUVUQUxFUyBZIEFDRVJPUyBFU1BFQ0lBTEVTIEtBTEktQlJFIFMxUDBOBgNVBCkTR0NFTlRSTyBERSBESVNUUklCVUNJT04gREUgTUVUQUxFUyBZIEFDRVJPUyBFU1BFQ0lBTEVTIEtBTEktQlJFIFNBIERFIENWMUkwRwYDVQQKE0BDRU5UUk8gREUgRElTVFJJQlVDSU9OIERFIE1FVEFMRVMgWSBBQ0VST1MgRVNQRUNJQUxFUyBLQUxJLUJSRSBTMSUwIwYDVQQtExxDRE0xMzA4MTYyMTUgLyBQRVNBODcwODAxTEdBMR4wHAYDVQQFExUgLyBQRVNBODcwODAxTVRMUk5SMDIxDzANBgNVBAsTBk1hdHJpejCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALRLs4QhgHpuKoxPoDse/22IQ2I5B1J9pykXHiIJxe9nWvQj58i5yZuz1ehIjdIcmK4smxCX+asutKbRpGfiyjMiwG9E113tDiACofR+2UOISyrRxGA4LUOtmp03NjApT4uPuO28YEREGAnYLFhlj18J5MDsfZp2xorf5+CARBE632ousEdzByM3myIP7CHNXQIgfJ0gYylh/bDkOrWknRu25V2Lt9qYynDQpIyYaXUliSKks/KNHzsrRaYuVs80Q9yRLR5+zKlqN/1r4Lp5/GeMTC/8vwzs1V1fwdavOo+4irYcA1brr8thTKwr9csYRHFpscdulsGwnR9yUAn55JMCAwEAAaMdMBswDAYDVR0TAQH/BAIwADALBgNVHQ8EBAMCBsAwDQYJKoZIhvcNAQELBQADggIBAE2ESgyD/B962ICyWN4a1lIseGFEDomn1g2rDhgBZeew6x4GdCsQg/47qDgZR6BBQIaHP/Zkg4Zo0RQ+ObpTK1TqQQhDwtek2Aa1Rrg5mCQSM0/u1LRPiGLPFf9KOLORDJJoRnsl0riIasNAdkuMPGcW68pxugqarhqpqCkJKYFb+ojxEWmujwo40i9fdZaFAjuacLgGodQNsAdqOgghdowPMjUu4srVvxiQuVIDkc/qqvtD8xeVObDDaUvG0uJLDVUrKuI6YGk4WHIXw/i1CFbxmHVJcaawjSc0pJr8NkVv69cZw9gCgp93XgShcLqNfEJ2jKbFNWJVkdrnzHj1gw9U90n2S3PVRVwBKkCnh3o1hwGj5lWO2wFEr8WbCDb3+6t+QGn5PgbXAaUVOBbytTY55QZm5g5G5rxhTXhtmxMMuKiwrcUWy1GNY2V0ChaGLqqYlLU5mNu9hBaph7gvRCdHAAssjxZY3/f79WESbLAXdv7E+LUhHUUvGuRU2OQxQGpfdoUaBkdDw6gXTwZHmMjnu+Kv/weAORFOH83BEBPfUaY2e8RGs4nS4iTPMvuRWCnoQ+WPHVLUf2vAs6TFiwB7MC4VTpyM+gI2q8JIL7B024FrArLIxoSoY0nrAWX85rOshT1EFP5JJhJabSjTmun7EGLmDl4+O//YtSz1nwkL" SubTotal="40992.07" Moneda="MXN" Total="47550.80" TipoDeComprobante="I" MetodoPago="PUE" LugarExpedicion="90990" xmlns:cfdi="http://www.sat.gob.mx/cfd/3">
+    <cfdi:Emisor Rfc="CDM130816215" Nombre="CENTRO DE DISTRIBUCION DE METALES Y ACEROS ESPECIALES KALI-BRE S.A. DE C.V." RegimenFiscal="601" />
+    <cfdi:Receptor Rfc="ASI110927ST8" Nombre="A&amp;S INTEGRAL SOLUTIONS S.A. DE C.V." UsoCFDI="P01" />
+    <cfdi:Conceptos>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="1" Unidad="PIEZA" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE MATRIZ DE CORTE SENSOR" ValorUnitario="905.172414" Importe="905.172414">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="905.172414" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="144.827586" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="1" Unidad="PIEZA" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE MATRIZ DET_01_048" ValorUnitario="1810.344828" Importe="1810.344828">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="1810.344828" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="289.655172" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="1" Unidad="PIEZA" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE MATRIZ DET_01_043" ValorUnitario="1810.344828" Importe="1810.344828">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="1810.344828" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="289.655172" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="1" Unidad="PIEZA" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE MATRIZ DET_01_045" ValorUnitario="2629.310345" Importe="2629.310345">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2629.310345" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="420.689655" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="1" Unidad="PIEZA" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE MATRIZ DET_01_044" ValorUnitario="1439.655172" Importe="1439.655172">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="1439.655172" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="230.344828" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="1" Unidad="PIEZA" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE MATRIZ DET_01_046" ValorUnitario="3275.862069" Importe="3275.862069">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="3275.862069" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="524.137931" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="2" Unidad="PIEZAS" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE PORTA PUNZÓN DET_02_018" ValorUnitario="1594.827586" Importe="3189.655172">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="3189.655172" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="510.344828" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="1" Unidad="PIEZA" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE PORTA PUNZÓN DET_02_039" ValorUnitario="1353.448276" Importe="1353.448276">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="1353.448276" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="216.551724" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="1" Unidad="PIEZA" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE PORTA PUNZÓN DET_02_024" ValorUnitario="1353.448276" Importe="1353.448276">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="1353.448276" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="216.551724" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="1" Unidad="PIEZA" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE PORTA PUNZÓN DET_02_030" ValorUnitario="1034.482759" Importe="1034.482759">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="1034.482759" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="165.517241" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="1" Unidad="PIEZA" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE PORTA PUNZÓN DET_02_021" ValorUnitario="1034.482759" Importe="1034.482759">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="1034.482759" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="165.517241" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="1" Unidad="PIEZA" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE PORTA PUNZÓN DET_02_027" ValorUnitario="1810.344828" Importe="1810.344828">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="1810.344828" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="289.655172" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="1" Unidad="PIEZA" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE PORTA PUNZÓN DET_02_053" ValorUnitario="1034.482759" Importe="1034.482759">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="1034.482759" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="165.517241" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="2" Unidad="PIEZAS" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE PORTA PUNZÓN DET_02_045" ValorUnitario="4094.827586" Importe="8189.655172">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="8189.655172" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="1310.344828" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="1" Unidad="PIEZA" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE PORTA PUNZÓN DET_02_033" ValorUnitario="2413.793103" Importe="2413.793103">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2413.793103" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="386.206896" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="2" Unidad="PIEZAS" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE PORTA PUNZÓN DET_02_042" ValorUnitario="2413.793103" Importe="4827.586206">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="4827.586206" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="772.413793" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="H87" ClaveProdServ="31391500" NoIdentificacion="31391500" Cantidad="2" Unidad="PIEZAS" Descripcion="SERVICIO DE EROSIÓN CORTE POR HILO DE MATRIZ IZQUIERDA/DERECHA DET OT_241_001" ValorUnitario="1440.00" Importe="2880.00">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2880.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="460.800000" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+    </cfdi:Conceptos>
+    <cfdi:Impuestos TotalImpuestosTrasladados="6558.73">
+        <cfdi:Traslados>
+            <cfdi:Traslado Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="6558.73" />
+        </cfdi:Traslados>
+    </cfdi:Impuestos>
+    <cfdi:Complemento>
+        <tfd:TimbreFiscalDigital Version="1.1" RfcProvCertif="FMD100203JS7" UUID="5FDDEF8B-3C76-4E61-8ADA-EE0E3B7A2E58" FechaTimbrado="2018-07-13T17:31:18" SelloCFD="NwYdEPJPScBPL8FapIwKpLd++ctZhWMelnt8wAyNj8ItXL/S4f9Imii/T1//fOJe0IrARUwYajOC2P367RqIp3ekiEq+uC+CvfuZxG38zz3Q3wzck9L8e3nCDTuShj/6GEmDSDo7ber4stSRUuImFRmfsEQo/uQZ+TILW9+B615Zee4zUV6OnwSJbM4o81DsDyuPn5Bri0UlW+y+ArERFnaXaCYPMs4ET1HWZ3880ZywcZ37ylHq9q+IpYIVsau/OPJ2JjmV0AjpuaGenyyq4BE+CRyd/8SD2/roH3OZsY8kNymXfDNvBAObQpkd5qMZm418XUq4kQnBTX+QoENm/Q==" NoCertificadoSAT="00001000000405535779" SelloSAT="BM+vAOMKpG1SpKzMn39CtsvG8fvak7NiRsQE0iAS2Jyfv0BmWh72qZiT+ptLUNwHhhTLSB342OS0JpFkQG8mVEaXFw2JZY4rb6ft+67FjMSM25yvSBV3SZNFmIuauxr0PFjEuJ+kUTM0/Hlw1HHgUW45qyOs3Ym+fHyntlfrKioWVxSWeruC7zfMEYH6pMoc2/9xC1nVq+Wb1HhzwWmOMqMP4UhR6B96vM2o7lTEE1861cm0OnUjyY3YC9vexGG/i2OjQoibETRiACxDBK9Lvg0FvPmQzVPjPKLqorbKqQP2fVBUIlUH3JLQqXQrcNOjlJeu1n6SgKIn/c25Ul9iXA==" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd" />
+    </cfdi:Complemento>
+</cfdi:Comprobante>

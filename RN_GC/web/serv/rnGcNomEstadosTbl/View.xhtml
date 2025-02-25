@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomEstadosTblViewDlg" widgetVar="RnGcNomEstadosTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcNomEstadosTblTitle}">
+            <h:form id="RnGcNomEstadosTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomEstadosTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcNomEstadosTblLabel_cveEstado}"/>
+                        <h:outputText value="#{rnGcNomEstadosTblController.selected.cveEstado}" title="#{bundle.ViewRnGcNomEstadosTblTitle_cveEstado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomEstadosTblLabel_nombre}"/>
+                        <h:outputText value="#{rnGcNomEstadosTblController.selected.nombre}" title="#{bundle.ViewRnGcNomEstadosTblTitle_nombre}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomEstadosTblLabel_version}"/>
+                        <h:outputText value="#{rnGcNomEstadosTblController.selected.version}" title="#{bundle.ViewRnGcNomEstadosTblTitle_version}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomEstadosTblLabel_revision}"/>
+                        <h:outputText value="#{rnGcNomEstadosTblController.selected.revision}" title="#{bundle.ViewRnGcNomEstadosTblTitle_revision}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomEstadosTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcNomEstadosTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcNomEstadosTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcNomEstadosTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcNomEstadosTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcNomEstadosTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcNomEstadosTblLabel_cvePais}"/>
+                        <h:outputText value="#{rnGcNomEstadosTblController.selected.cvePais}" title="#{bundle.ViewRnGcNomEstadosTblTitle_cvePais}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcNomEstadosTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

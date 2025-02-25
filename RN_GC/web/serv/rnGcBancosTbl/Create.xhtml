@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcBancosTblCreateDlg" widgetVar="RnGcBancosTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcBancosTblTitle}">
+            <h:form id="RnGcBancosTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcBancosTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcBancosTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcBancosTblController.selected.id}" title="#{bundle.CreateRnGcBancosTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcBancosTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcBancosTblLabel_bancoId}" for="bancoId" />
+                        <p:inputText id="bancoId" value="#{rnGcBancosTblController.selected.bancoId}" title="#{bundle.CreateRnGcBancosTblTitle_bancoId}" required="true" requiredMessage="#{bundle.CreateRnGcBancosTblRequiredMessage_bancoId}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcBancosTblLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{rnGcBancosTblController.selected.nombre}" title="#{bundle.CreateRnGcBancosTblTitle_nombre}" required="true" requiredMessage="#{bundle.CreateRnGcBancosTblRequiredMessage_nombre}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcBancosTblLabel_tipoBanco}" for="tipoBanco" />
+                        <p:inputText id="tipoBanco" value="#{rnGcBancosTblController.selected.tipoBanco}" title="#{bundle.CreateRnGcBancosTblTitle_tipoBanco}" required="true" requiredMessage="#{bundle.CreateRnGcBancosTblRequiredMessage_tipoBanco}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcBancosTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcBancosTblController.selected.creadoPor}" title="#{bundle.CreateRnGcBancosTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcBancosTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcBancosTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcBancosTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcBancosTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcBancosTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcBancosTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcBancosTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcBancosTblTitle_ultimaActualizacionPor}" required="true" requiredMessage="#{bundle.CreateRnGcBancosTblRequiredMessage_ultimaActualizacionPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcBancosTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcBancosTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcBancosTblTitle_ultimaFechaActualizacion}" required="true" requiredMessage="#{bundle.EditRnGcBancosTblRequiredMessage_ultimaFechaActualizacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcBancosTblLabel_personaId}" for="personaId" />
+                        <p:inputText id="personaId" value="#{rnGcBancosTblController.selected.personaId}" title="#{bundle.CreateRnGcBancosTblTitle_personaId}" required="true" requiredMessage="#{bundle.CreateRnGcBancosTblRequiredMessage_personaId}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcBancosTblLabel_cuentasBancariasId}" for="cuentasBancariasId" />
+                        <p:selectOneMenu id="cuentasBancariasId" value="#{rnGcBancosTblController.selected.cuentasBancariasId}" required="true" requiredMessage="#{bundle.EditRnGcBancosTblRequiredMessage_cuentasBancariasId}">
+                            <f:selectItems value="#{rnGcCuentasbancariasTblController.itemsAvailableSelectOne}"
+                                           var="cuentasBancariasIdItem"
+                                           itemValue="#{cuentasBancariasIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcBancosTblLabel_rngcpersonastblId}" for="rngcpersonastblId" />
+                        <p:selectOneMenu id="rngcpersonastblId" value="#{rnGcBancosTblController.selected.rngcpersonastblId}" required="true" requiredMessage="#{bundle.EditRnGcBancosTblRequiredMessage_rngcpersonastblId}">
+                            <f:selectItems value="#{rnGcPersonasTblController.itemsAvailableSelectOne}"
+                                           var="rngcpersonastblIdItem"
+                                           itemValue="#{rngcpersonastblIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcBancosTblController.create}" value="#{bundle.Save}" update="display,:RnGcBancosTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcBancosTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcBancosTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

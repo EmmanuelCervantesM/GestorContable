@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpTipounidadTblCreateDlg" widgetVar="RnGcCpTipounidadTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCpTipounidadTblTitle}">
+            <h:form id="RnGcCpTipounidadTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpTipounidadTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipounidadTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpTipounidadTblController.selected.id}" title="#{bundle.CreateRnGcCpTipounidadTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcCpTipounidadTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipounidadTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpTipounidadTblController.selected.clave}" title="#{bundle.CreateRnGcCpTipounidadTblTitle_clave}" required="true" requiredMessage="#{bundle.CreateRnGcCpTipounidadTblRequiredMessage_clave}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipounidadTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpTipounidadTblController.selected.descripcion}" title="#{bundle.CreateRnGcCpTipounidadTblTitle_descripcion}" required="true" requiredMessage="#{bundle.CreateRnGcCpTipounidadTblRequiredMessage_descripcion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipounidadTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpTipounidadTblController.selected.creadoPor}" title="#{bundle.CreateRnGcCpTipounidadTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcCpTipounidadTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipounidadTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpTipounidadTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpTipounidadTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpTipounidadTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipounidadTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpTipounidadTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcCpTipounidadTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipounidadTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpTipounidadTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpTipounidadTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpTipounidadTblController.create}" value="#{bundle.Save}" update="display,:RnGcCpTipounidadTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCpTipounidadTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpTipounidadTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

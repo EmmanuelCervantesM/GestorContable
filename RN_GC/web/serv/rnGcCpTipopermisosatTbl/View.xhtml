@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpTipopermisosatTblViewDlg" widgetVar="RnGcCpTipopermisosatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpTipopermisosatTblTitle}">
+            <h:form id="RnGcCpTipopermisosatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpTipopermisosatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpTipopermisosatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpTipopermisosatTblController.selected.id}" title="#{bundle.ViewRnGcCpTipopermisosatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipopermisosatTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpTipopermisosatTblController.selected.clave}" title="#{bundle.ViewRnGcCpTipopermisosatTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipopermisosatTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpTipopermisosatTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpTipopermisosatTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipopermisosatTblLabel_claveTransporte}"/>
+                        <h:outputText value="#{rnGcCpTipopermisosatTblController.selected.claveTransporte}" title="#{bundle.ViewRnGcCpTipopermisosatTblTitle_claveTransporte}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipopermisosatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpTipopermisosatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpTipopermisosatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipopermisosatTblLabel_fechaFin}"/>
+                        <h:outputText value="#{rnGcCpTipopermisosatTblController.selected.fechaFin}" title="#{bundle.ViewRnGcCpTipopermisosatTblTitle_fechaFin}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipopermisosatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpTipopermisosatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpTipopermisosatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipopermisosatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpTipopermisosatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpTipopermisosatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipopermisosatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpTipopermisosatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpTipopermisosatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipopermisosatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpTipopermisosatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpTipopermisosatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpTipopermisosatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

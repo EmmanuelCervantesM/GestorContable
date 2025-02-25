@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomPeriodicidadpagoTblEditDlg" widgetVar="RnGcNomPeriodicidadpagoTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcNomPeriodicidadpagoTblTitle}">
+            <h:form id="RnGcNomPeriodicidadpagoTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomPeriodicidadpagoTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcNomPeriodicidadpagoTblLabel_cvePeriodicidadPago}" for="cvePeriodicidadPago" />
+                        <p:inputText id="cvePeriodicidadPago" value="#{rnGcNomPeriodicidadpagoTblController.selected.cvePeriodicidadPago}" title="#{bundle.EditRnGcNomPeriodicidadpagoTblTitle_cvePeriodicidadPago}" required="true" requiredMessage="#{bundle.EditRnGcNomPeriodicidadpagoTblRequiredMessage_cvePeriodicidadPago}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomPeriodicidadpagoTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcNomPeriodicidadpagoTblController.selected.descripcion}" title="#{bundle.EditRnGcNomPeriodicidadpagoTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcNomPeriodicidadpagoTblLabel_version}" for="version" />
+                        <p:inputText id="version" value="#{rnGcNomPeriodicidadpagoTblController.selected.version}" title="#{bundle.EditRnGcNomPeriodicidadpagoTblTitle_version}" required="true" requiredMessage="#{bundle.EditRnGcNomPeriodicidadpagoTblRequiredMessage_version}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomPeriodicidadpagoTblLabel_revision}" for="revision" />
+                        <p:inputText id="revision" value="#{rnGcNomPeriodicidadpagoTblController.selected.revision}" title="#{bundle.EditRnGcNomPeriodicidadpagoTblTitle_revision}" required="true" requiredMessage="#{bundle.EditRnGcNomPeriodicidadpagoTblRequiredMessage_revision}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomPeriodicidadpagoTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomPeriodicidadpagoTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcNomPeriodicidadpagoTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcNomPeriodicidadpagoTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomPeriodicidadpagoTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomPeriodicidadpagoTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcNomPeriodicidadpagoTblTitle_fechaFinVigencia}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomPeriodicidadpagoTblController.update}" value="#{bundle.Save}" update="display,:RnGcNomPeriodicidadpagoTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcNomPeriodicidadpagoTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomPeriodicidadpagoTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

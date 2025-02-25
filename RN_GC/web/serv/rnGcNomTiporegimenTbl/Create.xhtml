@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomTiporegimenTblCreateDlg" widgetVar="RnGcNomTiporegimenTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcNomTiporegimenTblTitle}">
+            <h:form id="RnGcNomTiporegimenTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomTiporegimenTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTiporegimenTblLabel_cveTipoRegimen}" for="cveTipoRegimen" />
+                        <p:inputText id="cveTipoRegimen" value="#{rnGcNomTiporegimenTblController.selected.cveTipoRegimen}" title="#{bundle.CreateRnGcNomTiporegimenTblTitle_cveTipoRegimen}" required="true" requiredMessage="#{bundle.CreateRnGcNomTiporegimenTblRequiredMessage_cveTipoRegimen}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTiporegimenTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcNomTiporegimenTblController.selected.descripcion}" title="#{bundle.CreateRnGcNomTiporegimenTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTiporegimenTblLabel_version}" for="version" />
+                        <p:inputText id="version" value="#{rnGcNomTiporegimenTblController.selected.version}" title="#{bundle.CreateRnGcNomTiporegimenTblTitle_version}" required="true" requiredMessage="#{bundle.CreateRnGcNomTiporegimenTblRequiredMessage_version}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTiporegimenTblLabel_revision}" for="revision" />
+                        <p:inputText id="revision" value="#{rnGcNomTiporegimenTblController.selected.revision}" title="#{bundle.CreateRnGcNomTiporegimenTblTitle_revision}" required="true" requiredMessage="#{bundle.CreateRnGcNomTiporegimenTblRequiredMessage_revision}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTiporegimenTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomTiporegimenTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcNomTiporegimenTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcNomTiporegimenTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTiporegimenTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomTiporegimenTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcNomTiporegimenTblTitle_fechaFinVigencia}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomTiporegimenTblController.create}" value="#{bundle.Save}" update="display,:RnGcNomTiporegimenTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcNomTiporegimenTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomTiporegimenTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

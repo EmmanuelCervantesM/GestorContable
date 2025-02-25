@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcMesesTblViewDlg" widgetVar="RnGcMesesTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcMesesTblTitle}">
+            <h:form id="RnGcMesesTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcMesesTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcMesesTblLabel_id}"/>
+                        <h:outputText value="#{rnGcMesesTblController.selected.id}" title="#{bundle.ViewRnGcMesesTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcMesesTblLabel_CMeses}"/>
+                        <h:outputText value="#{rnGcMesesTblController.selected.CMeses}" title="#{bundle.ViewRnGcMesesTblTitle_CMeses}"/>
+                        <h:outputText value="#{bundle.ViewRnGcMesesTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcMesesTblController.selected.descripcion}" title="#{bundle.ViewRnGcMesesTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcMesesTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcMesesTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcMesesTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcMesesTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcMesesTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcMesesTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcMesesTblLabel_versionCFDI}"/>
+                        <h:outputText value="#{rnGcMesesTblController.selected.versionCFDI}" title="#{bundle.ViewRnGcMesesTblTitle_versionCFDI}"/>
+                        <h:outputText value="#{bundle.ViewRnGcMesesTblLabel_versionCatalogo}"/>
+                        <h:outputText value="#{rnGcMesesTblController.selected.versionCatalogo}" title="#{bundle.ViewRnGcMesesTblTitle_versionCatalogo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcMesesTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcMesesTblController.selected.creadoPor}" title="#{bundle.ViewRnGcMesesTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcMesesTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcMesesTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcMesesTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcMesesTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcMesesTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcMesesTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcMesesTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcMesesTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcMesesTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcMesesTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

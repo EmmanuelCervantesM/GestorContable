@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpConfigmaritimasatTblViewDlg" widgetVar="RnGcCpConfigmaritimasatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpConfigmaritimasatTblTitle}">
+            <h:form id="RnGcCpConfigmaritimasatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpConfigmaritimasatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigmaritimasatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpConfigmaritimasatTblController.selected.id}" title="#{bundle.ViewRnGcCpConfigmaritimasatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigmaritimasatTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpConfigmaritimasatTblController.selected.clave}" title="#{bundle.ViewRnGcCpConfigmaritimasatTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigmaritimasatTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpConfigmaritimasatTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpConfigmaritimasatTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigmaritimasatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpConfigmaritimasatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpConfigmaritimasatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigmaritimasatTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcCpConfigmaritimasatTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcCpConfigmaritimasatTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigmaritimasatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpConfigmaritimasatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpConfigmaritimasatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigmaritimasatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpConfigmaritimasatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpConfigmaritimasatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigmaritimasatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpConfigmaritimasatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpConfigmaritimasatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigmaritimasatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpConfigmaritimasatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpConfigmaritimasatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpConfigmaritimasatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

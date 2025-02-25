@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCatalogosconceptosTblViewDlg" widgetVar="RnGcCatalogosconceptosTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCatalogosconceptosTblTitle}">
+            <h:form id="RnGcCatalogosconceptosTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCatalogosconceptosTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCatalogosconceptosTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCatalogosconceptosTblController.selected.id}" title="#{bundle.ViewRnGcCatalogosconceptosTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogosconceptosTblLabel_cantidad}"/>
+                        <h:outputText value="#{rnGcCatalogosconceptosTblController.selected.cantidad}" title="#{bundle.ViewRnGcCatalogosconceptosTblTitle_cantidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogosconceptosTblLabel_unidad}"/>
+                        <h:outputText value="#{rnGcCatalogosconceptosTblController.selected.unidad}" title="#{bundle.ViewRnGcCatalogosconceptosTblTitle_unidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogosconceptosTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCatalogosconceptosTblController.selected.descripcion}" title="#{bundle.ViewRnGcCatalogosconceptosTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogosconceptosTblLabel_valorUnitario}"/>
+                        <h:outputText value="#{rnGcCatalogosconceptosTblController.selected.valorUnitario}" title="#{bundle.ViewRnGcCatalogosconceptosTblTitle_valorUnitario}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogosconceptosTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCatalogosconceptosTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCatalogosconceptosTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogosconceptosTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCatalogosconceptosTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCatalogosconceptosTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogosconceptosTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCatalogosconceptosTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCatalogosconceptosTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogosconceptosTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCatalogosconceptosTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCatalogosconceptosTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogosconceptosTblLabel_CFDIId}"/>
+                        <h:outputText value="#{rnGcCatalogosconceptosTblController.selected.CFDIId}" title="#{bundle.ViewRnGcCatalogosconceptosTblTitle_CFDIId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogosconceptosTblLabel_rngccfdistblId}"/>
+                        <h:outputText value="#{rnGcCatalogosconceptosTblController.selected.rngccfdistblId}" title="#{bundle.ViewRnGcCatalogosconceptosTblTitle_rngccfdistblId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCatalogosconceptosTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

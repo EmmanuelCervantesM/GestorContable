@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPolizaLineasTblCreateDlg" widgetVar="RnGcPolizaLineasTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcPolizaLineasTblTitle}">
+            <h:form id="RnGcPolizaLineasTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPolizaLineasTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaLineasTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcPolizaLineasTblController.selected.id}" title="#{bundle.CreateRnGcPolizaLineasTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcPolizaLineasTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaLineasTblLabel_sucursal}" for="sucursal" />
+                        <p:inputText id="sucursal" value="#{rnGcPolizaLineasTblController.selected.sucursal}" title="#{bundle.CreateRnGcPolizaLineasTblTitle_sucursal}" required="true" requiredMessage="#{bundle.CreateRnGcPolizaLineasTblRequiredMessage_sucursal}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaLineasTblLabel_cargo}" for="cargo" />
+                        <p:inputText id="cargo" value="#{rnGcPolizaLineasTblController.selected.cargo}" title="#{bundle.CreateRnGcPolizaLineasTblTitle_cargo}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaLineasTblLabel_abono}" for="abono" />
+                        <p:inputText id="abono" value="#{rnGcPolizaLineasTblController.selected.abono}" title="#{bundle.CreateRnGcPolizaLineasTblTitle_abono}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaLineasTblLabel_referencia}" for="referencia" />
+                        <p:inputText id="referencia" value="#{rnGcPolizaLineasTblController.selected.referencia}" title="#{bundle.CreateRnGcPolizaLineasTblTitle_referencia}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaLineasTblLabel_concepto}" for="concepto" />
+                        <p:inputText id="concepto" value="#{rnGcPolizaLineasTblController.selected.concepto}" title="#{bundle.CreateRnGcPolizaLineasTblTitle_concepto}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaLineasTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcPolizaLineasTblController.selected.creadoPor}" title="#{bundle.CreateRnGcPolizaLineasTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcPolizaLineasTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaLineasTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcPolizaLineasTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcPolizaLineasTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcPolizaLineasTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaLineasTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcPolizaLineasTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcPolizaLineasTblTitle_ultimaActualizacionPor}" required="true" requiredMessage="#{bundle.CreateRnGcPolizaLineasTblRequiredMessage_ultimaActualizacionPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaLineasTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcPolizaLineasTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcPolizaLineasTblTitle_ultimaFechaActualizacion}" required="true" requiredMessage="#{bundle.EditRnGcPolizaLineasTblRequiredMessage_ultimaFechaActualizacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaLineasTblLabel_catalogoCuentasId}" for="catalogoCuentasId" />
+                        <p:selectOneMenu id="catalogoCuentasId" value="#{rnGcPolizaLineasTblController.selected.catalogoCuentasId}" required="true" requiredMessage="#{bundle.EditRnGcPolizaLineasTblRequiredMessage_catalogoCuentasId}">
+                            <f:selectItems value="#{rnGcCatalogoCuentasTblController.itemsAvailableSelectOne}"
+                                           var="catalogoCuentasIdItem"
+                                           itemValue="#{catalogoCuentasIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaLineasTblLabel_polizaHeaderId}" for="polizaHeaderId" />
+                        <p:selectOneMenu id="polizaHeaderId" value="#{rnGcPolizaLineasTblController.selected.polizaHeaderId}" required="true" requiredMessage="#{bundle.EditRnGcPolizaLineasTblRequiredMessage_polizaHeaderId}">
+                            <f:selectItems value="#{rnGcPolizaHeaderTblController.itemsAvailableSelectOne}"
+                                           var="polizaHeaderIdItem"
+                                           itemValue="#{polizaHeaderIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcPolizaLineasTblController.create}" value="#{bundle.Save}" update="display,:RnGcPolizaLineasTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcPolizaLineasTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcPolizaLineasTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

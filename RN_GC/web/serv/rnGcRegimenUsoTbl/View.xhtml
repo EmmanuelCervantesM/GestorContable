@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcRegimenUsoTblViewDlg" widgetVar="RnGcRegimenUsoTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcRegimenUsoTblTitle}">
+            <h:form id="RnGcRegimenUsoTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcRegimenUsoTblController.selected != null}">
+                        <h:outputText value="Regimen Fiscal: "/>
+                        <h:outputText value="#{rnGcRegimenUsoTblController.selected.regimenId.claveRegimenFiscal} - #{rnGcRegimenUsoTblController.selected.regimenId.descripcion}" />
+                        <h:outputText value="Uso cfdi: "/>
+                        <h:outputText value="#{rnGcRegimenUsoTblController.selected.usocfdiId.CUsoCFDI} - #{rnGcRegimenUsoTblController.selected.usocfdiId.descripcion}" />
+                        <h:outputText value="#{bundle.ViewRnGcRegimenUsoTblLabel_fisica}"/>
+                        <h:outputText value="#{rnGcRegimenUsoTblController.selected.fisica}" title="#{bundle.ViewRnGcRegimenUsoTblTitle_fisica}"/>
+                        <h:outputText value="#{bundle.ViewRnGcRegimenUsoTblLabel_moral}"/>
+                        <h:outputText value="#{rnGcRegimenUsoTblController.selected.moral}" title="#{bundle.ViewRnGcRegimenUsoTblTitle_moral}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcRegimenUsoTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

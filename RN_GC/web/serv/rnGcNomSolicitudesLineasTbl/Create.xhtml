@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomSolicitudesLineasTblCreateDlg" widgetVar="RnGcNomSolicitudesLineasTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcNomSolicitudesLineasTblTitle}">
+            <h:form id="RnGcNomSolicitudesLineasTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomSolicitudesLineasTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudesLineasTblLabel_solicitudTrabajadorId}" for="solicitudTrabajadorId" />
+                        <p:inputText id="solicitudTrabajadorId" value="#{rnGcNomSolicitudesLineasTblController.selected.solicitudTrabajadorId}" title="#{bundle.CreateRnGcNomSolicitudesLineasTblTitle_solicitudTrabajadorId}" required="true" requiredMessage="#{bundle.CreateRnGcNomSolicitudesLineasTblRequiredMessage_solicitudTrabajadorId}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudesLineasTblLabel_totalGravado}" for="totalGravado" />
+                        <p:inputText id="totalGravado" value="#{rnGcNomSolicitudesLineasTblController.selected.totalGravado}" title="#{bundle.CreateRnGcNomSolicitudesLineasTblTitle_totalGravado}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudesLineasTblLabel_totalExento}" for="totalExento" />
+                        <p:inputText id="totalExento" value="#{rnGcNomSolicitudesLineasTblController.selected.totalExento}" title="#{bundle.CreateRnGcNomSolicitudesLineasTblTitle_totalExento}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudesLineasTblLabel_tipoClave}" for="tipoClave" />
+                        <p:inputText id="tipoClave" value="#{rnGcNomSolicitudesLineasTblController.selected.tipoClave}" title="#{bundle.CreateRnGcNomSolicitudesLineasTblTitle_tipoClave}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudesLineasTblLabel_tipoConcepto}" for="tipoConcepto" />
+                        <p:inputText id="tipoConcepto" value="#{rnGcNomSolicitudesLineasTblController.selected.tipoConcepto}" title="#{bundle.CreateRnGcNomSolicitudesLineasTblTitle_tipoConcepto}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudesLineasTblLabel_percepcionId}" for="percepcionId" />
+                        <p:selectOneMenu id="percepcionId" value="#{rnGcNomSolicitudesLineasTblController.selected.percepcionId}" required="true" requiredMessage="#{bundle.EditRnGcNomSolicitudesLineasTblRequiredMessage_percepcionId}">
+                            <f:selectItems value="#{rnGcNomPercepcionesTblController.itemsAvailableSelectOne}"
+                                           var="percepcionIdItem"
+                                           itemValue="#{percepcionIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudesLineasTblLabel_deduccionId}" for="deduccionId" />
+                        <p:selectOneMenu id="deduccionId" value="#{rnGcNomSolicitudesLineasTblController.selected.deduccionId}" required="true" requiredMessage="#{bundle.EditRnGcNomSolicitudesLineasTblRequiredMessage_deduccionId}">
+                            <f:selectItems value="#{rnGcNomDeduccionesTblController.itemsAvailableSelectOne}"
+                                           var="deduccionIdItem"
+                                           itemValue="#{deduccionIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomSolicitudesLineasTblController.create}" value="#{bundle.Save}" update="display,:RnGcNomSolicitudesLineasTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcNomSolicitudesLineasTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomSolicitudesLineasTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

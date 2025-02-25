@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpPaissatTblCreateDlg" widgetVar="RnGcCpPaissatTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCpPaissatTblTitle}">
+            <h:form id="RnGcCpPaissatTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpPaissatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPaissatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpPaissatTblController.selected.id}" title="#{bundle.CreateRnGcCpPaissatTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcCpPaissatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPaissatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpPaissatTblController.selected.descripcion}" title="#{bundle.CreateRnGcCpPaissatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPaissatTblLabel_clavePais}" for="clavePais" />
+                        <p:inputText id="clavePais" value="#{rnGcCpPaissatTblController.selected.clavePais}" title="#{bundle.CreateRnGcCpPaissatTblTitle_clavePais}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPaissatTblLabel_claveEstado}" for="claveEstado" />
+                        <p:inputText id="claveEstado" value="#{rnGcCpPaissatTblController.selected.claveEstado}" title="#{bundle.CreateRnGcCpPaissatTblTitle_claveEstado}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPaissatTblLabel_claveMunicipio}" for="claveMunicipio" />
+                        <p:inputText id="claveMunicipio" value="#{rnGcCpPaissatTblController.selected.claveMunicipio}" title="#{bundle.CreateRnGcCpPaissatTblTitle_claveMunicipio}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPaissatTblLabel_claveLocalidad}" for="claveLocalidad" />
+                        <p:inputText id="claveLocalidad" value="#{rnGcCpPaissatTblController.selected.claveLocalidad}" title="#{bundle.CreateRnGcCpPaissatTblTitle_claveLocalidad}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPaissatTblLabel_tipo}" for="tipo" />
+                        <p:inputText id="tipo" value="#{rnGcCpPaissatTblController.selected.tipo}" title="#{bundle.CreateRnGcCpPaissatTblTitle_tipo}" required="true" requiredMessage="#{bundle.CreateRnGcCpPaissatTblRequiredMessage_tipo}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPaissatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpPaissatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpPaissatTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcCpPaissatTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPaissatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpPaissatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpPaissatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPaissatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpPaissatTblController.selected.creadoPor}" title="#{bundle.CreateRnGcCpPaissatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcCpPaissatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPaissatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpPaissatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpPaissatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpPaissatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPaissatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpPaissatTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcCpPaissatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPaissatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpPaissatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpPaissatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpPaissatTblController.create}" value="#{bundle.Save}" update="display,:RnGcCpPaissatTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCpPaissatTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpPaissatTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="Emitidos"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcCfdisTransaccionesTblListForm">
+                <p:panel header="Emitidos">
+                    <p:dataTable id="datalist" value="#{rnGcCfdisTblController.obtenerEmitidos()}" var="item"
+                                 selectionMode="single" selection="#{rnGcCfdisLineasTblController.cfdiId}"
+                                 paginator="true" scrollable="true"
+                                 rowKey="#{item.id}" resizableColumns="true"
+                                 widgetVar="ingresosTable"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,15,20,25,30,35,40,45,50"
+                                 emptyMessage="No se encontraron facturas con esos criterios"
+                                 sortBy="#{item.fechaExpedicion}"
+                                 filteredValue="#{rnGcCfdisTblController.filteredEmitidos}"
+                                 >
+
+                        <!--
+                        <p:ajax event="rowSelect" update="viewButton"/>
+                        <p:ajax event="rowUnselect" update="viewButton"/>
+                        -->
+                        <p:ajax event="rowSelect" update="viewButton reenviarDocs descargarxml descagaPdf descargaCancelado"/>
+                        <p:ajax event="rowUnselect" update="viewButton reenviarDocs descargarxml descagaPdf descargaCancelado"/>
+
+                        <f:facet name="header">   <!--______________Busqueda Global____________-->
+                            <p:outputPanel>
+                                <h:outputText value="Buscar en todos lo campos: "/>
+                                <p:inputText id="globalFilter" onkeyup="PF('ingresosTable').filter()" style="width: 150px" placeholder="Ingresa el texto" />
+                            </p:outputPanel>
+                        </f:facet>                                               
+
+                        <p:column filterBy="#{item.uuid}" headerText="UUID" footerText="Contiene" filterMatchMode="contains" sortBy="#{item.uuid}" >
+                            <f:facet name="header">
+                                <h:outputText value="UUID"/>
+                            </f:facet>
+                            <h:outputText value="#{item.uuid}"/>
+                        </p:column>    
+
+                        <p:column filterBy="#{item.nombreReceptor}" headerText="nombreReceptor" footerText="contiene" filterMatchMode="contains" sortBy="#{item.nombreReceptor}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_nombreReceptor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombreReceptor}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.rfcReceptor}" headerText="rfcReceptor" footerText="contiene" filterMatchMode="contains" sortBy="#{item.rfcReceptor}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_rfcReceptor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rfcReceptor}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.folio}" headerText="folio" footerText="contiene" filterMatchMode="contains" sortBy="#{item.folio}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_folio}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.folio}"/>
+                        </p:column>    
+
+                        <p:column filterBy="#{item.formaPago}" headerText="formaPago" footerText="contiene" filterMatchMode="contains" sortBy="#{item.formaPago}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_formaPago}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.formaPago}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.metodoPago}" headerText="metodoPago" footerText="contiene" filterMatchMode="contains" sortBy="#{item.metodoPago}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_metodoPago}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.metodoPago}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.tipoComprobante}" headerText="tipoComprobante" footerText="contiene" filterMatchMode="contains" sortBy="#{item.tipoComprobante}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_tipoComprobante}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoComprobante}"/>
+                        </p:column>                                                
+
+                        <!--________________________________________________________________________________-->                        
+                        <p:column headerText="fechaExpedicion" filterBy="#{item.fechaExpedicion}" filterFunction="#{rnGcCfdisTblController.filterByFecha}" sortBy="#{item.fechaExpedicion}">
+                            <f:facet name="filter">
+                                <h:inputHidden id="filter"/>
+                            </f:facet>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_fechaExpedicion}"/>
+                                <br/>
+                                <p:calendar id="from" pattern="dd/MM/yyyy" style="width: 100px">
+                                    <p:ajax event="dateSelect" onstart="$(PrimeFaces.escapeClientId('#{p:component('filter')}'))[0].value = $(PrimeFaces.escapeClientId('#{p:component('from')}_input'))[0].value + '-' + $(PrimeFaces.escapeClientId('#{p:component('to')}_input'))[0].value" oncomplete="PF('ingresosTable').filter()"/>
+                                </p:calendar>
+                                <br/>
+                                <p:calendar id="to" pattern="dd/MM/yyyy" style="width: 100px">
+                                    <p:ajax event="dateSelect" onstart="$(PrimeFaces.escapeClientId('#{p:component('filter')}'))[0].value = $(PrimeFaces.escapeClientId('#{p:component('from')}_input'))[0].value + '-' + $(PrimeFaces.escapeClientId('#{p:component('to')}_input'))[0].value" oncomplete="PF('ingresosTable').filter()"/>
+                                </p:calendar>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaExpedicion}">
+                                <f:convertDateTime type="date" dateStyle="medium" />
+                            </h:outputText>
+                        </p:column>
+                        <!--____________________________________________________________________________________-->
+
+                        <p:column filterBy="#{item.usoCfdi}" headerText="usoCfdi" footerText="contiene" filterMatchMode="contains" sortBy="#{item.usoCfdi}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_usoCfdi}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.usoCfdi}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.moneda}" headerText="moneda" footerText="contiene" filterMatchMode="contains" sortBy="#{item.moneda}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_moneda}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.moneda}"/>
+                        </p:column>  
+
+                        <p:column filterBy="#{item.importe}" headerText="importe" footerText="contiene" filterMatchMode="contains" sortBy="#{item.importe}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdisTblTitle_importe}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.importe}">
+                                <f:convertNumber type="currency" currencySymbol="$" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column filterBy="#{item.saldoInsoluto}" headerText="Saldo Insoluto" filterMatchMode="contains" sortBy="#{item.saldoInsoluto}">
+                                <h:outputText value="#{item.saldoInsoluto}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
+                        </p:column>
+                        <p:column filterBy="#{item.estatus}" headerText="Estatus" footerText="contiene" filterMatchMode="contains" sortBy="#{item.estatus}">
+                            <f:facet name="header">
+                                <h:outputText value="Estatus"/>
+                            </f:facet>
+                            <h:outputText value="#{item.estatus}"/>
+                        </p:column> 
+                        <p:column style="width: 80px" headerText="Cancelar">
+                            <p:commandButton style="font-size: 10px !important;" id="cancelButton" value="Cancelar" icon="ui-icon-cancel" title="Cancelar Factura" disabled="#{rnGcCfdisLineasTblController.estadoCFDI(item)}" update="cancelarCfdiForm" oncomplete="PF('cancelCfdiDialog').show()"/>
+                        </p:column>
+                        <p:column style="width: 80px" headerText="Actualizar">
+                            <p:commandButton style="font-size: 10px !important;" id="refreshButton" value= "Actualizar" icon="ui-icon-refresh" title="Actualizar estatus" disabled="#{rnGcCfdisLineasTblController.estadoCFDI(item)}" update="updateCfdiForm" oncomplete="PF('updateCfdiDialog').show()"/>
+                        </p:column>
+                        <p:column style="width: 45px" headerText="Abono">
+                            <p:link outcome="complementoPago" value="Abonar">
+                                <f:param name="personas" value="#{facturarContoller.buscarPersona(item)}"/>
+                            </p:link>
+                        </p:column>
+
+                        <f:facet name="header">                         
+                            <p:commandButton id="viewButton" icon="ui-icon-search" value="#{bundle.View}" actionListener="#{rnGcCfdisLineasTblController.prepareLineas(rnGcCfdisLineasTblController.cfdiId)}" update="RnGcCfdisTransaccionesTblViewForm" oncomplete="PF('RnGcCfdisTransaccionesTblViewDialog').show()" disabled="#{rnGcCfdisLineasTblController.cfdiId.uuid == null}"/>
+                            <!--empty rnGcCfdisTblController.selected-->
+                            <p:commandButton id="reenviarDocs" icon="ui-icon-transferthick-e-w" value="Reenviar XML, PDF" update="reenviarDocsForm" actionListener="#{rnGcArchivosTblController.prepareDocs(rnGcCfdisLineasTblController.cfdiId)}" oncomplete="PF('reenviarDocsDialog').show()" disabled="#{rnGcCfdisLineasTblController.cfdiId.uuid == null}" />
+                            <p:commandButton id="descargarxml" icon="ui-icon-arrowthickstop-1-s" value="Descargar XML" actionListener="#{rnGcCfdisLineasTblController.descargaXml(rnGcCfdisLineasTblController.cfdiId)}" ajax="false" update="RnGcCfdisTblListForm" disabled="#{rnGcCfdisLineasTblController.cfdiId.uuid == null}">
+                                <p:fileDownload value="#{rnGcCfdisLineasTblController.downLoadFile}" />
+                            </p:commandButton>
+                            <p:commandButton id="descagaPdf" icon="ui-icon-arrowthickstop-1-s" value="Descargar PDF" actionListener="#{rnGcCfdisLineasTblController.descargaPdf(rnGcCfdisLineasTblController.cfdiId)}" ajax="false" update="RnGcCfdisTblListForm" disabled="#{rnGcCfdisLineasTblController.cfdiId.uuid == null}">
+                                <p:fileDownload value="#{rnGcCfdisLineasTblController.downLoadFile}"/>
+                            </p:commandButton>
+                            <p:commandButton id="descargaCancelado" 
+                                        icon="ui-icon-check" 
+                                        value="Descargar Acuse Cancelación" 
+                                        action="#{rnGcCfdisLineasTblController.descargaCancelado2(rnGcCfdisLineasTblController.cfdiId)}"
+                                        ajax="false"
+                                        update="RnGcCfdisTblListForm"
+                                        disabled="#{rnGcCfdisLineasTblController.cfdiId.estatus ne 'Cancelado'}">
+                           <p:fileDownload value="#{rnGcCfdisLineasTblController.downLoadFileC}"/>
+                       </p:commandButton>
+
+
+
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+                <p:contextMenu for="datalist" widgetVar="cMenu">
+                    <p:menuitem value="Ver Factura" icon="ui-icon-search" update=":RnGcCfdisTransaccionesTblViewForm" actionListener="#{rnGcCfdisLineasTblController.prepareLineas(rnGcCfdisTblController.selected)}" onclick="PF('RnGcCfdisTransaccionesTblViewDialog').show()" />
+                </p:contextMenu>
+            </h:form>
+            <ui:include src="ingresos_View.xhtml"/>
+            <ui:include src="reenviarDocs.xhtml"/>
+
+            <p:dialog id="cancelCfdiDlg" widgetVar="cancelCfdiDialog" modal="true" resizable="false" appendTo="@(body)" header="Cancelar CFDI">
+                <h:form id="cancelarCfdiForm">
+                    <h:panelGroup id="display">
+                        <h:panelGrid columns="4" cellpadding="8">
+                            <h:outputText value="Certificado: " style="font-weight: bold;"/>
+                            <p:selectOneMenu id="certificado" value="#{rnGcCfdisLineasTblController.certificados}" required="true" requiredMessage="El certificado es necesario">
+                                <f:selectItem itemLabel="Selecciona un certificado..."/>
+                                <f:selectItems value="#{rnGcCertificadosTblController.listaCertificadosActivos()}"
+                                               var="certificado"
+                                               itemLabel="#{certificado.nombreCertificado} - #{certificado.numeroCertificado}"
+                                               itemValue="#{certificado}"/>
+                                <p:ajax update="cancelarCfdiForm"/>
+                            </p:selectOneMenu>
+                        
+                            <h:outputText value="UUID a cancelar: " style="font-weight: bold;"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.uuid}"/>
+                            <h:outputText value="Motivo de Cancelacion:" style="font-weight: bold;"/>
+                            <p:selectOneMenu id="motiv" value="#{rnGcCfdisLineasTblController.motivo}" style="width: 250px" >
+                                <f:selectItem itemLabel="Selecciona uno..." itemValue=""/>
+                                <f:selectItems value="#{rnGcTipocancelacionsatTblController.itemsAvailableSelectOne}"
+                                               var="cancelacionItem"
+                                               itemLabel="#{cancelacionItem.claveTipoCancelacion} - #{cancelacionItem.descripcion}"
+                                               itemValue="#{cancelacionItem.claveTipoCancelacion}"/>
+                                <p:ajax update="cancelarCfdiForm"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="UUID que sustituye:" style="font-weight: bold;" rendered="#{rnGcCfdisLineasTblController.motivo == '01'}"/>
+                            <h:outputText id="sustitucion" value="#{rnGcCfdisLineasTblController.uuidRelacionado}" rendered="#{rnGcCfdisLineasTblController.motivo == '01'}"/>
+                        </h:panelGrid>
+                        <h:panelGrid id="buscador" columns="10" cellpadding="8" rendered="#{rnGcCfdisLineasTblController.motivo == '01'}">
+                            <p:outputLabel value="Fecha Inicial: " for="fechaInicial" style="font-weight: bold;"/>
+                            <p:calendar id="fechaInicial" style="width: 160px" pattern="dd/MM/yyyy" value="#{rnGcCfdisLineasTblController.ini}" showOn="button" locale="es"/>
+                            <p:outputLabel value="Fecha Final: " for="fechaFinal" style="font-weight: bold;"/>
+                            <p:calendar id="fechaFinal" style="width: 160px" pattern="dd/MM/yyyy" value="#{rnGcCfdisLineasTblController.fin}" showOn="button" locale="es"/>
+                            <p:commandButton actionListener="#{rnGcCfdisLineasTblController.buscarFacturasRFCFecha()}" value="Buscar facturas" update="cancelarCfdiForm"/>                    
+                        </h:panelGrid>
+                        <p:dataTable id="datalistSustitucion" value="#{rnGcCfdisLineasTblController.listaCfdisSustitucion}" var="itemS" widgetVar="listaSustitucion" 
+                                            selectionMode="single" selection="#{rnGcCfdisLineasTblController.cfdiSustitucion}"
+                                            paginator="true" emptyMessage="No se encontraron registros." style="width:1000px"
+                                            rowKey="#{itemS.id}" rows="10" rowsPerPageTemplate="10,20,30,40,50"
+                                            rendered="#{rnGcCfdisLineasTblController.motivo == '01'}">
+                                    
+                            <p:column >
+                                <f:facet name="header">
+                                    <h:outputText value="Folio Fiscal"/>
+                                </f:facet>
+                                <h:outputText value="#{itemS.uuid}"/>
+                            </p:column>
+                            <p:column width="80">
+                                <f:facet name="header">
+                                    <h:outputText value="Serie"/>
+                                </f:facet>
+                                <h:outputText value="#{itemS.serie}"/>
+                            </p:column>
+                            <p:column width="80">
+                                <f:facet name="header">
+                                    <h:outputText value="Folio"/>
+                                </f:facet>
+                                <h:outputText value="#{itemS.folio}"/>
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton value="Seleccionar CFDI" actionListener="#{rnGcCfdisLineasTblController.limpiarListaSustitucion()}" update=":cancelarCfdiForm"/>
+                            </f:facet>
+                        </p:dataTable>
+                        
+                        <p:commandButton actionListener="#{rnGcCfdisLineasTblController.cancelarComplemento()}" ajax="false" value="Cancelar CFDI" update="display, :RnGcCfdisTransaccionesTblListForm:datalist,:growl, :RnGcCfdisTransaccionesTblListForm:datalist:cancelButton" oncomplete="handleSubmit(args,'cancelCfdiDialog');">
+                        <p:fileDownload value="#{rnGcCfdisLineasTblController.downLoadFileC}"/>
+                        </p:commandButton>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+            
+            <p:dialog id="updateCfdiDlg" widgetVar="updateCfdiDialog" modal="true" resizable="false" appendTo="@(body)" header="Actualizar estatus">
+                <h:form id="updateCfdiForm">
+                    <h:panelGroup id="display">
+                        <h:panelGrid columns="4" cellpadding="8">
+                            <h:outputText value="Certificado: " style="font-weight: bold;"/>
+                            <p:selectOneMenu id="certificado" value="#{rnGcCfdisLineasTblController.certificados}" required="true" requiredMessage="El certificado es necesario">
+                                <f:selectItem itemLabel="Selecciona un certificado..."/>
+                                <f:selectItems value="#{rnGcCertificadosTblController.listaCertificadosActivos()}"
+                                               var="certificado"
+                                               itemLabel="#{certificado.nombreCertificado} - #{certificado.numeroCertificado}"
+                                               itemValue="#{certificado}"/>
+                                <p:ajax update="updateCfdiForm"/>
+                            </p:selectOneMenu>
+                        
+                            <h:outputText value="UUID a actualizar: " style="font-weight: bold;"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.uuid}"/>
+                        </h:panelGrid>
+                        
+                        <p:commandButton actionListener="#{rnGcCfdisLineasTblController.actualizarEstatus()}" ajax="false" value="Actualizar estatus" update="display, :RnGcCfdisTransaccionesTblListForm,:growl" oncomplete="handleSubmit(args,'updateCfdiDialog');"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+
+        </ui:define>
+    </ui:composition>
+
+</html>

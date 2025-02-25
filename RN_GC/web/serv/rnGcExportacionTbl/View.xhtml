@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcExportacionTblViewDlg" widgetVar="RnGcExportacionTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcExportacionTblTitle}">
+            <h:form id="RnGcExportacionTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcExportacionTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcExportacionTblLabel_id}"/>
+                        <h:outputText value="#{rnGcExportacionTblController.selected.id}" title="#{bundle.ViewRnGcExportacionTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcExportacionTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcExportacionTblController.selected.clave}" title="#{bundle.ViewRnGcExportacionTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcExportacionTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcExportacionTblController.selected.descripcion}" title="#{bundle.ViewRnGcExportacionTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcExportacionTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcExportacionTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcExportacionTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcExportacionTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcExportacionTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcExportacionTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcExportacionTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcExportacionTblController.selected.creadoPor}" title="#{bundle.ViewRnGcExportacionTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcExportacionTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcExportacionTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcExportacionTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcExportacionTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcExportacionTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcExportacionTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcExportacionTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcExportacionTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcExportacionTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcExportacionTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

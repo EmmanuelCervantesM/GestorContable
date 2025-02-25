@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTransaccionesTblViewDlg" widgetVar="RnGcTransaccionesTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcTransaccionesTblTitle}">
+            <h:form id="RnGcTransaccionesTblViewForm">
+                <h:panelGroup id="display">                    
+                    <p:panelGrid columns="4" rendered="#{rnGcTransaccionesTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_uuid}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.uuid}" title="#{bundle.ViewRnGcTransaccionesTblTitle_uuid}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_nombreEmisor}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.nombreEmisor}" title="#{bundle.ViewRnGcTransaccionesTblTitle_nombreEmisor}"/>                        
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_rfcEmisor}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.rfcEmisor}" title="#{bundle.ViewRnGcTransaccionesTblTitle_rfcEmisor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_nombreReceptor}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.nombreReceptor}" title="#{bundle.ViewRnGcTransaccionesTblTitle_nombreReceptor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_rfcReceptor}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.rfcReceptor}" title="#{bundle.ViewRnGcTransaccionesTblTitle_rfcReceptor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_folio}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.folio}" title="#{bundle.ViewRnGcTransaccionesTblTitle_folio}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_claveRegimenFiscal}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.claveRegimenFiscal}" title="#{bundle.ViewRnGcTransaccionesTblTitle_claveRegimenFiscal}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_formaPago}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.formaPago}" title="#{bundle.ViewRnGcTransaccionesTblTitle_formaPago}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_metodoPago}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.metodoPago}" title="#{bundle.ViewRnGcTransaccionesTblTitle_metodoPago}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_condicionPago}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.condicionPago}" title="#{bundle.ViewRnGcTransaccionesTblTitle_condicionPago}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_tipoComprobante}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.tipoComprobante}" title="#{bundle.ViewRnGcTransaccionesTblTitle_tipoComprobante}"/>                        
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_lugarExpedicion}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.lugarExpedicion}" title="#{bundle.ViewRnGcTransaccionesTblTitle_lugarExpedicion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_fechaExpedicion}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.fechaExpedicion}" title="#{bundle.ViewRnGcTransaccionesTblTitle_fechaExpedicion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>                        
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_usoCfdi}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.usoCfdi}" title="#{bundle.ViewRnGcTransaccionesTblTitle_usoCfdi}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_moneda}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.moneda}" title="#{bundle.ViewRnGcTransaccionesTblTitle_moneda}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTransaccionesTblLabel_importe}"/>
+                        <h:outputText value="#{rnGcTransaccionesTblController.selected.importe}" title="#{bundle.ViewRnGcTransaccionesTblTitle_importe}"/>                        
+                    </p:panelGrid>
+                    <br/>
+                    <h:form id="RnGcTrxlineasTblListForm">
+                        <p:dataTable id="lineas" value="#{rnGcTrxlineasTblController.itemsTrxLineas}" var="line"
+                                     selectionMode="single" selection="#{rnGcTrxlineasTblController.selected}"
+                                     paginator="true"
+                                     rowKey="#{line.id}" style="width: 1241px"
+                                     rows="10">
+                            <f:facet name="header">
+                                Conceptos
+                            </f:facet>
+                            <p:column headerText="#{bundle.ListRnGcTrxlineasTblTitle_claveProdServ}" style="width: 65px">
+                                <h:outputText value="#{line.claveProdServ}"/>
+                            </p:column>
+                            <p:column headerText="#{bundle.ListRnGcTrxlineasTblTitle_noIdentificacion}" style="width: 83px">
+                                <h:outputText value="#{line.noIdentificacion}" />
+                            </p:column>
+                            <p:column headerText="#{bundle.ListRnGcTrxlineasTblTitle_cantidad}" style="width: 57px">
+                                <h:outputText value="#{line.cantidad}" />
+                            </p:column>
+                            <p:column headerText="#{bundle.ListRnGcTrxlineasTblTitle_claveUnidad}" style="width: 55px">
+                                <h:outputText value="#{line.claveUnidad}" />
+                            </p:column>
+                            <p:column headerText="#{bundle.ListRnGcTrxlineasTblTitle_unidad}" style="width: 85px">
+                                <h:outputText value="#{line.unidad}" />
+                            </p:column>
+                            <p:column headerText="#{bundle.ListRnGcTrxlineasTblTitle_descripcion}" style="width: 115px">
+                                <h:outputText value="#{line.descripcion}" />
+                            </p:column>
+                            <p:column headerText="#{bundle.ListRnGcTrxlineasTblTitle_valorUnit}" style="width: 57px">
+                                <h:outputText value="#{line.valorUnit}" />
+                            </p:column>
+                            <p:column headerText="#{bundle.ListRnGcTrxlineasTblTitle_importe}" style="width: 57px">
+                                <h:outputText value="#{line.importe}" />
+                            </p:column>
+                            <p:column headerText="#{bundle.ListRnGcTrxlineasTblTitle_base}" style="width: 55px">
+                                <h:outputText value="#{line.base}" />
+                            </p:column>
+                            <p:column headerText="#{bundle.ListRnGcTrxlineasTblTitle_impuesto}" style="width: 57px">
+                                <h:outputText value="#{line.impuesto}" />
+                            </p:column>
+                            <p:column headerText="#{bundle.ListRnGcTrxlineasTblTitle_tipoFactor}" style="width: 50px">
+                                <h:outputText value="#{line.tipoFactor}" />
+                            </p:column>
+                            <p:column headerText="#{bundle.ListRnGcTrxlineasTblTitle_tipoTasa}" style="width: 50px">
+                                <h:outputText value="#{line.tipoTasa}" />                                
+                            </p:column>
+                            <p:column headerText="#{bundle.ListRnGcTrxlineasTblTitle_importeImpuesto}" style="width: 80px">
+                                <h:outputText value="#{line.importeImpuesto}" />
+                            </p:column>                                
+                        </p:dataTable>
+                    </h:form>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcTransaccionesTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

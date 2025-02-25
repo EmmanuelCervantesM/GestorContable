@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPeriodicidadTblViewDlg" widgetVar="RnGcPeriodicidadTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcPeriodicidadTblTitle}">
+            <h:form id="RnGcPeriodicidadTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPeriodicidadTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcPeriodicidadTblLabel_id}"/>
+                        <h:outputText value="#{rnGcPeriodicidadTblController.selected.id}" title="#{bundle.ViewRnGcPeriodicidadTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPeriodicidadTblLabel_CPeriodicidad}"/>
+                        <h:outputText value="#{rnGcPeriodicidadTblController.selected.CPeriodicidad}" title="#{bundle.ViewRnGcPeriodicidadTblTitle_CPeriodicidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPeriodicidadTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcPeriodicidadTblController.selected.descripcion}" title="#{bundle.ViewRnGcPeriodicidadTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPeriodicidadTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcPeriodicidadTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcPeriodicidadTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPeriodicidadTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcPeriodicidadTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcPeriodicidadTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPeriodicidadTblLabel_versionCFDI}"/>
+                        <h:outputText value="#{rnGcPeriodicidadTblController.selected.versionCFDI}" title="#{bundle.ViewRnGcPeriodicidadTblTitle_versionCFDI}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPeriodicidadTblLabel_versioCatalogo}"/>
+                        <h:outputText value="#{rnGcPeriodicidadTblController.selected.versioCatalogo}" title="#{bundle.ViewRnGcPeriodicidadTblTitle_versioCatalogo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPeriodicidadTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcPeriodicidadTblController.selected.creadoPor}" title="#{bundle.ViewRnGcPeriodicidadTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPeriodicidadTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcPeriodicidadTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcPeriodicidadTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPeriodicidadTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcPeriodicidadTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcPeriodicidadTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPeriodicidadTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcPeriodicidadTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcPeriodicidadTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcPeriodicidadTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpColoniasatTblViewDlg" widgetVar="RnGcCpColoniasatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpColoniasatTblTitle}">
+            <h:form id="RnGcCpColoniasatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpColoniasatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpColoniasatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpColoniasatTblController.selected.id}" title="#{bundle.ViewRnGcCpColoniasatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpColoniasatTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpColoniasatTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpColoniasatTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpColoniasatTblLabel_clavePais}"/>
+                        <h:outputText value="#{rnGcCpColoniasatTblController.selected.clavePais}" title="#{bundle.ViewRnGcCpColoniasatTblTitle_clavePais}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpColoniasatTblLabel_claveColonia}"/>
+                        <h:outputText value="#{rnGcCpColoniasatTblController.selected.claveColonia}" title="#{bundle.ViewRnGcCpColoniasatTblTitle_claveColonia}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpColoniasatTblLabel_codigoPostal}"/>
+                        <h:outputText value="#{rnGcCpColoniasatTblController.selected.codigoPostal}" title="#{bundle.ViewRnGcCpColoniasatTblTitle_codigoPostal}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpColoniasatTblLabel_tipo}"/>
+                        <h:outputText value="#{rnGcCpColoniasatTblController.selected.tipo}" title="#{bundle.ViewRnGcCpColoniasatTblTitle_tipo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpColoniasatTblLabel_fechaInicio}"/>
+                        <h:outputText value="#{rnGcCpColoniasatTblController.selected.fechaInicio}" title="#{bundle.ViewRnGcCpColoniasatTblTitle_fechaInicio}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpColoniasatTblLabel_fechaFin}"/>
+                        <h:outputText value="#{rnGcCpColoniasatTblController.selected.fechaFin}" title="#{bundle.ViewRnGcCpColoniasatTblTitle_fechaFin}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpColoniasatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpColoniasatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpColoniasatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpColoniasatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpColoniasatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpColoniasatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpColoniasatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpColoniasatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpColoniasatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpColoniasatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpColoniasatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpColoniasatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpColoniasatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

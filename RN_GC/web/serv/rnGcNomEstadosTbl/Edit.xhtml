@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomEstadosTblEditDlg" widgetVar="RnGcNomEstadosTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcNomEstadosTblTitle}">
+            <h:form id="RnGcNomEstadosTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomEstadosTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcNomEstadosTblLabel_cveEstado}" for="cveEstado" />
+                        <p:inputText id="cveEstado" value="#{rnGcNomEstadosTblController.selected.cveEstado}" title="#{bundle.EditRnGcNomEstadosTblTitle_cveEstado}" required="true" requiredMessage="#{bundle.EditRnGcNomEstadosTblRequiredMessage_cveEstado}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomEstadosTblLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{rnGcNomEstadosTblController.selected.nombre}" title="#{bundle.EditRnGcNomEstadosTblTitle_nombre}" />
+                        <p:outputLabel value="#{bundle.EditRnGcNomEstadosTblLabel_version}" for="version" />
+                        <p:inputText id="version" value="#{rnGcNomEstadosTblController.selected.version}" title="#{bundle.EditRnGcNomEstadosTblTitle_version}" required="true" requiredMessage="#{bundle.EditRnGcNomEstadosTblRequiredMessage_version}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomEstadosTblLabel_revision}" for="revision" />
+                        <p:inputText id="revision" value="#{rnGcNomEstadosTblController.selected.revision}" title="#{bundle.EditRnGcNomEstadosTblTitle_revision}" required="true" requiredMessage="#{bundle.EditRnGcNomEstadosTblRequiredMessage_revision}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomEstadosTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomEstadosTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcNomEstadosTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcNomEstadosTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomEstadosTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomEstadosTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcNomEstadosTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomEstadosTblLabel_cvePais}" for="cvePais" />
+                        <p:inputText id="cvePais" value="#{rnGcNomEstadosTblController.selected.cvePais}" title="#{bundle.EditRnGcNomEstadosTblTitle_cvePais}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomEstadosTblController.update}" value="#{bundle.Save}" update="display,:RnGcNomEstadosTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcNomEstadosTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomEstadosTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

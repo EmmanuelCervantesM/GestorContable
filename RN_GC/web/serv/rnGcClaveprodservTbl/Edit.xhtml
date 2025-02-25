@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcClaveprodservTblEditDlg" widgetVar="RnGcClaveprodservTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcClaveprodservTblTitle}">
+            <h:form id="RnGcClaveprodservTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcClaveprodservTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcClaveprodservTblLabel_CClaveProdServ}" for="CClaveProdServ" />
+                        <p:inputText id="CClaveProdServ" value="#{rnGcClaveprodservTblController.selected.CClaveProdServ}" title="#{bundle.EditRnGcClaveprodservTblTitle_CClaveProdServ}" required="true" requiredMessage="#{bundle.EditRnGcClaveprodservTblRequiredMessage_CClaveProdServ}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcClaveprodservTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcClaveprodservTblController.selected.descripcion}" title="#{bundle.EditRnGcClaveprodservTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcClaveprodservTblLabel_incluirIvaTrasladado}" for="incluirIvaTrasladado" />
+                        <p:inputText id="incluirIvaTrasladado" value="#{rnGcClaveprodservTblController.selected.incluirIvaTrasladado}" title="#{bundle.EditRnGcClaveprodservTblTitle_incluirIvaTrasladado}" required="true" requiredMessage="#{bundle.EditRnGcClaveprodservTblRequiredMessage_incluirIvaTrasladado}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcClaveprodservTblLabel_incluirIEPSTrasladado}" for="incluirIEPSTrasladado" />
+                        <p:inputText id="incluirIEPSTrasladado" value="#{rnGcClaveprodservTblController.selected.incluirIEPSTrasladado}" title="#{bundle.EditRnGcClaveprodservTblTitle_incluirIEPSTrasladado}" required="true" requiredMessage="#{bundle.EditRnGcClaveprodservTblRequiredMessage_incluirIEPSTrasladado}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcClaveprodservTblLabel_complementoIncluir}" for="complementoIncluir" />
+                        <p:inputText id="complementoIncluir" value="#{rnGcClaveprodservTblController.selected.complementoIncluir}" title="#{bundle.EditRnGcClaveprodservTblTitle_complementoIncluir}" />
+                        <p:outputLabel value="#{bundle.EditRnGcClaveprodservTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcClaveprodservTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcClaveprodservTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcClaveprodservTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcClaveprodservTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcClaveprodservTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcClaveprodservTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcClaveprodservTblLabel_versionCFDI}" for="versionCFDI" />
+                        <p:inputText id="versionCFDI" value="#{rnGcClaveprodservTblController.selected.versionCFDI}" title="#{bundle.EditRnGcClaveprodservTblTitle_versionCFDI}" />
+                        <p:outputLabel value="#{bundle.EditRnGcClaveprodservTblLabel_versionCatalogo}" for="versionCatalogo" />
+                        <p:inputText id="versionCatalogo" value="#{rnGcClaveprodservTblController.selected.versionCatalogo}" title="#{bundle.EditRnGcClaveprodservTblTitle_versionCatalogo}" />
+                        <p:outputLabel value="#{bundle.EditRnGcClaveprodservTblLabel_estimuloFranjaFronteriza}" for="estimuloFranjaFronteriza" />
+                        <p:selectBooleanCheckbox id="estimuloFranjaFronteriza" value="#{rnGcClaveprodservTblController.selected.estimuloFranjaFronteriza}" required="true" requiredMessage="#{bundle.EditRnGcClaveprodservTblRequiredMessage_estimuloFranjaFronteriza}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcClaveprodservTblLabel_palabrasSimilares}" for="palabrasSimilares" />
+                        <p:inputText id="palabrasSimilares" value="#{rnGcClaveprodservTblController.selected.palabrasSimilares}" title="#{bundle.EditRnGcClaveprodservTblTitle_palabrasSimilares}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcClaveprodservTblController.update}" value="#{bundle.Save}" update="display,:RnGcClaveprodservTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcClaveprodservTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcClaveprodservTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

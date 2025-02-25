@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCatalogosusosTblCreateDlg" widgetVar="RnGcCatalogosusosTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCatalogosusosTblTitle}">
+            <h:form id="RnGcCatalogosusosTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCatalogosusosTblController.selected != null}">
+                        <p:outputLabel value="Clave de uso" for="CUsoCFDI" />
+                        <p:inputText id="CUsoCFDI" value="#{rnGcCatalogosusosTblController.selected.CUsoCFDI}" title="#{bundle.CreateRnGcCatalogosusosTblTitle_CUsoCFDI}" required="true" requiredMessage="#{bundle.CreateRnGcCatalogosusosTblRequiredMessage_CUsoCFDI}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosusosTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCatalogosusosTblController.selected.descripcion}" title="#{bundle.CreateRnGcCatalogosusosTblTitle_descripcion}" required="true" requiredMessage="#{bundle.CreateRnGcCatalogosusosTblRequiredMessage_descripcion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosusosTblLabel_aplicacion}" for="aplicacion" />
+                        <p:inputText id="aplicacion" value="#{rnGcCatalogosusosTblController.selected.aplicacion}" title="#{bundle.CreateRnGcCatalogosusosTblTitle_aplicacion}" required="true" requiredMessage="#{bundle.CreateRnGcCatalogosusosTblRequiredMessage_aplicacion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosusosTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCatalogosusosTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCatalogosusosTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcCatalogosusosTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosusosTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCatalogosusosTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCatalogosusosTblTitle_fechaFinVigencia}" required="true" requiredMessage="#{bundle.EditRnGcCatalogosusosTblRequiredMessage_fechaFinVigencia}" showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCatalogosusosTblController.create}" value="#{bundle.Save}" update="display,:RnGcCatalogosusosTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCatalogosusosTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCatalogosusosTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

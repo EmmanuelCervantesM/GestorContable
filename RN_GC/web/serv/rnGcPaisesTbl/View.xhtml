@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPaisesTblViewDlg" widgetVar="RnGcPaisesTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcPaisesTblTitle}">
+            <h:form id="RnGcPaisesTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPaisesTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcPaisesTblLabel_id}"/>
+                        <h:outputText value="#{rnGcPaisesTblController.selected.id}" title="#{bundle.ViewRnGcPaisesTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPaisesTblLabel_CPais}"/>
+                        <h:outputText value="#{rnGcPaisesTblController.selected.CPais}" title="#{bundle.ViewRnGcPaisesTblTitle_CPais}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPaisesTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcPaisesTblController.selected.descripcion}" title="#{bundle.ViewRnGcPaisesTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPaisesTblLabel_formatoCodPostal}"/>
+                        <h:outputText value="#{rnGcPaisesTblController.selected.formatoCodPostal}" title="#{bundle.ViewRnGcPaisesTblTitle_formatoCodPostal}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPaisesTblLabel_formatoIdentidadTributaria}"/>
+                        <h:outputText value="#{rnGcPaisesTblController.selected.formatoIdentidadTributaria}" title="#{bundle.ViewRnGcPaisesTblTitle_formatoIdentidadTributaria}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPaisesTblLabel_validacionIdentidadTributaria}"/>
+                        <h:outputText value="#{rnGcPaisesTblController.selected.validacionIdentidadTributaria}" title="#{bundle.ViewRnGcPaisesTblTitle_validacionIdentidadTributaria}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPaisesTblLabel_agrupaciones}"/>
+                        <h:outputText value="#{rnGcPaisesTblController.selected.agrupaciones}" title="#{bundle.ViewRnGcPaisesTblTitle_agrupaciones}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPaisesTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcPaisesTblController.selected.creadoPor}" title="#{bundle.ViewRnGcPaisesTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPaisesTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcPaisesTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcPaisesTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPaisesTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcPaisesTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcPaisesTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPaisesTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcPaisesTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcPaisesTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcPaisesTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

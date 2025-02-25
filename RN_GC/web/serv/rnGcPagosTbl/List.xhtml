@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcPagosTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcPagosTblListForm">
+                <p:panel header="#{bundle.ListRnGcPagosTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcPagosTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcPagosTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_id}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_noPago}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.noPago}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_nombreEmisor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombreEmisor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_RFCEmisor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.RFCEmisor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_tipoCopmprobante}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoCopmprobante}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_lugarExpedicion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.lugarExpedicion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_fechaExpedicion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaExpedicion}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_horaExpedicion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.horaExpedicion}">
+                                <f:convertDateTime pattern="HH:mm:ss" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_moneda}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.moneda}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_RFCReceptor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.RFCReceptor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_usoCFDI}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.usoCFDI}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_importe}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.importe}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_impuesto}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.impuesto}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_subtotal}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.subtotal}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_totalImpuesto}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.totalImpuesto}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_total}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.total}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_creadoPor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.creadoPor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_fechaCreacion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaCreacion}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_ultimaActualizacionPor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.ultimaActualizacionPor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_ultimaFechaActualizacion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.ultimaFechaActualizacion}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_facturasId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.facturasId}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_rngcfacturastblId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rngcfacturastblId}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPagosTblTitle_rngcfacturastblId1}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rngcfacturastblId1}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcPagosTblController.prepareCreate}" update=":RnGcPagosTblCreateForm" oncomplete="PF('RnGcPagosTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcPagosTblViewForm" oncomplete="PF('RnGcPagosTblViewDialog').show()" disabled="#{empty rnGcPagosTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcPagosTblEditForm" oncomplete="PF('RnGcPagosTblEditDialog').show()" disabled="#{empty rnGcPagosTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcPagosTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcPagosTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

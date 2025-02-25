@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpUnidadesParteTransporteTblViewDlg" widgetVar="RnGcCpUnidadesParteTransporteTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpUnidadesParteTransporteTblTitle}">
+            <h:form id="RnGcCpUnidadesParteTransporteTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpUnidadesParteTransporteTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesParteTransporteTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpUnidadesParteTransporteTblController.selected.id}" title="#{bundle.ViewRnGcCpUnidadesParteTransporteTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesParteTransporteTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpUnidadesParteTransporteTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpUnidadesParteTransporteTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesParteTransporteTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpUnidadesParteTransporteTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpUnidadesParteTransporteTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesParteTransporteTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpUnidadesParteTransporteTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpUnidadesParteTransporteTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesParteTransporteTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpUnidadesParteTransporteTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpUnidadesParteTransporteTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesParteTransporteTblLabel_unidadId}"/>
+                        <h:outputText value="#{rnGcCpUnidadesParteTransporteTblController.selected.unidadId}" title="#{bundle.ViewRnGcCpUnidadesParteTransporteTblTitle_unidadId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesParteTransporteTblLabel_parteTransId}"/>
+                        <h:outputText value="#{rnGcCpUnidadesParteTransporteTblController.selected.parteTransId}" title="#{bundle.ViewRnGcCpUnidadesParteTransporteTblTitle_parteTransId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpUnidadesParteTransporteTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpContenedormaritimosatTblCreateDlg" widgetVar="RnGcCpContenedormaritimosatTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCpContenedormaritimosatTblTitle}">
+            <h:form id="RnGcCpContenedormaritimosatTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpContenedormaritimosatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedormaritimosatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpContenedormaritimosatTblController.selected.id}" title="#{bundle.CreateRnGcCpContenedormaritimosatTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcCpContenedormaritimosatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedormaritimosatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpContenedormaritimosatTblController.selected.clave}" title="#{bundle.CreateRnGcCpContenedormaritimosatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedormaritimosatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpContenedormaritimosatTblController.selected.descripcion}" title="#{bundle.CreateRnGcCpContenedormaritimosatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedormaritimosatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpContenedormaritimosatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpContenedormaritimosatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedormaritimosatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpContenedormaritimosatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpContenedormaritimosatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedormaritimosatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpContenedormaritimosatTblController.selected.creadoPor}" title="#{bundle.CreateRnGcCpContenedormaritimosatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcCpContenedormaritimosatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedormaritimosatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpContenedormaritimosatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpContenedormaritimosatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpContenedormaritimosatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedormaritimosatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpContenedormaritimosatTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcCpContenedormaritimosatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedormaritimosatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpContenedormaritimosatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpContenedormaritimosatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpContenedormaritimosatTblController.create}" value="#{bundle.Save}" update="display,:RnGcCpContenedormaritimosatTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCpContenedormaritimosatTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpContenedormaritimosatTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

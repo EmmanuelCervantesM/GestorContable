@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcMenuslineasTblCreateDlg" widgetVar="RnGcMenuslineasTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcMenuslineasTblTitle}">
+            <h:form id="RnGcMenuslineasTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcMenuslineasTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcMenuslineasTblLabel_noSecuencia}" for="noSecuencia" />
+                        <p:inputText id="noSecuencia" style="width: 160px" value="#{rnGcMenuslineasTblController.selected.noSecuencia}" title="#{bundle.CreateRnGcMenuslineasTblTitle_noSecuencia}" required="true" requiredMessage="#{bundle.CreateRnGcMenuslineasTblRequiredMessage_noSecuencia}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcMenuslineasTblLabel_funcionesId}" for="funcionesId" />
+                        <p:selectOneMenu id="funcionesId" style="width: 145px" value="#{rnGcMenuslineasTblController.selected.funcionesId}" required="true" requiredMessage="#{bundle.EditRnGcMenuslineasTblRequiredMessage_funcionesId}">
+                            <f:selectItems value="#{rnGcFuncionesTblController.itemsAvailableSelectOne}"
+                                           var="funcionesId"
+                                           itemLabel="#{funcionesId.funcionNombre}"
+                                           itemValue="#{funcionesIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcMenuslineasTblLabel_menuId}" for="menuId" />
+                        <p:selectOneMenu id="menuId" style="width: 145px" value="#{rnGcMenuslineasTblController.selected.menuId}" required="true" requiredMessage="#{bundle.EditRnGcMenuslineasTblRequiredMessage_menuId}">
+                            <f:selectItems value="#{rnGcMenusTblController.itemsAvailableSelectOne}"
+                                           var="menuId"
+                                           itemLabel="#{menuId.menuNombre}"
+                                           itemValue="#{menuIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcMenuslineasTblController.create}" value="#{bundle.Save}" update="display,:RnGcMenuslineasTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcMenuslineasTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcMenuslineasTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomTipoincapacidadTblViewDlg" widgetVar="RnGcNomTipoincapacidadTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcNomTipoincapacidadTblTitle}">
+            <h:form id="RnGcNomTipoincapacidadTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomTipoincapacidadTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcNomTipoincapacidadTblLabel_version}"/>
+                        <h:outputText value="#{rnGcNomTipoincapacidadTblController.selected.version}" title="#{bundle.ViewRnGcNomTipoincapacidadTblTitle_version}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipoincapacidadTblLabel_revision}"/>
+                        <h:outputText value="#{rnGcNomTipoincapacidadTblController.selected.revision}" title="#{bundle.ViewRnGcNomTipoincapacidadTblTitle_revision}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipoincapacidadTblLabel_cveTipoIncapacidad}"/>
+                        <h:outputText value="#{rnGcNomTipoincapacidadTblController.selected.cveTipoIncapacidad}" title="#{bundle.ViewRnGcNomTipoincapacidadTblTitle_cveTipoIncapacidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipoincapacidadTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcNomTipoincapacidadTblController.selected.descripcion}" title="#{bundle.ViewRnGcNomTipoincapacidadTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipoincapacidadTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcNomTipoincapacidadTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcNomTipoincapacidadTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipoincapacidadTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcNomTipoincapacidadTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcNomTipoincapacidadTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcNomTipoincapacidadTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

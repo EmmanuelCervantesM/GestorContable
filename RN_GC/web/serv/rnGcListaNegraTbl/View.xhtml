@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcListaNegraTblViewDlg" widgetVar="RnGcListaNegraTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcListaNegraTblTitle}">
+            <h:form id="RnGcListaNegraTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcListaNegraTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_rfc}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.rfc}" title="#{bundle.ViewRnGcListaNegraTblTitle_rfc}"/>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_nombreContribuyente}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.nombreContribuyente}" title="#{bundle.ViewRnGcListaNegraTblTitle_nombreContribuyente}"/>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_situacionContribuyente}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.situacionContribuyente}" title="#{bundle.ViewRnGcListaNegraTblTitle_situacionContribuyente}"/>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_numeroFechaOficioGlobalPresuncionSAT}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalPresuncionSAT}" title="#{bundle.ViewRnGcListaNegraTblTitle_numeroFechaOficioGlobalPresuncionSAT}"/>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_publicacionSATpresuntos}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.publicacionSATpresuntos}" title="#{bundle.ViewRnGcListaNegraTblTitle_publicacionSATpresuntos}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_numeroFechaOficioGlobalPresuncionDOF}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalPresuncionDOF}" title="#{bundle.ViewRnGcListaNegraTblTitle_numeroFechaOficioGlobalPresuncionDOF}"/>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_publicacionDOFpresuntos}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.publicacionDOFpresuntos}" title="#{bundle.ViewRnGcListaNegraTblTitle_publicacionDOFpresuntos}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_numeroFechaOficioGlobalDesvirtuadoSAT}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalDesvirtuadoSAT}" title="#{bundle.ViewRnGcListaNegraTblTitle_numeroFechaOficioGlobalDesvirtuadoSAT}"/>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_publicacionSATdesvirtuados}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.publicacionSATdesvirtuados}" title="#{bundle.ViewRnGcListaNegraTblTitle_publicacionSATdesvirtuados}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_numeroFechaOficioGlobalDesvirtuadoDOF}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalDesvirtuadoDOF}" title="#{bundle.ViewRnGcListaNegraTblTitle_numeroFechaOficioGlobalDesvirtuadoDOF}"/>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_publicacionDOFdesvirtuados}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.publicacionDOFdesvirtuados}" title="#{bundle.ViewRnGcListaNegraTblTitle_publicacionDOFdesvirtuados}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_numeroFechaOficioGlobalDefinitivoSAT}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalDefinitivoSAT}" title="#{bundle.ViewRnGcListaNegraTblTitle_numeroFechaOficioGlobalDefinitivoSAT}"/>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_publicacionSATdefinitivos}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.publicacionSATdefinitivos}" title="#{bundle.ViewRnGcListaNegraTblTitle_publicacionSATdefinitivos}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_numeroFechaOficioGlobalDefinitivoDOF}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalDefinitivoDOF}" title="#{bundle.ViewRnGcListaNegraTblTitle_numeroFechaOficioGlobalDefinitivoDOF}"/>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_publicacionDOFdefinitivos}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.publicacionDOFdefinitivos}" title="#{bundle.ViewRnGcListaNegraTblTitle_publicacionDOFdefinitivos}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_numeroFechaOficioGlobalSentenciaSAT}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalSentenciaSAT}" title="#{bundle.ViewRnGcListaNegraTblTitle_numeroFechaOficioGlobalSentenciaSAT}"/>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_publicacionSATsentencia}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.publicacionSATsentencia}" title="#{bundle.ViewRnGcListaNegraTblTitle_publicacionSATsentencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_numeroFechaOficioGlobalSentenciaDOF}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalSentenciaDOF}" title="#{bundle.ViewRnGcListaNegraTblTitle_numeroFechaOficioGlobalSentenciaDOF}"/>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_publicacionDOFsentencia}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.publicacionDOFsentencia}" title="#{bundle.ViewRnGcListaNegraTblTitle_publicacionDOFsentencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcListaNegraTblLabel_idTipoLista}"/>
+                        <h:outputText value="#{rnGcListaNegraTblController.selected.idTipoLista.tipoLista} - #{rnGcListaNegraTblController.selected.idTipoLista.folioPublicacion}" title="#{bundle.ViewRnGcListaNegraTblTitle_idTipoLista}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcListaNegraTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

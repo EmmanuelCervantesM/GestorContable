@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpCartaPorteTblEditDlg" widgetVar="RnGcCpCartaPorteTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpCartaPorteTblTitle}">
+            <h:form id="RnGcCpCartaPorteTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpCartaPorteTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpCartaPorteTblController.selected.id}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcCpCartaPorteTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpCartaPorteTblController.selected.clave}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_origen}" for="origen" />
+                        <p:inputText id="origen" value="#{rnGcCpCartaPorteTblController.selected.origen}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_origen}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_destino}" for="destino" />
+                        <p:inputText id="destino" value="#{rnGcCpCartaPorteTblController.selected.destino}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_destino}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_transporteInter}" for="transporteInter" />
+                        <p:inputText id="transporteInter" value="#{rnGcCpCartaPorteTblController.selected.transporteInter}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_transporteInter}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_totalDistancia}" for="totalDistancia" />
+                        <p:inputText id="totalDistancia" value="#{rnGcCpCartaPorteTblController.selected.totalDistancia}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_totalDistancia}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_fechaSalida}" for="fechaSalida" />
+                        <p:calendar id="fechaSalida" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpCartaPorteTblController.selected.fechaSalida}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_fechaSalida}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_fechaLlegada}" for="fechaLlegada" />
+                        <p:calendar id="fechaLlegada" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpCartaPorteTblController.selected.fechaLlegada}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_fechaLlegada}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_pesoBrutoTotal}" for="pesoBrutoTotal" />
+                        <p:inputText id="pesoBrutoTotal" value="#{rnGcCpCartaPorteTblController.selected.pesoBrutoTotal}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_pesoBrutoTotal}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_unidadPeso}" for="unidadPeso" />
+                        <p:inputText id="unidadPeso" value="#{rnGcCpCartaPorteTblController.selected.unidadPeso}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_unidadPeso}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_totalMercancia}" for="totalMercancia" />
+                        <p:inputText id="totalMercancia" value="#{rnGcCpCartaPorteTblController.selected.totalMercancia}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_totalMercancia}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_tipoCartaPorte}" for="tipoCartaPorte" />
+                        <p:inputText id="tipoCartaPorte" value="#{rnGcCpCartaPorteTblController.selected.tipoCartaPorte}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_tipoCartaPorte}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpCartaPorteTblController.selected.creadoPor}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_creadoPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpCartaPorteTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpCartaPorteTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpCartaPorteTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpCartaPorteTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpCartaPorteTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_unidadId}" for="unidadId" />
+                        <p:selectOneMenu id="unidadId" value="#{rnGcCpCartaPorteTblController.selected.unidadId}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCpUnidadesTblController.itemsAvailableSelectOne}"
+                                           var="unidadIdItem"
+                                           itemValue="#{unidadIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_conductorId}" for="conductorId" />
+                        <p:selectOneMenu id="conductorId" value="#{rnGcCpCartaPorteTblController.selected.conductorId}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCpConductoresTblController.itemsAvailableSelectOne}"
+                                           var="conductorIdItem"
+                                           itemValue="#{conductorIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_dirConductorId}" for="dirConductorId" />
+                        <p:selectOneMenu id="dirConductorId" value="#{rnGcCpCartaPorteTblController.selected.dirConductorId}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcDireccionesTblController.itemsAvailableSelectOne}"
+                                           var="dirConductorIdItem"
+                                           itemValue="#{dirConductorIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_clienteProveedorId}" for="clienteProveedorId" />
+                        <p:selectOneMenu id="clienteProveedorId" value="#{rnGcCpCartaPorteTblController.selected.clienteProveedorId}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcPersonasTblController.itemsAvailableSelectOne}"
+                                           var="clienteProveedorIdItem"
+                                           itemValue="#{clienteProveedorIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_dirClienteProveedorId}" for="dirClienteProveedorId" />
+                        <p:selectOneMenu id="dirClienteProveedorId" value="#{rnGcCpCartaPorteTblController.selected.dirClienteProveedorId}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcDireccionesTblController.itemsAvailableSelectOne}"
+                                           var="dirClienteProveedorIdItem"
+                                           itemValue="#{dirClienteProveedorIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCpCartaPorteTblLabel_cfdisId}" for="cfdisId" />
+                        <p:selectOneMenu id="cfdisId" value="#{rnGcCpCartaPorteTblController.selected.cfdisId}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCfdisTblController.itemsAvailableSelectOne}"
+                                           var="cfdisIdItem"
+                                           itemValue="#{cfdisIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpCartaPorteTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpCartaPorteTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpCartaPorteTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpCartaPorteTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

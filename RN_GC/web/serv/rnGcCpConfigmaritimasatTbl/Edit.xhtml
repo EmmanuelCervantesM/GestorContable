@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpConfigmaritimasatTblEditDlg" widgetVar="RnGcCpConfigmaritimasatTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpConfigmaritimasatTblTitle}">
+            <h:form id="RnGcCpConfigmaritimasatTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpConfigmaritimasatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigmaritimasatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpConfigmaritimasatTblController.selected.id}" title="#{bundle.EditRnGcCpConfigmaritimasatTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcCpConfigmaritimasatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigmaritimasatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpConfigmaritimasatTblController.selected.clave}" title="#{bundle.EditRnGcCpConfigmaritimasatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigmaritimasatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpConfigmaritimasatTblController.selected.descripcion}" title="#{bundle.EditRnGcCpConfigmaritimasatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigmaritimasatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpConfigmaritimasatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpConfigmaritimasatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigmaritimasatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpConfigmaritimasatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpConfigmaritimasatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigmaritimasatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpConfigmaritimasatTblController.selected.creadoPor}" title="#{bundle.EditRnGcCpConfigmaritimasatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.EditRnGcCpConfigmaritimasatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigmaritimasatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpConfigmaritimasatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpConfigmaritimasatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpConfigmaritimasatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigmaritimasatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpConfigmaritimasatTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcCpConfigmaritimasatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpConfigmaritimasatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpConfigmaritimasatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpConfigmaritimasatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpConfigmaritimasatTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpConfigmaritimasatTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpConfigmaritimasatTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpConfigmaritimasatTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

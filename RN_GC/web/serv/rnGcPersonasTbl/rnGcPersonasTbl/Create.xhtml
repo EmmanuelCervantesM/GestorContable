@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPersonasTblCreateDlg" widgetVar="RnGcPersonasTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcPersonasTblTitle}">
+            <h:form id="RnGcPersonasTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPersonasTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcPersonasTblController.selected.id}" title="#{bundle.CreateRnGcPersonasTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{rnGcPersonasTblController.selected.nombre}" title="#{bundle.CreateRnGcPersonasTblTitle_nombre}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_nombre}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_nombreFiscal}" for="nombreFiscal" />
+                        <p:inputText id="nombreFiscal" value="#{rnGcPersonasTblController.selected.nombreFiscal}" title="#{bundle.CreateRnGcPersonasTblTitle_nombreFiscal}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_rfc}" for="rfc" />
+                        <p:inputText id="rfc" value="#{rnGcPersonasTblController.selected.rfc}" title="#{bundle.CreateRnGcPersonasTblTitle_rfc}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_rfc}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_noExt}" for="noExt" />
+                        <p:inputText id="noExt" value="#{rnGcPersonasTblController.selected.noExt}" title="#{bundle.CreateRnGcPersonasTblTitle_noExt}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_noExt}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_noInt}" for="noInt" />
+                        <p:inputText id="noInt" value="#{rnGcPersonasTblController.selected.noInt}" title="#{bundle.CreateRnGcPersonasTblTitle_noInt}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_telefono}" for="telefono" />
+                        <p:inputText id="telefono" value="#{rnGcPersonasTblController.selected.telefono}" title="#{bundle.CreateRnGcPersonasTblTitle_telefono}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_pais}" for="pais" />
+                        <p:inputText id="pais" value="#{rnGcPersonasTblController.selected.pais}" title="#{bundle.CreateRnGcPersonasTblTitle_pais}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_pais}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_codigoPostal}" for="codigoPostal" />
+                        <p:inputText id="codigoPostal" value="#{rnGcPersonasTblController.selected.codigoPostal}" title="#{bundle.CreateRnGcPersonasTblTitle_codigoPostal}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_codigoPostal}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_estado}" for="estado" />
+                        <p:inputText id="estado" value="#{rnGcPersonasTblController.selected.estado}" title="#{bundle.CreateRnGcPersonasTblTitle_estado}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_estado}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_ciudad}" for="ciudad" />
+                        <p:inputText id="ciudad" value="#{rnGcPersonasTblController.selected.ciudad}" title="#{bundle.CreateRnGcPersonasTblTitle_ciudad}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_localidad}" for="localidad" />
+                        <p:inputText id="localidad" value="#{rnGcPersonasTblController.selected.localidad}" title="#{bundle.CreateRnGcPersonasTblTitle_localidad}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_localidad}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_calle}" for="calle" />
+                        <p:inputText id="calle" value="#{rnGcPersonasTblController.selected.calle}" title="#{bundle.CreateRnGcPersonasTblTitle_calle}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_calle}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_email}" for="email" />
+                        <p:inputText id="email" value="#{rnGcPersonasTblController.selected.email}" title="#{bundle.CreateRnGcPersonasTblTitle_email}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_tipoPersona}" for="tipoPersona" />
+                        <p:inputText id="tipoPersona" value="#{rnGcPersonasTblController.selected.tipoPersona}" title="#{bundle.CreateRnGcPersonasTblTitle_tipoPersona}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_tipoPersona}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_edad}" for="edad" />
+                        <p:inputText id="edad" value="#{rnGcPersonasTblController.selected.edad}" title="#{bundle.CreateRnGcPersonasTblTitle_edad}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcPersonasTblController.selected.creadoPor}" title="#{bundle.CreateRnGcPersonasTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcPersonasTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcPersonasTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcPersonasTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcPersonasTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcPersonasTblTitle_ultimaActualizacionPor}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_ultimaActualizacionPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcPersonasTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcPersonasTblTitle_ultimaFechaActualizacion}" required="true" requiredMessage="#{bundle.EditRnGcPersonasTblRequiredMessage_ultimaFechaActualizacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_tipoPersonaId}" for="tipoPersonaId" />
+                        <p:selectOneMenu id="tipoPersonaId" value="#{rnGcPersonasTblController.selected.tipoPersonaId}" >
+                            <f:selectItems value="#{rnGcTipospersonasTblController.itemsAvailableSelectOne}"
+                                           var="tipoPersonaIdItem"
+                                           itemValue="#{tipoPersonaIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcPersonasTblController.create}" value="#{bundle.Save}" update="display,:RnGcPersonasTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcPersonasTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcPersonasTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

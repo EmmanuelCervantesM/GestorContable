@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcListaNegraTblEditDlg" widgetVar="RnGcListaNegraTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcListaNegraTblTitle}">
+            <h:form id="RnGcListaNegraTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcListaNegraTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_rfc}" for="rfc" />
+                        <p:inputText id="rfc" value="#{rnGcListaNegraTblController.selected.rfc}" title="#{bundle.EditRnGcListaNegraTblTitle_rfc}" />
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_nombreContribuyente}" for="nombreContribuyente" />
+                        <p:inputText id="nombreContribuyente" value="#{rnGcListaNegraTblController.selected.nombreContribuyente}" title="#{bundle.EditRnGcListaNegraTblTitle_nombreContribuyente}" />
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_situacionContribuyente}" for="situacionContribuyente" />
+                        <p:inputText id="situacionContribuyente" value="#{rnGcListaNegraTblController.selected.situacionContribuyente}" title="#{bundle.EditRnGcListaNegraTblTitle_situacionContribuyente}" />
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_numeroFechaOficioGlobalPresuncionSAT}" for="numeroFechaOficioGlobalPresuncionSAT" />
+                        <p:inputText id="numeroFechaOficioGlobalPresuncionSAT" value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalPresuncionSAT}" title="#{bundle.EditRnGcListaNegraTblTitle_numeroFechaOficioGlobalPresuncionSAT}" />
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_publicacionSATpresuntos}" for="publicacionSATpresuntos" />
+                        <p:calendar id="publicacionSATpresuntos" pattern="MM/dd/yyyy" value="#{rnGcListaNegraTblController.selected.publicacionSATpresuntos}" title="#{bundle.EditRnGcListaNegraTblTitle_publicacionSATpresuntos}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_numeroFechaOficioGlobalPresuncionDOF}" for="numeroFechaOficioGlobalPresuncionDOF" />
+                        <p:inputText id="numeroFechaOficioGlobalPresuncionDOF" value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalPresuncionDOF}" title="#{bundle.EditRnGcListaNegraTblTitle_numeroFechaOficioGlobalPresuncionDOF}" />
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_publicacionDOFpresuntos}" for="publicacionDOFpresuntos" />
+                        <p:calendar id="publicacionDOFpresuntos" pattern="MM/dd/yyyy" value="#{rnGcListaNegraTblController.selected.publicacionDOFpresuntos}" title="#{bundle.EditRnGcListaNegraTblTitle_publicacionDOFpresuntos}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_numeroFechaOficioGlobalDesvirtuadoSAT}" for="numeroFechaOficioGlobalDesvirtuadoSAT" />
+                        <p:inputText id="numeroFechaOficioGlobalDesvirtuadoSAT" value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalDesvirtuadoSAT}" title="#{bundle.EditRnGcListaNegraTblTitle_numeroFechaOficioGlobalDesvirtuadoSAT}" />
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_publicacionSATdesvirtuados}" for="publicacionSATdesvirtuados" />
+                        <p:calendar id="publicacionSATdesvirtuados" pattern="MM/dd/yyyy" value="#{rnGcListaNegraTblController.selected.publicacionSATdesvirtuados}" title="#{bundle.EditRnGcListaNegraTblTitle_publicacionSATdesvirtuados}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_numeroFechaOficioGlobalDesvirtuadoDOF}" for="numeroFechaOficioGlobalDesvirtuadoDOF" />
+                        <p:inputText id="numeroFechaOficioGlobalDesvirtuadoDOF" value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalDesvirtuadoDOF}" title="#{bundle.EditRnGcListaNegraTblTitle_numeroFechaOficioGlobalDesvirtuadoDOF}" />
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_publicacionDOFdesvirtuados}" for="publicacionDOFdesvirtuados" />
+                        <p:calendar id="publicacionDOFdesvirtuados" pattern="MM/dd/yyyy" value="#{rnGcListaNegraTblController.selected.publicacionDOFdesvirtuados}" title="#{bundle.EditRnGcListaNegraTblTitle_publicacionDOFdesvirtuados}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_numeroFechaOficioGlobalDefinitivoSAT}" for="numeroFechaOficioGlobalDefinitivoSAT" />
+                        <p:inputText id="numeroFechaOficioGlobalDefinitivoSAT" value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalDefinitivoSAT}" title="#{bundle.EditRnGcListaNegraTblTitle_numeroFechaOficioGlobalDefinitivoSAT}" />
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_publicacionSATdefinitivos}" for="publicacionSATdefinitivos" />
+                        <p:calendar id="publicacionSATdefinitivos" pattern="MM/dd/yyyy" value="#{rnGcListaNegraTblController.selected.publicacionSATdefinitivos}" title="#{bundle.EditRnGcListaNegraTblTitle_publicacionSATdefinitivos}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_numeroFechaOficioGlobalDefinitivoDOF}" for="numeroFechaOficioGlobalDefinitivoDOF" />
+                        <p:inputText id="numeroFechaOficioGlobalDefinitivoDOF" value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalDefinitivoDOF}" title="#{bundle.EditRnGcListaNegraTblTitle_numeroFechaOficioGlobalDefinitivoDOF}" />
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_publicacionDOFdefinitivos}" for="publicacionDOFdefinitivos" />
+                        <p:calendar id="publicacionDOFdefinitivos" pattern="MM/dd/yyyy" value="#{rnGcListaNegraTblController.selected.publicacionDOFdefinitivos}" title="#{bundle.EditRnGcListaNegraTblTitle_publicacionDOFdefinitivos}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_numeroFechaOficioGlobalSentenciaSAT}" for="numeroFechaOficioGlobalSentenciaSAT" />
+                        <p:inputText id="numeroFechaOficioGlobalSentenciaSAT" value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalSentenciaSAT}" title="#{bundle.EditRnGcListaNegraTblTitle_numeroFechaOficioGlobalSentenciaSAT}" />
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_publicacionSATsentencia}" for="publicacionSATsentencia" />
+                        <p:calendar id="publicacionSATsentencia" pattern="MM/dd/yyyy" value="#{rnGcListaNegraTblController.selected.publicacionSATsentencia}" title="#{bundle.EditRnGcListaNegraTblTitle_publicacionSATsentencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_numeroFechaOficioGlobalSentenciaDOF}" for="numeroFechaOficioGlobalSentenciaDOF" />
+                        <p:inputText id="numeroFechaOficioGlobalSentenciaDOF" value="#{rnGcListaNegraTblController.selected.numeroFechaOficioGlobalSentenciaDOF}" title="#{bundle.EditRnGcListaNegraTblTitle_numeroFechaOficioGlobalSentenciaDOF}" />
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_publicacionDOFsentencia}" for="publicacionDOFsentencia" />
+                        <p:calendar id="publicacionDOFsentencia" pattern="MM/dd/yyyy" value="#{rnGcListaNegraTblController.selected.publicacionDOFsentencia}" title="#{bundle.EditRnGcListaNegraTblTitle_publicacionDOFsentencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcListaNegraTblLabel_idTipoLista}" for="idTipoLista" />
+                        <p:selectOneMenu id="idTipoLista" value="#{rnGcListaNegraTblController.selected.idTipoLista}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcTipoListaNegraTblController.itemsAvailableSelectOne}"
+                                           var="idTipoListaItem"
+                                           itemLabel="#{idTipoListaItem.tipoLista} #{idTipoListaItem.folioPublicacion}"
+                                           itemValue="#{idTipoListaItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcListaNegraTblController.update}" value="#{bundle.Save}" update="display,:RnGcListaNegraTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcListaNegraTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcListaNegraTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpTipolicenciaTblCreateDlg" widgetVar="RnGcCpTipolicenciaTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCpTipolicenciaTblTitle}">
+            <h:form id="RnGcCpTipolicenciaTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpTipolicenciaTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipolicenciaTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpTipolicenciaTblController.selected.id}" title="#{bundle.CreateRnGcCpTipolicenciaTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcCpTipolicenciaTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipolicenciaTblLabel_tipo}" for="tipo" />
+                        <p:inputText id="tipo" value="#{rnGcCpTipolicenciaTblController.selected.tipo}" title="#{bundle.CreateRnGcCpTipolicenciaTblTitle_tipo}" required="true" requiredMessage="#{bundle.CreateRnGcCpTipolicenciaTblRequiredMessage_tipo}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipolicenciaTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpTipolicenciaTblController.selected.descripcion}" title="#{bundle.CreateRnGcCpTipolicenciaTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipolicenciaTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpTipolicenciaTblController.selected.creadoPor}" title="#{bundle.CreateRnGcCpTipolicenciaTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcCpTipolicenciaTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipolicenciaTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpTipolicenciaTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpTipolicenciaTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpTipolicenciaTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipolicenciaTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpTipolicenciaTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcCpTipolicenciaTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpTipolicenciaTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpTipolicenciaTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpTipolicenciaTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpTipolicenciaTblController.create}" value="#{bundle.Save}" update="display,:RnGcCpTipolicenciaTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCpTipolicenciaTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpTipolicenciaTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

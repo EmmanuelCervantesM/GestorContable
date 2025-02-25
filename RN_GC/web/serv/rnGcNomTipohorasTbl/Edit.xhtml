@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomTipohorasTblEditDlg" widgetVar="RnGcNomTipohorasTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcNomTipohorasTblTitle}">
+            <h:form id="RnGcNomTipohorasTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomTipohorasTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipohorasTblLabel_cveTipoHoras}" for="cveTipoHoras" />
+                        <p:inputText id="cveTipoHoras" value="#{rnGcNomTipohorasTblController.selected.cveTipoHoras}" title="#{bundle.EditRnGcNomTipohorasTblTitle_cveTipoHoras}" required="true" requiredMessage="#{bundle.EditRnGcNomTipohorasTblRequiredMessage_cveTipoHoras}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipohorasTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcNomTipohorasTblController.selected.descripcion}" title="#{bundle.EditRnGcNomTipohorasTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipohorasTblLabel_version}" for="version" />
+                        <p:inputText id="version" value="#{rnGcNomTipohorasTblController.selected.version}" title="#{bundle.EditRnGcNomTipohorasTblTitle_version}" required="true" requiredMessage="#{bundle.EditRnGcNomTipohorasTblRequiredMessage_version}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipohorasTblLabel_revision}" for="revision" />
+                        <p:inputText id="revision" value="#{rnGcNomTipohorasTblController.selected.revision}" title="#{bundle.EditRnGcNomTipohorasTblTitle_revision}" required="true" requiredMessage="#{bundle.EditRnGcNomTipohorasTblRequiredMessage_revision}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipohorasTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomTipohorasTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcNomTipohorasTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcNomTipohorasTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipohorasTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomTipohorasTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcNomTipohorasTblTitle_fechaFinVigencia}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomTipohorasTblController.update}" value="#{bundle.Save}" update="display,:RnGcNomTipohorasTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcNomTipohorasTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomTipohorasTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

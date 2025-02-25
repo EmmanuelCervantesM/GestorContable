@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTiposcfdisTblEditDlg" widgetVar="RnGcTiposcfdisTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcTiposcfdisTblTitle}">
+            <h:form id="RnGcTiposcfdisTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcTiposcfdisTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcTiposcfdisTblLabel_ctipoComprobante}" for="ctipoComprobante" />
+                        <p:inputText id="ctipoComprobante" value="#{rnGcTiposcfdisTblController.selected.clavetipoComprobante}" title="#{bundle.CreateRnGcTiposcfdisTblTitle_ctipoComprobante}" required="true" requiredMessage="#{bundle.CreateRnGcTiposcfdisTblRequiredMessage_ctipoComprobante}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTiposcfdisTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcTiposcfdisTblController.selected.descripcion}" title="#{bundle.CreateRnGcTiposcfdisTblTitle_descripcion}" required="true" requiredMessage="#{bundle.CreateRnGcTiposcfdisTblRequiredMessage_descripcion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTiposcfdisTblLabel_valorMaximo}" for="valorMaximo" />
+                        <p:inputText id="valorMaximo" value="#{rnGcTiposcfdisTblController.selected.valorMaximo}" title="#{bundle.CreateRnGcTiposcfdisTblTitle_valorMaximo}" required="true" requiredMessage="#{bundle.CreateRnGcTiposcfdisTblRequiredMessage_valorMaximo}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTiposcfdisTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="dd/MM/yyyy" value="#{rnGcTiposcfdisTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcTiposcfdisTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcTiposcfdisTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTiposcfdisTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="dd/MM/yyyy" value="#{rnGcTiposcfdisTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcTiposcfdisTblTitle_fechaFinVigencia}" required="true" requiredMessage="#{bundle.EditRnGcTiposcfdisTblRequiredMessage_fechaFinVigencia}" showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcTiposcfdisTblController.update}" value="#{bundle.Save}" update="display,:RnGcTiposcfdisTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcTiposcfdisTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcTiposcfdisTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

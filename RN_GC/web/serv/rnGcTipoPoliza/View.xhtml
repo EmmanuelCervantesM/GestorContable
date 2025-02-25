@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTipoPolizaViewDlg" widgetVar="RnGcTipoPolizaViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcTipoPolizaTitle}">
+            <h:form id="RnGcTipoPolizaViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcTipoPolizaController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcTipoPolizaLabel_tipoPoliza}"/>
+                        <p:selectOneMenu value="#{rnGcTipoPolizaController.selected.tipoPoliza}" style="width:200px" disabled="true">
+                            <f:selectItem itemLabel="Ingreso" itemValue="I" />
+                            <f:selectItem itemLabel="Egreso" itemValue="E" />
+                            <f:selectItem itemLabel="Díario" itemValue="DA" />
+                        </p:selectOneMenu>
+                        <h:outputText value="#{bundle.ViewRnGcTipoPolizaLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcTipoPolizaController.selected.descripcion}" title="#{bundle.ViewRnGcTipoPolizaTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTipoPolizaLabel_estatus}"/>
+                        <p:selectOneMenu value="#{rnGcTipoPolizaController.selected.estatus}" style="width:200px" disabled="true">
+                            <f:selectItem itemLabel="Activo" itemValue="A" />
+                            <f:selectItem itemLabel="Inactivo" itemValue="I" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcTipoPolizaViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

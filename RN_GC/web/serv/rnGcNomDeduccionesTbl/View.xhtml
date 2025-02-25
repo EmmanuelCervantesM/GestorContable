@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomDeduccionesTblViewDlg" widgetVar="RnGcNomDeduccionesTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcNomDeduccionesTblTitle}">
+            <h:form id="RnGcNomDeduccionesTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomDeduccionesTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcNomDeduccionesTblLabel_cveTipoDeduccion}"/>
+                        <h:outputText value="#{rnGcNomDeduccionesTblController.selected.cveTipoDeduccion}" title="#{bundle.ViewRnGcNomDeduccionesTblTitle_cveTipoDeduccion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomDeduccionesTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcNomDeduccionesTblController.selected.descripcion}" title="#{bundle.ViewRnGcNomDeduccionesTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomDeduccionesTblLabel_version}"/>
+                        <h:outputText value="#{rnGcNomDeduccionesTblController.selected.version}" title="#{bundle.ViewRnGcNomDeduccionesTblTitle_version}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomDeduccionesTblLabel_revision}"/>
+                        <h:outputText value="#{rnGcNomDeduccionesTblController.selected.revision}" title="#{bundle.ViewRnGcNomDeduccionesTblTitle_revision}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomDeduccionesTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcNomDeduccionesTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcNomDeduccionesTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcNomDeduccionesTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcNomDeduccionesTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcNomDeduccionesTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcNomDeduccionesTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

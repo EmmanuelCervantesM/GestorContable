@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpFiguratransportesatTblViewDlg" widgetVar="RnGcCpFiguratransportesatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpFiguratransportesatTblTitle}">
+            <h:form id="RnGcCpFiguratransportesatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpFiguratransportesatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpFiguratransportesatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpFiguratransportesatTblController.selected.id}" title="#{bundle.ViewRnGcCpFiguratransportesatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpFiguratransportesatTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpFiguratransportesatTblController.selected.clave}" title="#{bundle.ViewRnGcCpFiguratransportesatTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpFiguratransportesatTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpFiguratransportesatTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpFiguratransportesatTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpFiguratransportesatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpFiguratransportesatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpFiguratransportesatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpFiguratransportesatTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcCpFiguratransportesatTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcCpFiguratransportesatTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpFiguratransportesatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpFiguratransportesatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpFiguratransportesatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpFiguratransportesatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpFiguratransportesatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpFiguratransportesatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpFiguratransportesatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpFiguratransportesatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpFiguratransportesatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpFiguratransportesatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpFiguratransportesatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpFiguratransportesatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpFiguratransportesatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

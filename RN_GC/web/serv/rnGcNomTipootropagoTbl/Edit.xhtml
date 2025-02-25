@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomTipootropagoTblEditDlg" widgetVar="RnGcNomTipootropagoTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcNomTipootropagoTblTitle}">
+            <h:form id="RnGcNomTipootropagoTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomTipootropagoTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipootropagoTblLabel_cveTipoOtroPago}" for="cveTipoOtroPago" />
+                        <p:inputText id="cveTipoOtroPago" value="#{rnGcNomTipootropagoTblController.selected.cveTipoOtroPago}" title="#{bundle.EditRnGcNomTipootropagoTblTitle_cveTipoOtroPago}" required="true" requiredMessage="#{bundle.EditRnGcNomTipootropagoTblRequiredMessage_cveTipoOtroPago}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipootropagoTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcNomTipootropagoTblController.selected.descripcion}" title="#{bundle.EditRnGcNomTipootropagoTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipootropagoTblLabel_version}" for="version" />
+                        <p:inputText id="version" value="#{rnGcNomTipootropagoTblController.selected.version}" title="#{bundle.EditRnGcNomTipootropagoTblTitle_version}" required="true" requiredMessage="#{bundle.EditRnGcNomTipootropagoTblRequiredMessage_version}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipootropagoTblLabel_revision}" for="revision" />
+                        <p:inputText id="revision" value="#{rnGcNomTipootropagoTblController.selected.revision}" title="#{bundle.EditRnGcNomTipootropagoTblTitle_revision}" required="true" requiredMessage="#{bundle.EditRnGcNomTipootropagoTblRequiredMessage_revision}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipootropagoTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomTipootropagoTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcNomTipootropagoTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcNomTipootropagoTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipootropagoTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomTipootropagoTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcNomTipootropagoTblTitle_fechaFinVigencia}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomTipootropagoTblController.update}" value="#{bundle.Save}" update="display,:RnGcNomTipootropagoTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcNomTipootropagoTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomTipootropagoTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

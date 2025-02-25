@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcTrabajadoresTblListForm">
+                <p:panel header="#{bundle.ListRnGcTrabajadoresTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcTrabajadoresTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcTrabajadoresTblController.selected}"
+                                 paginator="true" scrollable="true"
+                                 emptyMessage="No se encontraron registros"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton download"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton download"/>
+                        
+                        <p:column filterBy="#{item.noTrabajador}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="No. Trabajador"/>
+                            </f:facet>
+                            <h:outputText value="#{item.noTrabajador}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Fecha Inicio Labores"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaInicio}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column filterBy="#{item.nombre}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_nombre}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.apPaterno}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_apPaterno}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.apPaterno}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.apMaterno}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_apMaterno}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.apMaterno}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.curp}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_curp}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.curp}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.rfc}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_rfc}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rfc}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.nss}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_nss}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nss}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.salarioBase}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="Salario Base"/>
+                            </f:facet>
+                            <h:outputText value="#{item.salarioBase}">
+                                <f:convertNumber type="currency" currencySymbol="$" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column filterBy="#{item.sdi}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_sdi}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sdi}">
+                                <f:convertNumber type="currency" currencySymbol="$" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column filterBy="#{item.banco}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="Banco"/>
+                            </f:facet>
+                            <h:outputText value="#{item.banco}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.cuentaBancaria}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="Cuenta Bancaria"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cuentaBancaria}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.email1}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="E-mail"/>
+                            </f:facet>
+                            <h:outputText value="#{item.email1}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcTrabajadoresTblController.prepareCreate}" update=":RnGcTrabajadoresTblCreateForm" oncomplete="PF('RnGcTrabajadoresTblCreateDialog').show()"/>
+                            <p:commandButton id="archivop" icon="ui-icon-plus"   value="Usar plantilla" actionListener="#{rnGcTrabajadoresTblController.prepareCreate}" update="RnGcTrabajadoresTblDocForm" oncomplete="PF('RnGcTrabajadoresTblDocDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcTrabajadoresTblViewForm" oncomplete="PF('RnGcTrabajadoresTblViewDialog').show()" disabled="#{empty rnGcTrabajadoresTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcTrabajadoresTblEditForm" oncomplete="PF('RnGcTrabajadoresTblEditDialog').show()" disabled="#{empty rnGcTrabajadoresTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcTrabajadoresTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcTrabajadoresTblController.selected}"/>
+                        </f:facet>
+                        <f:facet name="header">
+                            <p:commandButton id="download" icon="ui-icon-arrowthickstop-1-s" value="Descargar Plantilla Trabajadores" actionListener="#{rnGcTrabajadoresTblController.deacargaPlantilla()}" ajax="false" update="RnGcTrabajadoresTblListForm">
+                                <p:fileDownload value="#{rnGcTrabajadoresTblController.downLoadFile}"/>
+                            </p:commandButton>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+            
+            <p:dialog id="RnGcTrabajadoresTblDocDlg" widgetVar="RnGcTrabajadoresTblDocDialog" modal="true" resizable="false" appendTo="@(body)" header="Cargar trabajadores">
+            <h:form id="RnGcTrabajadoresTblDocForm">
+                <p:panel header="Buscar plantilla">
+                    <f:facet name="header">
+                        <p:outputLabel value="Selecciona catalogo" />
+                    </f:facet>
+                    <p:fileUpload id="plantilla" fileUploadListener="#{rnGcTrabajadoresTblController.leerPlantilla}" fileLimitMessage="Número máximo de archivos excedido" label="Buscar" cancelLabel="Cancelar" uploadLabel="Cargar" sequential="true"
+                                  mode="advanced" update=":RnGcTrabajadoresTblListForm:datalist, :growl" dragDropSupport="true" sizeLimit="100000" fileLimit="20" allowTypes="/(\.|\/)(xlsx)$/">
+                        <p:growl life="10000" showDetail="true"/>      
+                    </p:fileUpload>
+                </p:panel>
+            </h:form>
+            </p:dialog>
+        
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpCodtransporteaereosatTblViewDlg" widgetVar="RnGcCpCodtransporteaereosatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpCodtransporteaereosatTblTitle}">
+            <h:form id="RnGcCpCodtransporteaereosatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpCodtransporteaereosatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpCodtransporteaereosatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpCodtransporteaereosatTblController.selected.id}" title="#{bundle.ViewRnGcCpCodtransporteaereosatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCodtransporteaereosatTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpCodtransporteaereosatTblController.selected.clave}" title="#{bundle.ViewRnGcCpCodtransporteaereosatTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCodtransporteaereosatTblLabel_nacionalidad}"/>
+                        <h:outputText value="#{rnGcCpCodtransporteaereosatTblController.selected.nacionalidad}" title="#{bundle.ViewRnGcCpCodtransporteaereosatTblTitle_nacionalidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCodtransporteaereosatTblLabel_nombreAerolinea}"/>
+                        <h:outputText value="#{rnGcCpCodtransporteaereosatTblController.selected.nombreAerolinea}" title="#{bundle.ViewRnGcCpCodtransporteaereosatTblTitle_nombreAerolinea}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCodtransporteaereosatTblLabel_designador}"/>
+                        <h:outputText value="#{rnGcCpCodtransporteaereosatTblController.selected.designador}" title="#{bundle.ViewRnGcCpCodtransporteaereosatTblTitle_designador}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCodtransporteaereosatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpCodtransporteaereosatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpCodtransporteaereosatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpCodtransporteaereosatTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcCpCodtransporteaereosatTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcCpCodtransporteaereosatTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpCodtransporteaereosatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpCodtransporteaereosatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpCodtransporteaereosatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCodtransporteaereosatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpCodtransporteaereosatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpCodtransporteaereosatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpCodtransporteaereosatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpCodtransporteaereosatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpCodtransporteaereosatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCodtransporteaereosatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpCodtransporteaereosatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpCodtransporteaereosatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpCodtransporteaereosatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,35 @@
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:nomina12="http://www.sat.gob.mx/nomina12" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xsd" Version="3.3" Serie="A" Folio="2422" Fecha="2018-04-11T13:23:59" FormaPago="99" NoCertificado="00001000000305763479" SubTotal="9909.42" Descuento="1797.91" Moneda="MXN" Total="8111.51" TipoDeComprobante="N" MetodoPago="PUE" LugarExpedicion="06000" Certificado="MIIEfzCCA2egAwIBAgIUMDAwMDEwMDAwMDAzMDU3NjM0NzkwDQYJKoZIhvcNAQEFBQAwggGKMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29kc0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVycmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMTUwMwYJKoZIhvcNAQkCDCZSZXNwb25zYWJsZTogQ2xhdWRpYSBDb3ZhcnJ1YmlhcyBPY2hvYTAeFw0xNDEyMjkyMDUxMDJaFw0xODEyMjkyMDUxMDJaMIHLMSUwIwYDVQQDExxTRUNSRVRBUklBIEVEVUNBQ0lPTiBQVUJMSUNBMSUwIwYDVQQpExxTRUNSRVRBUklBIEVEVUNBQ0lPTiBQVUJMSUNBMSUwIwYDVQQKExxTRUNSRVRBUklBIEVEVUNBQ0lPTiBQVUJMSUNBMSUwIwYDVQQtExxTRVAyMTA5MDU3NzggLyBBQVBNNTcwNTMwN0o3MR4wHAYDVQQFExUgLyBBQVBNNTcwNTMwTURGVkROMDAxDTALBgNVBAsTBEZPTkUwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALgA09H2/rkXMpMBsNN5P9lvMtJr9j8s1cY5bWgITpjsAS+theDQW16IS7QYF9xDLaK7A/lIFoTG33DZVjDONpo2e65T2B+48neTWF4A5vFobBqBYNy8A0WZFTM0SmySB70hd/1e+H0g9m3WsIHp456rJ5xoKel4MTxDee83QBwVAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBBQUAA4IBAQC4mstncNl4PV1+E06ykuxdxq5G9SyDi1rAlX2ETcCPsgoUsNOpx0bfh47c5AhQgNLatJuqjibuvyoDaxhqcKKgVbr+shBY6NJtYk3mlFSEdOwciFQQy51cGvyshSerxNtF+tKB7TWKfGgsDwGpOLR03ZMus1pe74Cy9ooL9f6Hu0YQ+vr5jsWRkqkysbW6RTPLYals4p6ei2WOwpx3zPKBrZPCBWa69epxvL+wSrqP/wDOzuCWIdgA07XdHb3mR46e/7ltO2fWP0aQkaOV49pbCP4+XdE0KkFuSBIfdTIdSas7hG8JESjnrOh93dFAXjpjFn+hxbWlnl5qtBKZQfI/" Sello="VteRsYBfOUom1F/OHr5Wq3OO0Z6jQb9byCJ4n5BWnYFlG2p8up1HiS5AgSIbmyxNRKpyBXaMEYqfXZAU+fRB9HEYxRxrhoJ97jzDdOG5004ryddps09cy6SmDTGl+ExOIYETOOjby711vcLAXg1pQI1jFIlSYRnkj85Xe6xtoNs=">
+    <cfdi:Emisor Rfc="SEP210905778" Nombre="SECRETARIA DE EDUCACION PUBLICA" RegimenFiscal="603" />
+    <cfdi:Receptor Rfc="COCM620906141" Nombre="COPALCUA CONDE MIGUEL" UsoCFDI="P01" />
+    <cfdi:Conceptos>
+        <cfdi:Concepto ClaveProdServ="84111505" Cantidad="1" ClaveUnidad="ACT" Descripcion="Pago de n�mina" ValorUnitario="9909.42" Importe="9909.42" Descuento="1797.91" />
+    </cfdi:Conceptos>
+    <cfdi:Complemento>
+        <nomina12:Nomina Version="1.2" TipoNomina="O" FechaPago="2018-03-22" FechaInicialPago="2018-03-16" FechaFinalPago="2018-03-31" NumDiasPagados="16" TotalPercepciones="9909.42" TotalDeducciones="1797.91">
+            <nomina12:Receptor Curp="COCM620906HTLPNG02" TipoContrato="99" TipoRegimen="99" NumEmpleado="COCM620906141" PeriodicidadPago="04" CuentaBancaria="014832566734459573" ClaveEntFed="TLA" />
+            <nomina12:Percepciones TotalSueldos="9909.42" TotalGravado="8584.02" TotalExento="1325.40">
+                <nomina12:Percepcion TipoPercepcion="038" Clave="ISR" Concepto="ISR" ImporteGravado="295.85" ImporteExento="0.0" />
+                <nomina12:Percepcion TipoPercepcion="038" Clave="0CC" Concepto="COMPENSACIN PROVISIONAL COMPACTABLE" ImporteGravado="1666.24" ImporteExento="0.0" />
+                <nomina12:Percepcion TipoPercepcion="038" Clave="0E9" Concepto="ASIGNACIN DOCENTE GENRICA" ImporteGravado="189.17" ImporteExento="0.0" />
+                <nomina12:Percepcion TipoPercepcion="038" Clave="0IN" Concepto="INAMOVILIDAD SINDICAL" ImporteGravado="220.0" ImporteExento="0.0" />
+                <nomina12:Percepcion TipoPercepcion="038" Clave="0Q5" Concepto="ACREDITACIN POR AOS DE SERVICIO EN LA DOCENCIA Q5" ImporteGravado="77.72" ImporteExento="0.0" />
+                <nomina12:Percepcion TipoPercepcion="038" Clave="0R9" Concepto="EQUIPARACIN DE LA ASIGNACIN DOCENTE GENRICA PLAZAS SIN CARRERA MAGISTERIAL" ImporteGravado="43.65" ImporteExento="0.0" />
+                <nomina12:Percepcion TipoPercepcion="038" Clave="0SC" Concepto="ASIGNACIN POR SERVICIOS COCURRICULARES" ImporteGravado="335.34" ImporteExento="0.0" />
+                <nomina12:Percepcion TipoPercepcion="001" Clave="007" Concepto="SUELDO BASE" ImporteGravado="5078.23" ImporteExento="0.0" />
+                <nomina12:Percepcion TipoPercepcion="021" Clave="032" Concepto="PRIMA VACACIONAL" ImporteGravado="456.3" ImporteExento="1325.4" />
+                <nomina12:Percepcion TipoPercepcion="038" Clave="039" Concepto="MATERIAL DIDCTICO" ImporteGravado="90.71" ImporteExento="0.0" />
+                <nomina12:Percepcion TipoPercepcion="038" Clave="040" Concepto="FORTALECIMIENTO A LA ACTIVIDAD DOCENTE" ImporteGravado="37.84" ImporteExento="0.0" />
+                <nomina12:Percepcion TipoPercepcion="038" Clave="044" Concepto="PREVISIN SOCIAL MULTIPLE" ImporteGravado="41.69" ImporteExento="0.0" />
+                <nomina12:Percepcion TipoPercepcion="038" Clave="38A" Concepto="AYUDA DE DESPENSA" ImporteGravado="51.28" ImporteExento="0.0" />
+            </nomina12:Percepciones>
+            <nomina12:Deducciones TotalOtrasDeducciones="602.54" TotalImpuestosRetenidos="1195.37">
+                <nomina12:Deduccion TipoDeduccion="002" Clave="ISR" Concepto="ISR" Importe="1195.37" />
+                <nomina12:Deduccion TipoDeduccion="001" Clave="002" Concepto="CUOTA AL ISSSTE" Importe="315.8" />
+                <nomina12:Deduccion TipoDeduccion="001" Clave="004" Concepto="CUOTA DEL ISSSTE" Importe="232.01" />
+                <nomina12:Deduccion TipoDeduccion="019" Clave="058" Concepto="CUOTA SINDICAL" Importe="50.78" />
+                <nomina12:Deduccion TipoDeduccion="004" Clave="077" Concepto="SEGURO INSTITUCIONAL PATRON" Importe="3.95" />
+            </nomina12:Deducciones>
+        </nomina12:Nomina>
+        <tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd" Version="1.1" UUID="1B584D85-6DF5-43FC-A2D5-E64AB8FD7C4D" FechaTimbrado="2018-04-11T13:52:10" RfcProvCertif="SAT970701NN3" SelloCFD="VteRsYBfOUom1F/OHr5Wq3OO0Z6jQb9byCJ4n5BWnYFlG2p8up1HiS5AgSIbmyxNRKpyBXaMEYqfXZAU+fRB9HEYxRxrhoJ97jzDdOG5004ryddps09cy6SmDTGl+ExOIYETOOjby711vcLAXg1pQI1jFIlSYRnkj85Xe6xtoNs=" NoCertificadoSAT="00001000000403258748" SelloSAT="BnBowywOQ0wXJcA/B4Trvo2y8rsL52cPOopJ86XQ8Y3vDYj8cMQOnYJjA1Gb66g5Od+rGnWuwxC7Upr0f8hAV1N7CrVPbJvjV4CWeOF5cGM4u6ZwsOHITVwxKMTNV0gVPK2rt1Ea5eoEmxOQSK473oCy68pF98SksTHmrhY9ni7JLquyZlxWfW//kO4i/a7zGZIRuvj8BUFT1E5QHnDyoI/Mz/ZbFjArzbDPTh0NKEaRAJGf/rgQ9wGXkYm55hivJTgEy8/BZwPxSQQKuDaaVPXvxI/rj9rIRiSScFUOLr82Mx667zAM+2/5tyHhtYxJGsSf8XS6NgOkvGG8mxY75g==" />
+    </cfdi:Complemento>
+</cfdi:Comprobante>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomTipohorasTblViewDlg" widgetVar="RnGcNomTipohorasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcNomTipohorasTblTitle}">
+            <h:form id="RnGcNomTipohorasTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomTipohorasTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcNomTipohorasTblLabel_version}"/>
+                        <h:outputText value="#{rnGcNomTipohorasTblController.selected.version}" title="#{bundle.ViewRnGcNomTipohorasTblTitle_version}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipohorasTblLabel_revision}"/>
+                        <h:outputText value="#{rnGcNomTipohorasTblController.selected.revision}" title="#{bundle.ViewRnGcNomTipohorasTblTitle_revision}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipohorasTblLabel_cveTipoHoras}"/>
+                        <h:outputText value="#{rnGcNomTipohorasTblController.selected.cveTipoHoras}" title="#{bundle.ViewRnGcNomTipohorasTblTitle_cveTipoHoras}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipohorasTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcNomTipohorasTblController.selected.descripcion}" title="#{bundle.ViewRnGcNomTipohorasTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipohorasTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcNomTipohorasTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcNomTipohorasTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipohorasTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcNomTipohorasTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcNomTipohorasTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcNomTipohorasTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

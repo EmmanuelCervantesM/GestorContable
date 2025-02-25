@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="reenviarDocsDlg" widgetVar="reenviarDocsDialog" modal="true" resizable="false" appendTo="@(body)" header="Reenviar Documentos">
+            <h:form id="reenviarDocsForm">
+                <p:growl id="growl" showDetail="true" life="10000"/>
+                <p:panelGrid columns="4">
+                    <p:outputLabel value="Nombre Emisor" style="font-weight: 900"/>
+                    <p:outputLabel value="#{rnGcCfdisLineasTblController.cfdiId.nombreEmisor}"/>
+                    <p:outputLabel value="RFC Emisor" style="font-weight: 900"/>
+                    <p:outputLabel value="#{rnGcCfdisLineasTblController.cfdiId.rfcEmisor}"/>
+                    <p:outputLabel value="Nombre Receptor" style="font-weight: 900"/>
+                    <p:outputLabel value="#{rnGcCfdisLineasTblController.cfdiId.nombreReceptor}"/>
+                    <p:outputLabel value="RFC Receptor" style="font-weight: 900"/>
+                    <p:outputLabel value="#{rnGcCfdisLineasTblController.cfdiId.rfcReceptor}"/>
+                    <p:outputLabel value="Total" style="font-weight: 900"/>
+                    <p:outputLabel value="#{rnGcCfdisLineasTblController.cfdiId.importe}">
+                        <f:convertNumber type="currency" currencySymbol="$"/>
+                    </p:outputLabel>
+                </p:panelGrid>
+                <br/>
+                <p:dataTable id="archivos" value="#{rnGcArchivosTblController.itemsArchivos}" style="width: 300px"
+                             var="archivo" emptyMessage="No hay archivos para ser enviados">
+                    <p:column headerText="Archivo PDF">
+                        <h:outputText value="Si" rendered="#{archivo.archivoPdf != null}"/>
+                        <h:outputText value="No" rendered="#{archivo.archivoPdf == null}"/>
+                    </p:column>
+                    <p:column headerText="Archivo XML">
+                        <h:outputText value="Si" rendered="#{archivo.archivoXml != null}"/>
+                        <h:outputText value="No" rendered="#{archivo.archivoXml == null}"/>
+                    </p:column>
+                </p:dataTable>
+
+                <br/>
+                <p:outputLabel value="Correo:" for="correo"/>
+                <p:inputText id="correo" style="width: 300px" value="#{rnGcArchivosTblController.correo}"/>
+                <p:commandButton value="Agregar Correo" actionListener="#{rnGcArchivosTblController.agregarCorreo()}" update="reenviarDocsForm, growl"/>
+                <br/><br/>
+                <p:dataTable id="correoList" value="#{rnGcArchivosTblController.listaCorreosEnviar}" paginator="true"
+                             var="correo" style="width: 500px">
+
+                    <p:column headerText="Correo">
+                        <h:outputText value="#{correo}"/>
+                    </p:column>
+
+                </p:dataTable>
+                <p:commandButton value="Enviar archivos" actionListener="#{rnGcArchivosTblController.correosSelect()}" update="@form" onclick="reenviarDocsDialog.hide()" />
+            </h:form>
+        </p:dialog>
+    </ui:composition>
+
+</html>

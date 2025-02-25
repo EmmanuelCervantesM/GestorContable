@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcImpuestosCfdisTblViewDlg" widgetVar="RnGcImpuestosCfdisTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcImpuestosCfdisTblTitle}">
+            <h:form id="RnGcImpuestosCfdisTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcImpuestosCfdisTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcImpuestosCfdisTblLabel_id}"/>
+                        <h:outputText value="#{rnGcImpuestosCfdisTblController.selected.id}" title="#{bundle.ViewRnGcImpuestosCfdisTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcImpuestosCfdisTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcImpuestosCfdisTblController.selected.creadoPor}" title="#{bundle.ViewRnGcImpuestosCfdisTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcImpuestosCfdisTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcImpuestosCfdisTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcImpuestosCfdisTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcImpuestosCfdisTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcImpuestosCfdisTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcImpuestosCfdisTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcImpuestosCfdisTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcImpuestosCfdisTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcImpuestosCfdisTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcImpuestosCfdisTblLabel_cfdisId}"/>
+                        <h:outputText value="#{rnGcImpuestosCfdisTblController.selected.cfdisId}" title="#{bundle.ViewRnGcImpuestosCfdisTblTitle_cfdisId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcImpuestosCfdisTblLabel_impuestosLocalesId}"/>
+                        <h:outputText value="#{rnGcImpuestosCfdisTblController.selected.impuestosLocalesId}" title="#{bundle.ViewRnGcImpuestosCfdisTblTitle_impuestosLocalesId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcImpuestosCfdisTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

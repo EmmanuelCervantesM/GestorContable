@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpNumautorizacionnavierosatTblEditDlg" widgetVar="RnGcCpNumautorizacionnavierosatTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpNumautorizacionnavierosatTblTitle}">
+            <h:form id="RnGcCpNumautorizacionnavierosatTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpNumautorizacionnavierosatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpNumautorizacionnavierosatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpNumautorizacionnavierosatTblController.selected.id}" title="#{bundle.EditRnGcCpNumautorizacionnavierosatTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcCpNumautorizacionnavierosatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpNumautorizacionnavierosatTblLabel_numAutorizacion}" for="numAutorizacion" />
+                        <p:inputText id="numAutorizacion" value="#{rnGcCpNumautorizacionnavierosatTblController.selected.numAutorizacion}" title="#{bundle.EditRnGcCpNumautorizacionnavierosatTblTitle_numAutorizacion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpNumautorizacionnavierosatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpNumautorizacionnavierosatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpNumautorizacionnavierosatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpNumautorizacionnavierosatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpNumautorizacionnavierosatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpNumautorizacionnavierosatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpNumautorizacionnavierosatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpNumautorizacionnavierosatTblController.selected.creadoPor}" title="#{bundle.EditRnGcCpNumautorizacionnavierosatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.EditRnGcCpNumautorizacionnavierosatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpNumautorizacionnavierosatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpNumautorizacionnavierosatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpNumautorizacionnavierosatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpNumautorizacionnavierosatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpNumautorizacionnavierosatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpNumautorizacionnavierosatTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcCpNumautorizacionnavierosatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpNumautorizacionnavierosatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpNumautorizacionnavierosatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpNumautorizacionnavierosatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpNumautorizacionnavierosatTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpNumautorizacionnavierosatTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpNumautorizacionnavierosatTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpNumautorizacionnavierosatTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

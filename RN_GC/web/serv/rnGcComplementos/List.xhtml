@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle2.ListRnGcComplementosTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:form styleClass="jsfcrud_list_form">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <h:outputText escape="false" value="#{bundle2.ListRnGcComplementosEmpty}" rendered="#{rnGcComplementosController.items.rowCount == 0}"/>
+                <h:panelGroup rendered="#{rnGcComplementosController.items.rowCount > 0}">
+                    <h:outputText value="#{rnGcComplementosController.pagination.pageFirstItem + 1}..#{rnGcComplementosController.pagination.pageLastItem + 1}/#{rnGcComplementosController.pagination.itemsCount}"/>&nbsp;
+                    <h:commandLink action="#{rnGcComplementosController.previous}" value="#{bundle2.Previous} #{rnGcComplementosController.pagination.pageSize}" rendered="#{rnGcComplementosController.pagination.hasPreviousPage}"/>&nbsp;
+                    <h:commandLink action="#{rnGcComplementosController.next}" value="#{bundle2.Next} #{rnGcComplementosController.pagination.pageSize}" rendered="#{rnGcComplementosController.pagination.hasNextPage}"/>&nbsp;
+                    <h:dataTable value="#{rnGcComplementosController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle2.ListRnGcComplementosTitle_pkId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.pkId}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle2.ListRnGcComplementosTitle_complementoSeleccionado}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.complementoSeleccionado}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle2.ListRnGcComplementosTitle_nombreAlumno}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombreAlumno}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle2.ListRnGcComplementosTitle_curp}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.curp}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle2.ListRnGcComplementosTitle_nivelEducativo}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nivelEducativo}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle2.ListRnGcComplementosTitle_autRVOE}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.autRVOE}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle2.ListRnGcComplementosTitle_rfcPago}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rfcPago}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle2.ListRnGcComplementosTitle_complementoEscuela}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.complementoEscuela}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="&nbsp;"/>
+                            </f:facet>
+                            <h:commandLink action="#{rnGcComplementosController.prepareView}" value="#{bundle2.ListRnGcComplementosViewLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{rnGcComplementosController.prepareEdit}" value="#{bundle2.ListRnGcComplementosEditLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{rnGcComplementosController.destroy}" value="#{bundle2.ListRnGcComplementosDestroyLink}"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+                <br />
+                <h:commandLink action="#{rnGcComplementosController.prepareCreate}" value="#{bundle2.ListRnGcComplementosCreateLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle2.ListRnGcComplementosIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

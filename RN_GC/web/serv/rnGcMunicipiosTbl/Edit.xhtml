@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcMunicipiosTblEditDlg" widgetVar="RnGcMunicipiosTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcMunicipiosTblTitle}">
+            <h:form id="RnGcMunicipiosTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcMunicipiosTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcMunicipiosTblLabel_CMunicipio}" for="CMunicipio" />
+                        <p:inputText id="CMunicipio" value="#{rnGcMunicipiosTblController.selected.CMunicipio}" title="#{bundle.EditRnGcMunicipiosTblTitle_CMunicipio}" required="true" requiredMessage="#{bundle.EditRnGcMunicipiosTblRequiredMessage_CMunicipio}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcMunicipiosTblLabel_estadoId}" for="estadoId" />
+                        <p:selectOneMenu id="estadoId" value="#{rnGcMunicipiosTblController.selected.estadoId}" required="true" requiredMessage="#{bundle.EditRnGcMunicipiosTblRequiredMessage_estadoId}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcEstadosTblController.itemsAvailableSelectOne}"
+                                           var="estadoIdItem"
+                                           itemValue="#{estadoIdItem}"
+                                           itemLabel="#{estadoIdItem.CEstado} - #{estadoIdItem.nombreEstado}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcMunicipiosTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcMunicipiosTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcMunicipiosTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcMunicipiosTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcMunicipiosTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcMunicipiosTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcMunicipiosTblLabel_versionCFDI}" for="versionCFDI" />
+                        <p:inputText id="versionCFDI" value="#{rnGcMunicipiosTblController.selected.versionCFDI}" title="#{bundle.EditRnGcMunicipiosTblTitle_versionCFDI}" />
+                        <p:outputLabel value="#{bundle.EditRnGcMunicipiosTblLabel_versionCatalogo}" for="versionCatalogo" />
+                        <p:inputText id="versionCatalogo" value="#{rnGcMunicipiosTblController.selected.versionCatalogo}" title="#{bundle.EditRnGcMunicipiosTblTitle_versionCatalogo}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcMunicipiosTblController.update}" value="#{bundle.Save}" update="display,:RnGcMunicipiosTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcMunicipiosTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcMunicipiosTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

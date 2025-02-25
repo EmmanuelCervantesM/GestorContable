@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcFacturaslineasTblViewDlg" widgetVar="RnGcFacturaslineasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcFacturaslineasTblTitle}">
+            <h:form id="RnGcFacturaslineasTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcFacturaslineasTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_id}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.id}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.creadoPor}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_claveProdServ}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.claveProdServ}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_claveProdServ}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_noIdentificacion}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.noIdentificacion}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_noIdentificacion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_cantidad}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.cantidad}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_cantidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_claveUnidad}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.claveUnidad}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_claveUnidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_unidad}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.unidad}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_unidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.descripcion}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_valorUnit}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.valorUnit}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_valorUnit}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_importe}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.importe}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_importe}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_base}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.base}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_base}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_impuesto}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.impuesto}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_impuesto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_tipoFactor}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.tipoFactor}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_tipoFactor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFacturaslineasTblLabel_tipoTasa}"/>
+                        <h:outputText value="#{rnGcFacturaslineasTblController.selected.tipoTasa}" title="#{bundle.ViewRnGcFacturaslineasTblTitle_tipoTasa}"/>                        
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcFacturaslineasTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

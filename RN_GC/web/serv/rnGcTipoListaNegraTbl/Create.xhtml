@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTipoListaNegraTblCreateDlg" widgetVar="RnGcTipoListaNegraTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcTipoListaNegraTblTitle}">
+            <h:form id="RnGcTipoListaNegraTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcTipoListaNegraTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcTipoListaNegraTblLabel_tipoLista}" for="tipoLista" />
+                        <p:inputText id="tipoLista" value="#{rnGcTipoListaNegraTblController.selected.tipoLista}" title="#{bundle.CreateRnGcTipoListaNegraTblTitle_tipoLista}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcTipoListaNegraTblLabel_fechaPublicacion}" for="fechaPublicacion" />
+                        <p:calendar id="fechaPublicacion" pattern="MM/dd/yyyy" value="#{rnGcTipoListaNegraTblController.selected.fechaPublicacion}" title="#{bundle.EditRnGcTipoListaNegraTblTitle_fechaPublicacion}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTipoListaNegraTblLabel_folioPublicacion}" for="folioPublicacion" />
+                        <p:inputText id="folioPublicacion" value="#{rnGcTipoListaNegraTblController.selected.folioPublicacion}" title="#{bundle.CreateRnGcTipoListaNegraTblTitle_folioPublicacion}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcTipoListaNegraTblController.create}" value="#{bundle.Save}" update="display,:RnGcTipoListaNegraTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcTipoListaNegraTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcTipoListaNegraTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

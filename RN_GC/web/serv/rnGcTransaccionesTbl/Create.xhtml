@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTransaccionesTblCreateDlg" widgetVar="RnGcTransaccionesTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcTransaccionesTblTitle}">
+            <h:form id="RnGcTransaccionesTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcTransaccionesTblController.selected != null}">                        
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_uuid}" for="uuid" />
+                        <p:inputText id="uuid" value="#{rnGcTransaccionesTblController.selected.uuid}" title="#{bundle.CreateRnGcTransaccionesTblTitle_uuid}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_uuid}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_nombreEmisor}" for="nombreEmisor" />
+                        <p:inputText id="nombreEmisor" value="#{rnGcTransaccionesTblController.selected.nombreEmisor}" title="#{bundle.CreateRnGcTransaccionesTblTitle_nombreEmisor}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_nombreEmisor}"/>                        
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_rfcEmisor}" for="rfcEmisor" />
+                        <p:inputText id="rfcEmisor" value="#{rnGcTransaccionesTblController.selected.rfcEmisor}" title="#{bundle.CreateRnGcTransaccionesTblTitle_rfcEmisor}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_rfcEmisor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_nombreReceptor}" for="nombreReceptor" />
+                        <p:inputText id="nombreReceptor" value="#{rnGcTransaccionesTblController.selected.nombreReceptor}" title="#{bundle.CreateRnGcTransaccionesTblTitle_nombreReceptor}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_nombreReceptor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_rfcReceptor}" for="rfcReceptor" />
+                        <p:inputText id="rfcReceptor" value="#{rnGcTransaccionesTblController.selected.rfcReceptor}" title="#{bundle.CreateRnGcTransaccionesTblTitle_rfcReceptor}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_rfcReceptor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_folio}" for="folio" />
+                        <p:inputText id="folio" value="#{rnGcTransaccionesTblController.selected.folio}" title="#{bundle.CreateRnGcTransaccionesTblTitle_folio}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_folio}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_claveRegimenFiscal}" for="claveRegimenFiscal" />
+                        <p:inputText id="claveRegimenFiscal" value="#{rnGcTransaccionesTblController.selected.claveRegimenFiscal}" title="#{bundle.CreateRnGcTransaccionesTblTitle_claveRegimenFiscal}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_claveRegimenFiscal}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_formaPago}" for="formaPago" />
+                        <p:inputText id="formaPago" value="#{rnGcTransaccionesTblController.selected.formaPago}" title="#{bundle.CreateRnGcTransaccionesTblTitle_formaPago}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_formaPago}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_metodoPago}" for="metodoPago" />
+                        <p:inputText id="metodoPago" value="#{rnGcTransaccionesTblController.selected.metodoPago}" title="#{bundle.CreateRnGcTransaccionesTblTitle_metodoPago}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_metodoPago}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_condicionPago}" for="condicionPago" />
+                        <p:inputText id="condicionPago" value="#{rnGcTransaccionesTblController.selected.condicionPago}" title="#{bundle.CreateRnGcTransaccionesTblTitle_condicionPago}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_condicionPago}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_tipoComprobante}" for="tipoComprobante" />
+                        <p:inputText id="tipoComprobante" value="#{rnGcTransaccionesTblController.selected.tipoComprobante}" title="#{bundle.CreateRnGcTransaccionesTblTitle_tipoComprobante}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_tipoComprobante}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_lugarExpedicion}" for="lugarExpedicion" />
+                        <p:inputText id="lugarExpedicion" value="#{rnGcTransaccionesTblController.selected.lugarExpedicion}" title="#{bundle.CreateRnGcTransaccionesTblTitle_lugarExpedicion}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_lugarExpedicion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_fechaExpedicion}" for="fechaExpedicion" />
+                        <p:calendar id="fechaExpedicion" pattern="MM/dd/yyyy" value="#{rnGcTransaccionesTblController.selected.fechaExpedicion}" title="#{bundle.EditRnGcTransaccionesTblTitle_fechaExpedicion}" required="true" requiredMessage="#{bundle.EditRnGcTransaccionesTblRequiredMessage_fechaExpedicion}" showOn="button"/>                        
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_usoCfdi}" for="usoCfdi" />
+                        <p:inputText id="usoCfdi" value="#{rnGcTransaccionesTblController.selected.usoCfdi}" title="#{bundle.CreateRnGcTransaccionesTblTitle_usoCfdi}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_usoCfdi}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_moneda}" for="moneda" />
+                        <p:inputText id="moneda" value="#{rnGcTransaccionesTblController.selected.moneda}" title="#{bundle.CreateRnGcTransaccionesTblTitle_moneda}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_moneda}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTransaccionesTblLabel_importe}" for="importe" />
+                        <p:inputText id="importe" value="#{rnGcTransaccionesTblController.selected.importe}" title="#{bundle.CreateRnGcTransaccionesTblTitle_importe}" required="true" requiredMessage="#{bundle.CreateRnGcTransaccionesTblRequiredMessage_importe}"/>                        
+                    </p:panelGrid>
+                </h:panelGroup>
+                    <br/>
+                <h:panelGroup id="conceptos">
+                    <p:dataTable id="concepto" widgetVar="concepto" var="concep" editable="true" style="width: 985px; text-align: center" rows="8">
+                        <f:facet name="header">
+                            Conceptos
+                        </f:facet>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_claveProdServ}" style="width: 60px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_noIdentificacion}" style="width: 85px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_cantidad}" style="width: 55px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_claveUnidad}" style="width: 45px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_unidad}" style="width: 45px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_descripcion}" style="width: 75px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_valorUnit}" style="width: 55px" />
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_importe}" style="width: 50px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_base}" style="width: 40px" />
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_impuesto}" style="width: 58px" />
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_tipoFactor}" style="width: 50px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_tipoTasa}" style="width: 30px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_importe}" style="width: 50px"/>
+                    </p:dataTable>
+                </h:panelGroup>
+                    <br/>                                        
+                    <p:commandButton actionListener="#{rnGcTransaccionesTblController.create}" value="#{bundle.Save}" update="display,:RnGcTransaccionesTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcTransaccionesTblCreateDialog');"/>
+                    <p:commandButton actionListener="#{rnGcTransaccionesTblController.addRow()}" value="#{bundle.Add}" process="@this" oncomplete="PF('concepto').addRow();" />
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcTransaccionesTblCreateDialog.hide()"/>
+
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

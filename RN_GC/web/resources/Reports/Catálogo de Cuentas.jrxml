@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Catálogo de Cuentas" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c6e5cd38-6400-4b28-a0b6-93074fabc521">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="21"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1" uuid="c62e3bd8-eb50-45d8-bc83-891bc61ca8a4">
+		<field name="nCuenta" class="java.lang.String"/>
+		<field name="dCuenta" class="java.lang.String"/>
+		<field name="nivel" class="java.lang.String"/>
+		<field name="tipo" class="java.lang.String"/>
+		<field name="subtipo" class="java.lang.String"/>
+		<field name="naturaleza" class="java.lang.String"/>
+		<field name="moneda" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="listaCuentas" class="java.util.Collection"/>
+	<parameter name="nombre" class="java.lang.String"/>
+	<parameter name="rfc" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+   cc.codigo_agrupador_sat_id, cc.numeroCuenta, cc.descripcionCuenta, cas.codigoAgrupador, cas.nombreCuenta
+FROM
+    rn_gc_db_test.rn_gc_catalogo_cuentas_tbl cc
+    LEFT JOIN  rn_gc_db_test.rn_gc_codigo_agrupador_sat_tbl cas ON cc.codigo_agrupador_sat_id = cas.id;]]>
+	</queryString>
+	<field name="codigo_agrupador_sat_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numeroCuenta" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descripcionCuenta" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="codigoAgrupador" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombreCuenta" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<title>
+		<band height="108" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="65" width="802" height="39" uuid="7be6a8aa-de05-40a6-be18-42c53acdf95c"/>
+			</rectangle>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="152" y="40" width="229" height="20" uuid="cc979ddd-a658-4dfd-af35-04de7bafe907"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="81" width="802" height="20" uuid="df6d5dec-17d7-468e-af1f-9635cd5e2684"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Catálogo de Cuentas]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="20" width="381" height="20" uuid="e48020c9-cda4-4d48-9165-48ac87c7b145"/>
+				<textFieldExpression><![CDATA[$P{rfc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="381" height="20" uuid="f955bc7b-a1f2-40fe-a317-561826b36f1d"/>
+				<textFieldExpression><![CDATA[$P{nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="40" width="152" height="20" uuid="8ab107c4-efd1-4ed6-ba5f-9008d02b13dd"/>
+				<text><![CDATA[Fecha de emisión del reporte:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="100" height="20" uuid="540bbd1a-548b-4c15-bdce-68943e414b1c"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cuenta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="1" width="303" height="20" uuid="e7772928-27df-4353-88fa-2289162c9a0b"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción de cuenta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="741" y="1" width="61" height="20" uuid="29460952-98f1-4f35-b1fa-6404f34a6dc0"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Moneda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="670" y="1" width="71" height="20" uuid="62759924-ed0f-4fd4-9fce-df0440b276c6"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Naturaleza]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="574" y="1" width="96" height="20" uuid="f19c24c6-f1ae-49d6-ad7d-59f2cc5b7903"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Subtipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="449" y="1" width="125" height="20" uuid="0751b543-156f-43e0-87f7-d3dc7c802d3f"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="1" width="46" height="20" uuid="6f7a4b11-3efa-4365-be48-02c2fa4b7898"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nivel]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<componentElement>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="802" height="20" isPrintWhenDetailOverflows="true" uuid="6c484ff3-8844-4b38-b9b9-36b60c2d7085"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset1" uuid="90386817-f158-40f0-9f95-7d919f8cc404">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaCuentas})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="20" width="802">
+						<textField isStretchWithOverflow="true">
+							<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="20" uuid="bc5a29ba-c861-4f1f-a932-4a7b986f1736"/>
+							<box leftPadding="2">
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textElement verticalAlignment="Middle">
+								<font isBold="false"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{nCuenta}]]></textFieldExpression>
+						</textField>
+						<textField isStretchWithOverflow="true">
+							<reportElement stretchType="RelativeToTallestObject" x="100" y="0" width="303" height="20" isPrintWhenDetailOverflows="true" uuid="5fa9b5c4-b1bf-4705-bb88-fa699a0f73fa"/>
+							<box leftPadding="2">
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textElement verticalAlignment="Middle">
+								<font isBold="false"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{dCuenta}]]></textFieldExpression>
+						</textField>
+						<textField isStretchWithOverflow="true">
+							<reportElement stretchType="RelativeToTallestObject" x="741" y="0" width="61" height="20" uuid="8c2a0e2b-886c-4111-8b7c-51a4175e2cb6"/>
+							<box leftPadding="2">
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textElement verticalAlignment="Middle">
+								<font isBold="false"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{moneda}]]></textFieldExpression>
+						</textField>
+						<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+							<reportElement stretchType="RelativeToTallestObject" x="670" y="0" width="71" height="20" uuid="80d2f9a3-b502-4954-a340-27e41e9dd164"/>
+							<box leftPadding="2">
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textElement verticalAlignment="Middle">
+								<font isBold="false"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{naturaleza}]]></textFieldExpression>
+						</textField>
+						<textField isStretchWithOverflow="true">
+							<reportElement stretchType="RelativeToTallestObject" x="574" y="0" width="96" height="20" isPrintWhenDetailOverflows="true" uuid="4a9a59bb-fd1c-4b7c-8f0a-73074748f73d"/>
+							<box leftPadding="2">
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textElement verticalAlignment="Middle">
+								<font isBold="false"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{subtipo}]]></textFieldExpression>
+						</textField>
+						<textField isStretchWithOverflow="true">
+							<reportElement stretchType="RelativeToTallestObject" x="449" y="0" width="125" height="20" isPrintWhenDetailOverflows="true" uuid="308b1d55-4082-41d5-9597-b4897e63ec91"/>
+							<box leftPadding="2">
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textElement verticalAlignment="Middle">
+								<font isBold="false"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+						</textField>
+						<textField isStretchWithOverflow="true">
+							<reportElement stretchType="RelativeToTallestObject" x="403" y="0" width="46" height="20" uuid="ebbdf9fd-df34-44b3-91d5-7301aa144aa8"/>
+							<box leftPadding="2">
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textElement verticalAlignment="Middle">
+								<font isBold="false"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{nivel}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

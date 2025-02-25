@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpTipocarrosatTblViewDlg" widgetVar="RnGcCpTipocarrosatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpTipocarrosatTblTitle}">
+            <h:form id="RnGcCpTipocarrosatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpTipocarrosatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpTipocarrosatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpTipocarrosatTblController.selected.id}" title="#{bundle.ViewRnGcCpTipocarrosatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipocarrosatTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpTipocarrosatTblController.selected.clave}" title="#{bundle.ViewRnGcCpTipocarrosatTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipocarrosatTblLabel_tipoCarro}"/>
+                        <h:outputText value="#{rnGcCpTipocarrosatTblController.selected.tipoCarro}" title="#{bundle.ViewRnGcCpTipocarrosatTblTitle_tipoCarro}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipocarrosatTblLabel_contenedor}"/>
+                        <h:outputText value="#{rnGcCpTipocarrosatTblController.selected.contenedor}" title="#{bundle.ViewRnGcCpTipocarrosatTblTitle_contenedor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipocarrosatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpTipocarrosatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpTipocarrosatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipocarrosatTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcCpTipocarrosatTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcCpTipocarrosatTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipocarrosatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpTipocarrosatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpTipocarrosatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipocarrosatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpTipocarrosatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpTipocarrosatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipocarrosatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpTipocarrosatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpTipocarrosatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipocarrosatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpTipocarrosatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpTipocarrosatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpTipocarrosatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

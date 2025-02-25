@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AcuseCancelacion" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f5442764-2fa5-409c-8f5c-f06acc18c3f8">
+	<property name="ireport.zoom" value="1.331000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="Logo" class="java.lang.String"/>
+	<parameter name="RFC_Emisor" class="java.lang.String"/>
+	<parameter name="Nombre_Emisor" class="java.lang.String"/>
+	<parameter name="RFC_Receptor" class="java.lang.String"/>
+	<parameter name="Nombre_Receptor" class="java.lang.String"/>
+	<parameter name="Uso_CFDI" class="java.lang.String"/>
+	<parameter name="Folio_Fiscal" class="java.lang.String"/>
+	<parameter name="NoSerie_CSD" class="java.lang.String"/>
+	<parameter name="CodigoPostal" class="java.lang.String"/>
+	<parameter name="FechaHora_Emision" class="java.lang.String"/>
+	<parameter name="EfectoComprobante" class="java.lang.String"/>
+	<parameter name="RegimenFiscal" class="java.lang.String"/>
+	<parameter name="Moneda" class="java.lang.String"/>
+	<parameter name="FormaPago" class="java.lang.String"/>
+	<parameter name="MetodoPago" class="java.lang.String"/>
+	<parameter name="conceptos" class="java.util.Collection" isForPrompting="false"/>
+	<parameter name="Subtotal" class="java.lang.Double"/>
+	<parameter name="ImpuestosTrasladados" class="java.lang.Double"/>
+	<parameter name="ImpuestosRetenidos" class="java.lang.Double"/>
+	<parameter name="Total" class="java.lang.Double"/>
+	<parameter name="Uuid" class="java.lang.String"/>
+	<parameter name="tipoCambio" class="java.lang.String"/>
+	<parameter name="totalDescuento" class="java.lang.Double"/>
+	<parameter name="sello_CFDI" class="java.lang.String"/>
+	<parameter name="sello_SAT" class="java.lang.String"/>
+	<parameter name="cadenaOriginal" class="java.lang.String"/>
+	<parameter name="noCertificadoSAT" class="java.lang.String"/>
+	<parameter name="fechaCertificacion" class="java.lang.String"/>
+	<parameter name="nombre1" class="java.lang.String"/>
+	<parameter name="cargo1" class="java.lang.String"/>
+	<parameter name="nombre2" class="java.lang.String"/>
+	<parameter name="cargo2" class="java.lang.String"/>
+	<parameter name="nombre3" class="java.lang.String"/>
+	<parameter name="cargo3" class="java.lang.String"/>
+	<parameter name="nombre4" class="java.lang.String"/>
+	<parameter name="cargo4" class="java.lang.String"/>
+	<parameter name="nombre5" class="java.lang.String"/>
+	<parameter name="cargo5" class="java.lang.String"/>
+	<parameter name="importeLetra" class="java.lang.String"/>
+	<parameter name="CFDIsRelacionados" class="java.util.Collection"/>
+	<parameter name="rfcProvCertif" class="java.lang.String"/>
+	<parameter name="CodigoPostalReceptor" class="java.lang.String"/>
+	<parameter name="RegimenFiscalReceptor" class="java.lang.String"/>
+	<parameter name="texto" class="java.lang.String"/>
+	<parameter name="motivo" class="java.lang.String"/>
+	<parameter name="uuidRel" class="java.lang.String"/>
+	<parameter name="FechaCancelacion" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="191" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="135" y="0" width="420" height="42" uuid="4e5e55dd-811a-46c3-afa4-8a0c4e37ea40"/>
+			</rectangle>
+			<rectangle radius="10">
+				<reportElement x="135" y="46" width="420" height="42" uuid="9207fb41-5501-44f4-92d2-caa236f5609d"/>
+			</rectangle>
+			<rectangle radius="10">
+				<reportElement x="-1" y="92" width="555" height="68" backcolor="#FFFFBF" uuid="f386d7a4-7d45-4fcb-a8a6-061d6901f608"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="135" y="0" width="419" height="11" uuid="1bfbe6ec-5dcb-4fac-a8a9-b7230df16c4c"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Emisor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="135" y="46" width="419" height="11" uuid="6b001958-f6c9-4acc-b316-760a4ca33928"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Receptor]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="136" y="31" width="283" height="11" uuid="7296c2e4-8de0-46b5-a367-f49a56a37a85"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{RFC_Emisor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="135" y="10" width="418" height="11" uuid="ea5c0307-bfd8-4f16-9579-c59d4966846e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Nombre_Emisor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="136" y="78" width="283" height="11" uuid="34a2d607-fbe5-42d4-b3a2-07773daf9da4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{RFC_Receptor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="135" y="56" width="420" height="11" uuid="5e8fa723-5765-45e5-b538-5861c53cfb54"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Nombre_Receptor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="92" width="554" height="11" uuid="bdd9167e-1c6a-42d3-b401-cabc0f44099f"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Acuse de Solicitud de Cancelación de CFDI]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="135" y="21" width="419" height="11" uuid="a2078ee0-4c05-4075-b9f7-300fcec5ef85"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{RegimenFiscal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="114" width="102" height="22" uuid="20ff6a09-a870-4ce4-b27a-10c24f0bba27"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Uso CFDI:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="102" y="114" width="190" height="22" uuid="d4e5b2c1-a8f7-4dbb-8efa-e1b8263be08d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Uso_CFDI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="136" width="102" height="11" uuid="30e6c6cc-fc86-4916-8e33-202c342bb561"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UUID:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="102" y="136" width="190" height="11" uuid="ce3b0d84-e4b4-4a55-ac01-660332445acf"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Uuid}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="136" width="108" height="11" uuid="8077db42-3de8-4f2f-a056-b5a45108402b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha y Hora de Emisión:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="400" y="136" width="153" height="11" uuid="a5fac4c8-6a59-47a7-8c2d-ec5dadf3de89"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FechaHora_Emision}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="114" width="108" height="11" uuid="ec74d040-d34c-48dc-8d8c-0e36eb7c2d1d"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Forma de Pago:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="400" y="114" width="154" height="11" uuid="2234986e-c49d-4cea-9e0d-6276e310563b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FormaPago}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="125" width="108" height="11" uuid="09a720b8-8bb6-4355-af85-7e03e90d95a7"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Método de Pago:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="400" y="125" width="153" height="11" uuid="7f19db08-b9ce-40f1-9f4d-e9868cb5fcc9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{MetodoPago}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="103" width="111" height="11" uuid="b1e5e0c4-ee7c-4456-96a9-28c00a0a2f56"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo de Comprobante:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="103" width="190" height="11" uuid="81067042-4b59-426f-a995-996ef5e659a6"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EfectoComprobante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="291" y="103" width="26" height="11" uuid="2bed29e4-a335-4936-809b-d90be9ee84a3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Serie:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="317" y="103" width="83" height="11" uuid="ab5337b0-f63c-406b-9998-834cb9a89707"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NoSerie_CSD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="400" y="103" width="31" height="11" uuid="f4274d1f-873b-4556-bfc8-866cd03ef8d2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Folio:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="431" y="103" width="123" height="11" uuid="abca135f-bb60-459d-99c1-b2f5127aeb25"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Folio_Fiscal}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="419" y="31" width="135" height="11" uuid="606127a4-8927-46f3-a57f-cee6dca78c1a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodigoPostal}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="135" height="87" uuid="f2153d4a-c81a-44ec-9e36-a250bc387e3c"/>
+				<imageExpression><![CDATA[$P{Logo}]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="175" width="554" height="16" backcolor="#C1BFAD" uuid="a67e1b69-9b20-4f5e-bd20-7032b9531d96"/>
+				<staticText>
+					<reportElement x="0" y="0" width="150" height="16" uuid="2539ea42-7ad8-4848-be15-3dd9013d1479"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="6"/>
+						<paragraph tabStopWidth="40"/>
+					</textElement>
+					<text><![CDATA[Folio Fiscal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="300" y="0" width="150" height="16" uuid="e67b4e59-4079-4170-8105-7edb64f821dc"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[Motivo de Cancelacion]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="450" y="0" width="104" height="16" uuid="9c67f2fb-7260-4030-9e37-7734c33d2798"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[CFDI Remplaza]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="150" y="0" width="150" height="16" uuid="30544a03-6f53-4256-ada3-12083ba0dadc"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[Estatus de Proceso de Cancelación]]></text>
+				</staticText>
+			</frame>
+			<staticText>
+				<reportElement x="0" y="163" width="150" height="12" uuid="955e94d9-14c2-4565-99fe-67de3c7cbd29"/>
+				<textElement verticalAlignment="Top">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha y Hora Solicitud:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="136" y="67" width="419" height="11" uuid="97212b33-69c8-4f0f-a1b4-3f0812e02651"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{RegimenFiscalReceptor}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="419" y="77" width="135" height="11" uuid="713fd0c1-eefc-48f8-95cd-616a49a759eb"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodigoPostalReceptor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="147" width="102" height="11" uuid="aa96138a-9c7a-4d09-96a8-559e33adc6df"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CFDI Relacionado: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="147" width="108" height="11" uuid="9636304f-682a-4308-b003-abef7a280c6e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Causa relación:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="401" y="147" width="153" height="11" uuid="9efea7d0-1390-42e0-98dd-1b6b03a61b86"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{motivo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="103" y="147" width="188" height="11" uuid="68698cd3-0bf7-40bd-8c39-7a4ea6afcc4a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{uuidRel}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="365" y="77" width="54" height="11" uuid="e79928c9-5e92-47ab-aeee-8621f0b40bcb"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Código Postal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="365" y="32" width="54" height="11" uuid="21cce825-5456-4a72-8b69-fc99177cc7bc"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Código Postal:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="150" y="160" width="150" height="15" uuid="389a9d2d-8062-44aa-a404-133de3b67667"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FechaCancelacion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="1" y="1" width="149" height="20" uuid="771aff22-13fe-48e0-8199-4d0c9b917248"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Uuid}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="150" y="1" width="150" height="20" uuid="e4b75d06-1920-443b-ac5c-954602e47254"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Solicitud de Cancelación Recibida]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="10"/>
+	</pageFooter>
+	<summary>
+		<band height="40">
+			<textField isBlankWhenNull="true">
+				<reportElement x="2" y="9" width="551" height="11" uuid="3c82afc7-7621-4051-a557-8253ddb676dc"/>
+				<textElement textAlignment="Justified">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{sello_CFDI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="120" height="10" backcolor="#C1BFAD" uuid="1138a317-5aa6-4b53-8257-feba2fa81dea"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sello digital del CFDI:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="31" width="554" height="9" uuid="8e0b3d15-2722-4a5d-8296-7c076a4029f8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Este documento es una Representación impresa de un CFDI]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcTrxlineasTblListForm">
+                <p:panel header="#{bundle.ListRnGTrxlineasTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcTrxlineasTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcTrxlineasTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle_claveProdServ}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.claveProdServ}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle_noIdentificacion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.noIdentificacion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle_cantidad}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cantidad}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle_claveUnidad}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.claveUnidad}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle_unidad}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.unidad}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle_descripcion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.descripcion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle_valorUnit}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.valorUnit}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle_importe}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.importe}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle_base}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.base}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle_impuesto}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.impuesto}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle_tipoFactor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoFactor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle_tipoTasa}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoTasa}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTrxlineasTblTitle_importeImpuesto}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.importeImpuesto}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton id="Cargar" value="Cargar" actionListener="#{rnGcTrxlineasTblController.leerXML()}" update=":RnGcTrxlineasTblListForm" />
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcTrxlineasTblController.prepareCreate}" update=":RnGcTrxlineasTblCreateForm" oncomplete="PF('RnGcTrxlineasTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcTrxlineasTblViewForm" oncomplete="PF('RnGcTrxlineasTblViewDialog').show()" disabled="#{empty rnGcTrxlineasTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcTrxlineasTblEditForm" oncomplete="PF('RnGcTrxlineasTblEditDialog').show()" disabled="#{empty rnGcTrxlineasTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcTrxlineasTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcTrxlineasTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

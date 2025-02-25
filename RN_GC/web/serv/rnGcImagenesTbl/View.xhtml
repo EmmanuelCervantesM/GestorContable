@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcImagenesTblViewDlg" widgetVar="RnGcImagenesTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcImagenesTblTitle}">
+            <h:form id="RnGcImagenesTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcImagenesTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcImagenesTblLabel_id}"/>
+                        <h:outputText value="#{rnGcImagenesTblController.selected.id}" title="#{bundle.ViewRnGcImagenesTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcImagenesTblLabel_rfc}"/>
+                        <h:outputText value="#{rnGcImagenesTblController.selected.rfc}" title="#{bundle.ViewRnGcImagenesTblTitle_rfc}"/>
+                        <h:outputText value="#{bundle.ViewRnGcImagenesTblLabel_nombreImagen}"/>
+                        <h:outputText value="#{rnGcImagenesTblController.selected.nombreImagen}" title="#{bundle.ViewRnGcImagenesTblTitle_nombreImagen}"/>
+                        <h:outputText value="#{bundle.ViewRnGcImagenesTblLabel_foto}"/>
+                        <h:outputText value="#{rnGcImagenesTblController.selected.foto}" title="#{bundle.ViewRnGcImagenesTblTitle_foto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcImagenesTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcImagenesTblController.selected.creadoPor}" title="#{bundle.ViewRnGcImagenesTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcImagenesTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcImagenesTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcImagenesTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcImagenesTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcImagenesTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcImagenesTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcImagenesTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcImagenesTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcImagenesTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcImagenesTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

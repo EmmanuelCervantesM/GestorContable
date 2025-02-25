@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcClaveprodservTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcClaveprodservTblListForm">
+                <p:panel header="#{bundle.ListRnGcClaveprodservTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcClaveprodservTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcClaveprodservTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClaveprodservTblTitle_CClaveProdServ}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.CClaveProdServ}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClaveprodservTblTitle_descripcion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.descripcion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClaveprodservTblTitle_incluirIvaTrasladado}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.incluirIvaTrasladado}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClaveprodservTblTitle_incluirIEPSTrasladado}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.incluirIEPSTrasladado}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClaveprodservTblTitle_complementoIncluir}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.complementoIncluir}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClaveprodservTblTitle_fechaInicioVigencia}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaInicioVigencia}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClaveprodservTblTitle_fechaFinVigencia}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaFinVigencia}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClaveprodservTblTitle_versionCFDI}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.versionCFDI}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClaveprodservTblTitle_versionCatalogo}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.versionCatalogo}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClaveprodservTblTitle_estimuloFranjaFronteriza}"/>
+                            </f:facet>
+                            <p:selectBooleanCheckbox value="#{item.estimuloFranjaFronteriza}" disabled="true"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClaveprodservTblTitle_palabrasSimilares}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.palabrasSimilares}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcClaveprodservTblController.prepareCreate}" update=":RnGcClaveprodservTblCreateForm" oncomplete="PF('RnGcClaveprodservTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcClaveprodservTblViewForm" oncomplete="PF('RnGcClaveprodservTblViewDialog').show()" disabled="#{empty rnGcClaveprodservTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcClaveprodservTblEditForm" oncomplete="PF('RnGcClaveprodservTblEditDialog').show()" disabled="#{empty rnGcClaveprodservTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcClaveprodservTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcClaveprodservTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

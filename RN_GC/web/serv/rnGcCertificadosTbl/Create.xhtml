@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCertificadosTblCreateDlg" widgetVar="RnGcCertificadosTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="Cargar Certificados">
+            <h:form id="RnGcCertificadosTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:outputLabel value="Los archivos .cer y .key se cargan de forma automatica al escogerlos" style="font-weight: 900" />
+                    <p:fileUpload fileUploadListener="#{rnGcCertificadosTblController.fileUpload}" update="createBoton1" invalidFileMessage="Solo se permiten archivos .cer y .key" label="Cargar Certificados" multiple="true" fileLimit="2" fileLimitMessage="Solo se puede escoger un archivo cer y key" mode="advanced" auto="true" sizeLimit="100000" allowTypes="/(\.|\/)(key|cer)$/">
+                        <p:growl life="10000" showDetail="true" />
+                    </p:fileUpload>
+                    <p:outputLabel value="Los archivos .cer y .key se validarán. En caso de estar caducados no se habilitará el botón guardar." style="font-weight: 900" />
+                    <p:panelGrid columns="4" rendered="#{rnGcCertificadosTblController.selected != null}">
+                        <p:outputLabel value="Nombre del Certificado" for="nombre" />
+                        <p:inputText id="nombre" value="#{rnGcCertificadosTblController.selected.nombreCertificado}" style="width: 160px" title="Nombre Certificado"/>
+                        <p:outputLabel value="Contraseña Llave Privada" for="passKey" />
+                        <p:inputText id="passKey" value="#{rnGcCertificadosTblController.selected.contraseniaLlavePrivada}" style="width: 160px" title="Contraseña Llave Privada" required="true" requiredMessage="La contraseña de la llave privada es necesaria"/>
+                        <p:outputLabel value="Estado:" for="estado"/>
+                        <p:selectOneMenu id="estado" value="#{rnGcCertificadosTblController.selected.estado}" required="true" requiredMessage="El estado de los certificados es necesario" style="width: 145px">
+                            <f:selectItem itemLabel="Activo" itemValue="Activo"/>
+                            <f:selectItem itemLabel="Inactivo" itemValue="Inactivo"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Usuario" for="user" />
+                        <p:selectOneMenu id="user" value="#{rnGcCertificadosTblController.selected.usuariosId}" style="width: 145px" required="true" requiredMessage="El usuario es necesario">
+                            <f:selectItems value="#{rnGcUsuariosTblController.usuarioCertifcados()}"
+                                           var="usuarioItem"
+                                           itemLabel="#{usuarioItem.nombreCompleto}" itemValue="#{usuarioItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton id="createBoton1" actionListener="#{rnGcCertificadosTblController.create}" value="#{bundle.Save}" update="display,:RnGcCertificadosTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCertificadosTblCreateDialog');" disabled="#{rnGcCertificadosTblController.validarFechaVencimiento()}"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCertificadosTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+    </ui:composition>
+</html>

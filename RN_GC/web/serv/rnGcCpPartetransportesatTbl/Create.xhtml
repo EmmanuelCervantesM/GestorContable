@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpPartetransportesatTblCreateDlg" widgetVar="RnGcCpPartetransportesatTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCpPartetransportesatTblTitle}">
+            <h:form id="RnGcCpPartetransportesatTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpPartetransportesatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPartetransportesatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpPartetransportesatTblController.selected.id}" title="#{bundle.CreateRnGcCpPartetransportesatTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcCpPartetransportesatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPartetransportesatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpPartetransportesatTblController.selected.clave}" title="#{bundle.CreateRnGcCpPartetransportesatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPartetransportesatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpPartetransportesatTblController.selected.descripcion}" title="#{bundle.CreateRnGcCpPartetransportesatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPartetransportesatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpPartetransportesatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpPartetransportesatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPartetransportesatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpPartetransportesatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpPartetransportesatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPartetransportesatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpPartetransportesatTblController.selected.creadoPor}" title="#{bundle.CreateRnGcCpPartetransportesatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcCpPartetransportesatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPartetransportesatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpPartetransportesatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpPartetransportesatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpPartetransportesatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPartetransportesatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpPartetransportesatTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcCpPartetransportesatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpPartetransportesatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpPartetransportesatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpPartetransportesatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpPartetransportesatTblController.create}" value="#{bundle.Save}" update="display,:RnGcCpPartetransportesatTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCpPartetransportesatTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpPartetransportesatTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

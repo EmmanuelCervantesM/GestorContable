@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcClaveprodservTblViewDlg" widgetVar="RnGcClaveprodservTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcClaveprodservTblTitle}">
+            <h:form id="RnGcClaveprodservTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcClaveprodservTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_id}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.id}" title="#{bundle.ViewRnGcClaveprodservTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_CClaveProdServ}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.CClaveProdServ}" title="#{bundle.ViewRnGcClaveprodservTblTitle_CClaveProdServ}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.descripcion}" title="#{bundle.ViewRnGcClaveprodservTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_incluirIvaTrasladado}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.incluirIvaTrasladado}" title="#{bundle.ViewRnGcClaveprodservTblTitle_incluirIvaTrasladado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_incluirIEPSTrasladado}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.incluirIEPSTrasladado}" title="#{bundle.ViewRnGcClaveprodservTblTitle_incluirIEPSTrasladado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_complementoIncluir}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.complementoIncluir}" title="#{bundle.ViewRnGcClaveprodservTblTitle_complementoIncluir}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcClaveprodservTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcClaveprodservTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_versionCFDI}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.versionCFDI}" title="#{bundle.ViewRnGcClaveprodservTblTitle_versionCFDI}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_versionCatalogo}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.versionCatalogo}" title="#{bundle.ViewRnGcClaveprodservTblTitle_versionCatalogo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_estimuloFranjaFronteriza}"/>
+                        <p:selectBooleanCheckbox value="#{rnGcClaveprodservTblController.selected.estimuloFranjaFronteriza}" disabled="true"/>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_palabrasSimilares}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.palabrasSimilares}" title="#{bundle.ViewRnGcClaveprodservTblTitle_palabrasSimilares}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.creadoPor}" title="#{bundle.ViewRnGcClaveprodservTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcClaveprodservTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcClaveprodservTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClaveprodservTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcClaveprodservTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcClaveprodservTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcClaveprodservTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

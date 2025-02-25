@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPolizaLineasTblViewDlg" widgetVar="RnGcPolizaLineasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcPolizaLineasTblTitle}">
+            <h:form id="RnGcPolizaLineasTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPolizaLineasTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcPolizaLineasTblLabel_id}"/>
+                        <h:outputText value="#{rnGcPolizaLineasTblController.selected.id}" title="#{bundle.ViewRnGcPolizaLineasTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPolizaLineasTblLabel_sucursal}"/>
+                        <h:outputText value="#{rnGcPolizaLineasTblController.selected.sucursal}" title="#{bundle.ViewRnGcPolizaLineasTblTitle_sucursal}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPolizaLineasTblLabel_cargo}"/>
+                        <h:outputText value="#{rnGcPolizaLineasTblController.selected.cargo}" title="#{bundle.ViewRnGcPolizaLineasTblTitle_cargo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPolizaLineasTblLabel_abono}"/>
+                        <h:outputText value="#{rnGcPolizaLineasTblController.selected.abono}" title="#{bundle.ViewRnGcPolizaLineasTblTitle_abono}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPolizaLineasTblLabel_referencia}"/>
+                        <h:outputText value="#{rnGcPolizaLineasTblController.selected.referencia}" title="#{bundle.ViewRnGcPolizaLineasTblTitle_referencia}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPolizaLineasTblLabel_concepto}"/>
+                        <h:outputText value="#{rnGcPolizaLineasTblController.selected.concepto}" title="#{bundle.ViewRnGcPolizaLineasTblTitle_concepto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPolizaLineasTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcPolizaLineasTblController.selected.creadoPor}" title="#{bundle.ViewRnGcPolizaLineasTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPolizaLineasTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcPolizaLineasTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcPolizaLineasTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPolizaLineasTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcPolizaLineasTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcPolizaLineasTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPolizaLineasTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcPolizaLineasTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcPolizaLineasTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPolizaLineasTblLabel_catalogoCuentasId}"/>
+                        <h:outputText value="#{rnGcPolizaLineasTblController.selected.catalogoCuentasId}" title="#{bundle.ViewRnGcPolizaLineasTblTitle_catalogoCuentasId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPolizaLineasTblLabel_polizaHeaderId}"/>
+                        <h:outputText value="#{rnGcPolizaLineasTblController.selected.polizaHeaderId}" title="#{bundle.ViewRnGcPolizaLineasTblTitle_polizaHeaderId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcPolizaLineasTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

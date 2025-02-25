@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpTipounidadTblViewDlg" widgetVar="RnGcCpTipounidadTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpTipounidadTblTitle}">
+            <h:form id="RnGcCpTipounidadTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpTipounidadTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpTipounidadTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpTipounidadTblController.selected.id}" title="#{bundle.ViewRnGcCpTipounidadTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipounidadTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpTipounidadTblController.selected.clave}" title="#{bundle.ViewRnGcCpTipounidadTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipounidadTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpTipounidadTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpTipounidadTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipounidadTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpTipounidadTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpTipounidadTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipounidadTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpTipounidadTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpTipounidadTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipounidadTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpTipounidadTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpTipounidadTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipounidadTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpTipounidadTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpTipounidadTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpTipounidadTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

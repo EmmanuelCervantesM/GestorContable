@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcProductserviciosTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcProductserviciosTblListForm">
+                <p:panel header="Lista de Productos y/o Servicios">
+                    <p:dataTable id="datalist" value="#{rnGcProductserviciosTblController.itemscreadoPor()}" var="item"
+                                 selectionMode="single" selection="#{rnGcProductserviciosTblController.selected}"
+                                 paginator="true" scrollable="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column width="50">
+                            <f:facet name="header">
+                                <h:outputText value="Tipo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoProdServ}"/>
+                        </p:column>
+                        <p:column width="100" filterMatchMode="contains" filterBy="#{item.claveProductServ}">
+                            <f:facet name="header">
+                                <h:outputText value="Clave de Producto/Servicio"/>
+                            </f:facet>
+                            <h:outputText value="#{item.claveProductServ}"/>
+                        </p:column>
+                        <p:column width="100" filterMatchMode="contains" filterBy="#{item.noIdentificacion}">
+                            <f:facet name="header">
+                                <h:outputText value="No. Identificación"/>
+                            </f:facet>
+                            <h:outputText value="#{item.noIdentificacion}"/>
+                        </p:column>
+                        <p:column width="50" filterMatchMode="contains" filterBy="#{item.claveUnidad}">
+                            <f:facet name="header">
+                                <h:outputText value="Clave Unidad"/>
+                            </f:facet>
+                            <h:outputText value="#{item.claveUnidad}"/>
+                        </p:column>
+                        <p:column width="70">
+                            <f:facet name="header">
+                                <h:outputText value="Unidad"/>
+                            </f:facet>
+                            <h:outputText value="#{item.unidad}"/>
+                        </p:column>
+                        <p:column filterMatchMode="contains" filterBy="#{item.descripcion}">
+                            <f:facet name="header">
+                                <h:outputText value="Descripción"/>
+                            </f:facet>
+                            <h:outputText value="#{item.descripcion}"/>
+                        </p:column>
+                        <p:column width="100">
+                            <f:facet name="header">
+                                <h:outputText value="Valor Unitario"/>
+                            </f:facet>
+                            <h:outputText value="#{item.valorunitario}">
+                                <f:convertNumber currencySymbol="$" type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column width="60">
+                            <f:facet name="header">
+                                <h:outputText value="Tipo Impuesto"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoImpuesto}"/>
+                        </p:column>
+                        <!--<p:column sortBy="#{item.impuesto}">
+                            <f:facet name="header">
+                                <h:outputText value="Impuesto"/>
+                            </f:facet>
+                            <h:outputText value="#{item.impuesto}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.tipofactor}">
+                            <f:facet name="header">
+                                <h:outputText value="Tipo Factor"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipofactor}"/>
+                        </p:column>-->
+                        <p:column width="50">
+                            <f:facet name="header">
+                                <h:outputText value="Tasa o Cuota"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoTasa}"/>
+                        </p:column>
+                        <!--<p:column sortBy="#{item.impuesto2}">
+                            <f:facet name="header">
+                                <h:outputText value="Impuesto 2"/>
+                            </f:facet>
+                            <h:outputText value="#{item.impuesto2}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.tipoFactor2}">
+                            <f:facet name="header">
+                                <h:outputText value="Tipo Factor 2"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoFactor2}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.tipoTasa2}">
+                            <f:facet name="header">
+                                <h:outputText value="Tasa o Cuota 2"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoTasa2}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.impuesto3}">
+                            <f:facet name="header">
+                                <h:outputText value="Impuesto 3"/>
+                            </f:facet>
+                            <h:outputText value="#{item.impuesto3}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.tipoFactor3}">
+                            <f:facet name="header">
+                                <h:outputText value="Tipo Factor 3"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoFactor3}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.tipoTasa3}">
+                            <f:facet name="header">
+                                <h:outputText value="Tasa o Cuota 3"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoTasa3}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.impuesto4}">
+                            <f:facet name="header">
+                                <h:outputText value="Impuesto 4"/>
+                            </f:facet>
+                            <h:outputText value="#{item.impuesto4}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.tipoFactor4}">
+                            <f:facet name="header">
+                                <h:outputText value="Tipo Factor 4"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoFactor4}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.tipoTasa4}">
+                            <f:facet name="header">
+                                <h:outputText value="Tasa o Cuota 4"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoTasa4}"/>
+                        </p:column>-->
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcProductserviciosTblController.prepareCreate}" update=":RnGcProductserviciosTblCreateForm" oncomplete="PF('RnGcProductserviciosTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcProductserviciosTblViewForm" oncomplete="PF('RnGcProductserviciosTblViewDialog').show()" disabled="#{empty rnGcProductserviciosTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcProductserviciosTblEditForm" oncomplete="PF('RnGcProductserviciosTblEditDialog').show()" disabled="#{empty rnGcProductserviciosTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcProductserviciosTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcProductserviciosTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

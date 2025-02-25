@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcDireccionesUsuariosTblViewDlg" widgetVar="RnGcDireccionesUsuariosTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcDireccionesUsuariosTblTitle}">
+            <h:form id="RnGcDireccionesUsuariosTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcDireccionesUsuariosTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_id}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.id}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_tipo}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.tipo}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_tipo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_pais}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.pais}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_pais}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_estado}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.estado}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_estado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_municipio}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.municipio}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_municipio}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_colonia}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.colonia}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_colonia}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_codigoPostal}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.codigoPostal}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_codigoPostal}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_nombreCalle}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.nombreCalle}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_nombreCalle}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_noExt}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.noExt}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_noExt}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_noInt}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.noInt}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_noInt}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.creadoPor}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcDireccionesUsuariosTblLabel_usuarioId}"/>
+                        <h:outputText value="#{rnGcDireccionesUsuariosTblController.selected.usuarioId}" title="#{bundle.ViewRnGcDireccionesUsuariosTblTitle_usuarioId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcDireccionesUsuariosTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

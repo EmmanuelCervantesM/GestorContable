@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcNomTipoincapacidadTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcNomTipoincapacidadTblListForm">
+                <p:panel header="#{bundle.ListRnGcNomTipoincapacidadTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcNomTipoincapacidadTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcNomTipoincapacidadTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcNomTipoincapacidadTblTitle_version}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.version}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcNomTipoincapacidadTblTitle_revision}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.revision}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcNomTipoincapacidadTblTitle_cveTipoIncapacidad}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cveTipoIncapacidad}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcNomTipoincapacidadTblTitle_descripcion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.descripcion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcNomTipoincapacidadTblTitle_fechaInicioVigencia}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaInicioVigencia}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcNomTipoincapacidadTblTitle_fechaFinVigencia}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaFinVigencia}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcNomTipoincapacidadTblController.prepareCreate}" update=":RnGcNomTipoincapacidadTblCreateForm" oncomplete="PF('RnGcNomTipoincapacidadTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcNomTipoincapacidadTblViewForm" oncomplete="PF('RnGcNomTipoincapacidadTblViewDialog').show()" disabled="#{empty rnGcNomTipoincapacidadTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcNomTipoincapacidadTblEditForm" oncomplete="PF('RnGcNomTipoincapacidadTblEditDialog').show()" disabled="#{empty rnGcNomTipoincapacidadTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcNomTipoincapacidadTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcNomTipoincapacidadTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

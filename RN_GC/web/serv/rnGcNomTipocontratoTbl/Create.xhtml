@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomTipocontratoTblCreateDlg" widgetVar="RnGcNomTipocontratoTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcNomTipocontratoTblTitle}">
+            <h:form id="RnGcNomTipocontratoTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomTipocontratoTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTipocontratoTblLabel_cveTipoContrato}" for="cveTipoContrato" />
+                        <p:inputText id="cveTipoContrato" value="#{rnGcNomTipocontratoTblController.selected.cveTipoContrato}" title="#{bundle.CreateRnGcNomTipocontratoTblTitle_cveTipoContrato}" required="true" requiredMessage="#{bundle.CreateRnGcNomTipocontratoTblRequiredMessage_cveTipoContrato}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTipocontratoTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcNomTipocontratoTblController.selected.descripcion}" title="#{bundle.CreateRnGcNomTipocontratoTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTipocontratoTblLabel_version}" for="version" />
+                        <p:inputText id="version" value="#{rnGcNomTipocontratoTblController.selected.version}" title="#{bundle.CreateRnGcNomTipocontratoTblTitle_version}" required="true" requiredMessage="#{bundle.CreateRnGcNomTipocontratoTblRequiredMessage_version}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTipocontratoTblLabel_revision}" for="revision" />
+                        <p:inputText id="revision" value="#{rnGcNomTipocontratoTblController.selected.revision}" title="#{bundle.CreateRnGcNomTipocontratoTblTitle_revision}" required="true" requiredMessage="#{bundle.CreateRnGcNomTipocontratoTblRequiredMessage_revision}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTipocontratoTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomTipocontratoTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcNomTipocontratoTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcNomTipocontratoTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTipocontratoTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomTipocontratoTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcNomTipocontratoTblTitle_fechaFinVigencia}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomTipocontratoTblController.create}" value="#{bundle.Save}" update="display,:RnGcNomTipocontratoTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcNomTipocontratoTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomTipocontratoTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

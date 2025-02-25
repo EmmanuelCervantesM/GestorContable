@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpTipoestacionsatTblViewDlg" widgetVar="RnGcCpTipoestacionsatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpTipoestacionsatTblTitle}">
+            <h:form id="RnGcCpTipoestacionsatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpTipoestacionsatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoestacionsatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpTipoestacionsatTblController.selected.id}" title="#{bundle.ViewRnGcCpTipoestacionsatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoestacionsatTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpTipoestacionsatTblController.selected.clave}" title="#{bundle.ViewRnGcCpTipoestacionsatTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoestacionsatTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpTipoestacionsatTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpTipoestacionsatTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoestacionsatTblLabel_claveTransporte}"/>
+                        <h:outputText value="#{rnGcCpTipoestacionsatTblController.selected.claveTransporte}" title="#{bundle.ViewRnGcCpTipoestacionsatTblTitle_claveTransporte}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoestacionsatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpTipoestacionsatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpTipoestacionsatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoestacionsatTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcCpTipoestacionsatTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcCpTipoestacionsatTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoestacionsatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpTipoestacionsatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpTipoestacionsatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoestacionsatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpTipoestacionsatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpTipoestacionsatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoestacionsatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpTipoestacionsatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpTipoestacionsatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoestacionsatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpTipoestacionsatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpTipoestacionsatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpTipoestacionsatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

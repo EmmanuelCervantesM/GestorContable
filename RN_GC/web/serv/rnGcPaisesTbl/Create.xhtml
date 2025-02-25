@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPaisesTblCreateDlg" widgetVar="RnGcPaisesTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcPaisesTblTitle}">
+            <h:form id="RnGcPaisesTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPaisesTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcPaisesTblLabel_CPais}" for="CPais" />
+                        <p:inputText id="CPais" value="#{rnGcPaisesTblController.selected.CPais}" title="#{bundle.CreateRnGcPaisesTblTitle_CPais}" required="true" requiredMessage="#{bundle.CreateRnGcPaisesTblRequiredMessage_CPais}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPaisesTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcPaisesTblController.selected.descripcion}" title="#{bundle.CreateRnGcPaisesTblTitle_descripcion}" required="true" requiredMessage="#{bundle.CreateRnGcPaisesTblRequiredMessage_descripcion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPaisesTblLabel_formatoCodPostal}" for="formatoCodPostal" />
+                        <p:inputText id="formatoCodPostal" value="#{rnGcPaisesTblController.selected.formatoCodPostal}" title="#{bundle.CreateRnGcPaisesTblTitle_formatoCodPostal}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPaisesTblLabel_formatoIdentidadTributaria}" for="formatoIdentidadTributaria" />
+                        <p:inputText id="formatoIdentidadTributaria" value="#{rnGcPaisesTblController.selected.formatoIdentidadTributaria}" title="#{bundle.CreateRnGcPaisesTblTitle_formatoIdentidadTributaria}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPaisesTblLabel_validacionIdentidadTributaria}" for="validacionIdentidadTributaria" />
+                        <p:inputText id="validacionIdentidadTributaria" value="#{rnGcPaisesTblController.selected.validacionIdentidadTributaria}" title="#{bundle.CreateRnGcPaisesTblTitle_validacionIdentidadTributaria}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPaisesTblLabel_agrupaciones}" for="agrupaciones" />
+                        <p:inputText id="agrupaciones" value="#{rnGcPaisesTblController.selected.agrupaciones}" title="#{bundle.CreateRnGcPaisesTblTitle_agrupaciones}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcPaisesTblController.create}" value="#{bundle.Save}" update="display,:RnGcPaisesTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcPaisesTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcPaisesTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

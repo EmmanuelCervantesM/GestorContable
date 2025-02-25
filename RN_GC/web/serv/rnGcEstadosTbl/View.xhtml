@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcEstadosTblViewDlg" widgetVar="RnGcEstadosTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcEstadosTblTitle}">
+            <h:form id="RnGcEstadosTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcEstadosTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcEstadosTblLabel_id}"/>
+                        <h:outputText value="#{rnGcEstadosTblController.selected.id}" title="#{bundle.ViewRnGcEstadosTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcEstadosTblLabel_CEstado}"/>
+                        <h:outputText value="#{rnGcEstadosTblController.selected.CEstado}" title="#{bundle.ViewRnGcEstadosTblTitle_CEstado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPaisesTblLabel_CPais}"/>
+                        <h:outputText value="#{rnGcEstadosTblController.selected.paisId.CPais}" title="#{bundle.ViewRnGcPaisesTblTitle_CPais}"/>
+                        <h:outputText value="#{bundle.ViewRnGcEstadosTblLabel_nombreEstado}"/>
+                        <h:outputText value="#{rnGcEstadosTblController.selected.nombreEstado}" title="#{bundle.ViewRnGcEstadosTblTitle_nombreEstado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcEstadosTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcEstadosTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcEstadosTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcEstadosTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcEstadosTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcEstadosTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcEstadosTblLabel_versionCFDI}"/>
+                        <h:outputText value="#{rnGcEstadosTblController.selected.versionCFDI}" title="#{bundle.ViewRnGcEstadosTblTitle_versionCFDI}"/>
+                        <h:outputText value="#{bundle.ViewRnGcEstadosTblLabel_versionCatalogo}"/>
+                        <h:outputText value="#{rnGcEstadosTblController.selected.versionCatalogo}" title="#{bundle.ViewRnGcEstadosTblTitle_versionCatalogo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcEstadosTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcEstadosTblController.selected.creadoPor}" title="#{bundle.ViewRnGcEstadosTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcEstadosTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcEstadosTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcEstadosTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcEstadosTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcEstadosTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcEstadosTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcEstadosTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcEstadosTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcEstadosTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcEstadosTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

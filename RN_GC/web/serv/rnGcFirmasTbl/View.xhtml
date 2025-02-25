@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcFirmasTblViewDlg" widgetVar="RnGcFirmasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcFirmasTblTitle}">
+            <h:form id="RnGcFirmasTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcFirmasTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_id}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.id}" title="#{bundle.ViewRnGcFirmasTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_cargo1}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.cargo1}" title="#{bundle.ViewRnGcFirmasTblTitle_cargo1}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_nombre1}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.nombre1}" title="#{bundle.ViewRnGcFirmasTblTitle_nombre1}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_cargo2}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.cargo2}" title="#{bundle.ViewRnGcFirmasTblTitle_cargo2}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_nombre2}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.nombre2}" title="#{bundle.ViewRnGcFirmasTblTitle_nombre2}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_cargo3}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.cargo3}" title="#{bundle.ViewRnGcFirmasTblTitle_cargo3}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_nombre3}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.nombre3}" title="#{bundle.ViewRnGcFirmasTblTitle_nombre3}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_cargo4}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.cargo4}" title="#{bundle.ViewRnGcFirmasTblTitle_cargo4}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_nombre4}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.nombre4}" title="#{bundle.ViewRnGcFirmasTblTitle_nombre4}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_cargo5}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.cargo5}" title="#{bundle.ViewRnGcFirmasTblTitle_cargo5}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_nombre5}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.nombre5}" title="#{bundle.ViewRnGcFirmasTblTitle_nombre5}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.creadoPor}" title="#{bundle.ViewRnGcFirmasTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcFirmasTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcFirmasTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcFirmasTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcFirmasTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcFirmasTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcFirmasTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

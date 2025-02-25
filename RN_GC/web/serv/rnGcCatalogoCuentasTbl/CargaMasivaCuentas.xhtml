@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <h:form id="CargaMasivaFormGeneral">
+        <p:dialog id="CargaMasivaDlg" widgetVar="CargaMasivaDialog" modal="true" resizable="false" appendTo="@(body)" header="Carga de Cuentas">
+            <h:form id="CargaMasivaForm" enctype="multipart/form-data">
+                <p:growl id="msgg" life="5000" showDetail="true"/>
+                <p:panel header="Contabilidad - Cargar Cuentas">
+                    <p:fileUpload id="uploader1" mode="advanced" styleClass="p-d-block p-mb-5" label="Buscar Archivo" cancelLabel="Cancelar" uploadLabel="Cargar"
+                                  fileUploadListener="#{rnGcCatalogoCuentasTblController.leerxls}" dragDropSupport="false" sequential="true" multiple="true"
+                                  update=":RnGcCatalogoCuentasTblListForm:datalist, msgg, :RnGcCatalogoCuentasTblListForm:mssg, :CargaMasivaFormGeneral:CuentasDlg, :CargaMasivaFormGeneral" 
+                                  fileLimit="1" allowTypes="/(\.|\/)(xlsx)$/" accept=".xlsx" oncomplete="PF('CargaMasivaDialog').hide()"/>
+                    <!--<p:fileUpload value="#/{rnGcCatalogoCuentasTblController.file}" 
+                                  mode="simple" 
+                                  id="archivo"
+                                  skinSimple="true"
+                                  label="Seleccionar Archivo"/>
+                    <br />
+                    <p:commandButton value="Cargar" ajax="false" action="#/{rnGcCatalogoCuentasTblController.leerxls(event)}" update=":RnGcCatalogoCuentasTblListForm:datalist"/>-->
+                </p:panel>
+            </h:form>            
+        </p:dialog>
+        <!--Lista de Cuentas-->
+        <p:dialog id="CuentasDlg" style="width: 200px" widgetVar="CuentasDialog" modal="true" resizable="false" appendTo="@(body)" header="Alerta">
+            <h:form id="RnGcCatalogoCuentasTblListForm2">
+                <p:scrollPanel mode="native" style="height: 450px">
+                <p:panel header="Lo sentimos!. Estas Cuentas no se pudierón registrar, debido a que:">
+                    <h:outputText rendered="#{rnGcCatalogoCuentasTblController.motivo != ''}" value="Hay cuentas sin#{rnGcCatalogoCuentasTblController.motivo} 
+                                   porque no se ingresaron de acuerdo a las instrucciones o  no se ingresaron" style="font-size: 15px"/>
+                    <br/>
+                    <h:outputText rendered="#{rnGcCatalogoCuentasTblController.motivoVal != ''}" value="Hay cuentas con#{rnGcCatalogoCuentasTblController.motivoVal} ya existente" style="font-size: 15px"/>
+                     <p:dataTable value="#{rnGcCatalogoCuentasTblController.obtenerCuentasNoRegistradas()}" var="item"                             
+                                 >
+                        <p:column headerText="Número Cuenta">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_numeroCuenta}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.numeroCuenta}"/>
+                        </p:column>
+                        <p:column headerText="Descripción Cuenta">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_descripcionCuenta}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.descripcionCuenta}"/>
+                        </p:column>
+                        <p:column headerText="Nivel">
+                            <f:facet name="header">
+                                <h:outputText value="Nivel"/>
+                            </f:facet>
+                            <h:outputText value="#{item.adicional2}"/>
+                        </p:column>
+                         <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Codigo agrupador"/>
+                            </f:facet>
+                             <h:outputText value="#{item.codigoAgrupadorSatId.codigoAgrupador}"/>
+                        </p:column>
+                         <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Tipo"/>
+                            </f:facet>
+                             <h:outputText value="#{item.tipo}"/>
+                        </p:column>
+                         <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Subtipo"/>
+                            </f:facet>
+                             <h:outputText value="#{item.subtipo}"/>
+                        </p:column>
+                        <p:column headerText="Naturaleza">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_naturaleza}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.naturaleza}"/>
+                        </p:column>
+                          <p:column headerText="Moneda">
+                            <f:facet name="header">
+                                <h:outputText value="Moneda"/>
+                            </f:facet>
+                            <h:outputText value="#{item.monedaId.CMoneda}"/>
+                        </p:column>
+                          <p:column headerText="Diot">
+                            <f:facet name="header">
+                                <h:outputText value="DIOT"/>
+                            </f:facet>
+                              <h:outputText value="#{item.adicional1}"/>
+                        </p:column>
+                         <p:column headerText="rfc">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_rfc}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rfc}"/>
+                        </p:column>
+                         <p:column headerText="inicio Vigencia">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_inicioVigencia}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.inicioVigencia}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>          
+                        <f:facet name="footer">
+                            <p:commandButton id="cancelar" icon="ui-icon-close"   value="Cerrar" onclick="PF('CuentasDialog').hide()" />
+                        </f:facet>
+                    </p:dataTable>
+                  
+                </p:panel>
+                </p:scrollPanel>
+            </h:form>
+        </p:dialog>
+        <!--Lista de Cuentas-->
+        </h:form>
+    </ui:composition>
+</html>

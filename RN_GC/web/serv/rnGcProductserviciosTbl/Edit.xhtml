@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcProductserviciosTblEditDlg" widgetVar="RnGcProductserviciosTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcProductserviciosTblTitle}">
+            <h:form id="RnGcProductserviciosTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcProductserviciosTblController.selected != null}">
+                        <p:outputLabel value="Tipo" for="tipoProdServ" />
+                        <p:selectOneMenu id="tipoProdServ" style="width: 145px" value="#{rnGcProductserviciosTblController.selected.tipoProdServ}" title="#{bundle.CreateRnGcProductserviciosTblTitle_tipoProdServ}" required="true" requiredMessage="#{bundle.CreateRnGcProductserviciosTblRequiredMessage_tipoProdServ}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}" />
+                            <f:selectItem itemLabel="Producto" itemValue="Producto"/>
+                            <f:selectItem itemLabel="Servicio" itemValue="Servicio"/>
+                        </p:selectOneMenu>
+                        <a target="_blank" href="http://pys.sat.gob.mx/PyS/catPyS.aspx">Clave de Producto o Servicio</a>
+                        <p:inputText id="claveProductServ" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.claveProductServ}" title="#{bundle.CreateRnGcProductserviciosTblTitle_claveProductServ}" required="true" requiredMessage="#{bundle.CreateRnGcProductserviciosTblRequiredMessage_claveProductServ}"/>
+                        <p:outputLabel value="No. Identificación" for="noIdentificacion" />
+                        <p:inputText id="noIdentificacion" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.noIdentificacion}" title="#{bundle.CreateRnGcProductserviciosTblTitle_noIdentificacion}" />
+                        <a target="_blank" href="http://200.57.3.89/PyS/catUnidades.aspx">Clave Unidad</a>
+                        <p:inputText id="claveUnidad" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.claveUnidad}" title="#{bundle.CreateRnGcProductserviciosTblTitle_claveUnidad}" required="true" requiredMessage="#{bundle.CreateRnGcProductserviciosTblRequiredMessage_claveUnidad}"/>
+                        <p:outputLabel value="Unidad" for="unidad" />
+                        <p:inputText id="unidad" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.unidad}" title="#{bundle.CreateRnGcProductserviciosTblTitle_unidad}" />
+                        <p:outputLabel value="Descripción" for="descripcion" />
+                        <p:scrollPanel style="height: 50px" mode="native">
+                            <p:inputTextarea id="descripcion" style="width: 170px" value="#{rnGcProductserviciosTblController.selected.descripcion}" title="#{bundle.CreateRnGcProductserviciosTblTitle_descripcion}" required="true" requiredMessage="#{bundle.CreateRnGcProductserviciosTblRequiredMessage_descripcion}"/>
+                        </p:scrollPanel>
+                        <p:outputLabel value="Valor Unitario" for="valorunitario" />
+                        <p:inputText id="valorunitario" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.valorunitario}" title="#{bundle.CreateRnGcProductserviciosTblTitle_valorunitario}" required="true" requiredMessage="#{bundle.CreateRnGcProductserviciosTblRequiredMessage_valorunitario}"/>
+                        <p:outputLabel value="Objeto Impuesto" for="objetoImpuesto" />
+                        <p:selectOneMenu id="objetoImpuesto" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.objetoImpId}" title="Objeto impuesto" required="true" requiredMessage="Se requiere el objeto impuesto">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcObjetoimpuestoTblController.itemsAvailableSelectOne}"
+                                           var="objetoItem"
+                                           itemLabel="#{objetoItem.clave} - #{objetoItem.descripcion}"
+                                           itemValue="#{objetoItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto" />
+                        <p:selectOneMenu id="tipoImpuesto" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.tipoImpuesto}" title="#{bundle.CreateRnGcProductserviciosTblTitle_tipoImpuesto}" required="true" requiredMessage="#{bundle.CreateRnGcProductserviciosTblRequiredMessage_tipoImpuesto}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                           var="tipoImpuestoItem"
+                                           itemLabel="#{tipoImpuestoItem.tipoImpuesto}"
+                                           itemValue="#{tipoImpuestoItem.tipoImpuesto}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Impuesto" for="impuesto" />
+                        <p:selectOneMenu id="impuesto" style="width: 145px" value="#{rnGcProductserviciosTblController.selected.impuesto}" title="#{bundle.CreateRnGcProductserviciosTblTitle_impuesto}" required="true" requiredMessage="#{bundle.CreateRnGcProductserviciosTblRequiredMessage_impuesto}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                           var="impuestoItem"
+                                           itemLabel="#{impuestoItem.CImpuesto} - #{impuestoItem.descripcion}"
+                                           itemValue="#{impuestoItem.CImpuesto}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Tipo de Factor" for="tipofactor" />
+                        <p:selectOneMenu id="tipofactor" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.tipofactor}" title="#{bundle.CreateRnGcProductserviciosTblTitle_tipofactor}" required="true" requiredMessage="#{bundle.CreateRnGcProductserviciosTblRequiredMessage_tipofactor}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                           var="factorItem"
+                                           itemLabel="#{factorItem.ctipoFactor}"
+                                           itemValue="#{factorItem.ctipoFactor}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Tasa o Cuota (%)" for="tipoTasa" />
+                        <p:inputText id="tipoTasa" style="width: 145px" value="#{rnGcProductserviciosTblController.selected.tipoTasa}" title="#{bundle.CreateRnGcProductserviciosTblTitle_tipoTasa}" required="true" requiredMessage="#{bundle.CreateRnGcProductserviciosTblRequiredMessage_tipoTasa}"/>
+                    </p:panelGrid>
+                    <br/>
+                    <p:panel header="Impuestos Adicionales" toggleable="true" collapsed="true" >
+                        <p:panelGrid columns="4">
+                            <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto2" />
+                            <p:selectOneMenu id="tipoImpuesto2" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.tipoImpuesto2}" title="#{bundle.CreateRnGcProductserviciosTblTitle_tipoImpuesto}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                               var="tipoImpuestoItem"
+                                               itemLabel="#{tipoImpuestoItem.tipoImpuesto}"
+                                               itemValue="#{tipoImpuestoItem.tipoImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Impuesto" for="impuesto2" />
+                            <p:selectOneMenu id="impuesto2" style="width: 145px" value="#{rnGcProductserviciosTblController.selected.impuesto2}" title="#{bundle.CreateRnGcProductserviciosTblTitle_impuesto}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                               var="impuesto2Item"
+                                               itemLabel="#{impuesto2Item.CImpuesto} - #{impuesto2Item.descripcion}"
+                                               itemValue="#{impuesto2Item.CImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tipo de Factor" for="tipofactor2" />
+                            <p:selectOneMenu id="tipofactor2" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.tipoFactor2}" title="#{bundle.CreateRnGcProductserviciosTblTitle_tipofactor}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                               var="factorItem"
+                                               itemLabel="#{factorItem.ctipoFactor}"
+                                               itemValue="#{factorItem.ctipoFactor}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tasa o Cuota (%)" for="tipoTasa2" />
+                            <p:inputText id="tipoTasa2" style="width: 145px" value="#{rnGcProductserviciosTblController.selected.tipoTasa2}" title="#{bundle.CreateRnGcProductserviciosTblTitle_tipoTasa}"/>
+
+                            <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto3" />
+                            <p:selectOneMenu id="tipoImpuesto3" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.tipoImpuesto3}" title="#{bundle.CreateRnGcProductserviciosTblTitle_tipoImpuesto}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                               var="tipoImpuestoItem"
+                                               itemLabel="#{tipoImpuestoItem.tipoImpuesto}"
+                                               itemValue="#{tipoImpuestoItem.tipoImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Impuesto" for="impuesto3" />
+                            <p:selectOneMenu id="impuesto3" style="width: 145px" value="#{rnGcProductserviciosTblController.selected.impuesto3}" title="#{bundle.CreateRnGcProductserviciosTblTitle_impuesto}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                               var="impuesto3Item"
+                                               itemLabel="#{impuesto3Item.CImpuesto} - #{impuesto3Item.descripcion}"
+                                               itemValue="#{impuesto3Item.CImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tipo de Factor" for="tipofactor3" />
+                            <p:selectOneMenu id="tipofactor3" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.tipoFactor3}" title="#{bundle.CreateRnGcProductserviciosTblTitle_tipofactor}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                               var="factorItem"
+                                               itemLabel="#{factorItem.ctipoFactor}"
+                                               itemValue="#{factorItem.ctipoFactor}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tasa o Cuota (%)" for="tipoTasa3" />
+                            <p:inputText id="tipoTasa3" style="width: 145px" value="#{rnGcProductserviciosTblController.selected.tipoTasa3}" title="#{bundle.CreateRnGcProductserviciosTblTitle_tipoTasa}"/>
+
+                            <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto4" />
+                            <p:selectOneMenu id="tipoImpuesto4" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.tipoImpuesto4}" title="#{bundle.CreateRnGcProductserviciosTblTitle_tipoImpuesto}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                               var="tipoImpuestoItem"
+                                               itemLabel="#{tipoImpuestoItem.tipoImpuesto}"
+                                               itemValue="#{tipoImpuestoItem.tipoImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Impuesto" for="impuesto4" />
+                            <p:selectOneMenu id="impuesto4" style="width: 145px" value="#{rnGcProductserviciosTblController.selected.impuesto4}" title="#{bundle.CreateRnGcProductserviciosTblTitle_impuesto}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                               var="impuesto4Item"
+                                               itemLabel="#{impuesto4Item.CImpuesto} - #{impuesto4Item.descripcion}"
+                                               itemValue="#{impuesto4Item.CImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tipo de Factor" for="tipofactor4" />
+                            <p:selectOneMenu id="tipofactor4" style="width: 160px" value="#{rnGcProductserviciosTblController.selected.tipoFactor4}" title="#{bundle.CreateRnGcProductserviciosTblTitle_tipofactor}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                               var="factorItem"
+                                               itemLabel="#{factorItem.ctipoFactor}"
+                                               itemValue="#{factorItem.ctipoFactor}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tasa o Cuota (%)" for="tipoTasa4" />
+                            <p:inputText id="tipoTasa4" style="width: 145px" value="#{rnGcProductserviciosTblController.selected.tipoTasa4}" title="#{bundle.CreateRnGcProductserviciosTblTitle_tipoTasa}"/>
+
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:commandButton actionListener="#{rnGcProductserviciosTblController.update}" value="#{bundle.Save}" update="display,:RnGcProductserviciosTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcProductserviciosTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcProductserviciosTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

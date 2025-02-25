@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPagosTblCreateDlg" widgetVar="RnGcPagosTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcPagosTblTitle}">
+            <h:form id="RnGcPagosTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPagosTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcPagosTblController.selected.id}" title="#{bundle.CreateRnGcPagosTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_noPago}" for="noPago" />
+                        <p:inputText id="noPago" value="#{rnGcPagosTblController.selected.noPago}" title="#{bundle.CreateRnGcPagosTblTitle_noPago}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_noPago}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_nombreEmisor}" for="nombreEmisor" />
+                        <p:inputText id="nombreEmisor" value="#{rnGcPagosTblController.selected.nombreEmisor}" title="#{bundle.CreateRnGcPagosTblTitle_nombreEmisor}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_nombreEmisor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_RFCEmisor}" for="RFCEmisor" />
+                        <p:inputText id="RFCEmisor" value="#{rnGcPagosTblController.selected.RFCEmisor}" title="#{bundle.CreateRnGcPagosTblTitle_RFCEmisor}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_RFCEmisor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_tipoCopmprobante}" for="tipoCopmprobante" />
+                        <p:inputText id="tipoCopmprobante" value="#{rnGcPagosTblController.selected.tipoCopmprobante}" title="#{bundle.CreateRnGcPagosTblTitle_tipoCopmprobante}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_tipoCopmprobante}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_lugarExpedicion}" for="lugarExpedicion" />
+                        <p:inputText id="lugarExpedicion" value="#{rnGcPagosTblController.selected.lugarExpedicion}" title="#{bundle.CreateRnGcPagosTblTitle_lugarExpedicion}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_lugarExpedicion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_fechaExpedicion}" for="fechaExpedicion" />
+                        <p:calendar id="fechaExpedicion" pattern="MM/dd/yyyy" value="#{rnGcPagosTblController.selected.fechaExpedicion}" title="#{bundle.EditRnGcPagosTblTitle_fechaExpedicion}" required="true" requiredMessage="#{bundle.EditRnGcPagosTblRequiredMessage_fechaExpedicion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_horaExpedicion}" for="horaExpedicion" />
+                        <p:calendar id="horaExpedicion" pattern="HH:mm:ss" value="#{rnGcPagosTblController.selected.horaExpedicion}" title="#{bundle.EditRnGcPagosTblTitle_horaExpedicion}" required="true" requiredMessage="#{bundle.EditRnGcPagosTblRequiredMessage_horaExpedicion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_moneda}" for="moneda" />
+                        <p:inputText id="moneda" value="#{rnGcPagosTblController.selected.moneda}" title="#{bundle.CreateRnGcPagosTblTitle_moneda}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_moneda}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_RFCReceptor}" for="RFCReceptor" />
+                        <p:inputText id="RFCReceptor" value="#{rnGcPagosTblController.selected.RFCReceptor}" title="#{bundle.CreateRnGcPagosTblTitle_RFCReceptor}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_RFCReceptor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_usoCFDI}" for="usoCFDI" />
+                        <p:inputText id="usoCFDI" value="#{rnGcPagosTblController.selected.usoCFDI}" title="#{bundle.CreateRnGcPagosTblTitle_usoCFDI}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_usoCFDI}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_importe}" for="importe" />
+                        <p:inputText id="importe" value="#{rnGcPagosTblController.selected.importe}" title="#{bundle.CreateRnGcPagosTblTitle_importe}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_importe}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_impuesto}" for="impuesto" />
+                        <p:inputText id="impuesto" value="#{rnGcPagosTblController.selected.impuesto}" title="#{bundle.CreateRnGcPagosTblTitle_impuesto}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_impuesto}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_subtotal}" for="subtotal" />
+                        <p:inputText id="subtotal" value="#{rnGcPagosTblController.selected.subtotal}" title="#{bundle.CreateRnGcPagosTblTitle_subtotal}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_subtotal}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_totalImpuesto}" for="totalImpuesto" />
+                        <p:inputText id="totalImpuesto" value="#{rnGcPagosTblController.selected.totalImpuesto}" title="#{bundle.CreateRnGcPagosTblTitle_totalImpuesto}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_totalImpuesto}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_total}" for="total" />
+                        <p:inputText id="total" value="#{rnGcPagosTblController.selected.total}" title="#{bundle.CreateRnGcPagosTblTitle_total}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_total}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcPagosTblController.selected.creadoPor}" title="#{bundle.CreateRnGcPagosTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcPagosTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcPagosTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcPagosTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcPagosTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcPagosTblTitle_ultimaActualizacionPor}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_ultimaActualizacionPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcPagosTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcPagosTblTitle_ultimaFechaActualizacion}" required="true" requiredMessage="#{bundle.EditRnGcPagosTblRequiredMessage_ultimaFechaActualizacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_facturasId}" for="facturasId" />
+                        <p:inputText id="facturasId" value="#{rnGcPagosTblController.selected.facturasId}" title="#{bundle.CreateRnGcPagosTblTitle_facturasId}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_facturasId}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_rngcfacturastblId}" for="rngcfacturastblId" />
+                        <p:inputText id="rngcfacturastblId" value="#{rnGcPagosTblController.selected.rngcfacturastblId}" title="#{bundle.CreateRnGcPagosTblTitle_rngcfacturastblId}" required="true" requiredMessage="#{bundle.CreateRnGcPagosTblRequiredMessage_rngcfacturastblId}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPagosTblLabel_rngcfacturastblId1}" for="rngcfacturastblId1" />
+                        <p:selectOneMenu id="rngcfacturastblId1" value="#{rnGcPagosTblController.selected.rngcfacturastblId1}" required="true" requiredMessage="#{bundle.EditRnGcPagosTblRequiredMessage_rngcfacturastblId1}">
+                            <f:selectItems value="#{rnGcFacturasTblController.itemsAvailableSelectOne}"
+                                           var="rngcfacturastblId1Item"
+                                           itemValue="#{rngcfacturastblId1Item}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcPagosTblController.create}" value="#{bundle.Save}" update="display,:RnGcPagosTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcPagosTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcPagosTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

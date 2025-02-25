@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcBancosTblViewDlg" widgetVar="RnGcBancosTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcBancosTblTitle}">
+            <h:form id="RnGcBancosTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcBancosTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcBancosTblLabel_id}"/>
+                        <h:outputText value="#{rnGcBancosTblController.selected.id}" title="#{bundle.ViewRnGcBancosTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcBancosTblLabel_bancoId}"/>
+                        <h:outputText value="#{rnGcBancosTblController.selected.bancoId}" title="#{bundle.ViewRnGcBancosTblTitle_bancoId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcBancosTblLabel_nombre}"/>
+                        <h:outputText value="#{rnGcBancosTblController.selected.nombre}" title="#{bundle.ViewRnGcBancosTblTitle_nombre}"/>
+                        <h:outputText value="#{bundle.ViewRnGcBancosTblLabel_tipoBanco}"/>
+                        <h:outputText value="#{rnGcBancosTblController.selected.tipoBanco}" title="#{bundle.ViewRnGcBancosTblTitle_tipoBanco}"/>
+                        <h:outputText value="#{bundle.ViewRnGcBancosTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcBancosTblController.selected.creadoPor}" title="#{bundle.ViewRnGcBancosTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcBancosTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcBancosTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcBancosTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcBancosTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcBancosTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcBancosTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcBancosTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcBancosTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcBancosTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcBancosTblLabel_personaId}"/>
+                        <h:outputText value="#{rnGcBancosTblController.selected.personaId}" title="#{bundle.ViewRnGcBancosTblTitle_personaId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcBancosTblLabel_cuentasBancariasId}"/>
+                        <h:outputText value="#{rnGcBancosTblController.selected.cuentasBancariasId}" title="#{bundle.ViewRnGcBancosTblTitle_cuentasBancariasId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcBancosTblLabel_rngcpersonastblId}"/>
+                        <h:outputText value="#{rnGcBancosTblController.selected.rngcpersonastblId}" title="#{bundle.ViewRnGcBancosTblTitle_rngcpersonastblId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcBancosTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

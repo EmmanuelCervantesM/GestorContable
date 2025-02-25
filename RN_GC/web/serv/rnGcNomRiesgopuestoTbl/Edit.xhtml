@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomRiesgopuestoTblEditDlg" widgetVar="RnGcNomRiesgopuestoTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcNomRiesgopuestoTblTitle}">
+            <h:form id="RnGcNomRiesgopuestoTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomRiesgopuestoTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcNomRiesgopuestoTblLabel_cveRiesgoPuesto}" for="cveRiesgoPuesto" />
+                        <p:inputText id="cveRiesgoPuesto" value="#{rnGcNomRiesgopuestoTblController.selected.cveRiesgoPuesto}" title="#{bundle.EditRnGcNomRiesgopuestoTblTitle_cveRiesgoPuesto}" required="true" requiredMessage="#{bundle.EditRnGcNomRiesgopuestoTblRequiredMessage_cveRiesgoPuesto}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomRiesgopuestoTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcNomRiesgopuestoTblController.selected.descripcion}" title="#{bundle.EditRnGcNomRiesgopuestoTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcNomRiesgopuestoTblLabel_version}" for="version" />
+                        <p:inputText id="version" value="#{rnGcNomRiesgopuestoTblController.selected.version}" title="#{bundle.EditRnGcNomRiesgopuestoTblTitle_version}" required="true" requiredMessage="#{bundle.EditRnGcNomRiesgopuestoTblRequiredMessage_version}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomRiesgopuestoTblLabel_revision}" for="revision" />
+                        <p:inputText id="revision" value="#{rnGcNomRiesgopuestoTblController.selected.revision}" title="#{bundle.EditRnGcNomRiesgopuestoTblTitle_revision}" required="true" requiredMessage="#{bundle.EditRnGcNomRiesgopuestoTblRequiredMessage_revision}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomRiesgopuestoTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomRiesgopuestoTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcNomRiesgopuestoTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcNomRiesgopuestoTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomRiesgopuestoTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomRiesgopuestoTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcNomRiesgopuestoTblTitle_fechaFinVigencia}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomRiesgopuestoTblController.update}" value="#{bundle.Save}" update="display,:RnGcNomRiesgopuestoTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcNomRiesgopuestoTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomRiesgopuestoTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

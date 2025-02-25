@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcCfdisLineasTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcCfdisLineasTblListForm">
+                <p:panel header="#{bundle.ListRnGcCfdisLineasTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcCfdisLineasTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcCfdisLineasTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                         <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdislineasTblTitle_claveProdServ}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.claveProdServ}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdislineasTblTitle_noIdentificacion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.noIdentificacion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdislineasTblTitle_cantidad}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cantidad}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdislineasTblTitle_claveUnidad}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.claveUnidad}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdislineasTblTitle_unidad}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.unidad}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdislineasTblTitle_descripcion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.descripcion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdislineasTblTitle_valorUnit}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.valorUnit}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdislineasTblTitle_importe}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.importe}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdislineasTblTitle_base}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.base}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdislineasTblTitle_impuesto}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.impuesto}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdislineasTblTitle_tipoFactor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoFactor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdislineasTblTitle_tipoTasa}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoTasa}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCfdislineasTblTitle_importeImpuesto}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.importeimpuesto}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcCfdisLineasTblController.prepareCreate}" update=":RnGcCfdisLineasTblCreateForm" oncomplete="PF('RnGcCfdisLineasTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcCfdisLineasTblViewForm" oncomplete="PF('RnGcCfdisLineasTblViewDialog').show()" disabled="#{empty rnGcCfdisLineasTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcCfdisLineasTblEditForm" oncomplete="PF('RnGcCfdisLineasTblEditDialog').show()" disabled="#{empty rnGcCfdisLineasTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcCfdisLineasTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcCfdisLineasTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

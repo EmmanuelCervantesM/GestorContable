@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTrabajadoresTblViewDlg" widgetVar="RnGcTrabajadoresTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcTrabajadoresTblTitle}">
+            <h:form id="RnGcTrabajadoresTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcTrabajadoresTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_apPaterno}"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.apPaterno}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_apPaterno}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_apMaterno}"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.apMaterno}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_apMaterno}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_nombre}"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.nombre}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_nombre}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_nombreCompleto}"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.nombreCompleto}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_nombreCompleto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_curp}"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.curp}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_curp}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_rfc}"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.rfc}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_rfc}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_nss}"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.nss}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_nss}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_sdi}"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.sdi}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_sdi}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_tipoPersona}"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.tipoPersona}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_tipoPersona}"/>
+                        <h:outputText value="Correo Electronico"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.email1}" title="Correo Electronico"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcTrabajadoresTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+    </ui:composition>
+</html>

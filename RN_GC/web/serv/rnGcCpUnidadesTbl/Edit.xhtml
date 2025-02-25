@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpUnidadesTblEditDlg" widgetVar="RnGcCpUnidadesTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpUnidadesTblTitle}">
+            <h:form id="RnGcCpUnidadesTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="8" rendered="#{rnGcCpUnidadesTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_numeroEconomico}" for="numeroEconomico" />
+                        <p:inputText id="numeroEconomico" value="#{rnGcCpUnidadesTblController.selected.numeroEconomico}" title="#{bundle.EditRnGcCpUnidadesTblTitle_numeroEconomico}" required="true" requiredMessage="#{bundle.EditRnGcCpUnidadesTblRequiredMessage_numeroEconomico}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_lecturaInicial}" for="lecturaInicial" />
+                        <p:inputText id="lecturaInicial" value="#{rnGcCpUnidadesTblController.selected.lecturaInicial}" title="#{bundle.EditRnGcCpUnidadesTblTitle_lecturaInicial}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_kmLecturaActual}" for="kmLecturaActual" />
+                        <p:inputText id="kmLecturaActual" value="#{rnGcCpUnidadesTblController.selected.kmLecturaActual}" title="#{bundle.EditRnGcCpUnidadesTblTitle_kmLecturaActual}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_kmAcumulados}" for="kmAcumulados" />
+                        <p:inputText id="kmAcumulados" value="#{rnGcCpUnidadesTblController.selected.kmAcumulados}" title="#{bundle.EditRnGcCpUnidadesTblTitle_kmAcumulados}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_kmPromedioDiario}" for="kmPromedioDiario" />
+                        <p:inputText id="kmPromedioDiario" value="#{rnGcCpUnidadesTblController.selected.kmPromedioDiario}" title="#{bundle.EditRnGcCpUnidadesTblTitle_kmPromedioDiario}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_litrosCargados}" for="litrosCargados" />
+                        <p:inputText id="litrosCargados" value="#{rnGcCpUnidadesTblController.selected.litrosCargados}" title="#{bundle.EditRnGcCpUnidadesTblTitle_litrosCargados}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_rendimiento}" for="rendimiento" />
+                        <p:inputText id="rendimiento" value="#{rnGcCpUnidadesTblController.selected.rendimiento}" title="#{bundle.EditRnGcCpUnidadesTblTitle_rendimiento}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_horaServicio}" for="horaServicio" />
+                        <p:inputText id="horaServicio" value="#{rnGcCpUnidadesTblController.selected.horaServicio}" title="#{bundle.EditRnGcCpUnidadesTblTitle_horaServicio}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_placas}" for="placas" />
+                        <p:inputText id="placas" value="#{rnGcCpUnidadesTblController.selected.placas}" title="#{bundle.EditRnGcCpUnidadesTblTitle_placas}" required="true" requiredMessage="Las placas son requeridas"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_estado}" for="estado" />
+                        <p:inputText id="estado" value="#{rnGcCpUnidadesTblController.selected.estado}" title="#{bundle.EditRnGcCpUnidadesTblTitle_estado}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_anio}" for="anio" />
+                        <p:inputText id="anio" value="#{rnGcCpUnidadesTblController.selected.anio}" title="#{bundle.EditRnGcCpUnidadesTblTitle_anio}" required="true" requiredMessage="El año es requerido"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_numeroMotor}" for="numeroMotor" />
+                        <p:inputText id="numeroMotor" value="#{rnGcCpUnidadesTblController.selected.numeroMotor}" title="#{bundle.EditRnGcCpUnidadesTblTitle_numeroMotor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_marcaMotor}" for="marcaMotor" />
+                        <p:inputText id="marcaMotor" value="#{rnGcCpUnidadesTblController.selected.marcaMotor}" title="#{bundle.EditRnGcCpUnidadesTblTitle_marcaMotor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_marca}" for="marca" />
+                        <p:inputText id="marca" value="#{rnGcCpUnidadesTblController.selected.marca}" title="#{bundle.EditRnGcCpUnidadesTblTitle_marca}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_modelo}" for="modelo" />
+                        <p:inputText id="modelo" value="#{rnGcCpUnidadesTblController.selected.modelo}" title="#{bundle.EditRnGcCpUnidadesTblTitle_modelo}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_numeroEjes}" for="numeroEjes" />
+                        <p:inputText id="numeroEjes" value="#{rnGcCpUnidadesTblController.selected.numeroEjes}" title="#{bundle.EditRnGcCpUnidadesTblTitle_numeroEjes}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_numeroSerie}" for="numeroSerie" />
+                        <p:inputText id="numeroSerie" value="#{rnGcCpUnidadesTblController.selected.numeroSerie}" title="#{bundle.EditRnGcCpUnidadesTblTitle_numeroSerie}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_rastreoSatelital}" for="rastreoSatelital" />
+                        <p:inputText id="rastreoSatelital" value="#{rnGcCpUnidadesTblController.selected.rastreoSatelital}" title="#{bundle.EditRnGcCpUnidadesTblTitle_rastreoSatelital}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_estadoAntena}" for="estadoAntena" />
+                        <p:inputText id="estadoAntena" value="#{rnGcCpUnidadesTblController.selected.estadoAntena}" title="#{bundle.EditRnGcCpUnidadesTblTitle_estadoAntena}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_tarjetaCombustible}" for="tarjetaCombustible" />
+                        <p:inputText id="tarjetaCombustible" value="#{rnGcCpUnidadesTblController.selected.tarjetaCombustible}" title="#{bundle.EditRnGcCpUnidadesTblTitle_tarjetaCombustible}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_longitud}" for="longitud" />
+                        <p:inputText id="longitud" value="#{rnGcCpUnidadesTblController.selected.longitud}" title="#{bundle.EditRnGcCpUnidadesTblTitle_longitud}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_rendimientoAutorizado1}" for="rendimientoAutorizado1" />
+                        <p:inputText id="rendimientoAutorizado1" value="#{rnGcCpUnidadesTblController.selected.rendimientoAutorizado1}" title="#{bundle.EditRnGcCpUnidadesTblTitle_rendimientoAutorizado1}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_rendimientoAutorizado2}" for="rendimientoAutorizado2" />
+                        <p:inputText id="rendimientoAutorizado2" value="#{rnGcCpUnidadesTblController.selected.rendimientoAutorizado2}" title="#{bundle.EditRnGcCpUnidadesTblTitle_rendimientoAutorizado2}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_rendimientoAutorizado3}" for="rendimientoAutorizado3" />
+                        <p:inputText id="rendimientoAutorizado3" value="#{rnGcCpUnidadesTblController.selected.rendimientoAutorizado3}" title="#{bundle.EditRnGcCpUnidadesTblTitle_rendimientoAutorizado3}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_factorAjustesCombustible}" for="factorAjustesCombustible" />
+                        <p:inputText id="factorAjustesCombustible" value="#{rnGcCpUnidadesTblController.selected.factorAjustesCombustible}" title="#{bundle.EditRnGcCpUnidadesTblTitle_factorAjustesCombustible}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_capacidadTanque}" for="capacidadTanque" />
+                        <p:inputText id="capacidadTanque" value="#{rnGcCpUnidadesTblController.selected.capacidadTanque}" title="#{bundle.EditRnGcCpUnidadesTblTitle_capacidadTanque}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_observaciones}" for="observaciones" />
+                        <p:inputText id="observaciones" value="#{rnGcCpUnidadesTblController.selected.observaciones}" title="#{bundle.EditRnGcCpUnidadesTblTitle_observaciones}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_numeroEcoRemolque1}" for="numeroEcoRemolque1" />
+                        <p:inputText id="numeroEcoRemolque1" value="#{rnGcCpUnidadesTblController.selected.numeroEcoRemolque1}" title="#{bundle.EditRnGcCpUnidadesTblTitle_numeroEcoRemolque1}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_numeroEcoRemolque2}" for="numeroEcoRemolque2" />
+                        <p:inputText id="numeroEcoRemolque2" value="#{rnGcCpUnidadesTblController.selected.numeroEcoRemolque2}" title="#{bundle.EditRnGcCpUnidadesTblTitle_numeroEcoRemolque2}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_numeroEcoDolly1}" for="numeroEcoDolly1" />
+                        <p:inputText id="numeroEcoDolly1" value="#{rnGcCpUnidadesTblController.selected.numeroEcoDolly1}" title="#{bundle.EditRnGcCpUnidadesTblTitle_numeroEcoDolly1}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_maximoCobranza}" for="maximoCobranza" />
+                        <p:inputText id="maximoCobranza" value="#{rnGcCpUnidadesTblController.selected.maximoCobranza}" title="#{bundle.EditRnGcCpUnidadesTblTitle_maximoCobranza}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_cantidadAyudantes}" for="cantidadAyudantes" />
+                        <p:inputText id="cantidadAyudantes" value="#{rnGcCpUnidadesTblController.selected.cantidadAyudantes}" title="#{bundle.EditRnGcCpUnidadesTblTitle_cantidadAyudantes}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_combustible}" for="combustible" />
+                        <p:inputText id="combustible" value="#{rnGcCpUnidadesTblController.selected.combustible}" title="#{bundle.EditRnGcCpUnidadesTblTitle_combustible}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_capacidadCarga}" for="capacidadCarga" />
+                        <p:inputText id="capacidadCarga" value="#{rnGcCpUnidadesTblController.selected.capacidadCarga}" title="#{bundle.EditRnGcCpUnidadesTblTitle_capacidadCarga}" required="true" requiredMessage="#{bundle.EditRnGcCpUnidadesTblRequiredMessage_capacidadCarga}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_pesoOcupado}" for="pesoOcupado" />
+                        <p:inputText id="pesoOcupado" value="#{rnGcCpUnidadesTblController.selected.pesoOcupado}" title="#{bundle.EditRnGcCpUnidadesTblTitle_pesoOcupado}" required="true" requiredMessage="#{bundle.EditRnGcCpUnidadesTblRequiredMessage_pesoOcupado}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_pesoDisponible}" for="pesoDisponible" />
+                        <p:inputText id="pesoDisponible" value="#{rnGcCpUnidadesTblController.selected.pesoDisponible}" title="#{bundle.EditRnGcCpUnidadesTblTitle_pesoDisponible}" required="true" requiredMessage="#{bundle.EditRnGcCpUnidadesTblRequiredMessage_pesoDisponible}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_placasRemolque1}" for="placasRemolque1" />
+                        <p:inputText id="placasRemolque1" value="#{rnGcCpUnidadesTblController.selected.placasRemolque1}" title="#{bundle.EditRnGcCpUnidadesTblTitle_placasRemolque1}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_placasRemolque2}" for="placasRemolque2" />
+                        <p:inputText id="placasRemolque2" value="#{rnGcCpUnidadesTblController.selected.placasRemolque2}" title="#{bundle.EditRnGcCpUnidadesTblTitle_placasRemolque2}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_numeroPermiso}" for="numeroPermiso" />
+                        <p:inputText id="numeroPermiso" value="#{rnGcCpUnidadesTblController.selected.numeroPermiso}" title="#{bundle.EditRnGcCpUnidadesTblTitle_numeroPermiso}" required="true" requiredMessage="El número de permiso es requerido"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesTblLabel_conductorId}" for="conductorId" />
+                        <p:selectOneMenu id="conductorId" style="width: 120px" value="#{rnGcCpUnidadesTblController.selected.conductorId}" required="true" requiredMessage="#{bundle.EditRnGcCpUnidadesTblRequiredMessage_conductorId}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCpConfigautotransportesatTblController.itemsAvailableSelectOne}"
+                                           var="conductorIdItem"
+                                           itemLabel="#{conductorIdItem.descripcion}"
+                                           itemValue="#{conductorIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpUnidadesTblLabel_configVehiculoId}" for="configVehiculoId" />
+                        <p:selectOneMenu id="configVehiculoId" style="width: 120px" value="#{rnGcCpUnidadesTblController.selected.configVehiculoId}" required="true" requiredMessage="La configuración vehiculo requerida">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCpConfigautotransportesatTblController.itemsAvailableSelectOne}"
+                                           var="configVehiculoIdItem"
+                                           itemLabel="#{configVehiculoIdItem.descripcion}"
+                                           itemValue="#{configVehiculoIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpUnidadesTblLabel_seguroId}" for="seguroId" />
+                        <p:selectOneMenu id="seguroId" value="#{rnGcCpUnidadesTblController.selected.seguroId}" required="true" requiredMessage="El seguro es requerido">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCpSegurosTblController.itemsAvailableSelectOne}"
+                                           var="seguroIdItem"
+                                           itemLabel="#{seguroIdItem.nombreAseguradora}"
+                                           itemValue="#{seguroIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpUnidadesTblLabel_tipoPermisoId}" for="tipoPermisoId" />
+                        <p:selectOneMenu id="tipoPermisoId" style="width: 120px" value="#{rnGcCpUnidadesTblController.selected.tipoPermisoId}" required="true" requiredMessage="El tipo de permiso es requerido">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCpTipopermisosatTblController.itemsAvailableSelectOne}"
+                                           var="tipoPermisoIdItem"
+                                           itemLabel="#{tipoPermisoIdItem.descripcion}"
+                                           itemValue="#{tipoPermisoIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpUnidadesTblLabel_tipoRemolqueId}" for="tipoRemolqueId" />
+                        <p:selectOneMenu id="tipoRemolqueId" style="width: 120px" value="#{rnGcCpUnidadesTblController.selected.tipoRemolqueId}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCpTiporemolquesatTblController.itemsAvailableSelectOne}"
+                                           var="tipoRemolqueIdItem"
+                                           itemLabel="#{tipoRemolqueIdItem.descripcion}"
+                                           itemValue="#{tipoRemolqueIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpUnidadesTblLabel_tipoUnidadId}" for="tipoUnidadId" />
+                        <p:selectOneMenu id="tipoUnidadId" style="width: 120px" value="#{rnGcCpUnidadesTblController.selected.tipoUnidadId}" required="true" requiredMessage="#{bundle.EditRnGcCpUnidadesTblRequiredMessage_tipoUnidadId}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCpConfigautotransportesatTblController.itemsAvailableSelectOne}"
+                                           var="tipoUnidadIdItem"
+                                           itemLabel="#{tipoUnidadIdItem.descripcion}"
+                                           itemValue="#{tipoUnidadIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpUnidadesTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpUnidadesTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpUnidadesTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpUnidadesTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

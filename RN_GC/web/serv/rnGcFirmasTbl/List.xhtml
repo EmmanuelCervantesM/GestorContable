@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcFirmasTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcFirmasTblListForm">
+                <p:panel header="#{bundle.ListRnGcFirmasTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcFirmasTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcFirmasTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_id}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_cargo1}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cargo1}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_nombre1}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre1}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_cargo2}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cargo2}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_nombre2}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre2}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_cargo3}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cargo3}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_nombre3}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre3}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_cargo4}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cargo4}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_nombre4}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre4}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_cargo5}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cargo5}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_nombre5}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre5}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_creadoPor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.creadoPor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_fechaCreacion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaCreacion}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_ultimaActualizacionPor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.ultimaActualizacionPor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFirmasTblTitle_ultimaFechaActualizacion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.ultimaFechaActualizacion}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcFirmasTblController.prepareCreate}" update=":RnGcFirmasTblCreateForm" oncomplete="PF('RnGcFirmasTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcFirmasTblViewForm" oncomplete="PF('RnGcFirmasTblViewDialog').show()" disabled="#{empty rnGcFirmasTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcFirmasTblEditForm" oncomplete="PF('RnGcFirmasTblEditDialog').show()" disabled="#{empty rnGcFirmasTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcFirmasTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcFirmasTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

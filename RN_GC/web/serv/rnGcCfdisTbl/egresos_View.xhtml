@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCfdisTblViewDlg" widgetVar="RnGcCfdisFacturasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCfdisTblTitle}">
+            <p:scrollPanel mode="native" style="width: 1250px;height: 450px">
+                <h:form id="RnGcCfdisFacturasTblViewForm">                
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="4" rendered="#{rnGcCfdisLineasTblController.cfdiId != null}">
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_uuid}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.uuid}" title="#{bundle.ViewRnGcCfdisTblTitle_uuid}"/>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_nombreEmisor}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.nombreEmisor}" title="#{bundle.ViewRnGcCfdisTblTitle_nombreEmisor}"/>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_rfcEmisor}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.rfcEmisor}" title="#{bundle.ViewRnGcCfdisTblTitle_rfcEmisor}"/>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_nombreReceptor}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.nombreReceptor}" title="#{bundle.ViewRnGcCfdisTblTitle_nombreReceptor}"/>                        
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_rfcReceptor}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.rfcReceptor}" title="#{bundle.ViewRnGcCfdisTblTitle_rfcReceptor}"/>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_folio}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.folio}" title="#{bundle.ViewRnGcCfdisTblTitle_folio}"/>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_claveRegimenFiscal}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.claveRegimenFiscal}" title="#{bundle.ViewRnGcCfdisTblTitle_claveRegimenFiscal}"/>                        
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_formaPago}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.formaPago}" title="#{bundle.ViewRnGcCfdisTblTitle_formaPago}"/>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_metodoPago}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.metodoPago}" title="#{bundle.ViewRnGcCfdisTblTitle_metodoPago}"/>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_condicionPago}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.condicionPago}" title="#{bundle.ViewRnGcCfdisTblTitle_condicionPago}"/>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_tipoComprobante}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.tipoComprobante}" title="#{bundle.ViewRnGcCfdisTblTitle_tipoComprobante}"/>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_lugarExpedicion}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.lugarExpedicion}" title="#{bundle.ViewRnGcCfdisTblTitle_lugarExpedicion}"/>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_fechaExpedicion}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.fechaExpedicion}" title="#{bundle.ViewRnGcCfdisTblTitle_fechaExpedicion}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_usoCfdi}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.usoCfdi}" title="#{bundle.ViewRnGcCfdisTblTitle_usoCfdi}"/>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_moneda}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.moneda}" title="#{bundle.ViewRnGcCfdisTblTitle_moneda}"/>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_importe}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.importe}" title="#{bundle.ViewRnGcCfdisTblTitle_importe}">
+                                <f:convertNumber type="currency" currencySymbol="$" />
+                            </h:outputText>
+                            <h:outputText value="#{bundle.ViewRnGcCfdisTblLabel_tipoRelacion}"/>
+                            <h:outputText value="#{rnGcCfdisLineasTblController.cfdiId.tipoRelacion}" title="#{bundle.ViewRnGcCfdisTblTitle_tipoRelacion}"/>
+                        </p:panelGrid>
+                        <br/>
+                        <h:form id="RnGcCfdisFacturasLineasTblListForm">
+                            <p:dataTable id="datalist" value="#{rnGcCfdisLineasTblController.itemsLineas}" var="item"
+                                         selectionMode="single" selection="#{rnGcCfdisLineasTblController.selected}"
+                                         paginator="true"
+                                         rowKey="#{item.id}"
+                                         rows="10">
+                                <f:facet name="header">
+                                    Conceptos
+                                </f:facet>
+                                <p:column headerText="#{bundle.ListRnGcCfdisLineasTblTitle_claveProdServ}" style="width: 65px">
+                                    <h:outputText value="#{item.claveProdServ}"/>
+                                </p:column>
+                                <p:column headerText="#{bundle.ListRnGcCfdisLineasTblTitle_noIdentificacion}" style="width: 83px">
+                                    <h:outputText value="#{item.noIdentificacion}"/>
+                                </p:column>
+                                <p:column headerText="#{bundle.ListRnGcCfdisLineasTblTitle_cantidad}" style="width: 57px">
+                                    <h:outputText value="#{item.cantidad}"/>
+                                </p:column>
+                                <p:column headerText="#{bundle.ListRnGcCfdisLineasTblTitle_claveUnidad}" style="width: 55px">
+                                    <h:outputText value="#{item.claveUnidad}"/>
+                                </p:column>
+                                <p:column headerText="#{bundle.ListRnGcCfdisLineasTblTitle_unidad}" style="width: 85px">
+                                    <h:outputText value="#{item.unidad}"/>
+                                </p:column>
+                                <p:column headerText="#{bundle.ListRnGcCfdisLineasTblTitle_descripcion}" style="width: 115px">
+                                    <h:outputText value="#{item.descripcion}"/>
+                                </p:column>
+                                <p:column headerText="#{bundle.ListRnGcCfdisLineasTblTitle_valorUnit}" style="width: 57px">
+                                    <h:outputText value="#{item.valorUnit}">
+                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="#{bundle.ListRnGcCfdisLineasTblTitle_importe}" style="width: 57px">
+                                    <h:outputText value="#{item.importe}">
+                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="#{bundle.ListRnGcCfdisLineasTblTitle_base}" style="width: 55px">
+                                    <h:outputText value="#{item.base}">
+                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="#{bundle.ListRnGcCfdisLineasTblTitle_impuesto}" style="width: 57px">
+                                    <h:outputText value="#{item.impuesto}"/>
+                                </p:column>
+                                <p:column headerText="#{bundle.ListRnGcCfdisLineasTblTitle_tipoFactor}" style="width: 50px">
+                                    <h:outputText value="#{item.tipoFactor}"/>
+                                </p:column>
+                                <p:column headerText="#{bundle.ListRnGcCfdisLineasTblTitle_tipoTasa}" style="width: 50px">
+                                    <h:outputText value="#{item.tipoTasa}"/>
+                                </p:column>
+                                <p:column headerText="#{bundle.ListRnGcCfdisLineasTblTitle_importeImpuesto}" style="width: 70px">
+                                    <h:outputText value="#{item.importeimpuesto}">
+                                        <f:convertNumber type="currency" currencySymbol="$" />
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                            <br/>
+                        </h:form>
+                        <p:commandButton value="#{bundle.Close}" onclick="RnGcCfdisTblViewDialog.hide()" ajax="false"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:scrollPanel>
+        </p:dialog>
+
+    </ui:composition>
+</html>

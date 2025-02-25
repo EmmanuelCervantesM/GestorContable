@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="UTF-8"?><cfdi:Comprobante xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd" Version="3.3" Serie="OT" Folio="744" Fecha="2018-11-24T00:18:45" Sello="GAlpg1vAYb6BjKY6RsG+DQpR1IjJ3uLVz6yoHZ+XWOr9Eux4DhE73kCcvy+/OLKujlbvdBgoEkGunf52sgMSLJcC4jC70DqcDDSpeuEdQOOI1xoZOItI9/oCiOW0G1V8w7ulnqwfZbmZp6u+CTrLpqS6e+qDErVzm75bM31rNK4cT61/uymNT+ktXa9NQ9xblSqSiQV41O2tl5xtHpDpdJhKU3tO0Kknah6246GPbyBFtPH4n08ddtQ0iLxYCDuLZKK7PnGhFRm66xidCI91U8wZ0F7LsmjMoIUM+efmLTtQt2bRyPltWpByAmgwB1YZuIEBbpSJkWUSZ64XSXak/Q==" FormaPago="01" NoCertificado="00001000000406803113" Certificado="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" CondicionesDePago="CONTADO" SubTotal="43.02" Moneda="MXN" TipoCambio="1" Total="49.90" TipoDeComprobante="I" MetodoPago="PUE" LugarExpedicion="90800" xmlns:cfdi="http://www.sat.gob.mx/cfd/3">
+    <cfdi:Emisor Rfc="TCH850701RM1" Nombre="Tiendas Chedraui S.A. de C.V." RegimenFiscal="601" />
+    <cfdi:Receptor Rfc="CORM950820L57" Nombre="MICHAEL URIEL COPALCUA RODRIGUEZ" UsoCFDI="G01" />
+    <cfdi:Conceptos>
+        <cfdi:Concepto ClaveProdServ="53131501" Cantidad="1" ClaveUnidad="XUN" Unidad="Pza" Descripcion="Enjuague Colgate P" ValorUnitario="43.02" Importe="43.02">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="43.02" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="6.88" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+    </cfdi:Conceptos>
+    <cfdi:Impuestos TotalImpuestosTrasladados="6.88">
+        <cfdi:Traslados>
+            <cfdi:Traslado Importe="6.88" TasaOCuota="0.160000" Impuesto="002" TipoFactor="Tasa" />
+        </cfdi:Traslados>
+    </cfdi:Impuestos>
+    <cfdi:Complemento>
+        <tfd:TimbreFiscalDigital xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="1.1" UUID="03352D53-2A5B-43A6-99E1-2660CA1648EA" FechaTimbrado="2018-11-24T00:18:45" RfcProvCertif="MAS980812UK1" SelloCFD="GAlpg1vAYb6BjKY6RsG+DQpR1IjJ3uLVz6yoHZ+XWOr9Eux4DhE73kCcvy+/OLKujlbvdBgoEkGunf52sgMSLJcC4jC70DqcDDSpeuEdQOOI1xoZOItI9/oCiOW0G1V8w7ulnqwfZbmZp6u+CTrLpqS6e+qDErVzm75bM31rNK4cT61/uymNT+ktXa9NQ9xblSqSiQV41O2tl5xtHpDpdJhKU3tO0Kknah6246GPbyBFtPH4n08ddtQ0iLxYCDuLZKK7PnGhFRm66xidCI91U8wZ0F7LsmjMoIUM+efmLTtQt2bRyPltWpByAmgwB1YZuIEBbpSJkWUSZ64XSXak/Q==" NoCertificadoSAT="00001000000405147715" SelloSAT="T9D9stS0jQGAKsC+UR1CLyYiwr1lK2iZdMTistMF9ze6/+HVp+F4gXOZqKe2Znu3TBMe+iawNN/vsPPerXg0w7ASJAOXX8bATG7eiSOEzG7Ql5lqCi9SBw3KzP4D4cX38g0AUr/jbMottOCqrHl+X8mcPKyZHEg32LQ6JcQXdOS9tisE0mB3z8mqWeaKbCWAlyiaWxjvuKlmSN64Xs1dGYNxV4S8WpKRjIbe0xLjwvl2Rp6oSgHTV1psqv0goCyDCVQvOb/ntfq/b5NT0haMf3BJwjy8Ubp6oJGDge2urg0ERT+gt5qhuRtvyHo3J3V3vutjC05Im4Hn2YTy6oDi5g==" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd" />
+    </cfdi:Complemento>
+    <cfdi:Addenda>
+        <mf:MASFACTURA2 xsi:schemaLocation="http://www.masteredi.com.mx/masfactura2 http://www.masteredi.com.mx/masfacturanet/masfactura2.xsd" xmlns:mf="http://www.masteredi.com.mx/masfactura2">
+            <mf:ENCAB>
+                <mf:NEMONICO nombre="COMENT"></mf:NEMONICO>
+                <mf:NEMONICO nombre="NINEXP"></mf:NEMONICO>
+                <mf:NEMONICO nombre="LOCEMI"></mf:NEMONICO>
+                <mf:NEMONICO nombre="TIPMON">MXN</mf:NEMONICO>
+                <mf:NEMONICO nombre="TIPCOM">ingreso</mf:NEMONICO>
+                <mf:NEMONICO nombre="XSLIMP_ADIC"></mf:NEMONICO>
+                <mf:NEMONICO nombre="NIVATR1">IVA</mf:NEMONICO>
+                <mf:NEMONICO nombre="CODLUGEXP">90800</mf:NEMONICO>
+                <mf:NEMONICO nombre="SUBTBR">43.02</mf:NEMONICO>
+                <mf:NEMONICO nombre="AOAPRO">0</mf:NEMONICO>
+                <mf:NEMONICO nombre="COLEMI">Lomas Altas</mf:NEMONICO>
+                <mf:NEMONICO nombre="VERSIO">3.3</mf:NEMONICO>
+                <mf:NEMONICO nombre="CALREC">HIDALGO</mf:NEMONICO>
+                <mf:NEMONICO nombre="CTAPAG"></mf:NEMONICO>
+                <mf:NEMONICO nombre="SUBTOT">43.02</mf:NEMONICO>
+                <mf:NEMONICO nombre="NUMFOL">744</mf:NEMONICO>
+                <mf:NEMONICO nombre="NEXEXP">70</mf:NEMONICO>
+                <mf:NEMONICO nombre="RFCEMI">TCH850701RM1</mf:NEMONICO>
+                <mf:NEMONICO nombre="USOCFDI">G01</mf:NEMONICO>
+                <mf:NEMONICO nombre="NEXREC">32</mf:NEMONICO>
+                <mf:NEMONICO nombre="PAIEMI">Mexico</mf:NEMONICO>
+                <mf:NEMONICO nombre="SUB_TIPDOC">1</mf:NEMONICO>
+                <mf:NEMONICO nombre="USOCFDIDESC">Adquisición de mercancias</mf:NEMONICO>
+                <mf:NEMONICO nombre="TIPFACIEP1">Tasa</mf:NEMONICO>
+                <mf:NEMONICO nombre="METPAG">PAGO EN UNA SOLA EXHIBICION</mf:NEMONICO>
+                <mf:NEMONICO nombre="CODREC">90692</mf:NEMONICO>
+                <mf:NEMONICO nombre="TOTIVA">16</mf:NEMONICO>
+                <mf:NEMONICO nombre="NUMTICKET">0019300700691123181901</mf:NEMONICO>
+                <mf:NEMONICO nombre="NOMEXP">TIENDA CHEDRAUI SANTA ANA CHIAUTEMPAN</mf:NEMONICO>
+                <mf:NEMONICO nombre="NUMSUC">193</mf:NEMONICO>
+                <mf:NEMONICO nombre="LOCEXP">SANTA ANA CHIAUTEMPAN</mf:NEMONICO>
+                <mf:NEMONICO nombre="COLREC">SAN JOSE AZTATLA</mf:NEMONICO>
+                <mf:NEMONICO nombre="TIPFACIVA1">Tasa</mf:NEMONICO>
+                <mf:NEMONICO nombre="TOTTRA">6.88</mf:NEMONICO>
+                <mf:NEMONICO nombre="IEPTRA">0</mf:NEMONICO>
+                <mf:NEMONICO nombre="CODEMI">11950</mf:NEMONICO>
+                <mf:NEMONICO nombre="CALEXP">ANTONIO DIAZ VARELA</mf:NEMONICO>
+                <mf:NEMONICO nombre="PAIREC">MÉXICO</mf:NEMONICO>
+                <mf:NEMONICO nombre="FCTTOTIVA1">0.160000</mf:NEMONICO>
+                <mf:NEMONICO nombre="NOMSUC">TIENDA CHEDRAUI SANTA ANA CHIAUTEMPAN</mf:NEMONICO>
+                <mf:NEMONICO nombre="COLEXP">CENTRO</mf:NEMONICO>
+                <mf:NEMONICO nombre="MUNEXP">SANTA ANA CHIAUTEMPAN</mf:NEMONICO>
+                <mf:NEMONICO nombre="FECEXP">2018-11-24T00:18:45</mf:NEMONICO>
+                <mf:NEMONICO nombre="NOMEMICFD">Tiendas Chedraui S.A. de C.V.</mf:NEMONICO>
+                <mf:NEMONICO nombre="CVEREGIMEN">601</mf:NEMONICO>
+                <mf:NEMONICO nombre="RFCEXP"></mf:NEMONICO>
+                <mf:NEMONICO nombre="TOTIVA1">16</mf:NEMONICO>
+                <mf:NEMONICO nombre="NIEPTR1">IEPS</mf:NEMONICO>
+                <mf:NEMONICO nombre="FCTTOTIVA">0.160000</mf:NEMONICO>
+                <mf:NEMONICO nombre="CVETIPDOC">I</mf:NEMONICO>
+                <mf:NEMONICO nombre="EMAIL">michelfvta@gmail.com</mf:NEMONICO>
+                <mf:NEMONICO nombre="TOTPAG">49.90</mf:NEMONICO>
+                <mf:NEMONICO nombre="RFCREC">CORM950820L57</mf:NEMONICO>
+                <mf:NEMONICO nombre="TOTLPF">1</mf:NEMONICO>
+                <mf:NEMONICO nombre="SERFOL">OT</mf:NEMONICO>
+                <mf:NEMONICO nombre="SUBTAI">43.02</mf:NEMONICO>
+                <mf:NEMONICO nombre="TATIEP1">0</mf:NEMONICO>
+                <mf:NEMONICO nombre="LUGEXP">SANTA ANA CHIAUTEMPAN, TLAXCALA</mf:NEMONICO>
+                <mf:NEMONICO nombre="REGIMEN">NA</mf:NEMONICO>
+                <mf:NEMONICO nombre="CONDPAG">CONTADO</mf:NEMONICO>
+                <mf:NEMONICO nombre="CODEXP">90800</mf:NEMONICO>
+                <mf:NEMONICO nombre="TIPFACIVA">Tasa</mf:NEMONICO>
+                <mf:NEMONICO nombre="NOMEMI">Tiendas Chedraui S.A. de C.V.</mf:NEMONICO>
+                <mf:NEMONICO nombre="IVATRA">6.88</mf:NEMONICO>
+                <mf:NEMONICO nombre="FCTTATIEP1">0.000000</mf:NEMONICO>
+                <mf:NEMONICO nombre="CVEFORPAG">01</mf:NEMONICO>
+                <mf:NEMONICO nombre="NOMRECCFD">MICHAEL URIEL COPALCUA RODRIGUEZ</mf:NEMONICO>
+                <mf:NEMONICO nombre="IEPTRA1">0.00</mf:NEMONICO>
+                <mf:NEMONICO nombre="NOAPRO">0</mf:NEMONICO>
+                <mf:NEMONICO nombre="PRCDSG">0</mf:NEMONICO>
+                <mf:NEMONICO nombre="CODMETPAG">PUE</mf:NEMONICO>
+                <mf:NEMONICO nombre="PAIEXP">MEXICO</mf:NEMONICO>
+                <mf:NEMONICO nombre="MUNEMI">Miguel Hidalgo</mf:NEMONICO>
+                <mf:NEMONICO nombre="NEXEMI">1150</mf:NEMONICO>
+                <mf:NEMONICO nombre="TIPFACIEP">0.00</mf:NEMONICO>
+                <mf:NEMONICO nombre="TIPCAM">1</mf:NEMONICO>
+                <mf:NEMONICO nombre="MONDET">0.00</mf:NEMONICO>
+                <mf:NEMONICO nombre="ESTREC">TLAXCALA</mf:NEMONICO>
+                <mf:NEMONICO nombre="FORPAG">PAGO EN UNA SOLA EXHIBICION</mf:NEMONICO>
+                <mf:NEMONICO nombre="SELLO"></mf:NEMONICO>
+                <mf:NEMONICO nombre="LOCREC">SAN BERNARDINO CONTLA</mf:NEMONICO>
+                <mf:NEMONICO nombre="CODMETPAGDESC">Pago en una sola exhibición</mf:NEMONICO>
+                <mf:NEMONICO nombre="TOTCAN">1</mf:NEMONICO>
+                <mf:NEMONICO nombre="NINREC">32</mf:NEMONICO>
+                <mf:NEMONICO nombre="MUNREC">CONTLA DE JUAN CUAMATZI</mf:NEMONICO>
+                <mf:NEMONICO nombre="NOMREC">MICHAEL URIEL COPALCUA RODRIGUEZ</mf:NEMONICO>
+                <mf:NEMONICO nombre="TATIEP">0</mf:NEMONICO>
+                <mf:NEMONICO nombre="CALEMI">Av. Constituyentes</mf:NEMONICO>
+                <mf:NEMONICO nombre="TIPDOC">1</mf:NEMONICO>
+                <mf:NEMONICO nombre="IVATRA1">6.88</mf:NEMONICO>
+                <mf:NEMONICO nombre="ESTEMI">CDMX</mf:NEMONICO>
+                <mf:NEMONICO nombre="NINEMI"></mf:NEMONICO>
+                <mf:NEMONICO nombre="NUMCER">00001000000406803113</mf:NEMONICO>
+                <mf:NEMONICO nombre="CVEFORPAGDESC">Efectivo</mf:NEMONICO>
+                <mf:NEMONICO nombre="ESTEXP">TLAXCALA</mf:NEMONICO>
+            </mf:ENCAB>
+            <mf:DETALLE>
+                <mf:PARTIDA>
+                    <mf:NEMONICO nombre="IMPORT">43.02</mf:NEMONICO>
+                    <mf:NEMONICO nombre="DESCRI">Enjuague Colgate P</mf:NEMONICO>
+                    <mf:NEMONICO nombre="IMPBRU">43.02</mf:NEMONICO>
+                    <mf:NEMONICO nombre="NUMLIN">1</mf:NEMONICO>
+                    <mf:NEMONICO nombre="PBRUDE">43.02</mf:NEMONICO>
+                    <mf:NEMONICO nombre="OBSER"></mf:NEMONICO>
+                    <mf:NEMONICO nombre="MONIEP">0</mf:NEMONICO>
+                    <mf:NEMONICO nombre="CVEPRODSERV">53131501</mf:NEMONICO>
+                    <mf:NEMONICO nombre="UNIDAD">Pza</mf:NEMONICO>
+                    <mf:NEMONICO nombre="IMPORTIPE1">43.02</mf:NEMONICO>
+                    <mf:NEMONICO nombre="CVEUNIDAD">XUN</mf:NEMONICO>
+                    <mf:NEMONICO nombre="FCTTASIEP">0.000000</mf:NEMONICO>
+                    <mf:NEMONICO nombre="FCTTASIPE">0.160000</mf:NEMONICO>
+                    <mf:NEMONICO nombre="TIPIPETR">Tasa</mf:NEMONICO>
+                    <mf:NEMONICO nombre="VALUNI">43.02</mf:NEMONICO>
+                    <mf:NEMONICO nombre="CANTID">1</mf:NEMONICO>
+                    <mf:NEMONICO nombre="IMPORTIEP">43.02</mf:NEMONICO>
+                    <mf:NEMONICO nombre="TASIPE">16</mf:NEMONICO>
+                    <mf:NEMONICO nombre="IMPORTIPE">43.02</mf:NEMONICO>
+                    <mf:NEMONICO nombre="CVESKU">789102413610</mf:NEMONICO>
+                    <mf:NEMONICO nombre="MDECON">0.00</mf:NEMONICO>
+                    <mf:NEMONICO nombre="MONIPE">6.88</mf:NEMONICO>
+                    <mf:NEMONICO nombre="TASIEP">0</mf:NEMONICO>
+                    <mf:NEMONICO nombre="TOTIVA">16</mf:NEMONICO>
+                </mf:PARTIDA>
+            </mf:DETALLE>
+        </mf:MASFACTURA2>
+    </cfdi:Addenda>
+</cfdi:Comprobante>

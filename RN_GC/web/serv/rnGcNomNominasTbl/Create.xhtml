@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomNominasTblCreateDlg" widgetVar="RnGcNomNominasTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcNomNominasTblTitle}">
+            <h:form id="RnGcNomNominasTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomNominasTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcNomNominasTblLabel_nombreNomina}" for="nombreNomina" />
+                        <p:inputText id="nombreNomina" value="#{rnGcNomNominasTblController.selected.nombreNomina}" title="#{bundle.CreateRnGcNomNominasTblTitle_nombreNomina}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomNominasTblLabel_esConfidencial}" for="esConfidencial" />
+                        <p:inputText id="esConfidencial" value="#{rnGcNomNominasTblController.selected.esConfidencial}" title="#{bundle.CreateRnGcNomNominasTblTitle_esConfidencial}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomNominasTblLabel_patronId}" for="patronId" />
+                        <p:inputText id="patronId" value="#{rnGcNomNominasTblController.selected.patronId}" title="#{bundle.CreateRnGcNomNominasTblTitle_patronId}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomNominasTblLabel_periodicidadPagoId}" for="periodicidadPagoId" />
+                        <p:selectOneMenu id="periodicidadPagoId" value="#{rnGcNomNominasTblController.selected.periodicidadPagoId}" required="true" requiredMessage="#{bundle.EditRnGcNomNominasTblRequiredMessage_periodicidadPagoId}">
+                            <f:selectItems value="#{rnGcNomPeriodicidadpagoTblController.itemsAvailableSelectOne}"
+                                           var="periodicidadPagoIdItem"
+                                           itemValue="#{periodicidadPagoIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomNominasTblLabel_tipoNominaId}" for="tipoNominaId" />
+                        <p:selectOneMenu id="tipoNominaId" value="#{rnGcNomNominasTblController.selected.tipoNominaId}" required="true" requiredMessage="#{bundle.EditRnGcNomNominasTblRequiredMessage_tipoNominaId}">
+                            <f:selectItems value="#{rnGcNomTiponominaTblController.itemsAvailableSelectOne}"
+                                           var="tipoNominaIdItem"
+                                           itemValue="#{tipoNominaIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomNominasTblController.create}" value="#{bundle.Save}" update="display,:RnGcNomNominasTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcNomNominasTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomNominasTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

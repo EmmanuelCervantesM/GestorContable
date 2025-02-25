@@ -1,0 +1,1676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Nómina"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:form id="tabEmisorReceptor">
+                <p:panel header="FACTURACIÓN NÓMINA" style="margin: auto">
+                    <h:panelGrid  columns="5" cellpadding="10" style="align-items: center">
+                        <p:commandButton value="Buscar Factura" icon="fa fa-external-link-square"/>
+                        <p:commandButton value="Guardar en la nube" icon="fa fa-cloud-upload"/>
+                        <p:commandButton value="Agregar Firmas" onclick="PF('AgregarFirmasDialog').show();" icon="fa fa-pencil" />
+                        <h:commandButton value="Vista Previa Factura" actionListener="#{facturarNominaContoller.vistaPreviaPDF(ActionEvent)}" />
+                        <h:commandButton value="Facturar" actionListener="#{facturarNominaContoller.createFactura()}" />
+                    </h:panelGrid>
+                    <p:accordionPanel  multiple="true">
+                        <p:tab title="Datos del Receptor" id="datosReceptorTab">
+                            <p:dataTable id="datalist" value="#{facturarNominaContoller.listaTrabajadores}" var="item"
+                                         selectionMode="single" selection="#{rnGcTrabajadoresTblController.selected}"
+                                         paginator="true"
+                                         emptyMessage="No se encontraron registros"
+                                         rowKey="#{item.id}"
+                                         rows="10"
+                                         rowsPerPageTemplate="10,20,30,40,50"
+                                         >
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="No. Trabajador"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.noTrabajador}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Fecha Inicio Labores"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.fechaInicio}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_nombre}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.nombre}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_apPaterno}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.apPaterno}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_apMaterno}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.apMaterno}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_curp}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.curp}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_rfc}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.rfc}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_nss}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.nss}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Salario Base"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.salarioBase}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_sdi}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.sdi}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_tipoPersona}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.tipoPersona}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Banco"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.banco}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Cuenta Bancaria"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.cuentaBancaria}"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <p:commandButton value="Buscar" id="Buscar" icon="fa fa-search" onclick="PF('dlg_datosReceptor').show()" />
+                            </h:panelGrid>
+                        </p:tab>
+
+                        <p:tab title="CFDI - Datos de la Factura">
+                            <h:outputText value="CFDI Versión 3.3" style="font-weight: bold"/>
+                            <h:panelGrid columns="4" cellpadding="10">
+                                <h:outputText value="No. certificado:" style="font-weight: bold"/>
+                                <h:outputText value="#{facturarNominaContoller.cfdisId.certificados_Id.numeroCertificado}" />
+                                <h:outputText value="Fecha de expedición:" style="font-weight: bold"/>
+                                <h:outputText value="#{facturarNominaContoller.cfdisId.fechaExpedicion}" />
+                                <h:outputText value="Lugar de expedición:" style="font-weight: bold"/>
+                                <h:outputText value="#{facturarNominaContoller.cfdisId.lugarExpedicion}" />
+                                <h:outputText value="Moneda:" style="font-weight: bold"/>
+                                <h:outputText value="#{facturarNominaContoller.cfdisId.moneda}" />
+                                <h:outputText value="Forma de pago:" style="font-weight: bold"/>
+                                <h:outputText value="#{facturarNominaContoller.cfdisId.formaPago}" />
+                                <h:outputText value="Método de pago:" style="font-weight: bold"/>
+                                <h:outputText value="#{facturarNominaContoller.cfdisId.metodoPago}"/>
+                                <h:outputText value="Condición de pago:" style="font-weight: bold"/>
+                                <h:outputText value="#{facturarNominaContoller.cfdisId.condicionPago}"/>
+                                <h:outputText value="Tipo de cambio:" style="font-weight: bold"/>
+                                <h:outputText value="#{facturarNominaContoller.cfdisId.tipoCambio}"/>                                
+                            </h:panelGrid>
+                            <p:separator/>
+                            <h:panelGrid columns="4" cellpadding="10">    
+                                <h:outputText value="Uso de la factura :" style="font-weight: bold"/>
+                                <h:outputText value="#{facturarNominaContoller.cfdisId.usoCfdi}"/>
+                                <h:outputText value="Clave de régimen fiscal:" style="font-weight: bold"/>
+                                <h:outputText value="#{facturarNominaContoller.cfdisId.claveRegimenFiscal}" />
+                                <h:outputText value="Tipo de comprobante:" style="font-weight: bold"/>
+                                <h:outputText value="#{facturarNominaContoller.cfdisId.tipoComprobante} "/>
+                            </h:panelGrid>
+                            <p:commandButton value="Editar" id="editar" onclick="PF('dlg_datosFactura').show()" icon="fa fa-edit" style="margin-right: 16px"/>
+                        </p:tab>
+
+                        <p:tab id="conceptosTab" title="Conceptos">
+                            <h:form id="conceptosForm">
+                                <h:panelGrid columns="5" cellpadding="5">
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" cellpadding="10">
+                                    <p:dataTable id="conceptosList" value="#{facturarNominaContoller.itemsFactura}" var="items" 
+                                                 reflow="true" rowKey="#{items.id}" rows="5" 
+                                                 paginator="true" selectionMode="single" selection="#{facturarNominaContoller.selectedLinea}"
+                                                 rowsPerPageTemplate="5,10,15,20,25,30" resizableColumns="true"
+                                                 emptyMessage="No hay conceptos agregados">
+
+                                        <p:ajax event="rowSelect" update="createButton createImpLocal editButton deleteButton"/>
+                                        <p:ajax event="rowUnselect" update="createButton createImpLocal editButton deleteButton"/>
+
+                                        <f:facet name="header">
+                                            <p:commandButton id="createButton" value="Agregar Concepto" actionListener="#{facturarNominaContoller.prepareCreateItems()}" update=":CfdisLineasTblCreateForm" oncomplete="PF('CfdisLineasTblCreateDialog').show()" icon="fa fa-plus" />
+                                            <p:commandButton id="editImpuesto" update=":impuestosEditForm" oncomplete="PF('impuestosEditDialog').show()" value="Editar Impuestos" icon="fa fa-edit"/>
+                                            <p:commandButton id="createImpLocal" value="Agregar Impuesto Local" action="#{facturarNominaContoller.selectedLineaImpCfdiLinea(facturarNominaContoller.selectedLinea)}" disabled="#{facturarNominaContoller.selectedLinea == null}" update="ListaImpuestosLocalesForm:impLocalesList" oncomplete="PF('ListImpLocalDialog').show()" icon="fa fa-plus-square-o" />
+                                            <p:commandButton id="editButton" value="Editar Concepto" update=":CfdisLineasTblEditForm" oncomplete="PF('CfdisLineasTblEditDialog').show()" disabled="#{facturarNominaContoller.selectedLinea == null}" icon="fa fa-pencil-square" />
+                                            <p:commandButton id="deleteButton" value="Eliminar Concepto" update=":confirmDeleteForm" oncomplete="PF('eliminarConfirmDialog').show()" disabled="#{facturarNominaContoller.selectedLinea == null}" icon="fa fa-remove"/>
+                                        </f:facet>
+                                        <p:column headerText="Clave producto/serv" resizable="false" width="100">
+                                            <h:outputText value="#{items.claveProdServ}"/>
+                                        </p:column>
+                                        <p:column headerText="No. Identificación" resizable="false" width="90">
+                                            <h:outputText value="#{items.noIdentificacion}"/>
+                                        </p:column>
+                                        <p:column headerText="Cantidad" resizable="true" width="48">
+                                            <h:outputText value="#{items.cantidad}"/>
+                                        </p:column>
+                                        <p:column headerText="Clave Unidad" resizable="true" width="75">
+                                            <h:outputText value="#{items.claveUnidad}"/>
+                                        </p:column>
+                                        <p:column headerText="Unidad" resizable="true" width="50">
+                                            <h:outputText value="#{items.unidad}"/>
+                                        </p:column>
+                                        <p:column headerText="Descripción" resizable="true">
+                                            <h:outputText value="#{items.descripcion}"/>
+                                        </p:column>
+                                        <p:column headerText="Valor Unitario" resizable="true" width="70">
+                                            <h:outputText value="#{items.valorUnit}" style="float:right">
+                                                <f:convertNumber type="currency" currencySymbol="$"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Descuento" resizable="true" width="70">
+                                            <h:outputText value="#{items.descuento}" style="float:right">
+                                                <f:convertNumber type="currency" currencySymbol="$"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Base" resizable="true" width="70">
+                                            <h:outputText value="#{items.base}" style="float:right">
+                                                <f:convertNumber type="currency" currencySymbol="$"/>
+                                            </h:outputText>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </h:form>
+                        </p:tab>
+
+                        <p:tab id="complementoPagoTab" title="Complementos" rendered="#{facturarNominaContoller.cfdisId.tipoComprobante == 'P'}">
+                            <h:form id="complementoPagoForm2">
+                                <h:outputText value="Complemento de Pago" style="font-weight: bold"/>
+                                <h:panelGrid columns="6" cellpadding="10">
+                                    <h:outputText value="Fecha de Pago::" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.fechaPago}" />
+                                    <h:outputText value="Forma de Pago:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.formaPagoP}" />
+                                    <h:outputText value="Moneda:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.monedaP}" />
+                                    <h:outputText value="Monto:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.montoPago}" />
+                                    <h:outputText value="Número Operación:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.numeroOperacion}" />
+                                </h:panelGrid>
+                                <p:separator/>
+                                <h:panelGrid columns="6" cellpadding="10">
+                                    <h:outputText value="Tipo de Cambio:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.tipoCambioP}" />
+                                    <h:outputText value="RFC Emisor de Cuenta Origen:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.rfcEmisorCuentaOrigen}" />
+                                    <h:outputText value="Nombre Banco:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.nombreBanco}" />
+                                    <h:outputText value="Cuenta Ordenante:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.cuentaOrdenante}" />
+                                    <h:outputText value="RFC Emisor Cuenta Benefiaria:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.rfcEmisorCuentaBeneficiaria}" />
+                                    <h:outputText value="Cuenta Beneficiaria:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.cuentaBeneficiaria}" />
+                                    <h:outputText value="Tipo Cadena de Pago:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.tipoCadenaPago}" />
+                                    <h:outputText value="Certificado Pago:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.certificadoPago}" />
+                                    <h:outputText value="Cadena de Pago:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.cadenaPago}" />
+                                    <h:outputText value="Sello de Pago:" style="font-weight: bold"/>
+                                    <h:outputText value="#{facturarNominaContoller.cfdisId.selloPago}" />
+                                </h:panelGrid>    
+                                <p:commandButton value="Agregar Complemento Pago" id="addComplemento" icon="fa fa-plus" onclick="PF('dlg_complementoPago').show()" />
+                                <p:separator/>
+                                <h:form id="listaComplementos2">
+                                    <p:dataTable id="listaFacturas" value="#{facturarNominaContoller.listaCfdis}" var="factura"
+                                                 reflow="true" rowKey="#{factura.id}" rows="5"
+                                                 paginator="true" selectionMode="single" selection="#{facturarNominaContoller.cfdiRelacionado}"
+                                                 rowsPerPageTemplate="5,10,15,20,30" resizableColumns="true"
+                                                 emptyMessage="No hay facturas agregadas">
+
+                                        <p:ajax event="rowSelect" update="addFact editFact deleteFact"/>
+                                        <p:ajax event="rowUnselect" update="addFact editFact deleteFact"/>
+
+                                        <f:facet name="header">
+                                            <p:commandButton id="addFact" value="Agregar Factura" oncomplete="PF('addComplementoDialog').show()" update="addComplementoForm" icon="fa fa-plus" />
+                                            <p:commandButton id="editFact" value="Editar Factura" update="editComplementoForm" oncomplete="PF('editComplementoDialog').show()" icon="fa fa-pencil"/>
+                                            <p:commandButton id="deleteFact" value="Eliminar Factura" oncomplete="PF('deleteComplementoDialog').show()" icon="fa fa-remove"/>
+                                        </f:facet>
+
+                                        <p:column headerText="UUID" resizable="false" width="100">
+                                            <h:outputText value="#{factura.uuid}"/>
+                                        </p:column>
+                                        <p:column headerText="Serie" resizable="false" width="100">
+                                            <h:outputText value="#{factura.serie}"/>
+                                        </p:column>
+                                        <p:column headerText="Folio" resizable="false" width="100">
+                                            <h:outputText value="#{factura.folio}"/>
+                                        </p:column>
+                                        <p:column headerText="Moneda" resizable="false" width="100">
+                                            <h:outputText value="#{factura.moneda}"/>
+                                        </p:column>
+                                        <p:column headerText="Tipo Cambio" resizable="false" width="100">
+                                            <h:outputText value="#{factura.tipoCambio}"/>
+                                        </p:column>
+                                        <p:column headerText="Metodo Pago" resizable="false" width="100">
+                                            <h:outputText value="#{factura.metodoPago}"/>
+                                        </p:column>
+                                        <p:column headerText="Saldo Anterior" resizable="false" width="100">
+                                            <h:outputText value="#{factura.saldoInsoluto + factura.saldoPagar}"/>
+                                        </p:column>
+                                        <p:column headerText="Saldo a Pagar" resizable="false" width="100">
+                                            <h:outputText value="#{factura.saldoPagar}"/>
+                                        </p:column>
+                                        <p:column headerText="Saldo Insoluto" resizable="false" width="100">
+                                            <h:outputText value="#{factura.saldoPagado - factura.saldoPagar}"/>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:form>
+                            </h:form>
+                        </p:tab>
+                    </p:accordionPanel>
+
+                    <p:separator/>
+
+                    <h:form id="total">
+                        <p:panel >
+                            <h:panelGrid columns="2" style="width: 100%">
+                                <p:panel header="Importe con letra" style="width: 100%; margin-right: 400px">
+                                    <p:outputLabel value="#{facturarNominaContoller.importeLetra()}"/>
+                                </p:panel>
+
+                                <p:panel header="Totales" style="width: 100%">
+                                    <table border="0" style="border-collapse: collapse" width="100%">
+                                        <tbody>
+                                            <tr style="height: 21px" >
+                                                <td style="width: 50%; text-align: left; height: 21px" > <h:outputText value="SubTotal" style="font-weight: 900"/> </td>
+                                                <td style="width: 10%; text-align: center; height: 21px"> <h:outputText value=""/> </td>
+                                                <td style="width: 40%; text-align: right; height: 21px">
+                                                    <h:outputText value="#{facturarNominaContoller.calcularSubtotal()}">
+                                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                                    </h:outputText>
+                                                </td> 
+                                            </tr>
+                                            <tr style="height: 21px">
+                                                <td style="width: 50%; text-align: left; height: 21px" > <h:outputText value="Impuestos Trasladados" style="font-weight: 900"/> </td>
+                                                <td style="width: 10%; text-align: center; height: 21px"> <h:outputText value="IVA"/> </td>
+                                                <td style="width: 40%; text-align: right; height: 21px">
+                                                    <h:outputText value="#{facturarNominaContoller.trasladadoIva()}">
+                                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                                    </h:outputText>
+                                                </td> 
+                                            </tr>
+                                            <tr style="height: 21px"  >
+                                                <td style="width: 50%; text-align: center; height: 21px"> <h:outputText value=""/> </td>
+                                                <td style="width: 10%; text-align: center; height: 21px"> <h:outputText value="ISR"/> </td>
+                                                <td style="width: 40%; text-align: right; height: 21px">
+                                                    <h:outputText value="#{facturarNominaContoller.trasladadoISR()}">
+                                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                                    </h:outputText>
+                                                </td> 
+                                            </tr>
+                                            <tr style="height: 21px"  >
+                                                <td style="width: 50%; text-align: center; height: 21px"> <h:outputText value=""/> </td>
+                                                <td style="width: 10%; text-align: center; height: 21px"> <h:outputText value="IEPS"/> </td>
+                                                <td style="width: 40%; text-align: right; height: 21px">
+                                                    <h:outputText value="#{facturarNominaContoller.trasladadoIEPS()}">
+                                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                                    </h:outputText>
+                                                </td> 
+                                            </tr>
+                                            <tr style="height: 21px">
+                                                <td style="width: 50%; text-align: left; height: 21px"> <h:outputText value="Impuestos Retenidos" style="font-weight: 900"/> </td>
+                                                <td style="width: 10%; text-align: center; height: 21px"> <h:outputText value="IVA"/> </td>
+                                                <td style="width: 40%; text-align: right; height: 21px">
+                                                    <h:outputText value="#{facturarNominaContoller.retenidosIva()}">
+                                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                                    </h:outputText>
+                                                </td> 
+                                            </tr>
+                                            <tr style="height: 21px" >
+                                                <td style="width: 50%; text-align: center; height: 21px"> <h:outputText value=""/> </td>
+                                                <td style="width: 10%; text-align: center; height: 21px"> <h:outputText value="ISR"/> </td>
+                                                <td style="width: 40%; text-align: right; height: 21px">
+                                                    <h:outputText value="#{facturarNominaContoller.retenidosISR()}">
+                                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                                    </h:outputText>
+                                                </td> 
+                                            </tr>
+                                            <tr style="height: 21px" >
+                                                <td style="width: 50%; text-align: center; height: 21px"> <h:outputText value=""/> </td>
+                                                <td style="width: 10%; text-align: center; height: 21px"> <h:outputText value="IEPS"/> </td>
+                                                <td style="width: 40%; text-align: right; height: 21px">
+                                                    <h:outputText value="#{facturarNominaContoller.retenidosIEPS()}">
+                                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                                    </h:outputText>
+                                                </td> 
+                                            </tr>
+                                            <tr style="height: 21px" >
+                                                <td style="width: 50%; text-align: left; height: 21px"> <h:outputText value="Total Descuentos" style="font-weight: 900"/>  </td>
+                                                <td style="width: 10%; text-align: center; height: 21px"> <h:outputText value=""/> </td>
+                                                <td style="width: 40%; text-align: right; height: 21px">
+                                                    <h:outputText value="#{facturarNominaContoller.calcularDescuento()}">
+                                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                                    </h:outputText>
+                                                </td> 
+                                            </tr>
+                                            <tr style="height: 21px" >
+                                                <td style="width: 50%; text-align: left; height: 21px"> <h:outputText value="Total" style="font-weight: 900"/> </td>
+                                                <td style="width: 10%; text-align: center; height: 21px"> <h:outputText value=""/> </td>
+                                                <td style="width: 40%; text-align: right; height: 21px">
+                                                    <h:outputText value="#{facturarNominaContoller.calcularTotal()}">
+                                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                                    </h:outputText>
+                                                </td> 
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </p:panel>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:form>
+                </p:panel>
+            </h:form>
+
+            <!--Datos del receptor-->
+            <p:dialog id="datosReceptorDlg" header="Datos del Receptor" widgetVar="dlg_datosReceptor" modal="true" resizable="false" appendTo="@(body)">
+                <h:form id="datosReceptorForm">
+                    <p:panel header="Bucar Receptor" style="margin: 15px">
+                        <p:growl id="growlCliente" showDetail="true" life="10000"/>
+                        <p:dataTable id="datalist" value="#{rnGcTrabajadoresTblController.items}" var="item"
+                                     selectionMode="multipñle" selection="#{facturarNominaContoller.listaTrabajadoresAux}"
+                                     paginator="true"
+                                     emptyMessage="No se encontraron registros"
+                                     rowKey="#{item.id}"
+                                     rows="10"
+                                     rowsPerPageTemplate="10,20,30,40,50"
+                                     >
+
+                            <p:ajax event="rowSelect"   update="addTrabajador"/>
+                            <p:ajax event="rowUnselect" update="addTrabajador"/>
+
+                            <p:column filterBy="#{item.noTrabajador}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="No. Trabajador"/>
+                                </f:facet>
+                                <h:outputText value="#{item.noTrabajador}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Fecha Inicio Labores"/>
+                                </f:facet>
+                                <h:outputText value="#{item.fechaInicio}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column filterBy="#{item.nombre}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_nombre}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.nombre}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.apPaterno}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_apPaterno}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.apPaterno}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.apMaterno}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_apMaterno}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.apMaterno}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.curp}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_curp}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.curp}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.rfc}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_rfc}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.rfc}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.nss}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_nss}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.nss}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.salarioBase}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Salario Base"/>
+                                </f:facet>
+                                <h:outputText value="#{item.salarioBase}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.sdi}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_sdi}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.sdi}"/>
+                            </p:column>
+                            <p:column filterBy="#{items.tipoper}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_tipoPersona}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.tipoPersona}"/>
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton id="addTrabajador" value="Agregar Trabajadores" actionListener="#{facturarNominaContoller.agregarTrabajadores()}" ajax="false" update="datosReceptorForm,tabEmisorReceptor" icon="fa fa-plus"/>
+                                <p:commandButton value="Cancelar" icon="fa fa-remove" immediate="true" onclick="PF('dlg_datosReceptor').hide();" />
+                            </f:facet>
+                        </p:dataTable>
+
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            <!--Datos del receptor-->
+            <!-- Datos de la factura-->
+            <p:dialog id="datosFacturaDlg" header="Datos de la Factura" widgetVar="dlg_datosFactura" modal="true" resizable="false" appendTo="@(body)" style="height: 300px">
+                <h:form id="datosFacturaForm">
+                    <p:panel header="CFDI - Datos de la Factura" style="margin: 15px">
+                        <p:growl id="growlCliente" showDetail="true" life="10000"/>
+
+                        <h:panelGrid columns="4" cellpadding="5">
+                            <p:outputLabel style="font-weight: 900" value="#{bundle.EditRnGcCfdisTblLabel_claveRegimenFiscal}" for="claveRegimenFiscal"/>
+                            <p:selectOneMenu id="claveRegimenFiscal" style="width: 482px" value="#{facturarNominaContoller.cfdisId.claveRegimenFiscal}" filter="true" filterMatchMode="contains" required="true" requiredMessage="#{bundle.RnGcCfdisTblRequiredMessage_claveRegimenFiscal}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}" />
+                                <f:selectItems value="#{rnGcRegimenfiscalTblController.itemsAvailableSelectOne}"
+                                               var="regimenItem"
+                                               itemLabel="#{regimenItem.claveRegimenFiscal} - #{regimenItem.descripcion}"
+                                               itemValue="#{regimenItem.claveRegimenFiscal}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel style="font-weight: 900" value="Tipo de  Comprobante" for="tipoComprobante" />
+                            <p:selectOneMenu id="tipoComprobante" style="width: 160px" value="#{facturarNominaContoller.cfdisId.tipoComprobante}" title="#{bundle.EditRnGcCfdisTblTitle_tipoComprobante}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_tipoComprobante}">
+                                <f:selectItem itemLabel="N - Nómina" itemValue="N" />
+                                <p:ajax update="tipoRelacion"/>
+                                <p:ajax update="formaPago"/>
+                                <p:ajax update="metodoPago"/>
+                                <p:ajax update="moneda"/>
+                                <p:ajax update="moneda2"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel style="font-weight: 900" value="Uso de la Factura" for="usoCfdi" />
+                            <p:selectOneMenu id="usoCfdi" style="width: 482px" value="#{facturarNominaContoller.cfdisId.usoCfdi}" filter="true" filterMatchMode="contains" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_tipoComprobante}">
+                                <f:selectItem itemLabel="P01 - Por definir"
+                                              itemValue="P01" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+
+                        <p:separator/>
+
+                        <h:panelGrid columns="8" cellpadding="5">
+                            <p:outputLabel style="font-weight: 900" value="No. Certificado" for="certificado"/>
+                            <p:selectOneMenu id="certificado" style="width: 160px" value="#{facturarNominaContoller.cfdisId.certificados_Id}" required="true" requiredMessage="El numero de certificado es necesario">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcCertificadosTblController.listaCertificadosActivos()}"
+                                               var="certificadoItem"
+                                               itemLabel="#{certificadoItem.numeroCertificado}"
+                                               itemValue="#{certificadoItem}"/>
+                                <p:ajax update="serie" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel style="font-weight: 900" value="#{bundle.EditRnGcCfdisTblLabel_fechaExpedicion}"  for="fechaExpedicion" />
+                            <p:calendar id="fechaExpedicion" style="width: 160px" pattern="dd/MM/yyyy HH:mm:ss" value="#{facturarNominaContoller.cfdisId.fechaExpedicion}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_fechaExpedicion}" showOn="button"/>
+
+                            <p:outputLabel style="font-weight: 900" value="#{bundle.EditRnGcCfdisTblLabel_lugarExpedicion}" for="lugarExpedicion" />
+                            <p:selectOneMenu id="lugarExpedicion" style="width: 160px" value="#{facturarNominaContoller.cfdisId.lugarExpedicion}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_lugarExpedicion}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{facturarNominaContoller.codigosPostalesUsuario()}"
+                                               var="codigosItem"
+                                               itemLabel="#{codigosItem}"
+                                               itemValue="#{codigosItem.substring(0,5)}"/>
+                                <p:ajax event="change" update="@this"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel style="font-weight: 900" value="#{bundle.EditRnGcCfdisTblLabel_moneda}" for="moneda" />
+                            <p:selectOneMenu id="moneda" style="width: 160px" filter="true" value="#{facturarNominaContoller.cfdisId.moneda}" rendered="#{facturarNominaContoller.cfdisId.tipoComprobante != 'P'}" title="#{bundle.EditRnGcCfdisTblTitle_moneda}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_moneda}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}" />
+                                <f:selectItems value="#{rnGcMonedasTblController.itemsAvailableSelectOne}"
+                                               var="monedaItem"
+                                               itemLabel="#{monedaItem.CMoneda} - #{monedaItem.descripcion}"
+                                               itemValue="#{monedaItem.CMoneda}" />
+                                <p:ajax update="tipoCambio"/>
+                                <p:ajax event="change" update="@this"/>
+                            </p:selectOneMenu>
+                            <p:selectOneMenu id="moneda2" style="width: 160px" value="#{facturarNominaContoller.cfdisId.moneda}" required="true" requiredMessage="La moneda es necesaria" rendered="#{facturarNominaContoller.cfdisId.tipoComprobante == 'P'}">
+                                <f:selectItem itemLabel="XXX - Los códigos asignados para las transacciones en que intervenga ninguna moneda" itemValue="XXX"/>
+                                <p:ajax event="change" update="@this"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel style="font-weight: 900" value="#{bundle.EditRnGcCfdisTblLabel_formaPago}" for="formaPago"/>
+                            <p:selectOneMenu id="formaPago" style="width: 160px" value="#{facturarNominaContoller.cfdisId.formaPago}" disabled="#{facturarNominaContoller.cfdisId.tipoComprobante == 'P'}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_formaPago}">
+                                <f:selectItem itemLabel="99 - Por definir"
+                                              itemValue="99"/>
+                                <p:ajax event="change" update="@this"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel style="font-weight: 900" value="#{bundle.EditRnGcCfdisTblLabel_metodoPago}" for="metodoPago" />
+                            <p:selectOneMenu id="metodoPago" style="width: 160px" value="#{facturarNominaContoller.cfdisId.metodoPago}" required="true" disabled="#{facturarNominaContoller.cfdisId.tipoComprobante == 'P'}" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_metodoPago}">
+                                <f:selectItem itemLabel="PUE - Pago en una sola exhibición"
+                                              itemValue="PUE" />
+                                <p:ajax event="change" update="@this"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel style="font-weight: 900" value="Condición Pago" for="condicionPago" />
+                            <p:inputText id="condicionPago" style="width: 175px" value="#{facturarNominaContoller.cfdisId.condicionPago}" disabled="#{facturarNominaContoller.cfdisId.tipoComprobante == 'P'}"/>
+
+                            <p:outputLabel style="font-weight: 900" value="#{bundle.EditRnGcCfdisTblLabel_serie}" for="serie" />
+                            <p:selectOneMenu id="serie" value="#{facturarNominaContoller.cfdisId.serie}" style="width: 160px">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcFolioserieTblController.foliosPorCertifcado(facturarNominaContoller.cfdisId.certificados_Id)}"
+                                               var="serieItem"
+                                               itemLabel="#{serieItem.serie}"
+                                               itemValue="#{serieItem.serie}"/>
+                                <p:ajax update="folio1"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel style="font-weight: 900" value="Folio: " for="folio1"/>
+                            <p:selectOneMenu id="folio1" value="#{facturarNominaContoller.cfdisId.folio}" style="width: 160px">
+                                <f:selectItems value="#{facturarNominaContoller.obtenerFolioPorUsuarioSerie(facturarNominaContoller.cfdisId.serie)}"
+                                               var="folioItem"
+                                               itemLabel="#{folioItem.folio}"
+                                               itemValue="#{folioItem.folio}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel style="font-weight: 900" value="Tipo de Cambio" for="tipoCambio"/>
+                            <p:inputText id="tipoCambio" style="width: 175px" value="#{facturarNominaContoller.cfdisId.tipoCambio}" disabled="#{facturarNominaContoller.cfdisId.moneda == 'MXN'}"/>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="3">
+                            <p:outputLabel style="font-weight: 900" value="#{bundle.EditRnGcCfdisTblLabel_tipoRelacion}" for="tipoRelacion"/>
+                            <p:selectOneMenu id="tipoRelacion" style="width: 160px" value="#{facturarNominaContoller.cfdisId.tipoRelacion}" title="#{bundle.EditRnGcCfdisTblTitle_tipoRelacion}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}" />
+                                <f:selectItems value="#{rnGcTiporelacionTblController.itemsAvailableSelectOne}"
+                                               var="relacionItem"
+                                               itemLabel="#{relacionItem.claveTipoRelacion} - #{relacionItem.descripcion}"
+                                               itemValue="#{relacionItem.claveTipoRelacion}" />
+                                <p:ajax update="uuidRelacionado"/>
+                            </p:selectOneMenu>
+                            <p:commandButton id="uuidRelacionado" update="datosFacturaForm,addRelacionadoForm, datosFacturaForm:addRelacionados" oncomplete="PF('addRelacionadoDialog').show()" value="Agregar CFDI relacionado" icon="ui-icon-plus"/>
+                        </h:panelGrid>
+
+                        <!-- ********************************************************************************************************************* -->
+                        <h:form id="addRelacionados">
+                            <p:panel header="Cfdis Relacionados">
+                                <p:dataTable id="relacionadosList" value="#{facturarNominaContoller.listaCfdisRelacionados}" var="item"
+                                             selectionMode="single" selection="#{facturarNominaContoller.cfdiRelacionado}"
+                                             paginator="true" scrollable="true"
+                                             rowKey="#{item.id}"
+                                             rows="2"
+                                             rowsPerPageTemplate="5,10,15,20,25,30,40,50"
+                                             >
+
+                                    <p:ajax event="rowSelect" update="deleteButton"/>
+                                    <p:ajax event="rowUnselect" update="deleteButton"/>
+
+                                    <p:column headerText="Folio Fiscal (UUID)">
+                                        <h:outputText value="#{item.uuid}"/>
+                                    </p:column>
+                                    <p:column headerText="RFC Receptor">
+                                        <h:outputText value="#{item.rfcReceptor}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombre Receptor">
+                                        <h:outputText value="#{item.nombreReceptor}"/>
+                                    </p:column>
+                                    <p:column headerText="Importe">
+                                        <h:outputText value="#{item.importe}">
+                                            <f:convertNumber type="currency" currencySymbol="$"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <f:facet name="footer">
+                                        <p:commandButton id="deleteButton" icon="ui-icon-trash" value="Eliminar Concepto" update="deleteRelacionadoForm" oncomplete="PF('deleteRelacionadoDialog').show()"/>
+                                    </f:facet>
+                                </p:dataTable>
+                            </p:panel>
+                        </h:form>
+                        <!-- ********************************************************************************************************************* -->
+                        <h:panelGrid columns="2" style="margin-left: 80%">
+                            <p:commandButton id="aceptar" value="Aceptar" update="datosFacturaForm, tabEmisorReceptor" oncomplete="handleSubmit(args, 'dlg_datosFactura');" icon="fa fa-check"/>
+                            <p:commandButton id="cancelar" value="Cancelar" immediate="true" onclick="PF('dlg_datosFactura').hide();" icon="fa fa-remove" style="margin-left: 10px; margin-top: 30px"/>
+                        </h:panelGrid>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            <!-- Datos de la factura-->
+            <!-- Agregar cfdis relacionados -->
+            <p:dialog id="addRelacionadoDlg" widgetVar="addRelacionadoDialog" modal="true" resizable="false" appendTo="@(body)" header="Agregar CFDI(S) Relacionado(s)">
+                <h:form id="addRelacionadoForm">addRelacionadoForm:
+                    <p:panel header="Cfdis Relacionados">
+                        <p:dataTable id="relacionadosList" value="#{rnGcCfdisTblController.obtenerEmitidos()}" var="item"
+                                     selectionMode="single" selection="#{facturarNominaContoller.cfdiRelacionado}"
+                                     paginator="true" scrollable="true"
+                                     rowKey="#{item.id}"
+                                     rows="2"
+                                     emptyMessage="No se encontraron CFDIS."
+                                     rowsPerPageTemplate="5,10,15,20,25,30,40,50"
+                                     >
+
+                            <!--<p:ajax event="rowSelect" update="deleteButton"/>-->
+                            <!--<p:ajax event="rowUnselect" update="deleteButton"/>-->
+
+                            <p:column filterBy="#{item.uuid}" headerText="Folio Fiscal (UUID)" filterMatchMode="contains" sortBy="#{item.uuid}">
+                                <h:outputText value="#{item.uuid}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.rfcReceptor}" headerText="RFC Receptor" filterMatchMode="contains" sortBy="#{item.rfcReceptor}">
+                                <h:outputText value="#{item.rfcReceptor}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.nombreReceptor}" headerText="Nombre Receptor" filterMatchMode="contains" sortBy="#{item.nombreReceptor}">
+                                <h:outputText value="#{item.nombreReceptor}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.importe}" headerText="Importe" filterMatchMode="contains" sortBy="#{item.importe}">
+                                <h:outputText value="#{item.importe}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+
+                    <p:commandButton value="Agregar CFDI Relacionado" actionListener="#{facturarNominaContoller.agregarRelacionados()}" update="datosFacturaForm, datosFacturaForm:addRelacionados" oncomplete="handleSubmit(args, 'addRelacionadoDialog');"/>
+                    <p:commandButton value="Cancelar" onclick="addRelacionadoDialog.hide()"/>
+                </h:form>
+            </p:dialog>
+            <!-- Agregar cfdis relacionados -->
+            <!-- Eliminar Relacionado -->
+            <p:dialog id="deleteRelacionadoDlg" widgetVar="deleteRelacionadoDialog" modal="true" resizable="false" appendTo="@(body)" header="Eliminar Relacionado">
+                <h:form id="deleteRelacionadoForm">
+                    <h:panelGrid columns="1">
+                        <p:outputLabel value="Quieres eliminar el CFDI Relacionado"/>
+                        <p:outputLabel value="#{facturarNominaContoller.cfdiRelacionado.uuid}?" style="font-weight: 900"/>
+                    </h:panelGrid>
+                    <p:commandButton value="Eliminar" actionListener="#{facturarNominaContoller.eliminarRelacionados()}" update="datosFacturaForm:addRelacionados:relacionadosList" oncomplete="handleSubmit(args, 'deleteRelacionadoDialog');"/>
+                    <p:commandButton value="Cancelar" onclick="deleteRelacionadoDialog.hide()"/>
+                </h:form>
+            </p:dialog>
+            <!-- Eliminar Relacionado -->
+            <!--Complemento de Pago-->
+            <p:dialog id="complementoPagoDlg" header="Complemento de Pago" widgetVar="dlg_complementoPago" modal="true" resizable="false" appendTo="@(body)">
+                <h:form id="complementoPagoForm1">
+                    <p:panel header="Bucar Receptor" style="margin: 15px">
+                        <p:growl id="growlCliente1" showDetail="true" life="10000"/>
+                        <h:panelGrid columns="4" cellpadding="5">
+                            <p:outputLabel value="Fecha de Pago: " for="fechaPago"/>        
+                            <p:calendar id="fechaPago" style="width: 160px" value="#{facturarNominaContoller.cfdisId.fechaPago}" pattern="dd/MM/yyyy HH:mm:ss" required="true" requiredMessage="La fecha de pago es necesaria" showOn="button"/>
+                            <p:outputLabel value="Forma de Pago: " for="formaPago"/>
+                            <p:selectOneMenu id="formaPago" style="width: 160px" value="#{facturarNominaContoller.cfdisId.formaPagoP}" required="true" requiredMessage="La forma de pago es necesaria" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcFormaspagosTblController.itemsAvailableSelectOne}"
+                                               var="formaPagoItem2"
+                                               itemLabel="#{formaPagoItem2.CFormaPago} - #{formaPagoItem2.descripcion}"
+                                               itemValue="#{formaPagoItem2.CFormaPago}"/>
+                                <p:ajax event="change" update="@this"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Moneda: " for="moneda"/>
+                            <p:selectOneMenu id="moneda" style="width: 160px" value="#{facturarNominaContoller.cfdisId.monedaP}" required="true" requiredMessage="La moneda es necesaria" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcMonedasTblController.itemsAvailableSelectOne}"
+                                               var="monedaItem2"
+                                               itemLabel="#{monedaItem2.CMoneda} - #{monedaItem2.descripcion}"
+                                               itemValue="#{monedaItem2.CMoneda}"/>
+                                <p:ajax event="change" update="@this"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tipo de Cambio: " for="tipoCambio2"/>
+                            <p:inputText id="tipoCambio2" style="width: 175px" value="#{facturarNominaContoller.cfdisId.tipoCambioP}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Monto: " for="monto"/>
+                            <p:inputText id="monto" style="width: 175px" value="#{facturarNominaContoller.cfdisId.montoPago}" required="true" requiredMessage="El monto es necesario y debe ser mayor a cero">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Número de Operación: " for="numeroOperacion"/>
+                            <p:inputText id="numeroOperacion" style="width: 175px" value="#{facturarNominaContoller.cfdisId.numeroOperacion}" >
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="RFC emisor de cuenta origen: " for="cuentaOrigen"/>
+                            <p:inputText id="cuentaOrigen" style="width: 175px" value="#{facturarNominaContoller.cfdisId.rfcEmisorCuentaOrigen}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Nombre de Banco: " for="nombreBanco"/>
+                            <p:inputText id="nombreBanco" style="width: 175px" value="#{facturarNominaContoller.cfdisId.nombreBanco}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Cuenta Ordenante: " for="cuentaOrdenante"/>
+                            <p:inputText id="cuentaOrdenante" style="width: 175px" value="#{facturarNominaContoller.cfdisId.cuentaOrdenante}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="RFC emisor cuenta beneficiaria: " for="rfccuentaBeneficiaria"/>
+                            <p:inputText id="rfccuentaBeneficiaria" style="width: 175px" value="#{facturarNominaContoller.cfdisId.rfcEmisorCuentaBeneficiaria}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Cuenta beneficiaria: " for="cuentaBeneficiaria"/>
+                            <p:inputText id="cuentaBeneficiaria" style="width: 175px" value="#{facturarNominaContoller.cfdisId.cuentaBeneficiaria}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Tipo cadena de pago" for="tipocadenaPago"/>
+                            <p:selectOneMenu id="tipocadenaPago" style="width: 160px" value="#{facturarNominaContoller.cfdisId.tipoCadenaPago}" >
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItem itemLabel="01 - SPEI" itemValue="01"/>
+                                <p:ajax event="change" update="@this"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Certificado de Pago" for="certificadoPago"/>
+                            <p:inputText id="certificadoPago" style="width: 175px" value="#{facturarNominaContoller.cfdisId.certificadoPago}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Cadena de pago" for="cadenaPago"/>
+                            <p:inputText id="cadenaPago" style="width: 175px" value="#{facturarNominaContoller.cfdisId.cadenaPago}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Sello de Pago" for="selloPago"/>
+                            <p:inputText id="selloPago" style="width: 175px" value="#{facturarNominaContoller.cfdisId.selloPago}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:commandButton id="addComplemento" value="Aceptar" oncomplete="handleSubmit(args, 'dlg_complementoPago');" update="tabEmisorReceptor" icon="fa fa-check"/>
+                        </h:panelGrid>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            <!--Complemento de Pago-->
+            <!-- Agregar complemento de pago -->
+            <p:dialog id="addComplementoPagoDlg" widgetVar="addComplementoDialog" modal="true" resizable="false" appendTo="@(body)" header="Agregar Factura">
+                <h:form id="addComplementoForm">
+                    <p:panel header="CFDI Pago Parcial o Diferido">
+                        <p:dataTable id="relacionadosList" value="#{rnGcCfdisTblController.obtenerPPD()}" var="item"
+                                     selectionMode="single" selection="#{facturarNominaContoller.cfdiRelacionado}"
+                                     paginator="true" scrollable="true"
+                                     rowKey="#{item.id}"
+                                     rows="5"
+                                     emptyMessage="No se encontraron CFDIS."
+                                     rowsPerPageTemplate="5,10,15,20,25,30,40,50"
+                                     >
+
+                            <p:column filterBy="#{item.uuid}" headerText="Folio Fiscal (UUID)" filterMatchMode="contains" sortBy="#{item.uuid}">
+                                <h:outputText value="#{item.uuid}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.rfcReceptor}" headerText="RFC Receptor" filterMatchMode="contains" sortBy="#{item.rfcReceptor}">
+                                <h:outputText value="#{item.rfcReceptor}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.nombreReceptor}" headerText="Nombre Receptor" filterMatchMode="contains" sortBy="#{item.nombreReceptor}">
+                                <h:outputText value="#{item.nombreReceptor}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.saldoInsoluto}" headerText="Saldo Insoluto" filterMatchMode="contains" sortBy="#{item.saldoInsoluto}">
+                                <h:outputText value="#{item.saldoInsoluto}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
+                            </p:column>
+                            <f:facet name="header">
+                                <p:commandButton id="addFactura" value="Agregar Factura" actionListener="#{facturarNominaContoller.agregarComplementoPago()}" update="tabEmisorReceptor" oncomplete="handleSubmit(args, 'addComplementoDialog');"/>
+                                <p:commandButton id="cancel" value="Cancelar" onclick="addRelacionadoDialog.hide()"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            <!-- Agregar complemento de pago -->
+            <!-- Eliminar Complemento -->
+            <p:dialog id="deleteComplementoDlg" widgetVar="deleteComplementoDialog" modal="true" resizable="false" appendTo="@(body)" header="Eliminar Factura de Complemento de Pago">
+                <h:form id="deleteComplementoForm">
+                    <h:panelGrid columns="1">
+                        <p:outputLabel value="Quieres eliminar la factura del complemento de pago"/>
+                        <p:outputLabel value="#{facturarNominaContoller.cfdiRelacionado.uuid}?" style="font-weight: 900"/>
+                    </h:panelGrid>
+                    <p:commandButton value="Eliminar" actionListener="#{facturarNominaContoller.eliminarComplemento()}" update="tabEmisorReceptor" oncomplete="handleSubmit(args, 'deleteComplementoDialog');"/>
+                    <p:commandButton value="Cancelar" onclick="deleteComplementoDialog.hide()"/>
+                </h:form>
+            </p:dialog>
+            <!-- Eliminar Complemento -->
+            <!-- Editar Complemento -->
+            <p:dialog id="editComplementoDlg" widgetVar="editComplementoDialog" modal="true" resizable="false" appendTo="@(body)" header="Editar Factura de Complemento de Pago">
+                <h:form id="editComplementoForm">
+                    <p:panelGrid columns="4">
+                        <p:outputLabel value="UUID:" style="font-weight: 900"/>
+                        <p:outputLabel value="#{facturarNominaContoller.cfdiRelacionado.uuid}"/>
+                        <p:outputLabel value="Nombre Receptor:" style="font-weight: 900"/>
+                        <p:outputLabel value="#{facturarNominaContoller.cfdiRelacionado.nombreReceptor}"/>
+                        <p:outputLabel value="RFC Receptor:" style="font-weight: 900"/>
+                        <p:outputLabel value="#{facturarNominaContoller.cfdiRelacionado.rfcReceptor}"/>
+                        <p:outputLabel value="Fecha Emisión:" style="font-weight: 900"/>
+                        <p:outputLabel value="#{facturarNominaContoller.cfdiRelacionado.fechaExpedicion}"/>
+                        <p:outputLabel value="Saldo Pagar" style="font-weight: 900"/>
+                        <p:inputText id="saldoPagar" style="width: 160px" value="#{facturarNominaContoller.cfdiRelacionado.saldoPagar}" title="Saldo a Pagar">
+                            <p:ajax update="saldoInsoluto"/>
+                            <p:ajax update="addButton"/>
+                        </p:inputText>
+                        <p:outputLabel value="Saldo Insoluto:" style="font-weight: 900"/>
+                        <p:selectOneMenu id="saldoInsoluto" style="width: 160px" value="#{facturarNominaContoller.cfdiRelacionado.saldoInsoluto}" title="Probando" required="true" requiredMessage="El saldo insoluto es requerido." editable="false">
+                            <f:selectItem itemLabel="#{facturarNominaContoller.calcularSaldoInsoluto(facturarNominaContoller.cfdiRelacionado.saldoPagar)}"
+                                          itemValue="#{facturarNominaContoller.calcularSaldoInsoluto(facturarNominaContoller.cfdiRelacionado.saldoPagar)}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Numero Parcialidad:" style="font-weight: 900"/>
+                        <p:inputText id="parcialidad" style="width: 160px" value="#{facturarNominaContoller.cfdiRelacionado.numeroParcialidad}" title="Numero Parcialidad"/>
+                    </p:panelGrid>
+                    <p:commandButton id="addButton" value="Agregar" update="tabEmisorReceptor" oncomplete="handleSubmit(args, 'editComplementoDialog');" disabled="#{facturarNominaContoller.cfdiRelacionado.saldoPagar == 0.0}"/>
+                </h:form>
+            </p:dialog>
+            <!-- Editar Complemento -->
+            <!-- Crear Conceptos -->
+            <p:dialog id="CfdisLineasTblCreateDlg" widgetVar="CfdisLineasTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="Agregar Concepto">
+                <h:form id="CfdisLineasTblCreateForm">
+                    <h:panelGroup id="display">
+                        <p:scrollPanel mode="native" style="height: 375px">
+                            <h:panelGrid columns="3">
+                                <p:selectOneMenu value="#{facturarNominaContoller.producServicio2}" style="width: 145px" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemLabel="Buscar Producto/Servicio"/>
+                                    <f:selectItems value="#{rnGcProductserviciosTblController.itemscreadoPor()}"
+                                                   var="prodServItem"
+                                                   itemLabel="#{prodServItem.descripcion}"
+                                                   itemValue="#{prodServItem}"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="Buscar Producto/Servicio" actionListener="#{facturarNominaContoller.buscarProdServ()}" update="CfdisLineasTblCreateForm"/>
+                            </h:panelGrid>
+                            <p:panelGrid columns="4">
+                                <p:outputLabel value="Cantidad" for="cantidad" />
+                                <p:inputText id="cantidad" style="width: 160px" value="#{facturarNominaContoller.lineas.cantidad}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_cantidad}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_cantidad}">
+                                    <p:ajax update="importeImpuesto"/>
+                                    <p:ajax update="importeImpuesto2"/>
+                                    <p:ajax update="importeImpuesto3"/>
+                                    <p:ajax update="importeImpuesto4"/>
+                                    <p:ajax update="addButton"/>
+                                </p:inputText>
+
+                                <a target="_blank" href="http://pys.sat.gob.mx/PyS/catPyS.aspx">Clave de Producto/Servicio</a>
+                                <p:inputText id="claveProducto" style="width: 160px" value="#{facturarNominaContoller.lineas.claveProdServ}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_claveProdServ}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_claveProdServ}"/>
+
+                                <p:outputLabel value="No. Identificacion" for="noIdentificacion" />
+                                <p:inputText id="noIdentificacion" style="width: 160px" value="#{facturarNominaContoller.lineas.noIdentificacion}" />
+
+                                <a target="_blank" href="http://200.57.3.89/PyS/catUnidades.aspx">Clave de Unidad</a>
+                                <p:inputText id="claveUnidad" style="width: 160px" value="#{facturarNominaContoller.lineas.claveUnidad}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_claveUnidad}"/>
+
+                                <p:outputLabel value="Unidad" for="unidad" />
+                                <p:inputText id="unidad" style="width: 160px" value="#{facturarNominaContoller.lineas.unidad}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_unidad}" />
+
+                                <p:outputLabel value="Descripcion" for="descripcion" />
+                                <p:scrollPanel mode="native" style="height: 52px">
+                                    <p:inputTextarea id="descripcion" style="width: 160px; height: 60px" value="#{facturarNominaContoller.lineas.descripcion}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_descripcion}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_descripcion}"/>
+                                </p:scrollPanel>
+
+                                <p:outputLabel value="Valor Unitario" for="valorUnit" />
+                                <p:inputText id="valorUnit" style="width: 160px" value="#{facturarNominaContoller.lineas.valorUnit}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_valorUnit}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_valorUnit}">
+                                    <p:ajax update="importeImpuesto"/>
+                                    <p:ajax update="importeImpuesto2"/>
+                                    <p:ajax update="importeImpuesto3"/>
+                                    <p:ajax update="importeImpuesto4"/>
+                                </p:inputText>
+
+                                <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto"/>
+                                <p:selectOneMenu id="tipoImpuesto" style="width: 145px" value="#{facturarNominaContoller.lineas.tipoImpuesto}" required="true" requiredMessage="El tipo de Impuesto es necesario">
+                                    <f:selectItem itemLabel="#{bundle.SelectOneMessage}" itemValue="-"/>
+                                    <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                                   var="tipoImpuesto"
+                                                   itemLabel="#{tipoImpuesto.tipoImpuesto}"
+                                                   itemValue="#{tipoImpuesto.tipoImpuesto}"/>
+                                    <p:ajax update="tipoTasa"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Impuesto" for="impuesto"/>
+                                <p:selectOneMenu id="impuesto" style="width: 145px" value="#{facturarNominaContoller.lineas.impuesto}">
+                                    <f:selectItem itemLabel="#{bundle.SelectOneMessage}" itemValue="-"/>
+                                    <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                                   var="impuestoItem"
+                                                   itemLabel="#{impuestoItem.CImpuesto} - #{impuestoItem.descripcion}"
+                                                   itemValue="#{impuestoItem.CImpuesto}"/>
+                                    <p:ajax update="tipoTasa"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Tipo Factor" for="tipoFactor" />
+                                <p:selectOneMenu id="tipoFactor" style="width: 145px" value="#{facturarNominaContoller.lineas.tipoFactor}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_tipoFactor}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_tipoFactor}">
+                                    <f:selectItem itemLabel="#{bundle.SelectOneMessage}" itemValue="-"/>
+                                    <f:selectItem itemLabel="Tasa" itemValue="Tasa"/>
+                                    <f:selectItem itemLabel="Cuota" itemValue="Cuota"/>
+                                    <f:selectItem itemLabel="Exento" itemValue="Exento"/>
+                                    <p:ajax update="tipoTasa"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Tasa o Cuota" for="tipoTasa" />
+                                <p:selectOneMenu id="tipoTasa" style="width: 160px" value="#{facturarNominaContoller.lineas.tipoTasa}" title="Probando" required="true" requiredMessage="La tasa o cuota es necesaria." editable="true">
+                                    <f:selectItems value="#{rnGcTasacuotaTblController.listaTasasCuotas(facturarNominaContoller.lineas.tipoImpuesto, facturarNominaContoller.lineas.tipoFactor, facturarNominaContoller.lineas.impuesto)}"
+                                                   var="tasaCuotaItem"
+                                                   itemLabel="#{String.valueof(tasaCuotaItem)}"
+                                                   itemValue="#{String.valueOf(tasaCuotaItem)}"/>
+                                    <p:ajax update="importeImpuesto"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Importe Impuesto" for="importeImpuesto"/>
+                                <p:selectOneMenu id="importeImpuesto" style="width: 145px" value="#{facturarNominaContoller.lineas.importeimpuesto}" required="true">
+                                    <f:selectItem itemLabel="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.lineas.tipoTasa, facturarNominaContoller.lineas.cantidad, facturarNominaContoller.lineas.valorUnit, facturarNominaContoller.lineas.descuento)}"
+                                                  itemValue="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.lineas.tipoTasa, facturarNominaContoller.lineas.cantidad, facturarNominaContoller.lineas.valorUnit, facturarNominaContoller.lineas.descuento)}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Descuento" for="descuento"/>
+                                <p:inputText id="descuento" value="#{facturarNominaContoller.lineas.descuento}"  style="width: 160px">
+                                    <p:ajax update="importeImpuesto"/>
+                                    <p:ajax update="importeImpuesto2"/>
+                                    <p:ajax update="importeImpuesto3"/>
+                                    <p:ajax update="importeImpuesto4"/>
+                                </p:inputText>
+                                <p:outputLabel value="No. de Pedimento" for="noPedimento"/>
+                                <p:inputText id="noPedimento" value="#{facturarNominaContoller.lineas.noPedimento}"  style="width: 160px"/>
+                                <p:outputLabel value="No. de Cuenta Predial" for="cuentaPredial"/>
+                                <p:inputText id="cuentaPredial" value="#{facturarNominaContoller.lineas.noCuentaPredial}"  style="width: 160px"/>
+                            </p:panelGrid>
+
+                            <p:panel header="Impuestos Adicionales" toggleable="true" collapsed="true">
+                                <p:panelGrid columns="4">
+                                    <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto2"/>
+                                    <p:selectOneMenu id="tipoImpuesto2" style="width: 145px" value="#{facturarNominaContoller.lineas.tipoImpuesto2}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                                       var="tipoImpuesto2Item"
+                                                       itemLabel="#{tipoImpuesto2Item.tipoImpuesto}"
+                                                       itemValue="#{tipoImpuesto2Item.tipoImpuesto}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Impuesto" for="impuesto2"/>
+                                    <p:selectOneMenu id="impuesto2" style="width: 145px" value="#{facturarNominaContoller.lineas.impuesto2}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                                       var="impuesto2Item"
+                                                       itemLabel="#{impuesto2Item.CImpuesto} - #{impuesto2Item.descripcion}"
+                                                       itemValue="#{impuesto2Item.CImpuesto}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Tipo de Factor" for="tipoFactor2"/>
+                                    <p:selectOneMenu id="tipoFactor2" style="width: 145px" value="#{facturarNominaContoller.lineas.tipoFactor2}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                                       var="tipoFactor2Item"
+                                                       itemLabel="#{tipoFactor2Item.ctipoFactor}"
+                                                       itemValue="#{tipoFactor2Item.ctipoFactor}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Tasa o Cuota" for="tasa2"/>
+                                    <p:inputText id="tasa2" style="width: 160px" value="#{facturarNominaContoller.lineas.tipoTasa2}">
+                                        <p:ajax update="importeImpuesto2"/>
+                                    </p:inputText>
+
+                                    <p:outputLabel value="Importe Impuesto" for="importeImpuesto2"/>
+                                    <p:selectOneMenu id="importeImpuesto2" style="width: 145px" value="#{facturarNominaContoller.lineas.importeImpuesto2}">
+                                        <f:selectItem itemLabel="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.lineas.tipoTasa2, facturarNominaContoller.lineas.cantidad, facturarNominaContoller.lineas.valorUnit, facturarNominaContoller.lineas.descuento)}"
+                                                      itemValue="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.lineas.tipoTasa2, facturarNominaContoller.lineas.cantidad, facturarNominaContoller.lineas.valorUnit, facturarNominaContoller.lineas.descuento)}"/>
+                                    </p:selectOneMenu>
+                                    <br/><p:outputLabel/>
+                                    <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto3"/>
+                                    <p:selectOneMenu id="tipoImpuesto3" style="width: 145px" value="#{facturarNominaContoller.lineas.tipoImpuesto3}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                                       var="tipoImpuesto3Item"
+                                                       itemLabel="#{tipoImpuesto3Item.tipoImpuesto}"
+                                                       itemValue="#{tipoImpuesto3Item.tipoImpuesto}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Impuesto" for="impuesto3"/>
+                                    <p:selectOneMenu id="impuesto3" style="width: 145px" value="#{facturarNominaContoller.lineas.impuesto3}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                                       var="impuesto3Item"
+                                                       itemLabel="#{impuesto3Item.CImpuesto} - #{impuesto3Item.descripcion}"
+                                                       itemValue="#{impuesto3Item.CImpuesto}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Tipo de Factor" for="tipoFactor3"/>
+                                    <p:selectOneMenu id="tipoFactor3" style="width: 145px" value="#{facturarNominaContoller.lineas.tipoFactor3}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                                       var="factor3Item"
+                                                       itemLabel="#{factor3Item.ctipoFactor}"
+                                                       itemValue="#{factor3Item.ctipoFactor}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Tasa o Cuota" for="tasa3"/>
+                                    <p:inputText id="tasa3" style="width: 160px" value="#{facturarNominaContoller.lineas.tipoTasa3}">
+                                        <p:ajax update="importeImpuesto3"/>
+                                    </p:inputText>
+
+                                    <p:outputLabel value="Importe Impuesto" for="importeImpuesto3"/>
+                                    <p:selectOneMenu id="importeImpuesto3" style="width: 145px" value="#{facturarNominaContoller.lineas.importeImpuesto3}">
+                                        <f:selectItem itemLabel="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.lineas.tipoTasa3, facturarNominaContoller.lineas.cantidad, facturarNominaContoller.lineas.valorUnit, facturarNominaContoller.lineas.descuento)}"
+                                                      itemValue="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.lineas.tipoTasa3, facturarNominaContoller.lineas.cantidad, facturarNominaContoller.lineas.valorUnit, facturarNominaContoller.lineas.descuento)}"/>
+                                    </p:selectOneMenu>
+                                    <br/><p:outputLabel/>
+                                    <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto4"/>
+                                    <p:selectOneMenu id="tipoImpuesto4" style="width: 145px" value="#{facturarNominaContoller.lineas.tipoImpuesto4}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                                       var="tipoImpuesto4Item"
+                                                       itemLabel="#{tipoImpuesto4Item.tipoImpuesto}"
+                                                       itemValue="#{tipoImpuesto4Item.tipoImpuesto}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Impuesto" for="impuesto4"/>
+                                    <p:selectOneMenu id="impuesto4" style="width: 145px" value="#{facturarNominaContoller.lineas.impuesto4}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                                       var="impuesto4Item"
+                                                       itemLabel="#{impuesto4Item.CImpuesto} - #{impuesto4Item.descripcion}"
+                                                       itemValue="#{impuesto4Item.CImpuesto}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Tipo de Factor" for="factor4"/>
+                                    <p:selectOneMenu id="factor4" style="width: 145px" value="#{facturarNominaContoller.lineas.tipoFactor4}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                                       var="factor4Item"
+                                                       itemLabel="#{factor4Item.ctipoFactor}"
+                                                       itemValue="#{factor4Item.ctipoFactor}"/>
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="Tasa o Cuota" for="tasa4"/>
+                                    <p:inputText id="tasa4" style="width: 145px" value="#{facturarNominaContoller.lineas.tipoTasa4}">
+                                        <p:ajax update="importeImpuesto4"/>
+                                    </p:inputText>
+
+                                    <p:outputLabel value="Importe Impuesto" for="importeImpuesto4"/>
+                                    <p:selectOneMenu id="importeImpuesto4" style="width: 145px" value="#{facturarNominaContoller.lineas.importeImpuesto4}">
+                                        <f:selectItem itemLabel="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.lineas.tipoTasa4, facturarNominaContoller.lineas.cantidad, facturarNominaContoller.lineas.valorUnit, facturarNominaContoller.lineas.descuento)}"
+                                                      itemValue="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.lineas.tipoTasa4, facturarNominaContoller.lineas.cantidad, facturarNominaContoller.lineas.valorUnit, facturarNominaContoller.lineas.descuento)}"/>
+                                    </p:selectOneMenu>
+                                </p:panelGrid>
+                            </p:panel>
+                        </p:scrollPanel>
+                        <p:commandButton id="addButton" value="Agregar" actionListener="#{facturarNominaContoller.agregarLinea()}" update=":growl,tabEmisorReceptor,tabEmisorReceptor:total" oncomplete="handleSubmit(args, 'CfdisLineasTblCreateDialog');" disabled="#{facturarNominaContoller.lineas.cantidad == 0.0}"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+            <!-- Crear Conceptos -->
+            <!-- Editar Conceptos -->
+            <p:dialog id="CfdisLineasTblEditDlg" widgetVar="CfdisLineasTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="Editar Concepto">
+                <h:form id="CfdisLineasTblEditForm">
+                    <h:panelGroup id="display">
+                        <p:scrollPanel mode="native" style="height: 350px">
+                            <p:panelGrid columns="4">
+                                <p:outputLabel value="Cantidad" for="cantidad" />
+                                <p:inputText id="cantidad" style="width: 160px" value="#{facturarNominaContoller.selectedLinea.cantidad}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_cantidad}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_cantidad}">
+                                    <p:ajax update="importeImpuesto"/>
+                                    <p:ajax update="importeImpuesto2"/>
+                                    <p:ajax update="importeImpuesto3"/>
+                                    <p:ajax update="importeImpuesto4"/>
+                                </p:inputText>
+
+                                <a target="_blank" href="http://pys.sat.gob.mx/PyS/catPyS.aspx">Clave de Producto/Servicio</a>
+                                <p:inputText id="claveProducto" style="width: 160px" value="#{facturarNominaContoller.selectedLinea.claveProdServ}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_claveProdServ}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_claveProdServ}"/>
+
+                                <p:outputLabel value="No. Identificacion" for="noIdentificacion" />
+                                <p:inputText id="noIdentificacion" style="width: 160px" value="#{facturarNominaContoller.selectedLinea.noIdentificacion}" />
+
+                                <a target="_blank" href="http://200.57.3.89/PyS/catUnidades.aspx">Clave de Unidad</a>
+                                <p:inputText id="claveUnidad" style="width: 160px" value="#{facturarNominaContoller.selectedLinea.claveUnidad}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_claveUnidad}"/>
+
+                                <p:outputLabel value="Unidad" for="unidad" />
+                                <p:inputText id="unidad" style="width: 160px" value="#{facturarNominaContoller.selectedLinea.unidad}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_unidad}" />
+
+                                <p:outputLabel value="Descripcion" for="descripcion" />
+                                <p:scrollPanel mode="native" style="height: 52px">
+                                    <p:inputTextarea id="descripcion" style="width: 160px; height: 60px" value="#{facturarNominaContoller.selectedLinea.descripcion}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_descripcion}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_descripcion}"/>
+                                </p:scrollPanel>
+
+                                <p:outputLabel value="Valor Unitario" for="valorUnit" />
+                                <p:inputText id="valorUnit" style="width: 160px" value="#{facturarNominaContoller.selectedLinea.valorUnit}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_valorUnit}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_valorUnit}">
+                                    <p:ajax update="importeImpuesto"/>
+                                    <p:ajax update="importeImpuesto2"/>
+                                    <p:ajax update="importeImpuesto3"/>
+                                    <p:ajax update="importeImpuesto4"/>
+                                </p:inputText>
+
+                                <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto"/>
+                                <p:selectOneMenu id="tipoImpuesto" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.tipoImpuesto}" required="true" requiredMessage="El tipo de Impuesto es necesario">
+                                    <f:selectItem itemLabel="#{bundle.SelectOneMessage}" itemValue="-"/>
+                                    <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                                   var="tipoImpuesto"
+                                                   itemLabel="#{tipoImpuesto.tipoImpuesto}"
+                                                   itemValue="#{tipoImpuesto.tipoImpuesto}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Impuesto" for="impuesto"/>
+                                <p:selectOneMenu id="impuesto" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.impuesto}">
+                                    <f:selectItem itemLabel="#{bundle.SelectOneMessage}" itemValue="-"/>
+                                    <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                                   var="impuestoItem"
+                                                   itemLabel="#{impuestoItem.CImpuesto} - #{impuestoItem.descripcion}"
+                                                   itemValue="#{impuestoItem.CImpuesto}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Tipo Factor" for="tipoFactor" />
+                                <p:selectOneMenu id="tipoFactor" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.tipoFactor}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_tipoFactor}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_tipoFactor}">
+                                    <f:selectItem itemLabel="#{bundle.SelectOneMessage}" itemValue="-"/>
+                                    <f:selectItem itemLabel="Tasa" itemValue="Tasa"/>
+                                    <f:selectItem itemLabel="Cuota" itemValue="Cuota"/>
+                                    <f:selectItem itemLabel="Exento" itemValue="Exento"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Tasa o Cuota" for="tipoTasa" />
+                                <p:inputText id="tipoTasa" style="width: 160px" value="#{facturarNominaContoller.selectedLinea.tipoTasa}" title="Probando" required="true" requiredMessage="La tasa o cuota es necesaria.">
+                                    <p:ajax update="importeImpuesto"/>
+                                </p:inputText>
+
+                                <p:outputLabel value="Importe Impuesto" for="importeImpuesto"/>
+                                <p:selectOneMenu id="importeImpuesto" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.importeimpuesto}" required="true">
+                                    <f:selectItem itemLabel="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"
+                                                  itemValue="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Descuento" for="descuento"/>
+                                <p:inputText id="descuento" value="#{facturarNominaContoller.selectedLinea.descuento}"  style="width: 160px">
+                                    <p:ajax update="importeImpuesto"/>
+                                    <p:ajax update="importeImpuesto2"/>
+                                    <p:ajax update="importeImpuesto3"/>
+                                    <p:ajax update="importeImpuesto4"/>
+                                </p:inputText>
+                                <p:outputLabel value="No. de Pedimento" for="noPedimento"/>
+                                <p:inputText id="noPedimento" value="#{facturarNominaContoller.selectedLinea.noPedimento}"  style="width: 160px"/>
+                                <p:outputLabel value="No. de Cuenta Predial" for="cuentaPredial"/>
+                                <p:inputText id="cuentaPredial" value="#{facturarNominaContoller.selectedLinea.noCuentaPredial}"  style="width: 160px"/>
+                            </p:panelGrid>
+
+                            <p:panel header="Impuestos Adicionales" toggleable="true" collapsed="true">
+                                <p:panelGrid columns="4">
+                                    <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto2"/>
+                                    <p:selectOneMenu id="tipoImpuesto2" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.tipoImpuesto2}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                                       var="tipoImpuesto2Item"
+                                                       itemLabel="#{tipoImpuesto2Item.tipoImpuesto}"
+                                                       itemValue="#{tipoImpuesto2Item.tipoImpuesto}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Impuesto" for="impuesto2"/>
+                                    <p:selectOneMenu id="impuesto2" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.impuesto2}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                                       var="impuesto2Item"
+                                                       itemLabel="#{impuesto2Item.CImpuesto} - #{impuesto2Item.descripcion}"
+                                                       itemValue="#{impuesto2Item.CImpuesto}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Tipo de Factor" for="tipoFactor2"/>
+                                    <p:selectOneMenu id="tipoFactor2" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.tipoFactor2}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                                       var="tipoFactor2Item"
+                                                       itemLabel="#{tipoFactor2Item.ctipoFactor}"
+                                                       itemValue="#{tipoFactor2Item.ctipoFactor}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Tasa o Cuota" for="tasa2"/>
+                                    <p:inputText id="tasa2" style="width: 160px" value="#{facturarNominaContoller.selectedLinea.tipoTasa2}">
+                                        <p:ajax update="importeImpuesto2"/>
+                                    </p:inputText>
+
+                                    <p:outputLabel value="Importe Impuesto" for="importeImpuesto2"/>
+                                    <p:selectOneMenu id="importeImpuesto2" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.importeImpuesto2}">
+                                        <f:selectItem itemLabel="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa2, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"
+                                                      itemValue="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa2, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"/>
+                                    </p:selectOneMenu>
+                                    <br/><p:outputLabel/>
+                                    <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto3"/>
+                                    <p:selectOneMenu id="tipoImpuesto3" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.tipoImpuesto3}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                                       var="tipoImpuesto3Item"
+                                                       itemLabel="#{tipoImpuesto3Item.tipoImpuesto}"
+                                                       itemValue="#{tipoImpuesto3Item.tipoImpuesto}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Impuesto" for="impuesto3"/>
+                                    <p:selectOneMenu id="impuesto3" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.impuesto3}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                                       var="impuesto3Item"
+                                                       itemLabel="#{impuesto3Item.CImpuesto} - #{impuesto3Item.descripcion}"
+                                                       itemValue="#{impuesto3Item.CImpuesto}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Tipo de Factor" for="tipoFactor3"/>
+                                    <p:selectOneMenu id="tipoFactor3" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.tipoFactor3}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                                       var="factor3Item"
+                                                       itemLabel="#{factor3Item.ctipoFactor}"
+                                                       itemValue="#{factor3Item.ctipoFactor}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Tasa o Cuota" for="tasa3"/>
+                                    <p:inputText id="tasa3" style="width: 160px" value="#{facturarNominaContoller.selectedLinea.tipoTasa3}">
+                                        <p:ajax update="importeImpuesto3"/>
+                                    </p:inputText>
+
+                                    <p:outputLabel value="Importe Impuesto" for="importeImpuesto3"/>
+                                    <p:selectOneMenu id="importeImpuesto3" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.importeImpuesto3}">
+                                        <f:selectItem itemLabel="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa3, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"
+                                                      itemValue="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa3, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"/>
+                                    </p:selectOneMenu>
+                                    <br/><p:outputLabel/>
+                                    <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto4"/>
+                                    <p:selectOneMenu id="tipoImpuesto4" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.tipoImpuesto4}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                                       var="tipoImpuesto4Item"
+                                                       itemLabel="#{tipoImpuesto4Item.tipoImpuesto}"
+                                                       itemValue="#{tipoImpuesto4Item.tipoImpuesto}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Impuesto" for="impuesto4"/>
+                                    <p:selectOneMenu id="impuesto4" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.impuesto4}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                                       var="impuesto4Item"
+                                                       itemLabel="#{impuesto4Item.CImpuesto} - #{impuesto4Item.descripcion}"
+                                                       itemValue="#{impuesto4Item.CImpuesto}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Tipo de Factor" for="factor4"/>
+                                    <p:selectOneMenu id="factor4" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.tipoFactor4}">
+                                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                        <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                                       var="factor4Item"
+                                                       itemLabel="#{factor4Item.ctipoFactor}"
+                                                       itemValue="#{factor4Item.ctipoFactor}"/>
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="Tasa o Cuota" for="tasa4"/>
+                                    <p:inputText id="tasa4" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.tipoTasa4}">
+                                        <p:ajax update="importeImpuesto4"/>
+                                    </p:inputText>
+
+                                    <p:outputLabel value="Importe Impuesto" for="importeImpuesto4"/>
+                                    <p:selectOneMenu id="importeImpuesto4" style="width: 145px" value="#{facturarNominaContoller.selectedLinea.importeImpuesto4}">
+                                        <f:selectItem itemLabel="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa4, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"
+                                                      itemValue="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa4, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"/>
+                                    </p:selectOneMenu>
+                                </p:panelGrid>
+                            </p:panel>
+                        </p:scrollPanel>
+                        <p:commandButton actionListener="#{facturarNominaContoller.updateLinea()}" value="#{bundle.Save}" update="tabEmisorReceptor, tabEmisorReceptor:total"  oncomplete="handleSubmit(args, 'CfdisLineasTblEditDialog');"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+            <!-- Editar Conceptos -->
+            <!-- Eliminar concepto confirmacion -->
+            <p:dialog id="eliminarConfirmDlg" widgetVar="eliminarConfirmDialog" modal="true" resizable="false" appendTo="@(body)" header="Eliminar Concepto">
+                <h:form id="confirmDeleteForm">
+                    <h:panelGrid columns="1">
+                        <p:outputLabel value="Quieres eliminar el concepto"/>
+                        <p:outputLabel value="#{facturarNominaContoller.selectedLinea.descripcion}?" style="font-weight: 900"/>
+                    </h:panelGrid>
+                    <p:commandButton value="Eliminar" actionListener="#{facturarNominaContoller.eliminarConcepto()}" update="tabEmisorReceptor, tabEmisorReceptor:total, :growl" oncomplete="handleSubmit(args, 'eliminarConfirmDialog');"/>
+                    <p:commandButton value="Cancelar" onclick="eliminarConfirmDialog.hide()"/>
+                </h:form>
+            </p:dialog>
+            <!-- Eliminar concepto confirmacion -->
+
+            <!-- Editar Impuestos -->
+            <p:dialog id="impuestosEditDlg" widgetVar="impuestosEditDialog" modal="true" resizable="false" appendTo="@(body)" header="Editar Impuestos">
+                <h:form id="impuestosEditForm">
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="4">
+                            <p:outputLabel value="Tipo Impuesto" for="tipoImpuesto1"/>
+                            <p:selectOneMenu id="tipoImpuesto1" value="#{facturarNominaContoller.selectedLinea.tipoImpuesto}" style="width: 130px" >
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                               var="tipoImp1Item"
+                                               itemLabel="#{tipoImp1Item.tipoImpuesto}"
+                                               itemValue="#{tipoImp1Item.tipoImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Impuesto" for="impuesto1"/>
+                            <p:selectOneMenu id="impuesto1" value="#{facturarNominaContoller.selectedLinea.impuesto}" style="width: 130px">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                               var="imp1Item"
+                                               itemLabel="#{imp1Item.CImpuesto} - #{imp1Item.descripcion}"
+                                               itemValue="#{imp1Item.CImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tipo Factor" for="tipoFactor1"/>
+                            <p:selectOneMenu id="tipoFactor1" value="#{facturarNominaContoller.selectedLinea.tipoFactor}" style="width: 130px">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                               var="factor1Item"
+                                               itemLabel="#{factor1Item.ctipoFactor}"
+                                               itemValue="#{factor1Item.ctipoFactor}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tasa O Cuota" for="tasaCuota1"/>
+                            <p:inputText id="tasaCuota1" value="#{facturarNominaContoller.selectedLinea.tipoTasa}">
+                                <p:ajax update="importeImpuesto1"/>
+                            </p:inputText>
+                            <p:outputLabel value="Importe Impuesto" for="importeImpuesto1"/>
+                            <p:selectOneMenu id="importeImpuesto1" value="#{facturarNominaContoller.selectedLinea.importeimpuesto}" style="width: 130px">
+                                <f:selectItem itemLabel="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"
+                                              itemValue="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"/>
+                            </p:selectOneMenu>
+                            <br/><p:outputLabel/>
+                            <p:outputLabel value="Tipo Impuesto" for="tipoImpuesto"/>
+                            <p:selectOneMenu id="tipoImpuesto" value="#{facturarNominaContoller.selectedLinea.tipoImpuesto2}" style="width: 130px" >
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                               var="tipoImpItem"
+                                               itemLabel="#{tipoImpItem.tipoImpuesto}"
+                                               itemValue="#{tipoImpItem.tipoImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Impuesto" for="impuesto"/>
+                            <p:selectOneMenu id="impuesto" value="#{facturarNominaContoller.selectedLinea.impuesto2}" style="width: 130px">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                               var="imp2Item"
+                                               itemLabel="#{imp2Item.CImpuesto} - #{imp2Item.descripcion}"
+                                               itemValue="#{imp2Item.CImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tipo Factor" for="tipoFactor"/>
+                            <p:selectOneMenu id="tipoFactor" value="#{facturarNominaContoller.selectedLinea.tipoFactor2}" style="width: 130px">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                               var="factorItem"
+                                               itemLabel="#{factorItem.ctipoFactor}"
+                                               itemValue="#{factorItem.ctipoFactor}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tasa O Cuota" for="tasaCuota"/>
+                            <p:inputText id="tasaCuota" value="#{facturarNominaContoller.selectedLinea.tipoTasa2}">
+                                <p:ajax update="importeImpuesto2"/>
+                            </p:inputText>
+                            <p:outputLabel value="Importe Impuesto" for="importeImpuesto2"/>
+                            <p:selectOneMenu id="importeImpuesto2" value="#{facturarNominaContoller.selectedLinea.importeImpuesto2}" style="width: 130px">
+                                <f:selectItem itemLabel="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa2, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"
+                                              itemValue="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa2, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"/>
+                            </p:selectOneMenu>
+                            <br/><p:outputLabel/>
+                            <p:outputLabel value="Tipo Impuesto" for="tipoImpuesto3"/>
+                            <p:selectOneMenu id="tipoImpuesto3" value="#{facturarNominaContoller.selectedLinea.tipoImpuesto3}" style="width: 130px" >
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}" itemValue=""/>
+                                <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                               var="tipoImp3Item"
+                                               itemLabel="#{tipoImp3Item.tipoImpuesto}"
+                                               itemValue="#{tipoImp3Item.tipoImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Impuesto" for="impuesto3"/>
+                            <p:selectOneMenu id="impuesto3" value="#{facturarNominaContoller.selectedLinea.impuesto3}" style="width: 130px">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                               var="imp3Item"
+                                               itemLabel="#{imp3Item.CImpuesto} - #{imp3Item.descripcion}"
+                                               itemValue="#{imp3Item.CImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tipo Factor" for="tipoFactor3"/>
+                            <p:selectOneMenu id="tipoFactor3" value="#{facturarNominaContoller.selectedLinea.tipoFactor3}" style="width: 130px">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                               var="factor3Item"
+                                               itemLabel="#{factor3Item.ctipoFactor}"
+                                               itemValue="#{factor3Item.ctipoFactor}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tasa O Cuota" for="tasaCuota3"/>
+                            <p:inputText id="tasaCuota3" value="#{facturarNominaContoller.selectedLinea.tipoTasa3}">
+                                <p:ajax update="importeImpuesto3"/>
+                            </p:inputText>
+                            <p:outputLabel value="Importe Impuesto" for="importeImpuesto3"/>
+                            <p:selectOneMenu id="importeImpuesto3" value="#{facturarNominaContoller.selectedLinea.importeImpuesto3}" style="width: 130px">
+                                <f:selectItem itemLabel="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa3, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"
+                                              itemValue="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa3, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"/>
+                            </p:selectOneMenu>
+                            <br/><p:outputLabel/>
+                            <p:outputLabel value="Tipo Impuesto" for="tipoImpuesto4"/>
+                            <p:selectOneMenu id="tipoImpuesto4" value="#{facturarNominaContoller.selectedLinea.tipoImpuesto4}" style="width: 130px" >
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}" itemValue=""/>
+                                <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                               var="tipoImp4Item"
+                                               itemLabel="#{tipoImp4Item.tipoImpuesto}"
+                                               itemValue="#{tipoImp4Item.tipoImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Impuesto" for="impuesto4"/>
+                            <p:selectOneMenu id="impuesto4" value="#{facturarNominaContoller.selectedLinea.impuesto4}" style="width: 130px">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                               var="imp4Item"
+                                               itemLabel="#{imp4Item.CImpuesto} - #{imp4Item.descripcion}"
+                                               itemValue="#{imp4Item.CImpuesto}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tipo Factor" for="tipoFactor4"/>
+                            <p:selectOneMenu id="tipoFactor4" value="#{facturarNominaContoller.selectedLinea.tipoFactor4}" style="width: 130px">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                               var="factor4Item"
+                                               itemLabel="#{factor4Item.ctipoFactor}"
+                                               itemValue="#{factor4Item.ctipoFactor}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tasa O Cuota" for="tasaCuota4"/>
+                            <p:inputText id="tasaCuota4" value="#{facturarNominaContoller.selectedLinea.tipoTasa4}">
+                                <p:ajax update="importeImpuesto4"/>
+                            </p:inputText>
+                            <p:outputLabel value="Importe Impuesto" for="importeImpuesto4"/>
+                            <p:selectOneMenu id="importeImpuesto4" value="#{facturarNominaContoller.selectedLinea.importeImpuesto4}" style="width: 130px">
+                                <f:selectItem itemLabel="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa4, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"
+                                              itemValue="#{facturarNominaContoller.calcularImporteImpuesto(facturarNominaContoller.selectedLinea.tipoTasa4, facturarNominaContoller.selectedLinea.cantidad, facturarNominaContoller.selectedLinea.valorUnit, facturarNominaContoller.selectedLinea.descuento)}"/>
+                            </p:selectOneMenu>
+
+                        </p:panelGrid>
+                        <p:commandButton value="Guardar" actionListener="#{facturarNominaContoller.updateLinea()}" update="growl, tabEmisorReceptor, tabEmisorReceptor:total" oncomplete="handleSubmit(args, 'impuestosEditDialog');"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+            <!-- Editar Impuestos -->
+            <!-- Agregar impuesto local -->
+            <p:dialog id="addImpLocalDlg" widgetVar="addImpLocalDialog" modal="true" resizable="false" appendTo="@(body)" header="Agregar Impuesto Local" onHide="#{facturarNominaContoller.iniciarLineas()}" >
+                <h:form id="addImpLocalForm">
+                    <h:panelGrid columns="3">
+                        <p:selectOneMenu value="#{facturarNominaContoller.impLocales}" style="width: 160px">
+                            <f:selectItem itemLabel="Buscar por nombre..."/>
+                            <f:selectItems value="#{rnGcImpuestosLocalesTblController.obtenerImpLocalesXUsuario()}"
+                                           var="impLocalItem"
+                                           itemLabel="#{impLocalItem.nombreImpuesto}"
+                                           itemValue="#{impLocalItem}"/>
+                        </p:selectOneMenu>
+                        <p:commandButton value="Buscar Impuesto Local" actionListener="#{facturarNominaContoller.buscarImpLocal()}" update="addImpLocalForm"/>
+                    </h:panelGrid>
+                    <p:panelGrid columns="4">
+                        <h:outputLabel value="Nombre Impuesto" for="nomImpuesto"/>
+                        <p:inputTextarea id="nomImpuesto" value="#{facturarNominaContoller.impLocales2.nombreImpuesto}" style="width: 175px" autoResize="false"/>
+                        <h:outputLabel value="Tipo Impuesto" for="nomImpuestoLocal"/>
+                        <p:selectOneMenu id="nomImpuestoLocal" value="#{facturarNominaContoller.impLocales2.tipoimpuestoId}" style="width: 160px">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                           var="tipoImpItem"
+                                           itemLabel="#{tipoImpItem.tipoImpuesto}"
+                                           itemValue="#{tipoImpItem}"/>
+                        </p:selectOneMenu>
+                        <h:outputLabel value="Tipo Factor" for="tipoFactorLocal"/>
+                        <p:selectOneMenu id="tipoFactorLocal" value="#{facturarNominaContoller.impLocales2.tipofactorId}" style="width: 160px">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                           var="tipoFactorLocal"
+                                           itemLabel="#{tipoFactorLocal.ctipoFactor}"
+                                           itemValue="#{tipoFactorLocal}"/>
+                        </p:selectOneMenu>
+                        <h:outputLabel value="Tasa O Cuota" for="tasaCuotaLocal"/>
+                        <p:inputText id="tasaCuotaLocal" value="#{facturarNominaContoller.impLocales2.tasaCuota}" style="width: 175px">
+                            <p:ajax update="importeImpLocal"/>
+                        </p:inputText>
+                        <h:outputLabel value="Importe" for="importeImpLocal"/>
+                        <p:selectOneMenu id="importeImpLocal" value="#{facturarNominaContoller.impuestosCfdis.importe}" style="width: 160px" editable="true">
+                            <f:selectItem itemLabel="#{facturarNominaContoller.importeImpuestoCfdis2(facturarNominaContoller.selectedLinea, facturarNominaContoller.impLocales2.tasaCuota)}"
+                                          itemValue="#{Double.parseDouble(facturarNominaContoller.importeImpuestoCfdis2(facturarNominaContoller.selectedLinea, facturarNominaContoller.impLocales2.tasaCuota))}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton value="Guardar" actionListener="#{facturarNominaContoller.agregarImpuestosCfdis()}" update="ListaImpuestosLocalesForm:impLocalesList, tabEmisorReceptor:total" oncomplete="handleSubmit(args, 'addImpLocalDialog');"/>
+                    <p:commandButton value="Cancelar" onclick="addImpLocalDialog.hide()"/>
+                </h:form>
+            </p:dialog>
+            <!-- Agregar impuesto local -->
+            <!-- Eliminar impuesto local -->
+            <p:dialog id="eliminarImpConfirmDlg" widgetVar="eliminarImpConfirmDialog" modal="true" resizable="false" appendTo="@(body)" header="Eliminar Impuesto Local">
+                <h:form id="confirmImpDeleteForm">
+                    <h:panelGrid columns="1">
+                        <p:outputLabel value="¿Quieres eliminar el impuesto local"/>
+                        <p:outputLabel value="#{facturarNominaContoller.impuestosCfdis.impuestosLocalesId.nombreImpuesto}?" style="font-weight: 900"/>
+                    </h:panelGrid>
+                    <p:commandButton value="Eliminar" actionListener="#{facturarNominaContoller.eliminarImpCfdis()}" update="ListaImpuestosLocalesForm:impLocalesList, tabEmisorReceptor:total" oncomplete="handleSubmit(args,'eliminarImpConfirmDialog');"/>
+                    <p:commandButton value="Cancelar" onclick="eliminarConfirmDialog.hide()"/>
+                </h:form>
+            </p:dialog>
+            <!-- Eliminar impuesto local -->
+            <!-- Editar impuesto local -->
+            <p:dialog id="editImpLocalDlg" widgetVar="editImpLocalDialog" modal="true" resizable="false" appendTo="@(body)" header="Editar Impuesto Local">
+                <h:form id="editImpLocalForm">
+                    <p:panelGrid columns="4">
+                        <h:outputLabel value="Nombre Impuesto" for="nomImpuesto"/>
+                        <p:inputTextarea id="nomImpuesto" value="#{facturarNominaContoller.impuestosCfdis.impuestosLocalesId.nombreImpuesto}" style="width: 175px" autoResize="false"/>
+                        <h:outputLabel value="Tipo Impuesto" for="tipoImpuestoLocal"/>
+                        <p:selectOneMenu id="tipoImpuestoLocal" value="#{facturarNominaContoller.impuestosCfdis.impuestosLocalesId.tipoimpuestoId}" style="width: 160px">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                           var="tipoImpItem"
+                                           itemLabel="#{tipoImpItem.tipoImpuesto}"
+                                           itemValue="#{tipoImpItem}"/>
+                        </p:selectOneMenu>
+                        <h:outputLabel value="Tipo Factor" for="tipoFactorLocal"/>
+                        <p:selectOneMenu id="tipoFactorLocal" value="#{facturarNominaContoller.impuestosCfdis.impuestosLocalesId.tipofactorId}" style="width: 160px">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                           var="tipoFactorLocal"
+                                           itemLabel="#{tipoFactorLocal.ctipoFactor}"
+                                           itemValue="#{tipoFactorLocal}"/>
+                        </p:selectOneMenu>
+                        <h:outputLabel value="Tasa O Cuota" for="tasaCuotaLocal"/>
+                        <p:inputText id="tasaCuotaLocal" value="#{facturarNominaContoller.impuestosCfdis.impuestosLocalesId.tasaCuota}" style="width: 175px">
+                            <p:ajax update="importeImpLocal"/>
+                        </p:inputText>
+                        <h:outputLabel value="Importe" for="importeImpLocal"/>
+                        <p:selectOneMenu id="importeImpLocal" value="#{facturarNominaContoller.impuestosCfdis.importe}" style="width: 160px" editable="true">
+                            <f:selectItem itemLabel="#{facturarNominaContoller.importeImpuestoCfdis2(facturarNominaContoller.selectedLinea, facturarNominaContoller.impuestosCfdis.impuestosLocalesId.tasaCuota)}"
+                                          itemValue="#{facturarNominaContoller.importeImpuestoCfdis2(facturarNominaContoller.selectedLinea, facturarNominaContoller.impuestosCfdis.impuestosLocalesId.tasaCuota)}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton value="Agregar Impuesto Local" actionListener="#{facturarNominaContoller.editarImpCfdis()}" update="ListaImpuestosLocalesForm:impLocalesList, tabEmisorReceptor, tabEmisorReceptor:total" oncomplete="handleSubmit(args, 'editImpLocalDialog');"/>
+                    <p:commandButton value="Cancelar" onclick="addImpLocalDialog.hide()"/>
+                </h:form>
+            </p:dialog>
+            <!-- Editar impuesto local -->
+            <!-- Agregar Impuestos Locales Dialog -->
+            <p:dialog id="ListImpLocalDlg" widgetVar="ListImpLocalDialog" modal="true" resizable="false" appendTo="@(body)" header="Impuestos Locales" onHide="">
+                <h:form id="ListaImpuestosLocalesForm">
+                    <p:panel header="Impuestos Locales" style="width: 1000px">
+                        <p:dataTable id="impLocalesList" value="#{facturarNominaContoller.listaImpuestosCfdisXLinea}" var="impCfdis"
+                                     selectionMode="single" selection="#{facturarNominaContoller.impuestosCfdis}"
+                                     paginator="true" scrollable="true"
+                                     rowKey="#{impCfdis.id}"
+                                     rows="5"
+                                     rowsPerPageTemplate="5,10,15,20,25,30,40,50"
+                                     emptyMessage="No hay impustos locales para #{facturarNominaContoller.selectedLinea.descripcion}"
+                                     >
+
+                            <p:ajax event="rowSelect" update="editButton editButton"/>
+                            <p:ajax event="rowUnselect" update="editButton editButton"/>
+
+                            <p:column headerText="Nombre Impuesto">
+                                <h:outputText value="#{impCfdis.impuestosLocalesId.nombreImpuesto}"/>
+                            </p:column>
+                            <p:column headerText="Tipo Impuesto">
+                                <h:outputText value="#{impCfdis.impuestosLocalesId.tipoimpuestoId.tipoImpuesto}"/>
+                            </p:column>
+                            <p:column headerText="Tipo Factor">
+                                <h:outputText value="#{impCfdis.impuestosLocalesId.tipofactorId.ctipoFactor}"/>
+                            </p:column>
+                            <p:column headerText="Tasa O Cuota">
+                                <h:outputText value="#{impCfdis.impuestosLocalesId.tasaCuota}"/>
+                            </p:column>
+                            <p:column headerText="Importe">
+                                <h:outputText value="#{impCfdis.importe}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Concepto">
+                                <h:outputText value="#{impCfdis.cfdisLineasId.descripcion}"/>
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton id="createButton" icon="ui-icon-plus" value="Agregar Impuesto Local" update=":addImpLocalForm, ListaImpuestosLocalesForm:impLocalesList" actionListener="#{facturarNominaContoller.prepareImpLocal()}" oncomplete="PF('addImpLocalDialog').show()"/>
+                                <p:commandButton id="editButton" icon="ui-icon-pencil" value="Editar Impuesto Local" update="editImpLocalForm" oncomplete="PF('editImpLocalDialog').show()"/>
+                                <p:commandButton id="deleteButton" icon="ui-icon-trash" value="Eliminar Impuesto Local" update="confirmImpDeleteForm" oncomplete="PF('eliminarImpConfirmDialog').show()"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            <!-- Agregar Impuestos Locales Dialog -->
+            <!-- Agregar Firmas -->
+            <p:dialog id="AgregarFirmasDlg" widgetVar="AgregarFirmasDialog" modal="true" resizable="false" appendTo="@(body)" header="Agregar Firmas" onHide="">
+                <h:form id="AgregarFirmasForm">
+                    <p:panel header="Firmas">
+                        <h:panelGrid columns="4">
+                            <p:outputLabel value="Cargo"/>
+                            <p:inputText value="#{facturarNominaContoller.firmas.cargo1}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Nombre"/>
+                            <p:inputText value="#{facturarNominaContoller.firmas.nombre1}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Cargo"/>
+                            <p:inputText value="#{facturarNominaContoller.firmas.cargo2}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Nombre"/>
+                            <p:inputText value="#{facturarNominaContoller.firmas.nombre2}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Cargo"/>
+                            <p:inputText value="#{facturarNominaContoller.firmas.cargo3}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Nombre"/>
+                            <p:inputText value="#{facturarNominaContoller.firmas.nombre3}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Cargo"/>
+                            <p:inputText value="#{facturarNominaContoller.firmas.cargo4}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Nombre"/>
+                            <p:inputText value="#{facturarNominaContoller.firmas.nombre4}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Cargo"/>
+                            <p:inputText value="#{facturarNominaContoller.firmas.cargo5}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                            <p:outputLabel value="Nombre"/>
+                            <p:inputText value="#{facturarNominaContoller.firmas.nombre5}">
+                                <p:ajax event="change" update="@this"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="margin-left: 80%">
+                            <p:commandButton value="Aceptar" update="tabEmisorReceptor" onclick="PF('AgregarFirmasDialog').hide();" icon="fa fa-check"/>
+                            <!--<p:commandButton value="Cancelar" immediate="true" onclick="PF('dlg_datosFactura').hide();" icon="fa fa-remove" style="margin-left: 10px; margin-top: 30px"/>-->
+                        </h:panelGrid>
+                    </p:panel>
+                </h:form>
+            </p:dialog>   
+            <!-- Agregar firmas -->
+        </ui:define>
+    </ui:composition>
+</html>

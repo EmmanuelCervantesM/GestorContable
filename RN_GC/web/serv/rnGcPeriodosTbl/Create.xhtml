@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPeriodosTblCreateDlg" widgetVar="RnGcPeriodosTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="Crear nuevo periodo">
+            <h:form id="RnGcPeriodosTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPeriodosTblController.selected != null}">
+                        <p:outputLabel value="Año: " for="año" />
+                        <p:calendar id="año"  locale="mx" pattern="yyyy" navigator="true" value="#{rnGcPeriodosTblController.año}" showOn="button" required="true" requiredMessage="Se requiere el año"/>
+                        <p:outputLabel value="Mes: " for="mes" />
+                        <p:selectOneMenu id="mes" value="#{rnGcPeriodosTblController.selected.mes}" required="true" requiredMessage="Se requiere el mes">
+                            <f:selectItem itemLabel="Enero" itemValue="Enero"/>
+                            <f:selectItem itemLabel="Febrero" itemValue="Febrero"/>
+                            <f:selectItem itemLabel="Marzo" itemValue="Marzo"/>
+                            <f:selectItem itemLabel="Abril" itemValue="Abril"/>
+                            <f:selectItem itemLabel="Mayo" itemValue="Mayo"/>
+                            <f:selectItem itemLabel="Junio" itemValue="Junio"/>
+                            <f:selectItem itemLabel="Julio" itemValue="Julio"/>
+                            <f:selectItem itemLabel="Agosto" itemValue="Agosto"/>
+                            <f:selectItem itemLabel="Septiembre" itemValue="Septiembre"/>
+                            <f:selectItem itemLabel="Octubre" itemValue="Octubre"/>
+                            <f:selectItem itemLabel="Noviembre" itemValue="Noviembre"/>
+                            <f:selectItem itemLabel="Diciembre" itemValue="Diciembre"/>
+                            <f:selectItem itemLabel="Periodo 13" itemValue="Periodo 13"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Estatus: " for="estatus" />
+                        <p:selectOneMenu id="estatus" value="#{rnGcPeriodosTblController.selected.estatus}" required="true" requiredMessage="Se requiere el estatus">
+                            <f:selectItem itemLabel="Cerrado" itemValue="Cerrado"/>
+                            <f:selectItem itemLabel="Abierto" itemValue="Abierto"/>
+                            <f:selectItem itemLabel="Contabilizado" itemValue="Contabilizado" itemDisabled="#{rnGcPeriodosTblController.selected.estatus == 'Abierto'}"/>
+                            <p:ajax update="estatus"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Tipo periodo: " for="tipo" />
+                        <p:selectOneMenu id="tipo" value="#{rnGcPeriodosTblController.selected.tipoPeriodo}" required="true" requiredMessage="Se requiere el tipo de periodo">
+                            <f:selectItem itemLabel="Normal" itemValue="Normal"/>
+                            <f:selectItem itemLabel="Adicional" itemValue="Adicional"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcPeriodosTblController.create}" value="#{bundle.Save}" update="display,:RnGcPeriodosTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcPeriodosTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcPeriodosTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomTrabajadorCfdisTblViewDlg" widgetVar="RnGcNomTrabajadorCfdisTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcNomTrabajadorCfdisTblTitle}">
+            <h:form id="RnGcNomTrabajadorCfdisTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcNomTrabajadorCfdisTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcNomTrabajadorCfdisTblLabel_id}"/>
+                        <h:outputText value="#{rnGcNomTrabajadorCfdisTblController.selected.id}" title="#{bundle.ViewRnGcNomTrabajadorCfdisTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTrabajadorCfdisTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcNomTrabajadorCfdisTblController.selected.creadoPor}" title="#{bundle.ViewRnGcNomTrabajadorCfdisTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTrabajadorCfdisTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcNomTrabajadorCfdisTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcNomTrabajadorCfdisTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcNomTrabajadorCfdisTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcNomTrabajadorCfdisTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcNomTrabajadorCfdisTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTrabajadorCfdisTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcNomTrabajadorCfdisTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcNomTrabajadorCfdisTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcNomTrabajadorCfdisTblLabel_solicitudTrabajdorId}"/>
+                        <h:outputText value="#{rnGcNomTrabajadorCfdisTblController.selected.solicitudTrabajdorId}" title="#{bundle.ViewRnGcNomTrabajadorCfdisTblTitle_solicitudTrabajdorId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTrabajadorCfdisTblLabel_cfdiId}"/>
+                        <h:outputText value="#{rnGcNomTrabajadorCfdisTblController.selected.cfdiId}" title="#{bundle.ViewRnGcNomTrabajadorCfdisTblTitle_cfdiId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcNomTrabajadorCfdisTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

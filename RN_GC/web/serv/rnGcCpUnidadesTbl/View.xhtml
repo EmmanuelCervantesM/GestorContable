@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpUnidadesTblViewDlg" widgetVar="RnGcCpUnidadesTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpUnidadesTblTitle}">
+            <h:form id="RnGcCpUnidadesTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="6" rendered="#{rnGcCpUnidadesTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_numeroEconomico}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.numeroEconomico}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_numeroEconomico}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_lecturaInicial}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.lecturaInicial}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_lecturaInicial}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_kmLecturaActual}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.kmLecturaActual}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_kmLecturaActual}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_kmAcumulados}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.kmAcumulados}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_kmAcumulados}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_kmPromedioDiario}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.kmPromedioDiario}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_kmPromedioDiario}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_litrosCargados}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.litrosCargados}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_litrosCargados}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_rendimiento}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.rendimiento}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_rendimiento}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_horaServicio}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.horaServicio}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_horaServicio}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_placas}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.placas}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_placas}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_estado}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.estado}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_estado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_anio}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.anio}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_anio}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_numeroMotor}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.numeroMotor}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_numeroMotor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_marcaMotor}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.marcaMotor}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_marcaMotor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_marca}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.marca}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_marca}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_modelo}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.modelo}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_modelo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_numeroEjes}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.numeroEjes}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_numeroEjes}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_numeroSerie}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.numeroSerie}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_numeroSerie}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_rastreoSatelital}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.rastreoSatelital}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_rastreoSatelital}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_estadoAntena}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.estadoAntena}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_estadoAntena}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_tarjetaCombustible}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.tarjetaCombustible}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_tarjetaCombustible}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_longitud}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.longitud}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_longitud}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_rendimientoAutorizado1}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.rendimientoAutorizado1}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_rendimientoAutorizado1}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_rendimientoAutorizado2}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.rendimientoAutorizado2}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_rendimientoAutorizado2}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_rendimientoAutorizado3}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.rendimientoAutorizado3}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_rendimientoAutorizado3}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_factorAjustesCombustible}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.factorAjustesCombustible}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_factorAjustesCombustible}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_capacidadTanque}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.capacidadTanque}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_capacidadTanque}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_observaciones}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.observaciones}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_observaciones}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_numeroEcoRemolque1}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.numeroEcoRemolque1}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_numeroEcoRemolque1}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_numeroEcoRemolque2}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.numeroEcoRemolque2}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_numeroEcoRemolque2}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_numeroEcoDolly1}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.numeroEcoDolly1}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_numeroEcoDolly1}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_maximoCobranza}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.maximoCobranza}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_maximoCobranza}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_cantidadAyudantes}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.cantidadAyudantes}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_cantidadAyudantes}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_combustible}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.combustible}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_combustible}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_capacidadCarga}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.capacidadCarga}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_capacidadCarga}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_pesoOcupado}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.pesoOcupado}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_pesoOcupado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_pesoDisponible}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.pesoDisponible}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_pesoDisponible}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_placasRemolque1}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.placasRemolque1}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_placasRemolque1}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_placasRemolque2}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.placasRemolque2}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_placasRemolque2}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_numeroPermiso}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.numeroPermiso}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_numeroPermiso}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_conductorId}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.conductorId.nombre}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_conductorId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_configVehiculoId}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.configVehiculoId.descripcion}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_configVehiculoId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_seguroId}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.seguroId.nombreAseguradora}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_seguroId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_tipoPermisoId}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.tipoPermisoId.descripcion}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_tipoPermisoId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_tipoRemolqueId}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.tipoRemolqueId.descripcion}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_tipoRemolqueId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpUnidadesTblLabel_tipoUnidadId}"/>
+                        <h:outputText value="#{rnGcCpUnidadesTblController.selected.tipoUnidadId.descripcion}" title="#{bundle.ViewRnGcCpUnidadesTblTitle_tipoUnidadId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpUnidadesTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

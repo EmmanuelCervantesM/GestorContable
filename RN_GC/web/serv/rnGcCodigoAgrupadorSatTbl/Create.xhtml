@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCodigoAgrupadorSatTblCreateDlg" widgetVar="RnGcCodigoAgrupadorSatTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCodigoAgrupadorSatTblTitle}">
+            <h:form id="RnGcCodigoAgrupadorSatTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCodigoAgrupadorSatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCodigoAgrupadorSatTblLabel_nivel}" for="nivel" />
+                        <p:inputText id="nivel" value="#{rnGcCodigoAgrupadorSatTblController.selected.nivel}" title="#{bundle.CreateRnGcCodigoAgrupadorSatTblTitle_nivel}" required="false" requiredMessage="#{bundle.CreateRnGcCodigoAgrupadorSatTblRequiredMessage_nivel}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCodigoAgrupadorSatTblLabel_codigoAgrupador}" for="codigoAgrupador" />
+                        <p:inputText id="codigoAgrupador" value="#{rnGcCodigoAgrupadorSatTblController.selected.codigoAgrupador}" title="#{bundle.CreateRnGcCodigoAgrupadorSatTblTitle_codigoAgrupador}" required="true" requiredMessage="#{bundle.CreateRnGcCodigoAgrupadorSatTblRequiredMessage_codigoAgrupador}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCodigoAgrupadorSatTblLabel_nombreCuenta}" for="nombreCuenta" />
+                        <p:inputText id="nombreCuenta" value="#{rnGcCodigoAgrupadorSatTblController.selected.nombreCuenta}" title="#{bundle.CreateRnGcCodigoAgrupadorSatTblTitle_nombreCuenta}" required="true" requiredMessage="#{bundle.CreateRnGcCodigoAgrupadorSatTblRequiredMessage_nombreCuenta}"/>                        
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCodigoAgrupadorSatTblController.create}" value="#{bundle.Save}" update="display,:RnGcCodigoAgrupadorSatTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCodigoAgrupadorSatTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCodigoAgrupadorSatTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

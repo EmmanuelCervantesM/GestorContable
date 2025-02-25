@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcFolioserieTblCreateDlg" widgetVar="RnGcFolioserieTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="Crear Folio/Serie">
+                <h:form id="RnGcFolioserieTblCreateForm">
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="4" rendered="#{rnGcFolioserieTblController.selected != null}">
+                            <p:outputLabel value="Nombre:" for="nombre" />
+                            <p:inputText id="nombre" value="#{rnGcFolioserieTblController.selected.nombre}" required="true" requiredMessage="El nombre es necesario"/>
+                            <p:outputLabel value="Serie" for="serie" />
+                            <p:inputText id="serie" value="#{rnGcFolioserieTblController.selected.serie}" title="Serie" required="true" requiredMessage="La serie es necesaria"/>
+                            <p:outputLabel value="Folio:" for="folio" />
+                            <p:inputText id="folio" value="#{rnGcFolioserieTblController.selected.folio}" title="Folio" required="true" requiredMessage="El Folio es necesario"/>
+                            <p:outputLabel value="Estado:" for="estado" />
+                            <p:selectOneMenu id="estado" value="#{rnGcFolioserieTblController.selected.estado}" style="width: 145px" required="true" requiredMessage="El estado es necesario">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItem itemLabel="Activo" itemValue="Activo"/>
+                                <f:selectItem itemLabel="Inactivo" itemValue="Inactivo"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Usuario:" for="usuariosId" />
+                            <p:selectOneMenu id="usuariosId" value="#{rnGcFolioserieTblController.selected.usuariosId}" style="width: 145px" required="true" requiredMessage="El Usuario es necesario">
+                                <f:selectItem itemLabel="#{rnGcFolioserieTblController.usuarioLogeado().nombreCompleto}"
+                                              itemValue="#{rnGcFolioserieTblController.usuarioLogeado()}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:commandButton actionListener="#{rnGcFolioserieTblController.create}" value="#{bundle.Save}" update="display,:RnGcFolioserieTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcFolioserieTblCreateDialog');"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="RnGcFolioserieTblCreateDialog.hide()"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+
+    </ui:composition>
+</html>

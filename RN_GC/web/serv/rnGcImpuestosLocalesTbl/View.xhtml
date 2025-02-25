@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcImpuestosLocalesTblViewDlg" widgetVar="RnGcImpuestosLocalesTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcImpuestosLocalesTblTitle}">
+            <h:form id="RnGcImpuestosLocalesTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcImpuestosLocalesTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcImpuestosLocalesTblLabel_nombreImpuesto}"/>
+                        <h:outputText value="#{rnGcImpuestosLocalesTblController.selected.nombreImpuesto}" title="#{bundle.ViewRnGcImpuestosLocalesTblTitle_nombreImpuesto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcImpuestosLocalesTblLabel_tasaCuota}"/>
+                        <h:outputText value="#{rnGcImpuestosLocalesTblController.selected.tasaCuota}" title="#{bundle.ViewRnGcImpuestosLocalesTblTitle_tasaCuota}"/>
+                        <h:outputText value="#{bundle.ViewRnGcImpuestosLocalesTblLabel_tipofactorId}"/>
+                        <h:outputText value="#{rnGcImpuestosLocalesTblController.selected.tipofactorId.ctipoFactor}" title="#{bundle.ViewRnGcImpuestosLocalesTblTitle_tipofactorId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcImpuestosLocalesTblLabel_tipoimpuestoId}"/>
+                        <h:outputText value="#{rnGcImpuestosLocalesTblController.selected.tipoimpuestoId.tipoImpuesto}" title="#{bundle.ViewRnGcImpuestosLocalesTblTitle_tipoimpuestoId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcImpuestosLocalesTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

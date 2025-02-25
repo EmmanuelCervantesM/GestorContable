@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpCodtransporteaereosatTblCreateDlg" widgetVar="RnGcCpCodtransporteaereosatTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCpCodtransporteaereosatTblTitle}">
+            <h:form id="RnGcCpCodtransporteaereosatTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpCodtransporteaereosatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCpCodtransporteaereosatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpCodtransporteaereosatTblController.selected.id}" title="#{bundle.CreateRnGcCpCodtransporteaereosatTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcCpCodtransporteaereosatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpCodtransporteaereosatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpCodtransporteaereosatTblController.selected.clave}" title="#{bundle.CreateRnGcCpCodtransporteaereosatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpCodtransporteaereosatTblLabel_nacionalidad}" for="nacionalidad" />
+                        <p:inputText id="nacionalidad" value="#{rnGcCpCodtransporteaereosatTblController.selected.nacionalidad}" title="#{bundle.CreateRnGcCpCodtransporteaereosatTblTitle_nacionalidad}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpCodtransporteaereosatTblLabel_nombreAerolinea}" for="nombreAerolinea" />
+                        <p:inputText id="nombreAerolinea" value="#{rnGcCpCodtransporteaereosatTblController.selected.nombreAerolinea}" title="#{bundle.CreateRnGcCpCodtransporteaereosatTblTitle_nombreAerolinea}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpCodtransporteaereosatTblLabel_designador}" for="designador" />
+                        <p:inputText id="designador" value="#{rnGcCpCodtransporteaereosatTblController.selected.designador}" title="#{bundle.CreateRnGcCpCodtransporteaereosatTblTitle_designador}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpCodtransporteaereosatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpCodtransporteaereosatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpCodtransporteaereosatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpCodtransporteaereosatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpCodtransporteaereosatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpCodtransporteaereosatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpCodtransporteaereosatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpCodtransporteaereosatTblController.selected.creadoPor}" title="#{bundle.CreateRnGcCpCodtransporteaereosatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcCpCodtransporteaereosatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpCodtransporteaereosatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpCodtransporteaereosatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpCodtransporteaereosatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpCodtransporteaereosatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpCodtransporteaereosatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpCodtransporteaereosatTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcCpCodtransporteaereosatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpCodtransporteaereosatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpCodtransporteaereosatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpCodtransporteaereosatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpCodtransporteaereosatTblController.create}" value="#{bundle.Save}" update="display,:RnGcCpCodtransporteaereosatTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCpCodtransporteaereosatTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpCodtransporteaereosatTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

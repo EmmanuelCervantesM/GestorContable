@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomPeriodonominaTblCreateDlg" widgetVar="RnGcNomPeriodonominaTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcNomPeriodonominaTblTitle}">
+            <h:form id="RnGcNomPeriodonominaTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomPeriodonominaTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcNomPeriodonominaTblLabel_nombrePeriodo}" for="nombrePeriodo" />
+                        <p:inputText id="nombrePeriodo" value="#{rnGcNomPeriodonominaTblController.selected.nombrePeriodo}" title="#{bundle.CreateRnGcNomPeriodonominaTblTitle_nombrePeriodo}" required="true" requiredMessage="#{bundle.CreateRnGcNomPeriodonominaTblRequiredMessage_nombrePeriodo}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomPeriodonominaTblLabel_fechaInicio}" for="fechaInicio" />
+                        <p:calendar id="fechaInicio" pattern="MM/dd/yyyy" value="#{rnGcNomPeriodonominaTblController.selected.fechaInicio}" title="#{bundle.EditRnGcNomPeriodonominaTblTitle_fechaInicio}" required="true" requiredMessage="#{bundle.EditRnGcNomPeriodonominaTblRequiredMessage_fechaInicio}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomPeriodonominaTblLabel_fechaFin}" for="fechaFin" />
+                        <p:calendar id="fechaFin" pattern="MM/dd/yyyy" value="#{rnGcNomPeriodonominaTblController.selected.fechaFin}" title="#{bundle.EditRnGcNomPeriodonominaTblTitle_fechaFin}" required="true" requiredMessage="#{bundle.EditRnGcNomPeriodonominaTblRequiredMessage_fechaFin}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomPeriodonominaTblLabel_anioPeriodo}" for="anioPeriodo" />
+                        <p:inputText id="anioPeriodo" value="#{rnGcNomPeriodonominaTblController.selected.anioPeriodo}" title="#{bundle.CreateRnGcNomPeriodonominaTblTitle_anioPeriodo}" required="true" requiredMessage="#{bundle.CreateRnGcNomPeriodonominaTblRequiredMessage_anioPeriodo}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomPeriodonominaTblLabel_mesPeriodo}" for="mesPeriodo" />
+                        <p:inputText id="mesPeriodo" value="#{rnGcNomPeriodonominaTblController.selected.mesPeriodo}" title="#{bundle.CreateRnGcNomPeriodonominaTblTitle_mesPeriodo}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomPeriodonominaTblLabel_numMesPeriodo}" for="numMesPeriodo" />
+                        <p:inputText id="numMesPeriodo" value="#{rnGcNomPeriodonominaTblController.selected.numMesPeriodo}" title="#{bundle.CreateRnGcNomPeriodonominaTblTitle_numMesPeriodo}" required="true" requiredMessage="#{bundle.CreateRnGcNomPeriodonominaTblRequiredMessage_numMesPeriodo}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomPeriodonominaTblLabel_estatus}" for="estatus" />
+                        <p:inputText id="estatus" value="#{rnGcNomPeriodonominaTblController.selected.estatus}" title="#{bundle.CreateRnGcNomPeriodonominaTblTitle_estatus}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomPeriodonominaTblLabel_nominaId}" for="nominaId" />
+                        <p:selectOneMenu id="nominaId" value="#{rnGcNomPeriodonominaTblController.selected.nominaId}" required="true" requiredMessage="#{bundle.EditRnGcNomPeriodonominaTblRequiredMessage_nominaId}">
+                            <f:selectItems value="#{rnGcNomNominasTblController.itemsAvailableSelectOne}"
+                                           var="nominaIdItem"
+                                           itemValue="#{nominaIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomPeriodonominaTblController.create}" value="#{bundle.Save}" update="display,:RnGcNomPeriodonominaTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcNomPeriodonominaTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomPeriodonominaTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

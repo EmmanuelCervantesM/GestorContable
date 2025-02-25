@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcClavesunidadesTblCreateDlg" widgetVar="RnGcClavesunidadesTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcClavesunidadesTblTitle}">
+            <h:form id="RnGcClavesunidadesTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcClavesunidadesTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcClavesunidadesTblController.selected.creadoPor}" title="#{bundle.CreateRnGcClavesunidadesTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcClavesunidadesTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcClavesunidadesTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcClavesunidadesTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcClavesunidadesTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcClavesunidadesTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcClavesunidadesTblTitle_ultimaActualizacionPor}" required="true" requiredMessage="#{bundle.CreateRnGcClavesunidadesTblRequiredMessage_ultimaActualizacionPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcClavesunidadesTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcClavesunidadesTblTitle_ultimaFechaActualizacion}" required="true" requiredMessage="#{bundle.EditRnGcClavesunidadesTblRequiredMessage_ultimaFechaActualizacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcClavesunidadesTblController.selected.id}" title="#{bundle.CreateRnGcClavesunidadesTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcClavesunidadesTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_CClaveUnidadcol}" for="CClaveUnidadcol" />
+                        <p:inputText id="CClaveUnidadcol" value="#{rnGcClavesunidadesTblController.selected.CClaveUnidadcol}" title="#{bundle.CreateRnGcClavesunidadesTblTitle_CClaveUnidadcol}" required="true" requiredMessage="#{bundle.CreateRnGcClavesunidadesTblRequiredMessage_CClaveUnidadcol}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{rnGcClavesunidadesTblController.selected.nombre}" title="#{bundle.CreateRnGcClavesunidadesTblTitle_nombre}" required="true" requiredMessage="#{bundle.CreateRnGcClavesunidadesTblRequiredMessage_nombre}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_descripcion}" for="descripcion" />
+                        <p:inputTextarea rows="4" cols="30" id="descripcion" value="#{rnGcClavesunidadesTblController.selected.descripcion}" title="#{bundle.CreateRnGcClavesunidadesTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_nota}" for="nota" />
+                        <p:inputTextarea rows="4" cols="30" id="nota" value="#{rnGcClavesunidadesTblController.selected.nota}" title="#{bundle.CreateRnGcClavesunidadesTblTitle_nota}" required="true" requiredMessage="#{bundle.CreateRnGcClavesunidadesTblRequiredMessage_nota}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcClavesunidadesTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcClavesunidadesTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcClavesunidadesTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_fehaFinVigencia}" for="fehaFinVigencia" />
+                        <p:calendar id="fehaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcClavesunidadesTblController.selected.fehaFinVigencia}" title="#{bundle.EditRnGcClavesunidadesTblTitle_fehaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_simbolo}" for="simbolo" />
+                        <p:inputText id="simbolo" value="#{rnGcClavesunidadesTblController.selected.simbolo}" title="#{bundle.CreateRnGcClavesunidadesTblTitle_simbolo}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_CFDICatalogoUsoId}" for="CFDICatalogoUsoId" />
+                        <p:inputText id="CFDICatalogoUsoId" value="#{rnGcClavesunidadesTblController.selected.CFDICatalogoUsoId}" title="#{bundle.CreateRnGcClavesunidadesTblTitle_CFDICatalogoUsoId}" required="true" requiredMessage="#{bundle.CreateRnGcClavesunidadesTblRequiredMessage_CFDICatalogoUsoId}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcClavesunidadesTblLabel_rngccfdistblId}" for="rngccfdistblId" />
+                        <p:selectOneMenu id="rngccfdistblId" value="#{rnGcClavesunidadesTblController.selected.rngccfdistblId}" required="true" requiredMessage="#{bundle.EditRnGcClavesunidadesTblRequiredMessage_rngccfdistblId}">
+                            <f:selectItems value="#{rnGcCfdisTblController.itemsAvailableSelectOne}"
+                                           var="rngccfdistblIdItem"
+                                           itemValue="#{rngccfdistblIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcClavesunidadesTblController.create}" value="#{bundle.Save}" update="display,:RnGcClavesunidadesTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcClavesunidadesTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcClavesunidadesTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

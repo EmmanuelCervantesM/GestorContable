@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTrabajadoresTblCreateDlg" widgetVar="RnGcTrabajadoresTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcTrabajadoresTblTitle}">
+            <h:form id="RnGcTrabajadoresTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcTrabajadoresTblController.selected != null}">
+                        <p:outputLabel value="No. Empleado" for="noEmpleado" />
+                        <p:inputText id="noEmpleado" value="#{rnGcTrabajadoresTblController.selected.noTrabajador}" title="No. Empleado" />
+                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{rnGcTrabajadoresTblController.selected.nombre}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_nombre}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_apPaterno}" for="apPaterno" />
+                        <p:inputText id="apPaterno" value="#{rnGcTrabajadoresTblController.selected.apPaterno}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_apPaterno}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_apMaterno}" for="apMaterno" />
+                        <p:inputText id="apMaterno" value="#{rnGcTrabajadoresTblController.selected.apMaterno}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_apMaterno}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_curp}" for="curp" />
+                        <p:inputText id="curp" value="#{rnGcTrabajadoresTblController.selected.curp}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_curp}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_rfc}" for="rfc" />
+                        <p:inputText id="rfc" value="#{rnGcTrabajadoresTblController.selected.rfc}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_rfc}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_nss}" for="nss" />
+                        <p:inputText id="nss" value="#{rnGcTrabajadoresTblController.selected.nss}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_nss}" />
+                        <p:outputLabel value="Salario Base" for="salarioBase" />
+                        <p:inputText id="salarioBase" value="#{rnGcTrabajadoresTblController.selected.salarioBase}" title="Salario Base" />
+                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_sdi}" for="sdi" />
+                        <p:inputText id="sdi" value="#{rnGcTrabajadoresTblController.selected.sdi}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_sdi}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_tipoPersona}" for="tipoPersona" />
+                        <p:selectOneMenu id="tipoPersona" style="width: 120px" value="#{rnGcTrabajadoresTblController.selected.tipoPersona}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_tipoPersona}">
+                            <f:selectItem itemLabel="Selecciona Tipo Regimen"/>
+                            <f:selectItems value="#{rnGcNomTiporegimenTblController.items}" var="regimen"
+                                           itemLabel="#{regimen.cveTipoRegimen} - #{regimen.descripcion}"
+                                           itemValue="#{regimen.cveTipoRegimen}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Banco" for="banco" />
+                        <p:selectOneMenu id="banco" style="width: 117px" value="#{rnGcTrabajadoresTblController.selected.banco}" title="Clave Banco" required="true">
+                            <f:selectItem itemLabel="Selecciona un Banco"/>
+                            <f:selectItems value="#{rnGcNomBancosTblController.items}" var="banco"
+                                           itemLabel="#{banco.cveBanco} - #{banco.nombre}"
+                                           itemValue="#{banco.cveBanco}"/>
+                        </p:selectOneMenu>    
+                        <p:outputLabel value="Cuenta Bancaria" for="cuentaBancaria" />
+                        <p:inputText id="cuentaBancaria" value="#{rnGcTrabajadoresTblController.selected.cuentaBancaria}" title="Cuenta Bancaria" required="true"/>
+                        <p:outputLabel value="Correo Electronico" for="email" />
+                        <p:inputText id="email" value="#{rnGcTrabajadoresTblController.selected.email1}" title="Correo electronico" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcTrabajadoresTblController.create}" value="#{bundle.Save}" update="display,:RnGcTrabajadoresTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcTrabajadoresTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcTrabajadoresTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

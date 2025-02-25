@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomSolicitudTrabajadorTblCreateDlg" widgetVar="RnGcNomSolicitudTrabajadorTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcNomSolicitudTrabajadorTblTitle}">
+            <h:form id="RnGcNomSolicitudTrabajadorTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomSolicitudTrabajadorTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudTrabajadorTblLabel_diasPagados}" for="diasPagados" />
+                        <p:inputText id="diasPagados" value="#{rnGcNomSolicitudTrabajadorTblController.selected.diasPagados}" title="#{bundle.CreateRnGcNomSolicitudTrabajadorTblTitle_diasPagados}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudTrabajadorTblLabel_fechaPago}" for="fechaPago" />
+                        <p:calendar id="fechaPago" pattern="MM/dd/yyyy" value="#{rnGcNomSolicitudTrabajadorTblController.selected.fechaPago}" title="#{bundle.EditRnGcNomSolicitudTrabajadorTblTitle_fechaPago}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudTrabajadorTblLabel_sdi}" for="sdi" />
+                        <p:inputText id="sdi" value="#{rnGcNomSolicitudTrabajadorTblController.selected.sdi}" title="#{bundle.CreateRnGcNomSolicitudTrabajadorTblTitle_sdi}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudTrabajadorTblLabel_totalPercepciones}" for="totalPercepciones" />
+                        <p:inputText id="totalPercepciones" value="#{rnGcNomSolicitudTrabajadorTblController.selected.totalPercepciones}" title="#{bundle.CreateRnGcNomSolicitudTrabajadorTblTitle_totalPercepciones}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudTrabajadorTblLabel_totalDeducciones}" for="totalDeducciones" />
+                        <p:inputText id="totalDeducciones" value="#{rnGcNomSolicitudTrabajadorTblController.selected.totalDeducciones}" title="#{bundle.CreateRnGcNomSolicitudTrabajadorTblTitle_totalDeducciones}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudTrabajadorTblLabel_importeNeto}" for="importeNeto" />
+                        <p:inputText id="importeNeto" value="#{rnGcNomSolicitudTrabajadorTblController.selected.importeNeto}" title="#{bundle.CreateRnGcNomSolicitudTrabajadorTblTitle_importeNeto}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudTrabajadorTblLabel_estatus}" for="estatus" />
+                        <p:inputText id="estatus" value="#{rnGcNomSolicitudTrabajadorTblController.selected.estatus}" title="#{bundle.CreateRnGcNomSolicitudTrabajadorTblTitle_estatus}" required="true" requiredMessage="#{bundle.CreateRnGcNomSolicitudTrabajadorTblRequiredMessage_estatus}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudTrabajadorTblLabel_solicitudId}" for="solicitudId" />
+                        <p:selectOneMenu id="solicitudId" value="#{rnGcNomSolicitudTrabajadorTblController.selected.solicitudId}" required="true" requiredMessage="#{bundle.EditRnGcNomSolicitudTrabajadorTblRequiredMessage_solicitudId}">
+                            <f:selectItems value="#{rnGcNomSolicitudesTblController.itemsAvailableSelectOne}"
+                                           var="solicitudIdItem"
+                                           itemValue="#{solicitudIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudTrabajadorTblLabel_trabajadorId}" for="trabajadorId" />
+                        <p:selectOneMenu id="trabajadorId" value="#{rnGcNomSolicitudTrabajadorTblController.selected.trabajadorId}" required="true" requiredMessage="#{bundle.EditRnGcNomSolicitudTrabajadorTblRequiredMessage_trabajadorId}">
+                            <f:selectItems value="#{rnGcTrabajadoresTblController.itemsAvailableSelectOne}"
+                                           var="trabajadorIdItem"
+                                           itemValue="#{trabajadorIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomSolicitudTrabajadorTblController.create}" value="#{bundle.Save}" update="display,:RnGcNomSolicitudTrabajadorTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcNomSolicitudTrabajadorTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomSolicitudTrabajadorTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

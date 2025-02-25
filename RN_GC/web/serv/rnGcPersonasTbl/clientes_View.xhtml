@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPersonasTblViewDlg" widgetVar="RnGcPersonasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcPersonasTblTitle}">
+            <h:form id="RnGcPersonasTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcPersonas_clientesTblController.selected != null}">
+                        <h:outputText value="Tipo: "/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.tipo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_rfc}"/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.rfc}" title="#{bundle.ViewRnGcPersonasTblTitle_rfc}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_nombre}"/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.nombre}" title="#{bundle.ViewRnGcPersonasTblTitle_nombre}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_telefono}"/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.telefono}" title="#{bundle.ViewRnGcPersonasTblTitle_telefono}"/>
+                        <h:outputText value="Regimen Fiscal: "/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.regimenFiscalId.descripcion}" title="Regimen Fiscal"/>
+                        <h:outputText value="Uso CFDI: "/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.usocfdiId.descripcion}" title="Uso CFDI"/>
+                        <h:outputText value="Tipo Persona: "/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.tipoPersonaSat}" title="Tipo Persona"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_email}"/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.email}" title="#{bundle.ViewRnGcPersonasTblTitle_email}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_email} 2:"/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.email2}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_pais}"/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.pais}" title="#{bundle.ViewRnGcPersonasTblTitle_pais}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_estado}"/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.estado}" title="#{bundle.ViewRnGcPersonasTblTitle_estado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_ciudad}"/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.ciudad}" title="#{bundle.ViewRnGcPersonasTblTitle_ciudad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_localidad}"/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.localidad}" title="#{bundle.ViewRnGcPersonasTblTitle_localidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_codigoPostal}"/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.codigoPostal}" title="#{bundle.ViewRnGcPersonasTblTitle_codigoPostal}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_calle}"/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.domicilio}" title="#{bundle.ViewRnGcPersonasTblTitle_calle}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_noExt}"/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.noExt}" title="#{bundle.ViewRnGcPersonasTblTitle_noExt}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_noInt}"/>
+                        <h:outputText value="#{rnGcPersonas_clientesTblController.selected.noInt}" title="#{bundle.ViewRnGcPersonasTblTitle_noInt}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcPersonasTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

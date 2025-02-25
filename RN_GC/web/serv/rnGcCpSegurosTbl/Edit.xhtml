@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpSegurosTblEditDlg" widgetVar="RnGcCpSegurosTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpSegurosTblTitle}">
+            <h:form id="RnGcCpSegurosTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpSegurosTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpSegurosTblLabel_nombreAseguradora}" for="nombreAseguradora" />
+                        <p:inputText id="nombreAseguradora" value="#{rnGcCpSegurosTblController.selected.nombreAseguradora}" title="#{bundle.EditRnGcCpSegurosTblTitle_nombreAseguradora}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpSegurosTblLabel_poliza}" for="poliza" />
+                        <p:inputText id="poliza" value="#{rnGcCpSegurosTblController.selected.poliza}" title="#{bundle.EditRnGcCpSegurosTblTitle_poliza}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpSegurosTblLabel_primaSeguro}" for="primaSeguro" />
+                        <p:inputText id="primaSeguro" value="#{rnGcCpSegurosTblController.selected.primaSeguro}" title="#{bundle.EditRnGcCpSegurosTblTitle_primaSeguro}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpSegurosTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpSegurosTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpSegurosTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpSegurosTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpSegurosTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpSegurosTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpSegurosTblLabel_tipoSeguro}" for="tipoSeguro" />
+                        <p:inputText id="tipoSeguro" value="#{rnGcCpSegurosTblController.selected.tipoSeguro}" title="#{bundle.EditRnGcCpSegurosTblTitle_tipoSeguro}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpSegurosTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpSegurosTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpSegurosTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpSegurosTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

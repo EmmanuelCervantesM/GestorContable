@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd" Version="3.3" Serie="B" Folio="519" Fecha="2018-08-31T17:47:30" FormaPago="03" Sello="EYidrCzmhL6UabInlt9a55NTzppiD3G9pNUnX55JvW3Yws6LnbHtkpPrGblUnFduQPySCv20/0JiewmwvO4nuuxKq0qw1MaD1UgCij1/17wzFQnCAGsQSiKBEd/TSoGO750QLRyLGB/I/Zf0pe3o3GS0cxDbGbCwr8hu90zeK4stuaOFOh5SVdywUYCUSQYmSjHhN2vJPiw8xGQII+JoCpcgHHuxFdNc9K+vVy9yzKMN03/RPIpbsni7r43vuhXq9NV9wB5o6+Q7Cwv2i+psV+tHqhY+57a1vS67E/PmQVpdj7ir1ZdafgVd3RYf/v+zUFreXh1ShlYPVY0QMSu6RA==" NoCertificado="00001000000408252830" Certificado="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" SubTotal="48899.12" Descuento="2721.80" Moneda="MXN" TipoCambio="1" Total="53565.69" TipoDeComprobante="I" MetodoPago="PUE" LugarExpedicion="90800">
+    <cfdi:Emisor Rfc="TMA131212CS0" Nombre="TRANSFORMACIONES METALICAS ALVATEX SA DE CV" RegimenFiscal="601" />
+    <cfdi:Receptor Rfc="CIA0610096A4" Nombre="CONSTRUCCIONES, INGENIERIA,ARQUITECTURA,MANTENIMIENTO Y SERVICIO DE ARRENDAMIENT" UsoCFDI="G01" />
+    <cfdi:Conceptos>
+        <cfdi:Concepto ClaveProdServ="23153402" Cantidad="4.000000" ClaveUnidad="XRO" Unidad="PRODUSTOS EN ROLLO" Descripcion="FELPA 5 X 7 mm GRIS" ValorUnitario="135.437528" Importe="541.750112" Descuento="16.252498">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="525.497614" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="84.079618" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="2.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="ADAPTADOR OXXO BLANCO" ValorUnitario="113.520023" Importe="227.040046" Descuento="6.811199">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="220.228847" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="35.236616" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="1.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="TAPA CHAMBRANA 3 BLANCO" ValorUnitario="248.292051" Importe="248.292051" Descuento="7.448759">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="240.843292" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="38.534927" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="2.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="TUBO RECTANGULAR 2X1 BLANCO" ValorUnitario="226.974047" Importe="453.948094" Descuento="13.618438">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="440.329656" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="70.452745" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="15.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="TUBO RECTANGULAR 2X1 NATURAL" ValorUnitario="204.723042" Importe="3070.845630" Descuento="181.486946">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2889.358684" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="462.297389" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="23153402" Cantidad="40.000000" ClaveUnidad="EA" Unidad="PIEZA" Descripcion="JALADERA EMBUTIDA 3 BLANCO TecnoMX" ValorUnitario="34.817407" Importe="1392.696280" Descuento="109.326630">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="1283.369650" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="205.339144" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="6.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="ANGULO DE 1 BLANCO" ValorUnitario="118.656024" Importe="711.936144" Descuento="21.358077">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="690.578067" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="110.492491" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="23153402" Cantidad="4.000000" ClaveUnidad="XRO" Unidad="PRODUSTOS EN ROLLO" Descripcion="VINIL 143-11 CRISTAL" ValorUnitario="578.810118" Importe="2315.240472" Descuento="204.204163">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2111.036309" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="337.765809" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="3.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="TUBO RECTANGULAR 1 X 1/2 NATURAL" ValorUnitario="137.880028" Importe="413.640084" Descuento="12.409198">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="401.230886" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="64.196942" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="1.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="TAPA LISA 2 BLANCO" ValorUnitario="137.664028" Importe="137.664028" Descuento="4.129919">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="133.534109" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="21.365457" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="8.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="CELOCIA LOUVER 3 BLANCO" ValorUnitario="274.752056" Importe="2198.016448" Descuento="129.902750">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2068.113698" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="330.898192" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="10.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="JUNQUILLO P/PESADA BLANCO" ValorUnitario="107.496022" Importe="1074.960220" Descuento="63.530138">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="1011.430082" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="161.828813" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="36.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="DUELA LISA BLANCO" ValorUnitario="315.813065" Importe="11369.270340" Descuento="671.923763">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="10697.346577" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="1711.575452" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="12.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="CHAMBRANA 3 BLANCO" ValorUnitario="314.634664" Importe="3775.615968" Descuento="223.138866">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="3552.477102" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="568.396336" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="8.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="ZOCLO 1 VENA 3 BLANCO" ValorUnitario="285.591058" Importe="2284.728464" Descuento="135.027429">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2149.701035" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="343.952166" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="1.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="CABEZAL 3 BLANCO" ValorUnitario="247.779051" Importe="247.779051" Descuento="7.433369">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="240.345682" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="38.455309" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="8.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="ZOCLO 2 VENAS 3 BLANCO" ValorUnitario="494.748101" Importe="3957.984808" Descuento="233.916863">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="3724.067945" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="595.850871" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="8.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="CERCO PUERTA 3 BLANCO" ValorUnitario="307.512063" Importe="2460.096504" Descuento="145.391679">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2314.704825" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="370.352772" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="8.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="TRASLAPE 3 BLANCO" ValorUnitario="370.212076" Importe="2961.696608" Descuento="175.036240">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2786.660368" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="445.865659" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="1.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="JUNQUILLO 3 BLANCO" ValorUnitario="136.620028" Importe="136.620028" Descuento="4.098599">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="132.521429" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="21.203429" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="5.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="BOLSA 3 BLANCO" ValorUnitario="454.986093" Importe="2274.930465" Descuento="68.247891">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2206.682574" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="353.069212" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="1.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="ESCALONADO 3 BLANCO" ValorUnitario="405.168083" Importe="405.168083" Descuento="12.155038">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="393.013045" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="62.882087" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="2.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="ZOCLO P/PESADA BLANCO" ValorUnitario="579.600119" Importe="1159.200238" Descuento="34.775996">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="1124.424242" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="179.907879" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="2.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="CABEZAL PUERA PESADA 1750 BLANCO" ValorUnitario="430.128088" Importe="860.256176" Descuento="25.807677">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="834.448499" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="133.511760" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="23153402" Cantidad="30.000000" ClaveUnidad="EA" Unidad="PIEZA" Descripcion="CARRETILLA FIJA 3 Tecno" ValorUnitario="13.261303" Importe="397.839090" Descuento="11.935169">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="385.903921" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="61.744627" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="10.000000" ClaveUnidad="H87" Unidad="TIRAS A 6.10 mts" Descripcion="RIEL 3 BLANCO" ValorUnitario="280.278057" Importe="2802.780570" Descuento="165.644304">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2637.136266" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="421.941803" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="23153402" Cantidad="10.000000" ClaveUnidad="EA" Unidad="PAQ" Descripcion="REMACHE No.46 BLANCO 100pz Indux" ValorUnitario="21.359004" Importe="213.590040" Descuento="12.623169">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="200.966871" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="32.154699" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="30102306" Cantidad="3.000000" ClaveUnidad="EA" Unidad="PIEZA" Descripcion="4.6 CERCO PUERTA PESADA 1750 BLANCO" ValorUnitario="268.512055" Importe="805.536165" Descuento="24.166077">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="781.370088" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="125.019214" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+    </cfdi:Conceptos>
+    <cfdi:Impuestos TotalImpuestosTrasladados="7388.37">
+        <cfdi:Traslados>
+            <cfdi:Traslado Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="7388.37" />
+        </cfdi:Traslados>
+    </cfdi:Impuestos>
+    <cfdi:Complemento>
+        <tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/timbrefiscaldigital/TimbreFiscalDigitalv11.xsd" Version="1.1" FechaTimbrado="2018-08-31T17:52:35" UUID="1c1cdcf2-cb9e-45a9-8125-15c84f7088af" NoCertificadoSAT="00001000000406144089" SelloCFD="EYidrCzmhL6UabInlt9a55NTzppiD3G9pNUnX55JvW3Yws6LnbHtkpPrGblUnFduQPySCv20/0JiewmwvO4nuuxKq0qw1MaD1UgCij1/17wzFQnCAGsQSiKBEd/TSoGO750QLRyLGB/I/Zf0pe3o3GS0cxDbGbCwr8hu90zeK4stuaOFOh5SVdywUYCUSQYmSjHhN2vJPiw8xGQII+JoCpcgHHuxFdNc9K+vVy9yzKMN03/RPIpbsni7r43vuhXq9NV9wB5o6+Q7Cwv2i+psV+tHqhY+57a1vS67E/PmQVpdj7ir1ZdafgVd3RYf/v+zUFreXh1ShlYPVY0QMSu6RA==" SelloSAT="VWUrzApt0moS1LkIv1sfdL3gzMUeXLzZtjLq/sYNOJlzwCY2wtltb2RgCGC1ixdfH0d5iPxqBLvhDkidLXN7mD84n7nb5YxKEiq5WF1n45CqVdkzRviEtMgMYSPo9ME9LccYPp0fjxHhi61c1UpKJ7XGZRJBH8mq3z2hmoeZc/SkKq8mTzYOpHfsePTKPV3FBjUagDzdDlcl7pIrL6i55bh3nO4OOALlk89X+gQAzhJBtrGAyWrnfM7ND/lsaM7mhTWPKjPskY0ngVZQcyvTho8trNg+VL4jZs0uN9TBkO2Y/zg9lenGOxNkoxcpMTh6szILXiWLIHUbtg6xbihGJQ==" RfcProvCertif="CAD100607RY8" />
+    </cfdi:Complemento>
+</cfdi:Comprobante>

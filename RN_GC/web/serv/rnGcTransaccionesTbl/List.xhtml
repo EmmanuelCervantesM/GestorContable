@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcTransaccionesTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcTransaccionesTblListForm">
+                <p:panel header="#{bundle.ListRnGcTransaccionesTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcTransaccionesTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcTransaccionesTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="viewButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="viewButton deleteButton"/>
+
+                        <f:facet name="header">             <!--Busqueda Global en interfaz-->
+                            <p:outputPanel>
+                                <h:outputText value="Bucar en todos los campos: " />
+                                <p:inputText id="globalfilter" onkeyup="PF('transaccionesTable').filter()" style="width:150px" placeholder="Ingresa el texto" />
+                            </p:outputPanel>
+                        </f:facet>                              <!--Busqueda Global en interfaz-->                                                  
+                        
+                        <p:column filterBy="#{item.uuid}" headerText="uuid" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTransaccionesTblTitle_uuid}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.uuid}"/>
+                        </p:column>    
+                        
+                        <p:column filterBy="#{item.nombreReceptor}" headerText="nombreReceptor" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTransaccionesTblTitle_nombreReceptor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombreReceptor}"/>
+                        </p:column>
+                        
+                        <p:column filterBy="#{item.rfcReceptor}" headerText="rfcReceptor" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTransaccionesTblTitle_rfcReceptor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rfcReceptor}"/>
+                        </p:column>
+                        
+                        <p:column filterBy="#{item.folio}" headerText="folio" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTransaccionesTblTitle_folio}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.folio}"/>
+                        </p:column>    
+                        
+                        <p:column filterBy="#{item.formaPago}" headerText="formaPago" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTransaccionesTblTitle_formaPago}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.formaPago}"/>
+                        </p:column>
+                        
+                        <p:column filterBy="#{item.metodoPago}" headerText="metodoPago" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTransaccionesTblTitle_metodoPago}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.metodoPago}"/>
+                        </p:column>
+                        
+                        <p:column filterBy="#{item.condicionPago}" headerText="condicionPago" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTransaccionesTblTitle_condicionPago}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.condicionPago}"/>
+                        </p:column>
+                        
+                        <p:column filterBy="#{item.tipoComprobante}" headerText="tipoComprobante" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTransaccionesTblTitle_tipoComprobante}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoComprobante}"/>
+                        </p:column>                                                
+                        
+                        <!--________________________________________________________________________________-->                        
+                        <p:column headerText="fechaExpedicion" sortBy="#{item.fechaExpedicion}" filterBy="#{item.fechaExpedicion}" filterFunction="#{RnGcTransaccionesTblController.filterByFecha}">
+                            <f:facet name="filter">
+                                <h:inputHidden id="filter" />
+                            </f:facet>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTransaccionesTblTitle_fechaExpedicion}"/>
+                                <br/>
+                                <p:calendar id="from" pattern="dd/MM/yyyy">
+                                    <p:ajax event="dateSelect" onstart="$(PrimeFaces.escapeClientId('#{p:component('filter')}'))[0].value = $(PrimeFaces.escapeClientId('#{p:component('from')}_input'))[0].value + '-' + $(PrimeFaces.escapeClientId('#{p:component('to')}_input'))[0].value" oncomplete="PF('transaccionestable').filter()" />
+                                </p:calendar>
+                                <p:calendar id="to" pattern="dd/MM/yyyy">
+                                    <p:ajax event="dateSelect" onstart="$(PrimeFaces.escapeClientId('#{p:component('filter')}'))[0].value = $(PrimeFaces.escapeClientId('#{p:component('from')}_input'))[0].value + '-' + $(PrimeFaces.escapeClientId('#{p:component('to')}_input'))[0].value" oncomplete="PF('transaccionesTable').filter()"/>
+                                </p:calendar>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaExpedicion}">
+                                <f:convertDateTime type="date" dateStyle="medium" />
+                            </h:outputText>
+                        </p:column>
+                        <!--____________________________________________________________________________________-->
+                        
+                        <p:column filterBy="#{item.usoCfdi}" headerText="usoCfdi" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTransaccionesTblTitle_usoCfdi}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.usoCfdi}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.moneda}" headerText="moneda" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTransaccionesTblTitle_moneda}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.moneda}"/>
+                        </p:column>  
+                        
+                        <p:column filterBy="#{item.importe}" headerText="importe" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTransaccionesTblTitle_importe}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.importe}"/>
+                        </p:column>
+                        
+                        <f:facet name="footer">
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" actionListener="#{rnGcTrxlineasTblController.prepareTrxLines(rnGcTransaccionesTblController.selected)}"  update=":RnGcTransaccionesTblViewForm" oncomplete="PF('RnGcTransaccionesTblViewDialog').show()" disabled="#{empty rnGcTransaccionesTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcTransaccionesTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcTransaccionesTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>            
+        </ui:define>
+    </ui:composition>
+
+</html>

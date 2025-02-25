@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomSolicitudesTblCreateDlg" widgetVar="RnGcNomSolicitudesTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcNomSolicitudesTblTitle}">
+            <h:form id="RnGcNomSolicitudesTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomSolicitudesTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudesTblLabel_nominaId}" for="nominaId" />
+                        <p:inputText id="nominaId" value="#{rnGcNomSolicitudesTblController.selected.nominaId}" title="#{bundle.CreateRnGcNomSolicitudesTblTitle_nominaId}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudesTblLabel_patronId}" for="patronId" />
+                        <p:inputText id="patronId" value="#{rnGcNomSolicitudesTblController.selected.patronId}" title="#{bundle.CreateRnGcNomSolicitudesTblTitle_patronId}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudesTblLabel_registroPatronal}" for="registroPatronal" />
+                        <p:inputText id="registroPatronal" value="#{rnGcNomSolicitudesTblController.selected.registroPatronal}" title="#{bundle.CreateRnGcNomSolicitudesTblTitle_registroPatronal}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudesTblLabel_nombreSolicitud}" for="nombreSolicitud" />
+                        <p:inputText id="nombreSolicitud" value="#{rnGcNomSolicitudesTblController.selected.nombreSolicitud}" title="#{bundle.CreateRnGcNomSolicitudesTblTitle_nombreSolicitud}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudesTblLabel_estatus}" for="estatus" />
+                        <p:inputText id="estatus" value="#{rnGcNomSolicitudesTblController.selected.estatus}" title="#{bundle.CreateRnGcNomSolicitudesTblTitle_estatus}" required="true" requiredMessage="#{bundle.CreateRnGcNomSolicitudesTblRequiredMessage_estatus}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomSolicitudesTblLabel_periodoNominaId}" for="periodoNominaId" />
+                        <p:selectOneMenu id="periodoNominaId" value="#{rnGcNomSolicitudesTblController.selected.periodoNominaId}" required="true" requiredMessage="#{bundle.EditRnGcNomSolicitudesTblRequiredMessage_periodoNominaId}">
+                            <f:selectItems value="#{rnGcNomPeriodonominaTblController.itemsAvailableSelectOne}"
+                                           var="periodoNominaIdItem"
+                                           itemValue="#{periodoNominaIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomSolicitudesTblController.create}" value="#{bundle.Save}" update="display,:RnGcNomSolicitudesTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcNomSolicitudesTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomSolicitudesTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

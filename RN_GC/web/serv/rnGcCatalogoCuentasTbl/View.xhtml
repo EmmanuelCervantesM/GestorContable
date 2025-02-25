@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCatalogoCuentasTblViewDlg" widgetVar="RnGcCatalogoCuentasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCatalogoCuentasTblTitle}">
+            <h:form id="RnGcCatalogoCuentasTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcCatalogoCuentasTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCatalogoCuentasTblLabel_numeroCuenta}"/>
+                        <h:outputText value="#{rnGcCatalogoCuentasTblController.selected.numeroCuenta}" title="#{bundle.ViewRnGcCatalogoCuentasTblTitle_numeroCuenta}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogoCuentasTblLabel_descripcionCuenta}"/>
+                        <h:outputText value="#{rnGcCatalogoCuentasTblController.selected.descripcionCuenta}" title="#{bundle.ViewRnGcCatalogoCuentasTblTitle_descripcionCuenta}"/>
+                        <h:outputText value="Nivel: "/>
+                        <h:outputText value="#{rnGcCatalogoCuentasTblController.selected.adicional2}" title="Nivel"/>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogoCuentasTblLabel_codigoAgrupadorSatId}"/>
+                        <h:outputText value="#{rnGcCatalogoCuentasTblController.selected.codigoAgrupadorSatId.codigoAgrupador}" title="#{bundle.ViewRnGcCatalogoCuentasTblTitle_codigoAgrupadorSatId}"/>
+                        <h:outputText value="Tipo: "/>
+                        <h:outputText value="#{rnGcCatalogoCuentasTblController.selected.tipo}" title="Tipo"/>
+                        <h:outputText value="Subtipo: "/>
+                        <h:outputText value="#{rnGcCatalogoCuentasTblController.selected.subtipo}" title="Subtipo"/>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogoCuentasTblLabel_naturaleza}"/>
+                        <h:outputText value="#{rnGcCatalogoCuentasTblController.selected.naturaleza}" title="Naturaleza"/>
+                        <h:outputText value="Moneda: "/>
+                        <h:outputText value="#{rnGcCatalogoCuentasTblController.selected.monedaId.CMoneda}" title="Moneda"/>
+                        <h:outputText value="DIOT:"/>
+                        <h:outputText value="#{rnGcCatalogoCuentasTblController.selected.adicional1}" />
+                        <h:outputText value="RFC: "/>
+                        <h:outputText value="#{rnGcCatalogoCuentasTblController.selected.rfc}" title="#{bundle.ViewRnGcCatalogoCuentasTblTitle_rfc}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCatalogoCuentasTblLabel_inicioVigencia}"/>
+                        <h:outputText value="#{rnGcCatalogoCuentasTblController.selected.inicioVigencia}" title="#{bundle.ViewRnGcCatalogoCuentasTblTitle_inicioVigencia}">
+                            <f:convertDateTime pattern="MM/yyyy" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCatalogoCuentasTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

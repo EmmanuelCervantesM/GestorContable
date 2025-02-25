@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomPercepcionesTblViewDlg" widgetVar="RnGcNomPercepcionesTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcNomPercepcionesTblTitle}">
+            <h:form id="RnGcNomPercepcionesTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomPercepcionesTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcNomPercepcionesTblLabel_version}"/>
+                        <h:outputText value="#{rnGcNomPercepcionesTblController.selected.version}" title="#{bundle.ViewRnGcNomPercepcionesTblTitle_version}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomPercepcionesTblLabel_revision}"/>
+                        <h:outputText value="#{rnGcNomPercepcionesTblController.selected.revision}" title="#{bundle.ViewRnGcNomPercepcionesTblTitle_revision}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomPercepcionesTblLabel_cveTipoPercepcion}"/>
+                        <h:outputText value="#{rnGcNomPercepcionesTblController.selected.cveTipoPercepcion}" title="#{bundle.ViewRnGcNomPercepcionesTblTitle_cveTipoPercepcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomPercepcionesTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcNomPercepcionesTblController.selected.descripcion}" title="#{bundle.ViewRnGcNomPercepcionesTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomPercepcionesTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcNomPercepcionesTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcNomPercepcionesTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcNomPercepcionesTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcNomPercepcionesTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcNomPercepcionesTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcNomPercepcionesTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

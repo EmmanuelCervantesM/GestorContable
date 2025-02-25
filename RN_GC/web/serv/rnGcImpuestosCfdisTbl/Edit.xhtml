@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcImpuestosCfdisTblEditDlg" widgetVar="RnGcImpuestosCfdisTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcImpuestosCfdisTblTitle}">
+            <h:form id="RnGcImpuestosCfdisTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcImpuestosCfdisTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcImpuestosCfdisTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcImpuestosCfdisTblController.selected.id}" title="#{bundle.EditRnGcImpuestosCfdisTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcImpuestosCfdisTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcImpuestosCfdisTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcImpuestosCfdisTblController.selected.creadoPor}" title="#{bundle.EditRnGcImpuestosCfdisTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.EditRnGcImpuestosCfdisTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcImpuestosCfdisTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcImpuestosCfdisTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcImpuestosCfdisTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcImpuestosCfdisTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcImpuestosCfdisTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcImpuestosCfdisTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcImpuestosCfdisTblTitle_ultimaActualizacionPor}" required="true" requiredMessage="#{bundle.EditRnGcImpuestosCfdisTblRequiredMessage_ultimaActualizacionPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcImpuestosCfdisTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcImpuestosCfdisTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcImpuestosCfdisTblTitle_ultimaFechaActualizacion}" required="true" requiredMessage="#{bundle.EditRnGcImpuestosCfdisTblRequiredMessage_ultimaFechaActualizacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcImpuestosCfdisTblLabel_cfdisId}" for="cfdisId" />
+                        <p:selectOneMenu id="cfdisId" value="#{rnGcImpuestosCfdisTblController.selected.cfdisId}" required="true" requiredMessage="#{bundle.EditRnGcImpuestosCfdisTblRequiredMessage_cfdisId}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCfdisTblController.itemsAvailableSelectOne}"
+                                           var="cfdisIdItem"
+                                           itemValue="#{cfdisIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcImpuestosCfdisTblLabel_impuestosLocalesId}" for="impuestosLocalesId" />
+                        <p:selectOneMenu id="impuestosLocalesId" value="#{rnGcImpuestosCfdisTblController.selected.impuestosLocalesId}" required="true" requiredMessage="#{bundle.EditRnGcImpuestosCfdisTblRequiredMessage_impuestosLocalesId}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcImpuestosLocalesTblController.itemsAvailableSelectOne}"
+                                           var="impuestosLocalesIdItem"
+                                           itemValue="#{impuestosLocalesIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcImpuestosCfdisTblController.update}" value="#{bundle.Save}" update="display,:RnGcImpuestosCfdisTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcImpuestosCfdisTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcImpuestosCfdisTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

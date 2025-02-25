@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomSolicitudTrabajadorTblViewDlg" widgetVar="RnGcNomSolicitudTrabajadorTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcNomSolicitudTrabajadorTblTitle}">
+            <h:form id="RnGcNomSolicitudTrabajadorTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomSolicitudTrabajadorTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudTrabajadorTblLabel_sdi}"/>
+                        <h:outputText value="#{rnGcNomSolicitudTrabajadorTblController.selected.sdi}" title="#{bundle.ViewRnGcNomSolicitudTrabajadorTblTitle_sdi}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudTrabajadorTblLabel_totalPercepciones}"/>
+                        <h:outputText value="#{rnGcNomSolicitudTrabajadorTblController.selected.totalPercepciones}" title="#{bundle.ViewRnGcNomSolicitudTrabajadorTblTitle_totalPercepciones}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudTrabajadorTblLabel_totalDeducciones}"/>
+                        <h:outputText value="#{rnGcNomSolicitudTrabajadorTblController.selected.totalDeducciones}" title="#{bundle.ViewRnGcNomSolicitudTrabajadorTblTitle_totalDeducciones}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudTrabajadorTblLabel_importeNeto}"/>
+                        <h:outputText value="#{rnGcNomSolicitudTrabajadorTblController.selected.importeNeto}" title="#{bundle.ViewRnGcNomSolicitudTrabajadorTblTitle_importeNeto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudTrabajadorTblLabel_estatus}"/>
+                        <h:outputText value="#{rnGcNomSolicitudTrabajadorTblController.selected.estatus}" title="#{bundle.ViewRnGcNomSolicitudTrabajadorTblTitle_estatus}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudTrabajadorTblLabel_solicitudId}"/>
+                        <h:outputText value="#{rnGcNomSolicitudTrabajadorTblController.selected.solicitudId}" title="#{bundle.ViewRnGcNomSolicitudTrabajadorTblTitle_solicitudId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudTrabajadorTblLabel_trabajadorId}"/>
+                        <h:outputText value="#{rnGcNomSolicitudTrabajadorTblController.selected.trabajadorId}" title="#{bundle.ViewRnGcNomSolicitudTrabajadorTblTitle_trabajadorId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcNomSolicitudTrabajadorTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

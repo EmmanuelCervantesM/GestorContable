@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomTrabajadorCfdisTblEditDlg" widgetVar="RnGcNomTrabajadorCfdisTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcNomTrabajadorCfdisTblTitle}">
+            <h:form id="RnGcNomTrabajadorCfdisTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcNomTrabajadorCfdisTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcNomTrabajadorCfdisTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcNomTrabajadorCfdisTblController.selected.id}" title="#{bundle.EditRnGcNomTrabajadorCfdisTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcNomTrabajadorCfdisTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTrabajadorCfdisTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcNomTrabajadorCfdisTblController.selected.creadoPor}" title="#{bundle.EditRnGcNomTrabajadorCfdisTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.EditRnGcNomTrabajadorCfdisTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTrabajadorCfdisTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcNomTrabajadorCfdisTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcNomTrabajadorCfdisTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcNomTrabajadorCfdisTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTrabajadorCfdisTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcNomTrabajadorCfdisTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcNomTrabajadorCfdisTblTitle_ultimaActualizacionPor}" required="true" requiredMessage="#{bundle.EditRnGcNomTrabajadorCfdisTblRequiredMessage_ultimaActualizacionPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTrabajadorCfdisTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcNomTrabajadorCfdisTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcNomTrabajadorCfdisTblTitle_ultimaFechaActualizacion}" required="true" requiredMessage="#{bundle.EditRnGcNomTrabajadorCfdisTblRequiredMessage_ultimaFechaActualizacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTrabajadorCfdisTblLabel_solicitudTrabajdorId}" for="solicitudTrabajdorId" />
+                        <p:selectOneMenu id="solicitudTrabajdorId" value="#{rnGcNomTrabajadorCfdisTblController.selected.solicitudTrabajdorId}" required="true" requiredMessage="#{bundle.EditRnGcNomTrabajadorCfdisTblRequiredMessage_solicitudTrabajdorId}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcNomSolicitudTrabajadorTblController.itemsAvailableSelectOne}"
+                                           var="solicitudTrabajdorIdItem"
+                                           itemValue="#{solicitudTrabajdorIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTrabajadorCfdisTblLabel_cfdiId}" for="cfdiId" />
+                        <p:selectOneMenu id="cfdiId" value="#{rnGcNomTrabajadorCfdisTblController.selected.cfdiId}" required="true" requiredMessage="#{bundle.EditRnGcNomTrabajadorCfdisTblRequiredMessage_cfdiId}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCfdisTblController.itemsAvailableSelectOne}"
+                                           var="cfdiIdItem"
+                                           itemValue="#{cfdiIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomTrabajadorCfdisTblController.update}" value="#{bundle.Save}" update="display,:RnGcNomTrabajadorCfdisTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcNomTrabajadorCfdisTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomTrabajadorCfdisTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

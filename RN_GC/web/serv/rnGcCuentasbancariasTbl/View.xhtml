@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCuentasbancariasTblViewDlg" widgetVar="RnGcCuentasbancariasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCuentasbancariasTblTitle}">
+            <h:form id="RnGcCuentasbancariasTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCuentasbancariasTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCuentasbancariasTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCuentasbancariasTblController.selected.id}" title="#{bundle.ViewRnGcCuentasbancariasTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCuentasbancariasTblLabel_cuentaBancariaId}"/>
+                        <h:outputText value="#{rnGcCuentasbancariasTblController.selected.cuentaBancariaId}" title="#{bundle.ViewRnGcCuentasbancariasTblTitle_cuentaBancariaId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCuentasbancariasTblLabel_banconombre}"/>
+                        <h:outputText value="#{rnGcCuentasbancariasTblController.selected.banconombre}" title="#{bundle.ViewRnGcCuentasbancariasTblTitle_banconombre}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCuentasbancariasTblLabel_noCuentaBancaria}"/>
+                        <h:outputText value="#{rnGcCuentasbancariasTblController.selected.noCuentaBancaria}" title="#{bundle.ViewRnGcCuentasbancariasTblTitle_noCuentaBancaria}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCuentasbancariasTblLabel_pais}"/>
+                        <h:outputText value="#{rnGcCuentasbancariasTblController.selected.pais}" title="#{bundle.ViewRnGcCuentasbancariasTblTitle_pais}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCuentasbancariasTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCuentasbancariasTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCuentasbancariasTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCuentasbancariasTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcCuentasbancariasTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcCuentasbancariasTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCuentasbancariasTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCuentasbancariasTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCuentasbancariasTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCuentasbancariasTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCuentasbancariasTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCuentasbancariasTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCuentasbancariasTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCuentasbancariasTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCuentasbancariasTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCuentasbancariasTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCuentasbancariasTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCuentasbancariasTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCuentasbancariasTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

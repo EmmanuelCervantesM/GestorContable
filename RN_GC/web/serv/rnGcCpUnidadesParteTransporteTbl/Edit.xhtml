@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpUnidadesParteTransporteTblEditDlg" widgetVar="RnGcCpUnidadesParteTransporteTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpUnidadesParteTransporteTblTitle}">
+            <h:form id="RnGcCpUnidadesParteTransporteTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpUnidadesParteTransporteTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesParteTransporteTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpUnidadesParteTransporteTblController.selected.id}" title="#{bundle.EditRnGcCpUnidadesParteTransporteTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcCpUnidadesParteTransporteTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesParteTransporteTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpUnidadesParteTransporteTblController.selected.creadoPor}" title="#{bundle.EditRnGcCpUnidadesParteTransporteTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.EditRnGcCpUnidadesParteTransporteTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesParteTransporteTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpUnidadesParteTransporteTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpUnidadesParteTransporteTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpUnidadesParteTransporteTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesParteTransporteTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpUnidadesParteTransporteTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcCpUnidadesParteTransporteTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesParteTransporteTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpUnidadesParteTransporteTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpUnidadesParteTransporteTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesParteTransporteTblLabel_unidadId}" for="unidadId" />
+                        <p:selectOneMenu id="unidadId" value="#{rnGcCpUnidadesParteTransporteTblController.selected.unidadId}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCpUnidadesTblController.itemsAvailableSelectOne}"
+                                           var="unidadIdItem"
+                                           itemValue="#{unidadIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCpUnidadesParteTransporteTblLabel_parteTransId}" for="parteTransId" />
+                        <p:selectOneMenu id="parteTransId" value="#{rnGcCpUnidadesParteTransporteTblController.selected.parteTransId}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCpPartetransportesatTblController.itemsAvailableSelectOne}"
+                                           var="parteTransIdItem"
+                                           itemValue="#{parteTransIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpUnidadesParteTransporteTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpUnidadesParteTransporteTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpUnidadesParteTransporteTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpUnidadesParteTransporteTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

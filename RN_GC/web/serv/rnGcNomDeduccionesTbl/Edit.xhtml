@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomDeduccionesTblEditDlg" widgetVar="RnGcNomDeduccionesTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcNomDeduccionesTblTitle}">
+            <h:form id="RnGcNomDeduccionesTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomDeduccionesTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcNomDeduccionesTblLabel_cveTipoDeduccion}" for="cveTipoDeduccion" />
+                        <p:inputText id="cveTipoDeduccion" value="#{rnGcNomDeduccionesTblController.selected.cveTipoDeduccion}" title="#{bundle.EditRnGcNomDeduccionesTblTitle_cveTipoDeduccion}" required="true" requiredMessage="#{bundle.EditRnGcNomDeduccionesTblRequiredMessage_cveTipoDeduccion}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomDeduccionesTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcNomDeduccionesTblController.selected.descripcion}" title="#{bundle.EditRnGcNomDeduccionesTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcNomDeduccionesTblLabel_version}" for="version" />
+                        <p:inputText id="version" value="#{rnGcNomDeduccionesTblController.selected.version}" title="#{bundle.EditRnGcNomDeduccionesTblTitle_version}" required="true" requiredMessage="#{bundle.EditRnGcNomDeduccionesTblRequiredMessage_version}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomDeduccionesTblLabel_revision}" for="revision" />
+                        <p:inputText id="revision" value="#{rnGcNomDeduccionesTblController.selected.revision}" title="#{bundle.EditRnGcNomDeduccionesTblTitle_revision}" required="true" requiredMessage="#{bundle.EditRnGcNomDeduccionesTblRequiredMessage_revision}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomDeduccionesTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomDeduccionesTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcNomDeduccionesTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcNomDeduccionesTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomDeduccionesTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomDeduccionesTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcNomDeduccionesTblTitle_fechaFinVigencia}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomDeduccionesTblController.update}" value="#{bundle.Save}" update="display,:RnGcNomDeduccionesTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcNomDeduccionesTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomDeduccionesTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

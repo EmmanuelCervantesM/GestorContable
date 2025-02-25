@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomTipojornadaTblEditDlg" widgetVar="RnGcNomTipojornadaTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcNomTipojornadaTblTitle}">
+            <h:form id="RnGcNomTipojornadaTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomTipojornadaTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipojornadaTblLabel_cveTipoJornada}" for="cveTipoJornada" />
+                        <p:inputText id="cveTipoJornada" value="#{rnGcNomTipojornadaTblController.selected.cveTipoJornada}" title="#{bundle.EditRnGcNomTipojornadaTblTitle_cveTipoJornada}" required="true" requiredMessage="#{bundle.EditRnGcNomTipojornadaTblRequiredMessage_cveTipoJornada}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipojornadaTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcNomTipojornadaTblController.selected.descripcion}" title="#{bundle.EditRnGcNomTipojornadaTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipojornadaTblLabel_version}" for="version" />
+                        <p:inputText id="version" value="#{rnGcNomTipojornadaTblController.selected.version}" title="#{bundle.EditRnGcNomTipojornadaTblTitle_version}" required="true" requiredMessage="#{bundle.EditRnGcNomTipojornadaTblRequiredMessage_version}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipojornadaTblLabel_revision}" for="revision" />
+                        <p:inputText id="revision" value="#{rnGcNomTipojornadaTblController.selected.revision}" title="#{bundle.EditRnGcNomTipojornadaTblTitle_revision}" required="true" requiredMessage="#{bundle.EditRnGcNomTipojornadaTblRequiredMessage_revision}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipojornadaTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomTipojornadaTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcNomTipojornadaTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcNomTipojornadaTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomTipojornadaTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomTipojornadaTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcNomTipojornadaTblTitle_fechaFinVigencia}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomTipojornadaTblController.update}" value="#{bundle.Save}" update="display,:RnGcNomTipojornadaTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcNomTipojornadaTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomTipojornadaTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTrxlineasTblCreateDlg" widgetVar="RnGcTrxlineasTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcTrxlineasTblTitle}">
+            <h:form id="RnGcTrxlineasTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcTrxlineasTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcTrxlineasTblLabel_claveProdServ}" for="claveProdServ" />
+                        <p:inputText id="claveProdServ" value="#{rnGcTrxlineasTblController.selected.claveProdServ}" title="#{bundle.CreateRnGcTrxlineasTblTitle_claveProdServ}" required="true" requiredMessage="#{bundle.CreateRnGcTrxlineasTblRequiredMessage_claveProdServ}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTrxlineasTblLabel_noIdentificacion}" for="noIdentificacion" />
+                        <p:inputText id="noIdentificacion" value="#{rnGcTrxlineasTblController.selected.noIdentificacion}" title="#{bundle.CreateRnGcTrxlineasTblTitle_noIdentificacion}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcTrxlineasTblLabel_cantidad}" for="cantidad" />
+                        <p:inputText id="cantidad" value="#{rnGcTrxlineasTblController.selected.cantidad}" title="#{bundle.CreateRnGcTrxlineasTblTitle_cantidad}" required="true" requiredMessage="#{bundle.CreateRnGcTrxlineasTblRequiredMessage_cantidad}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTrxlineasTblLabel_claveUnidad}" for="claveUnidad" />
+                        <p:inputText id="claveUnidad" value="#{rnGcTrxlineasTblController.selected.claveUnidad}" title="#{bundle.CreateRnGcTrxlineasTblTitle_claveUnidad}" required="true" requiredMessage="#{bundle.CreateRnGcTrxlineasTblRequiredMessage_claveUnidad}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTrxlineasTblLabel_unidad}" for="unidad" />
+                        <p:inputText id="unidad" value="#{rnGcTrxlineasTblController.selected.unidad}" title="#{bundle.CreateRnGcTrxlineasTblTitle_unidad}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcTrxlineasTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcTrxlineasTblController.selected.descripcion}" title="#{bundle.CreateRnGcTrxlineasTblTitle_descripcion}" required="true" requiredMessage="#{bundle.CreateRnGcTrxlineasTblRequiredMessage_descripcion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTrxlineasTblLabel_valorUnit}" for="valorUnit" />
+                        <p:inputText id="valorUnit" value="#{rnGcTrxlineasTblController.selected.valorUnit}" title="#{bundle.CreateRnGcTrxlineasTblTitle_valorUnit}" required="true" requiredMessage="#{bundle.CreateRnGcTrxlineasTblRequiredMessage_valorUnit}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTrxlineasTblLabel_importe}" for="importe" />
+                        <p:inputText id="importe" value="#{rnGcTrxlineasTblController.selected.importe}" title="#{bundle.CreateRnGcTrxlineasTblTitle_importe}" required="true" requiredMessage="#{bundle.CreateRnGcTrxlineasTblRequiredMessage_importe}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTrxlineasTblLabel_base}" for="base" />
+                        <p:inputText id="base" value="#{rnGcTrxlineasTblController.selected.base}" title="#{bundle.CreateRnGcTrxlineasTblTitle_base}" required="true" requiredMessage="#{bundle.CreateRnGcTrxlineasTblRequiredMessage_base}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTrxlineasTblLabel_impuesto}" for="impuesto" />
+                        <p:inputText id="impuesto" value="#{rnGcTrxlineasTblController.selected.impuesto}" title="#{bundle.CreateRnGcTrxlineasTblTitle_impuesto}" required="true" requiredMessage="#{bundle.CreateRnGcTrxlineasTblRequiredMessage_impuesto}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTrxlineasTblLabel_tipoFactor}" for="tipoFactor" />
+                        <p:inputText id="tipoFactor" value="#{rnGcTrxlineasTblController.selected.tipoFactor}" title="#{bundle.CreateRnGcTrxlineasTblTitle_tipoFactor}" required="true" requiredMessage="#{bundle.CreateRnGcTrxlineasTblRequiredMessage_tipoFactor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTrxlineasTblLabel_tipoTasa}" for="tipoTasa" />
+                        <p:inputText id="tipoTasa" value="#{rnGcTrxlineasTblController.selected.tipoTasa}" title="#{bundle.CreateRnGcTrxlineasTblTitle_tipoTasa}" required="true" requiredMessage="#{bundle.CreateRnGcTrxlineasTblRequiredMessage_tipoTasa}"/>                        
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcTrxlineasTblController.create}" value="#{bundle.Save}" update="display,:RnGcTrxlineasTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcTrxlineasTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcTrxlineasTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

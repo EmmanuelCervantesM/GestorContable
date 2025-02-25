@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcMonedasTblCreateDlg" widgetVar="RnGcMonedasTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcMonedasTblTitle}">
+            <h:form id="RnGcMonedasTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcMonedasTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcMonedasTblLabel_CMoneda}" for="CMoneda" />
+                        <p:inputText id="CMoneda" value="#{rnGcMonedasTblController.selected.CMoneda}" title="#{bundle.CreateRnGcMonedasTblTitle_CMoneda}" required="true" requiredMessage="#{bundle.CreateRnGcMonedasTblRequiredMessage_CMoneda}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcMonedasTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcMonedasTblController.selected.descripcion}" title="#{bundle.CreateRnGcMonedasTblTitle_descripcion}" required="true" requiredMessage="#{bundle.CreateRnGcMonedasTblRequiredMessage_descripcion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcMonedasTblLabel_decimales}" for="decimales" />
+                        <p:inputText id="decimales" value="#{rnGcMonedasTblController.selected.decimales}" title="#{bundle.CreateRnGcMonedasTblTitle_decimales}" required="true" requiredMessage="#{bundle.CreateRnGcMonedasTblRequiredMessage_decimales}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcMonedasTblLabel_porcentVariacion}" for="porcentVariacion" />
+                        <p:inputText id="porcentVariacion" value="#{rnGcMonedasTblController.selected.porcentVariacion}" title="#{bundle.CreateRnGcMonedasTblTitle_porcentVariacion}" required="true" requiredMessage="#{bundle.CreateRnGcMonedasTblRequiredMessage_porcentVariacion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcMonedasTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="dd/MM/yyyy" value="#{rnGcMonedasTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcMonedasTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcMonedasTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcMonedasTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="dd/MM/yyyy" value="#{rnGcMonedasTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcMonedasTblTitle_fechaFinVigencia}" required="true" requiredMessage="#{bundle.EditRnGcMonedasTblRequiredMessage_fechaFinVigencia}" showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcMonedasTblController.create}" value="#{bundle.Save}" update="display,:RnGcMonedasTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcMonedasTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcMonedasTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

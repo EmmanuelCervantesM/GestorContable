@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcObjetoimpuestoTblViewDlg" widgetVar="RnGcObjetoimpuestoTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcObjetoimpuestoTblTitle}">
+            <h:form id="RnGcObjetoimpuestoTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcObjetoimpuestoTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcObjetoimpuestoTblLabel_id}"/>
+                        <h:outputText value="#{rnGcObjetoimpuestoTblController.selected.id}" title="#{bundle.ViewRnGcObjetoimpuestoTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcObjetoimpuestoTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcObjetoimpuestoTblController.selected.clave}" title="#{bundle.ViewRnGcObjetoimpuestoTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcObjetoimpuestoTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcObjetoimpuestoTblController.selected.descripcion}" title="#{bundle.ViewRnGcObjetoimpuestoTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcObjetoimpuestoTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcObjetoimpuestoTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcObjetoimpuestoTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcObjetoimpuestoTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcObjetoimpuestoTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcObjetoimpuestoTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcObjetoimpuestoTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcObjetoimpuestoTblController.selected.creadoPor}" title="#{bundle.ViewRnGcObjetoimpuestoTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcObjetoimpuestoTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcObjetoimpuestoTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcObjetoimpuestoTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcObjetoimpuestoTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcObjetoimpuestoTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcObjetoimpuestoTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcObjetoimpuestoTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcObjetoimpuestoTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcObjetoimpuestoTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcObjetoimpuestoTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

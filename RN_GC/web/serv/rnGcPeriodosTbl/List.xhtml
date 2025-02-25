@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="Periodos"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcPeriodosTblListForm">
+                <p:panel header="Lista de periodos">
+                    <p:dataTable id="datalist" value="#{rnGcPeriodosTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcPeriodosTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Clave periodo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.periodoId}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Año"/>
+                            </f:facet>
+                            <h:outputText value="#{item.año}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Mes"/>
+                            </f:facet>
+                            <h:outputText value="#{item.mes}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Estatus"/>
+                            </f:facet>
+                            <h:outputText value="#{item.estatus}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Tipo periodo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoPeriodo}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcPeriodosTblController.prepareCreate}" update=":RnGcPeriodosTblCreateForm" oncomplete="PF('RnGcPeriodosTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcPeriodosTblViewForm" oncomplete="PF('RnGcPeriodosTblViewDialog').show()" disabled="#{empty rnGcPeriodosTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcPeriodosTblEditForm" oncomplete="PF('RnGcPeriodosTblEditDialog').show()" disabled="#{empty rnGcPeriodosTblController.selected}"/>
+                            <!--<p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#/{bundle.Delete}" actionListener="#/{rnGcPeriodosTblController.destroy}" update=":growl,datalist" disabled="#/{empty rnGcPeriodosTblController.selected}"/>-->
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

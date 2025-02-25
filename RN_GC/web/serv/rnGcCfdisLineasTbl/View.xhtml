@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCfdisLineasTblViewDlg" widgetVar="RnGcCfdisLineasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCfdisLineasTblTitle}">
+            <h:form id="RnGcCfdisLineasTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCfdisLineasTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.id}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_claveProdServ}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.claveProdServ}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_claveProdServ}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_noIdentificacion}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.noIdentificacion}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_noIdentificacion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_cantidad}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.cantidad}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_cantidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_claveUnidad}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.claveUnidad}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_claveUnidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_unidad}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.unidad}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_unidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.descripcion}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_valorUnit}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.valorUnit}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_valorUnit}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_importe}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.importe}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_importe}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_base}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.base}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_base}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_impuesto}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.impuesto}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_impuesto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_tipoFactor}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.tipoFactor}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_tipoFactor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_tipoTasa}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.tipoTasa}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_tipoTasa}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_importeimpuesto}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.importeimpuesto}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_importeimpuesto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCfdisLineasTblLabel_cfdisId}"/>
+                        <h:outputText value="#{rnGcCfdisLineasTblController.selected.cfdisId}" title="#{bundle.ViewRnGcCfdisLineasTblTitle_cfdisId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCfdisLineasTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

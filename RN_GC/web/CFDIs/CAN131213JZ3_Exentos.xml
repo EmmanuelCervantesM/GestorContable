@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cfdi:Comprobante xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xmlns:xs="http://www.w3.org/2001/XMLSchema" Version="3.3" Serie="MAT" Folio="294" Fecha="2018-08-31T11:49:29" Sello="YtepeuxuNw3e6UGlY8LZGyPyjIhW2Nbd5xQC8dc1tmdteuSv/vNNcKqY1TYta1CYDds5cj3uTAZW+PoyrWCpzKCwnOOfnHqR1Iwhgut4xJavf94L3Ddci56Ja3ujsGzsb5aH365opP46mnJ6UIFkW2RUEn48FAZivkAjKJpI3BSeTZOcu4Fgg7BfFrmTV10YwZLxLIiXDRPnTcPQg9XmmQGlDLsnmGDBBM1fnNQpDAm4W+kglauNuUprop8A/F9K0JcKrRcx7fGunj64w0YTG/9wtGqtvdMMN8sQdN7ih8eq44FTIQw0CPmqXkA1YZK0m9Cx36dcdqZN0IS+mfVYCQ==" FormaPago="03" NoCertificado="00001000000408191798" Certificado="MIIGqDCCBJCgAwIBAgIUMDAwMDEwMDAwMDA0MDgxOTE3OTgwDQYJKoZIhvcNAQELBQAwggGyMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29kc0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVycmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMV0wWwYJKoZIhvcNAQkCDE5SZXNwb25zYWJsZTogQWRtaW5pc3RyYWNpw7NuIENlbnRyYWwgZGUgU2VydmljaW9zIFRyaWJ1dGFyaW9zIGFsIENvbnRyaWJ1eWVudGUwHhcNMTcxMTE4MDAyMDI0WhcNMjExMTE4MDAyMDI0WjCCAUcxSTBHBgNVBAMTQENPTUVSQ0lBTElaQURPUkEgREUgQVJUSUNVTE9TIE5BQ0lPTkFMRVMgWSBERSBJTVBPUlRBQ0lPTiBET0xMQVIxVzBVBgNVBCkTTkNPTUVSQ0lBTElaQURPUkEgREUgQVJUSUNVTE9TIE5BQ0lPTkFMRVMgWSBERSBJTVBPUlRBQ0lPTiBET0xMQVIgREFZUyBTQSBERSBDVjFJMEcGA1UEChNAQ09NRVJDSUFMSVpBRE9SQSBERSBBUlRJQ1VMT1MgTkFDSU9OQUxFUyBZIERFIElNUE9SVEFDSU9OIERPTExBUjElMCMGA1UELRMcQ0FOMTMxMjEzSlozIC8gR0FDVTgxMDIwOUhKMzEeMBwGA1UEBRMVIC8gR0FDVTgxMDIwOUhUTFJITDA0MQ8wDQYDVQQLEwZNQVRSSVowggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCia6m8wFT4ly/h0MwMrPTzHVX/JV70VKglBRJAyqLJ0s//zn/eIzH1CFImUcZr6UC+ptFLkqS4XVwJi/0motWZvLDiKXSzwYg5tNqufMjdlovSrEukQ0A6Xp4cO1ZmH0oFTNoQwUkoniyaCPFRvi1ZTaa7TXflTpDMuCfTqS8Eul8QPRE9nwB2RoFytPe4QI57gh3ogmP5qfbisPI5JX8zfdqm+pVsWwZNheXihR1PV68ZXhQDqljDQWI4v0kgRn7CIGuYRHP9YJdxp5g3+Q/p8+5zuDH2pQ5yhwZKGvgGrrZjDPmiSf3oLJOaOep6UrNgFHIFFwbddW/31VAqSs7zAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBd9zGPRhXnGYPFi1jmjwUWs3SxYHsHw5LPtFjAwHZNisg8AY7yqk0iSWib13O93Ij//8/wYy5CWJ8MK8I4++ICuRjznnk4zqUpoZjOlWC82Lq9lAiIAM3uYFOTCfJovWMpiDESKNXBwevbEFzGYmo0EXir4Kp+BIep8ntuWtLF0x1G5g7D02lkvdzTjjyULe9KWbtpw3fFwXRWgDN3a4+NSs/ZIvMG+1YPTRQ21ocCLNRcvNpHs7squnfTG237odRPKZWilCd2PHRbbZly+1g1qTgONz9UOcavKgbue+p8DS1HJYG/crFbYhDDgHkyAh2FR8wZ8owDS0pwr5nLdg5OT4BngUozOk4QeXfakWsqWULCDBvtfPH9C74s6G3zmSyf7lTB6VnX7HnMXCZ8LFlwl3uriNvEB4aggqaNicOeBE2+N7uqbiPOyzpPE5m9iPM7vEwHmm1oDUeErat5CHSt0fY17JhG2tv2TddNpwvQ9Z4z6zdl4ubZ+dGPK5fqt3vsveq7ct/rXt3bbN8XnqimPyTo393uInE2SOOd4aW/EM9PHqw7zMqYKjEG7k7YfKumpTbf3/q4avdlCpSzE9pSfbVAj4+g7e3qJESt8GKw7XZDMwc4Ng3rV4d9wUWOqVzvero1u3szoKc8VHLD+w1DuiApXlTm0n/BX5wi3OAxrA==" SubTotal="341.55" Moneda="MXN" TipoCambio="1" Total="344.99" TipoDeComprobante="I" MetodoPago="PUE" LugarExpedicion="90500" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd">
+    <cfdi:Emisor Rfc="CAN131213JZ3" Nombre="COMERCIALIZADORA DE ARTICULOS NACIONALES Y DE IMPORTACION DOLLAR DAYS SA DE CV" RegimenFiscal="601" />
+    <cfdi:Receptor Rfc="XAXX010101000" Nombre="PUBLICO EN GENERAL" UsoCFDI="G03" />
+    <cfdi:Conceptos>
+        <cfdi:Concepto ClaveProdServ="55101500" Cantidad="8.000000" ClaveUnidad="H87" Unidad="Pieza" Descripcion="9786072102897 DICCIONARIO LAROUSSE BASICO T1" ValorUnitario="40.00" Importe="320.00">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="320.00" Impuesto="002" TipoFactor="Exento" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveProdServ="43202200" NoIdentificacion="AUDIO02" Cantidad="1.000000" ClaveUnidad="H87" Unidad="Pieza" Descripcion="AUDIO02 CABLE DE AUDIO Y VIDEO T3" ValorUnitario="21.5517" Importe="21.55">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="21.5517" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="3.44" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+    </cfdi:Conceptos>
+    <cfdi:Impuestos TotalImpuestosTrasladados="3.44">
+        <cfdi:Traslados>
+            <cfdi:Traslado Impuesto="002" TipoFactor="Exento" TasaOCuota="0.000000" Importe="0.00" />
+            <cfdi:Traslado Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="3.44" />
+        </cfdi:Traslados>
+    </cfdi:Impuestos>
+    <cfdi:Complemento>
+        <tfd:TimbreFiscalDigital Version="1.1" UUID="4563A8B2-0A73-441A-AD4C-B94FA199AFDF" FechaTimbrado="2018-08-31T11:50:20" RfcProvCertif="FFM100507289" SelloCFD="YtepeuxuNw3e6UGlY8LZGyPyjIhW2Nbd5xQC8dc1tmdteuSv/vNNcKqY1TYta1CYDds5cj3uTAZW+PoyrWCpzKCwnOOfnHqR1Iwhgut4xJavf94L3Ddci56Ja3ujsGzsb5aH365opP46mnJ6UIFkW2RUEn48FAZivkAjKJpI3BSeTZOcu4Fgg7BfFrmTV10YwZLxLIiXDRPnTcPQg9XmmQGlDLsnmGDBBM1fnNQpDAm4W+kglauNuUprop8A/F9K0JcKrRcx7fGunj64w0YTG/9wtGqtvdMMN8sQdN7ih8eq44FTIQw0CPmqXkA1YZK0m9Cx36dcdqZN0IS+mfVYCQ==" NoCertificadoSAT="00001000000403038987" SelloSAT="zzKhw4FwJXpZ7fZCP816o93swok1CM0tUWym34jyA04+PMVp6G/6DwxQ9WHlsQSGKChz8EU5bskNPEZ+QhHQNbP+/Spt3uAqhlQTh8mgTYc1MPQCnMz6V5Yq1TlDj993Kr+UoHpQQwwKp0bZl+rG1TTNHCmgkzkeNL2mvg3oFqwMV5PQMm255ag0uxkNQGOyDDDgN9En7VTraW2HVKe5vFR5lqwoOnJrQsP98p4+4/2J+FIuzC8eLQhNnyD9Y4LU651qtzMTEFE1n/Fd719g1gL8KSJzoZVUFvu13MTk6mwvFrS0xnKbpbOs+5qW0qhhmkNcMduqNVRwjF4cBvSaAA==" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd" />
+    </cfdi:Complemento>
+</cfdi:Comprobante>

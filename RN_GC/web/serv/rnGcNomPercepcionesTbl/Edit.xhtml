@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomPercepcionesTblEditDlg" widgetVar="RnGcNomPercepcionesTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcNomPercepcionesTblTitle}">
+            <h:form id="RnGcNomPercepcionesTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomPercepcionesTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcNomPercepcionesTblLabel_cveTipoPercepcion}" for="cveTipoPercepcion" />
+                        <p:inputText id="cveTipoPercepcion" value="#{rnGcNomPercepcionesTblController.selected.cveTipoPercepcion}" title="#{bundle.EditRnGcNomPercepcionesTblTitle_cveTipoPercepcion}" required="true" requiredMessage="#{bundle.EditRnGcNomPercepcionesTblRequiredMessage_cveTipoPercepcion}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomPercepcionesTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcNomPercepcionesTblController.selected.descripcion}" title="#{bundle.EditRnGcNomPercepcionesTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcNomPercepcionesTblLabel_version}" for="version" />
+                        <p:inputText id="version" value="#{rnGcNomPercepcionesTblController.selected.version}" title="#{bundle.EditRnGcNomPercepcionesTblTitle_version}" required="true" requiredMessage="#{bundle.EditRnGcNomPercepcionesTblRequiredMessage_version}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomPercepcionesTblLabel_revision}" for="revision" />
+                        <p:inputText id="revision" value="#{rnGcNomPercepcionesTblController.selected.revision}" title="#{bundle.EditRnGcNomPercepcionesTblTitle_revision}" required="true" requiredMessage="#{bundle.EditRnGcNomPercepcionesTblRequiredMessage_revision}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomPercepcionesTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomPercepcionesTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcNomPercepcionesTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcNomPercepcionesTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcNomPercepcionesTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomPercepcionesTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcNomPercepcionesTblTitle_fechaFinVigencia}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomPercepcionesTblController.update}" value="#{bundle.Save}" update="display,:RnGcNomPercepcionesTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcNomPercepcionesTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomPercepcionesTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

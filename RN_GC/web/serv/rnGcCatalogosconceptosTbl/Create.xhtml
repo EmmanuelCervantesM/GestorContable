@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCatalogosconceptosTblCreateDlg" widgetVar="RnGcCatalogosconceptosTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCatalogosconceptosTblTitle}">
+            <h:form id="RnGcCatalogosconceptosTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCatalogosconceptosTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosconceptosTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCatalogosconceptosTblController.selected.id}" title="#{bundle.CreateRnGcCatalogosconceptosTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcCatalogosconceptosTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosconceptosTblLabel_cantidad}" for="cantidad" />
+                        <p:inputText id="cantidad" value="#{rnGcCatalogosconceptosTblController.selected.cantidad}" title="#{bundle.CreateRnGcCatalogosconceptosTblTitle_cantidad}" required="true" requiredMessage="#{bundle.CreateRnGcCatalogosconceptosTblRequiredMessage_cantidad}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosconceptosTblLabel_unidad}" for="unidad" />
+                        <p:inputText id="unidad" value="#{rnGcCatalogosconceptosTblController.selected.unidad}" title="#{bundle.CreateRnGcCatalogosconceptosTblTitle_unidad}" required="true" requiredMessage="#{bundle.CreateRnGcCatalogosconceptosTblRequiredMessage_unidad}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosconceptosTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCatalogosconceptosTblController.selected.descripcion}" title="#{bundle.CreateRnGcCatalogosconceptosTblTitle_descripcion}" required="true" requiredMessage="#{bundle.CreateRnGcCatalogosconceptosTblRequiredMessage_descripcion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosconceptosTblLabel_valorUnitario}" for="valorUnitario" />
+                        <p:inputText id="valorUnitario" value="#{rnGcCatalogosconceptosTblController.selected.valorUnitario}" title="#{bundle.CreateRnGcCatalogosconceptosTblTitle_valorUnitario}" required="true" requiredMessage="#{bundle.CreateRnGcCatalogosconceptosTblRequiredMessage_valorUnitario}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosconceptosTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCatalogosconceptosTblController.selected.creadoPor}" title="#{bundle.CreateRnGcCatalogosconceptosTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcCatalogosconceptosTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosconceptosTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCatalogosconceptosTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCatalogosconceptosTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCatalogosconceptosTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosconceptosTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCatalogosconceptosTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcCatalogosconceptosTblTitle_ultimaActualizacionPor}" required="true" requiredMessage="#{bundle.CreateRnGcCatalogosconceptosTblRequiredMessage_ultimaActualizacionPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosconceptosTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCatalogosconceptosTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCatalogosconceptosTblTitle_ultimaFechaActualizacion}" required="true" requiredMessage="#{bundle.EditRnGcCatalogosconceptosTblRequiredMessage_ultimaFechaActualizacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosconceptosTblLabel_CFDIId}" for="CFDIId" />
+                        <p:inputText id="CFDIId" value="#{rnGcCatalogosconceptosTblController.selected.CFDIId}" title="#{bundle.CreateRnGcCatalogosconceptosTblTitle_CFDIId}" required="true" requiredMessage="#{bundle.CreateRnGcCatalogosconceptosTblRequiredMessage_CFDIId}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogosconceptosTblLabel_rngccfdistblId}" for="rngccfdistblId" />
+                        <p:selectOneMenu id="rngccfdistblId" value="#{rnGcCatalogosconceptosTblController.selected.rngccfdistblId}" required="true" requiredMessage="#{bundle.EditRnGcCatalogosconceptosTblRequiredMessage_rngccfdistblId}">
+                            <f:selectItems value="#{rnGcCfdisTblController.itemsAvailableSelectOne}"
+                                           var="rngccfdistblIdItem"
+                                           itemValue="#{rngccfdistblIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCatalogosconceptosTblController.create}" value="#{bundle.Save}" update="display,:RnGcCatalogosconceptosTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCatalogosconceptosTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCatalogosconceptosTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

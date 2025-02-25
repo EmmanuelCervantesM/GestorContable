@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <h:head>
+        <title><ui:insert name="title">Default Title</ui:insert></title>
+        <h:outputStylesheet library="css" name="jsfcrudRN.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
+    </h:head>
+    
+    <h:body>
+        
+        <p:growl id="growl" life="10000" showDetail="true"/>
+        
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="100" header="#{bundle.AppName}" >
+                <ui:insert name="header">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tbody>
+                            <tr>
+                                <!--<td style="width: 16.66665%;"><p:graphicImage id="graficosImagen" value="#{rnGcImagenesTblController.byteToImage(facturarContoller.obtenerRFCUsuario())}"  height="70" width="75" cache="false"/></td> -->
+                                <td style="width: 16.66665%;">
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <h:outputText value="Emisor:" style="font-weight: bold"/>
+                                        <h:outputText value="#{facturarContoller.obtenerNombreCompletoUsuario()}" />
+                                        <h:outputText value="RFC:" style="font-weight: bold"/>
+                                        <h:outputText value="#{facturarContoller.obtenerRFCUsuario()}"/>
+                                    </h:panelGrid> 
+                                </td>
+                                <td style="width: 33.3333%; text-align: center;"><h1>Bienvenido #{sessionScope['nombreCompleto']}</h1></td>
+                                <td style="width: 16.6667%; text-align: right;">
+                                    <h2>
+                                        <h:form>
+                                            <p:commandLink value="Cambiar Contraseña" action="/serv/rnGcUsuariosTbl/cambioPwd" />
+                                        </h:form>
+                                    </h2>
+                                </td>    
+                                <td style="width: 16.6667%; text-align: center;">
+                                    <h2>
+                                        <h:form>
+                                            <p:commandLink action="#{login.logout}">
+                                                <p:graphicImage id="salirIcon"
+                                                                value="/resources/images/icons/exit.png"
+                                                                width="42"
+                                                                height="42">
+                                                </p:graphicImage>
+                                            </p:commandLink>
+                                        </h:form>
+                                    </h2>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h:form>
+                        
+                    </h:form>
+                </ui:insert>
+            </p:layoutUnit>
+            
+            <p:layoutUnit position="south" size="65">
+                <ui:insert name="footer">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tbody>
+                            <tr>
+                                <td style="width: 33.3333%;">
+                                    <h:panelGrid columns="2" cellpadding="10">
+                                        <h:form>
+                                            <p:outputLabel style="font-weight: 900" value="Timbres Restantes:" for="proveedor" />
+                                            <p:selectOneMenu id="proveedor" style="width: 160px" value="#{facturarContoller.cfdisId.proveedorTimbres}">
+                                                <f:selectItems value="#{facturarContoller.obtenerTimbres()}"
+                                                               var="timbresItem"
+                                                               itemLabel="#{timbresItem.timbresRestantes} timbres restantes"
+                                                               itemValue="#{timbresItem.id}"/>
+                                            </p:selectOneMenu>
+                                        </h:form>
+                                    </h:panelGrid>
+                                </td>
+                                <td style="width: 33.3333%; text-align: center;"><h2>Administración Contable. 2023</h2></td>
+                                <td style="width: 33.3333%; text-align: right;">
+                                    <h:form>
+                                        <h2><p:clock pattern="dd/MM/yyyy hh:mm:ss aa" /></h2>
+                                    </h:form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ui:insert> 
+            </p:layoutUnit>
+            
+            <p:layoutUnit position="west" size="173" header="Menu" collapsible="true" >
+                <ui:insert name="menu">
+                    <h:form >
+                        <p:panelMenu style="width: 150px" model="#{menuView.model}"/>
+                    </h:form>
+                </ui:insert>
+            </p:layoutUnit>
+            
+            <p:layoutUnit position="center">
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+                
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage value="/resources/images/icons/spinner.gif"/>
+                </p:dialog>
+                <ui:insert name="body"/>
+            </p:layoutUnit>
+            
+        </p:layout>
+        
+    </h:body>
+    
+</html>

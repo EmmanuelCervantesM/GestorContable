@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPersonasTblViewDlg" widgetVar="RnGcPersonasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcPersonasTblTitle}">
+            <h:form id="RnGcPersonasTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPersonasTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_id}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.id}" title="#{bundle.ViewRnGcPersonasTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_nombre}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.nombre}" title="#{bundle.ViewRnGcPersonasTblTitle_nombre}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_nombreFiscal}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.nombreFiscal}" title="#{bundle.ViewRnGcPersonasTblTitle_nombreFiscal}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_rfc}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.rfc}" title="#{bundle.ViewRnGcPersonasTblTitle_rfc}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_noExt}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.noExt}" title="#{bundle.ViewRnGcPersonasTblTitle_noExt}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_noInt}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.noInt}" title="#{bundle.ViewRnGcPersonasTblTitle_noInt}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_telefono}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.telefono}" title="#{bundle.ViewRnGcPersonasTblTitle_telefono}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_pais}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.pais}" title="#{bundle.ViewRnGcPersonasTblTitle_pais}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_codigoPostal}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.codigoPostal}" title="#{bundle.ViewRnGcPersonasTblTitle_codigoPostal}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_estado}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.estado}" title="#{bundle.ViewRnGcPersonasTblTitle_estado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_ciudad}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.ciudad}" title="#{bundle.ViewRnGcPersonasTblTitle_ciudad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_localidad}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.localidad}" title="#{bundle.ViewRnGcPersonasTblTitle_localidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_calle}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.calle}" title="#{bundle.ViewRnGcPersonasTblTitle_calle}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_email}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.email}" title="#{bundle.ViewRnGcPersonasTblTitle_email}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_tipoPersona}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.tipoPersona}" title="#{bundle.ViewRnGcPersonasTblTitle_tipoPersona}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_edad}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.edad}" title="#{bundle.ViewRnGcPersonasTblTitle_edad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.creadoPor}" title="#{bundle.ViewRnGcPersonasTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcPersonasTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcPersonasTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcPersonasTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPersonasTblLabel_tipoPersonaId}"/>
+                        <h:outputText value="#{rnGcPersonasTblController.selected.tipoPersonaId}" title="#{bundle.ViewRnGcPersonasTblTitle_tipoPersonaId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcPersonasTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

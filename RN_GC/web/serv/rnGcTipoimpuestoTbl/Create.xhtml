@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTipoimpuestoTblCreateDlg" widgetVar="RnGcTipoimpuestoTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcTipoimpuestoTblTitle}">
+            <h:form id="RnGcTipoimpuestoTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcTipoimpuestoTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcTipoimpuestoTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcTipoimpuestoTblController.selected.id}" title="#{bundle.CreateRnGcTipoimpuestoTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcTipoimpuestoTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTipoimpuestoTblLabel_tipoImpuesto}" for="tipoImpuesto" />
+                        <p:inputText id="tipoImpuesto" value="#{rnGcTipoimpuestoTblController.selected.tipoImpuesto}" title="#{bundle.CreateRnGcTipoimpuestoTblTitle_tipoImpuesto}" required="true" requiredMessage="#{bundle.CreateRnGcTipoimpuestoTblRequiredMessage_tipoImpuesto}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTipoimpuestoTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcTipoimpuestoTblController.selected.creadoPor}" title="#{bundle.CreateRnGcTipoimpuestoTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcTipoimpuestoTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTipoimpuestoTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcTipoimpuestoTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcTipoimpuestoTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcTipoimpuestoTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTipoimpuestoTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcTipoimpuestoTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcTipoimpuestoTblTitle_ultimaActualizacionPor}" required="true" requiredMessage="#{bundle.CreateRnGcTipoimpuestoTblRequiredMessage_ultimaActualizacionPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTipoimpuestoTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcTipoimpuestoTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcTipoimpuestoTblTitle_ultimaFechaActualizacion}" required="true" requiredMessage="#{bundle.EditRnGcTipoimpuestoTblRequiredMessage_ultimaFechaActualizacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTipoimpuestoTblLabel_cfdiLineaId}" for="cfdiLineaId" />
+                        <p:selectOneMenu id="cfdiLineaId" value="#{rnGcTipoimpuestoTblController.selected.cfdiLineaId}" >
+                            <f:selectItems value="#{rnGcCfdisLineasTblController.itemsAvailableSelectOne}"
+                                           var="cfdiLineaIdItem"
+                                           itemValue="#{cfdiLineaIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcTipoimpuestoTblController.create}" value="#{bundle.Save}" update="display,:RnGcTipoimpuestoTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcTipoimpuestoTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcTipoimpuestoTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

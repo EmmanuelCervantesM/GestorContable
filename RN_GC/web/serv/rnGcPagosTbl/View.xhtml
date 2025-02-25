@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPagosTblViewDlg" widgetVar="RnGcPagosTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcPagosTblTitle}">
+            <h:form id="RnGcPagosTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPagosTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_id}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.id}" title="#{bundle.ViewRnGcPagosTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_noPago}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.noPago}" title="#{bundle.ViewRnGcPagosTblTitle_noPago}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_nombreEmisor}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.nombreEmisor}" title="#{bundle.ViewRnGcPagosTblTitle_nombreEmisor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_RFCEmisor}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.RFCEmisor}" title="#{bundle.ViewRnGcPagosTblTitle_RFCEmisor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_tipoCopmprobante}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.tipoCopmprobante}" title="#{bundle.ViewRnGcPagosTblTitle_tipoCopmprobante}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_lugarExpedicion}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.lugarExpedicion}" title="#{bundle.ViewRnGcPagosTblTitle_lugarExpedicion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_fechaExpedicion}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.fechaExpedicion}" title="#{bundle.ViewRnGcPagosTblTitle_fechaExpedicion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_horaExpedicion}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.horaExpedicion}" title="#{bundle.ViewRnGcPagosTblTitle_horaExpedicion}">
+                            <f:convertDateTime pattern="HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_moneda}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.moneda}" title="#{bundle.ViewRnGcPagosTblTitle_moneda}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_RFCReceptor}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.RFCReceptor}" title="#{bundle.ViewRnGcPagosTblTitle_RFCReceptor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_usoCFDI}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.usoCFDI}" title="#{bundle.ViewRnGcPagosTblTitle_usoCFDI}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_importe}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.importe}" title="#{bundle.ViewRnGcPagosTblTitle_importe}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_impuesto}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.impuesto}" title="#{bundle.ViewRnGcPagosTblTitle_impuesto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_subtotal}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.subtotal}" title="#{bundle.ViewRnGcPagosTblTitle_subtotal}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_totalImpuesto}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.totalImpuesto}" title="#{bundle.ViewRnGcPagosTblTitle_totalImpuesto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_total}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.total}" title="#{bundle.ViewRnGcPagosTblTitle_total}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.creadoPor}" title="#{bundle.ViewRnGcPagosTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcPagosTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcPagosTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcPagosTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_facturasId}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.facturasId}" title="#{bundle.ViewRnGcPagosTblTitle_facturasId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_rngcfacturastblId}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.rngcfacturastblId}" title="#{bundle.ViewRnGcPagosTblTitle_rngcfacturastblId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosTblLabel_rngcfacturastblId1}"/>
+                        <h:outputText value="#{rnGcPagosTblController.selected.rngcfacturastblId1}" title="#{bundle.ViewRnGcPagosTblTitle_rngcfacturastblId1}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcPagosTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

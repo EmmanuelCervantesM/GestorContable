@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpTipoembalajesatTblViewDlg" widgetVar="RnGcCpTipoembalajesatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpTipoembalajesatTblTitle}">
+            <h:form id="RnGcCpTipoembalajesatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpTipoembalajesatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoembalajesatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpTipoembalajesatTblController.selected.id}" title="#{bundle.ViewRnGcCpTipoembalajesatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoembalajesatTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpTipoembalajesatTblController.selected.clave}" title="#{bundle.ViewRnGcCpTipoembalajesatTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoembalajesatTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpTipoembalajesatTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpTipoembalajesatTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoembalajesatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpTipoembalajesatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpTipoembalajesatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoembalajesatTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcCpTipoembalajesatTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcCpTipoembalajesatTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoembalajesatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpTipoembalajesatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpTipoembalajesatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoembalajesatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpTipoembalajesatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpTipoembalajesatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoembalajesatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpTipoembalajesatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpTipoembalajesatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipoembalajesatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpTipoembalajesatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpTipoembalajesatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpTipoembalajesatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

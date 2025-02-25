@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cfdi:Comprobante xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd" Version="3.3" Serie="A" Folio="1970" Fecha="2018-08-28T19:45:35" Sello="P3XxQnVZGE9hqY0mcKHrl3zAlrrAGfHR7vYa6txkswmJwiIJtrwCSZagoBWvBi6G+uaqkN/a0hW0As4ZtpHCCRmQ/5onIcKwVFibansnZKbarkjLn8Q5o9Jhh1aktYVmaW0fXODVPz4m7UCL92VRoT5i7UH/XtepkiHvNWe6rHE=" FormaPago="99" NoCertificado="00001000000305007300" Certificado="MIIEojCCA4qgAwIBAgIUMDAwMDEwMDAwMDAzMDUwMDczMDAwDQYJKoZIhvcNAQEFBQAwggGKMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29kc0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVycmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMTUwMwYJKoZIhvcNAQkCDCZSZXNwb25zYWJsZTogQ2xhdWRpYSBDb3ZhcnJ1YmlhcyBPY2hvYTAeFw0xNDA4MjkxNzA3MTdaFw0xODA4MjkxNzA3MTdaMIHuMTAwLgYDVQQDEydNQVFVSU5BRE9TIElORFVTVFJJQUxFUyBKQU5LRU4gU0EgREUgQ1YxMDAuBgNVBCkTJ01BUVVJTkFET1MgSU5EVVNUUklBTEVTIEpBTktFTiBTQSBERSBDVjEwMC4GA1UEChMnTUFRVUlOQURPUyBJTkRVU1RSSUFMRVMgSkFOS0VOIFNBIERFIENWMSUwIwYDVQQtExxNSUowOTAzMTlUNTAgLyBNQVBINzYwMjE3NVU1MR4wHAYDVQQFExUgLyBNQVBINzYwMjE3SFBMUlpDMDgxDzANBgNVBAsTBkpBTktFTjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAi0juhppzr0ai/BTu9mWcjcZSvdHryxA87sxeIRDGaHZxOMXVFa2GVPP9X/t5/ISpzDDwIGp+CkNQk1fh2RzSYRv0lc9hcvAwdxkvh89ew8aXfk+jr4gIfbFWRSQwC/jEcNHpB+zte38DmDYTDMr+/HZB6fOU/KS0bXzQxbvMfmUCAwEAAaMdMBswDAYDVR0TAQH/BAIwADALBgNVHQ8EBAMCBsAwDQYJKoZIhvcNAQEFBQADggEBAFVZU/IUMMo3vFou0KakJ3mOqhR/sFqvhUwdEa8gYDrVaZt9p+o/3O+p7nB8F4ZYZofu6lAsMYFwBA808sZg1Cc0sN3T3q2gdKS2ThbhTbP07IADkIR1DqWjc7yzQ16eQi9Ha+nyU7KpfD0spMpVYe3MM70uPxWUBHDyHJtiZFZqLZY+Uvv3+K98iGBX9IpkV5q5XJgNK+WvnHp3aj9EBR1KrIvtOKutN5y6hw3l1GgT5DJXAdL0jqmVVblmqmfeBh/sEuyc7rH+NxeaNIJvtFDXOGYWMXUaH3PTkLFbwFgKdxzoeHvjEpCcomhQ8j45+HVlYAcpkobYmhanV0I5Iec=" CondicionesDePago="CRÉDITO 90 DÍAS" SubTotal="92650" Moneda="MXN" Total="107474.00" TipoDeComprobante="I" MetodoPago="PPD" LugarExpedicion="90378" xmlns:cfdi="http://www.sat.gob.mx/cfd/3">
+    <cfdi:Emisor Rfc="MIJ090319T50" Nombre="MAQUINADOS INDUSTRIALES JANKEN S.A. DE C.V." RegimenFiscal="601" />
+    <cfdi:Receptor Rfc="INO141203SN3" Nombre="INDUSTRIAS NOVACERAMIC S.A. DE C.V." UsoCFDI="P01" />
+    <cfdi:Conceptos>
+        <cfdi:Concepto ClaveUnidad="E48" ClaveProdServ="73181000" Cantidad="1" Descripcion="FABRICACIÓN DE EMBUDO  MOLDE  V12RMH4" ValorUnitario="24400" Importe="24400">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="24400" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="3904.000000" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="E48" ClaveProdServ="73181000" Cantidad="1" Descripcion="FABRICACIÓN DE OREJAS PARA FRENO MOLDE  V12RMH4" ValorUnitario="4800" Importe="4800">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="4800" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="768.000000" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="E48" ClaveProdServ="73181000" Cantidad="1" Descripcion="FABRICACIÓN DE FRENO  SUPERIOR E INFERIOR MOLDE  V12RMH4" ValorUnitario="11200" Importe="11200">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="11200" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="1792.000000" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="E48" ClaveProdServ="73181000" Cantidad="1" Descripcion="FABRICACIÓN DE TACOS  MOLDE V12RMH4" ValorUnitario="9400" Importe="9400">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="9400" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="1504.000000" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="E48" ClaveProdServ="73181000" Cantidad="1" Descripcion="FABRICACIÓN DE PLACA INTERMEDIA MOLDE V12RMH4" ValorUnitario="7600" Importe="7600">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="7600" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="1216.000000" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="E48" ClaveProdServ="73181000" Cantidad="1" Descripcion="FABRICACIÓN DE PLACA BASE MOLDE V12RMH4" ValorUnitario="9400" Importe="9400">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="9400" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="1504.000000" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="E48" ClaveProdServ="73181000" Cantidad="1" Descripcion="FABRICACIÓN DE PARRILLA MOLDE V12RMH4" ValorUnitario="9400" Importe="9400">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="9400" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="1504.000000" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="E48" ClaveProdServ="73181000" Cantidad="1" Descripcion="FABRICACIÓN DE CUCHILLAS SUPERIOR E INFERIOR  MOLDE V12RMH4" ValorUnitario="9950" Importe="9950">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="9950" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="1592.000000" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="E48" ClaveProdServ="73181000" Cantidad="1" Descripcion="FABRICACIÓN DE BASES PARA CUCHILLAS MOLDE V12RMH4" ValorUnitario="5100" Importe="5100">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="5100" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="816.000000" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto ClaveUnidad="E48" ClaveProdServ="73181000" Cantidad="1" Descripcion="FABRICACIÓN DE SOPORTE PARA FRENOS DE MOLDE V12RMH4" ValorUnitario="1400" Importe="1400">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="1400" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="224.000000" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+    </cfdi:Conceptos>
+    <cfdi:Impuestos TotalImpuestosTrasladados="14824.00">
+        <cfdi:Traslados>
+            <cfdi:Traslado Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="14824.00" />
+        </cfdi:Traslados>
+    </cfdi:Impuestos>
+    <cfdi:Complemento>
+        <tfd:TimbreFiscalDigital Version="1.1" RfcProvCertif="FLI081010EK2" UUID="9EF7C66C-98EF-48F0-9C2F-3EC34C44C437" FechaTimbrado="2018-08-28T20:01:17" SelloCFD="P3XxQnVZGE9hqY0mcKHrl3zAlrrAGfHR7vYa6txkswmJwiIJtrwCSZagoBWvBi6G+uaqkN/a0hW0As4ZtpHCCRmQ/5onIcKwVFibansnZKbarkjLn8Q5o9Jhh1aktYVmaW0fXODVPz4m7UCL92VRoT5i7UH/XtepkiHvNWe6rHE=" NoCertificadoSAT="00001000000403498740" SelloSAT="aCvzWKLoziVrnQe76hiPyNlWpNE2AEabut/+sHAZGxw7cuZ6zT8etLY3GqAcfoKtvyqbeP4CBdrUs0pbSbtheR4IlKQztOWq6Z/G3PXrg/2sPhjlFCyiyZuHvpA25IX9GqEkgUa1Y9gDVzEEtzCjPYRDcjvYq/TJctiOujtHJHiR1sQd85w/TxczzVH7i30FptL3XLB4MTpPS9vH9JV8jObr9rMhwPwsA/TvR5ZOL+rSWpcqr6ItS7ul8h6cssAWGhGbBYhGZhXt0gVobF4nH7lwFNRVWqEMT5Iw8D7DSEHQ/fSTXBNkjOCqltfZHo2V2c0Sfdkdck39akfRSilafw==" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd" />
+    </cfdi:Complemento>
+</cfdi:Comprobante>

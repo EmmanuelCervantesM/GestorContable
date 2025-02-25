@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpPaissatTblViewDlg" widgetVar="RnGcCpPaissatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpPaissatTblTitle}">
+            <h:form id="RnGcCpPaissatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpPaissatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpPaissatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpPaissatTblController.selected.id}" title="#{bundle.ViewRnGcCpPaissatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPaissatTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpPaissatTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpPaissatTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPaissatTblLabel_clavePais}"/>
+                        <h:outputText value="#{rnGcCpPaissatTblController.selected.clavePais}" title="#{bundle.ViewRnGcCpPaissatTblTitle_clavePais}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPaissatTblLabel_claveEstado}"/>
+                        <h:outputText value="#{rnGcCpPaissatTblController.selected.claveEstado}" title="#{bundle.ViewRnGcCpPaissatTblTitle_claveEstado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPaissatTblLabel_claveMunicipio}"/>
+                        <h:outputText value="#{rnGcCpPaissatTblController.selected.claveMunicipio}" title="#{bundle.ViewRnGcCpPaissatTblTitle_claveMunicipio}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPaissatTblLabel_claveLocalidad}"/>
+                        <h:outputText value="#{rnGcCpPaissatTblController.selected.claveLocalidad}" title="#{bundle.ViewRnGcCpPaissatTblTitle_claveLocalidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPaissatTblLabel_tipo}"/>
+                        <h:outputText value="#{rnGcCpPaissatTblController.selected.tipo}" title="#{bundle.ViewRnGcCpPaissatTblTitle_tipo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPaissatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpPaissatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpPaissatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpPaissatTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcCpPaissatTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcCpPaissatTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpPaissatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpPaissatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpPaissatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPaissatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpPaissatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpPaissatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpPaissatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpPaissatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpPaissatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpPaissatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpPaissatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpPaissatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpPaissatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

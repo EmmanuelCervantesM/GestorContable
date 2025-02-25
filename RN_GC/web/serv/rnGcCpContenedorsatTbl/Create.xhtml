@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpContenedorsatTblCreateDlg" widgetVar="RnGcCpContenedorsatTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCpContenedorsatTblTitle}">
+            <h:form id="RnGcCpContenedorsatTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpContenedorsatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedorsatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpContenedorsatTblController.selected.id}" title="#{bundle.CreateRnGcCpContenedorsatTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcCpContenedorsatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedorsatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpContenedorsatTblController.selected.clave}" title="#{bundle.CreateRnGcCpContenedorsatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedorsatTblLabel_tipoContenedor}" for="tipoContenedor" />
+                        <p:inputText id="tipoContenedor" value="#{rnGcCpContenedorsatTblController.selected.tipoContenedor}" title="#{bundle.CreateRnGcCpContenedorsatTblTitle_tipoContenedor}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedorsatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpContenedorsatTblController.selected.descripcion}" title="#{bundle.CreateRnGcCpContenedorsatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedorsatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpContenedorsatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpContenedorsatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedorsatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpContenedorsatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpContenedorsatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedorsatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpContenedorsatTblController.selected.creadoPor}" title="#{bundle.CreateRnGcCpContenedorsatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcCpContenedorsatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedorsatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpContenedorsatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpContenedorsatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpContenedorsatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedorsatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpContenedorsatTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcCpContenedorsatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpContenedorsatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpContenedorsatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpContenedorsatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpContenedorsatTblController.create}" value="#{bundle.Save}" update="display,:RnGcCpContenedorsatTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCpContenedorsatTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpContenedorsatTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

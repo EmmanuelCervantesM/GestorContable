@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpTipotraficosatTblViewDlg" widgetVar="RnGcCpTipotraficosatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpTipotraficosatTblTitle}">
+            <h:form id="RnGcCpTipotraficosatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpTipotraficosatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpTipotraficosatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpTipotraficosatTblController.selected.id}" title="#{bundle.ViewRnGcCpTipotraficosatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipotraficosatTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpTipotraficosatTblController.selected.clave}" title="#{bundle.ViewRnGcCpTipotraficosatTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipotraficosatTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpTipotraficosatTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpTipotraficosatTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipotraficosatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpTipotraficosatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpTipotraficosatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipotraficosatTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcCpTipotraficosatTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcCpTipotraficosatTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipotraficosatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpTipotraficosatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpTipotraficosatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipotraficosatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpTipotraficosatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpTipotraficosatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipotraficosatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpTipotraficosatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpTipotraficosatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipotraficosatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpTipotraficosatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpTipotraficosatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpTipotraficosatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

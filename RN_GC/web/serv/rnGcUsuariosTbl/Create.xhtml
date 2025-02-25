@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcUsuariosTblCreateDlg" widgetVar="RnGcUsuariosTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="Alta de Usuario">
+            <h:form id="RnGcUsuariosTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:growl sticky="true"/>
+                    <p:panelGrid columns="4" rendered="#{rnGcUsuariosTblController.selected != null}">
+                        <p:outputLabel value="Tipo Negocio" for="tipoUsuario"/>
+                        <p:selectOneMenu id="tipoUsuario" style="width: 145px" value="#{rnGcUsuariosTblController.selected.proveedorId}" required="true" requiredMessage="El tipo de negocio es necesario">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItem itemLabel="Matriz" itemValue="Matriz"/>
+                            <f:selectItem itemLabel="Sucursal" itemValue="Sucursal"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcUsuariosTblLabel_usuarioClave}"  for="usuarioClave" />
+                        <p:inputText id="usuarioClave" value="#{rnGcUsuariosTblController.selected.usuarioClave}" style="width: 160px" title="#{bundle.CreateRnGcUsuariosTblTitle_usuarioClave}" required="true" requiredMessage="#{bundle.CreateRnGcUsuariosTblRequiredMessage_usuarioClave}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcUsuariosTblLabel_contrasenia}" for="contrasenia" />
+                        <p:password id="contrasenia" value="#{rnGcUsuariosTblController.selected.contrasenia}" style="width: 160px" title="#{bundle.CreateRnGcUsuariosTblTitle_contrasenia}" required="true" requiredMessage="#{bundle.CreateRnGcUsuariosTblRequiredMessage_contrasenia}">
+                            <f:validateLength minimum="8"/>
+                        </p:password>
+                        <p:outputLabel value="E-mail: "  for="correo" />
+                        <p:inputText id="correo" value="#{rnGcUsuariosTblController.selected.email}" style="width: 160px" title="E-mail" required="true" requiredMessage="Se requiere el E-mail"/>
+                        <p:outputLabel value="Contraseña e-mail:" for="contraseniaCorreo" />
+                        <p:password id="contraseniaCorreo" value="#{rnGcUsuariosTblController.selected.passwordEmail}" style="width: 160px" title="Contraseña e-mail" required="true" requiredMessage="Se requiere la contraseña para el e-mail">
+                            <f:validateLength minimum="8"/>
+                        </p:password>
+                        <p:outputLabel value="RFC" for="rfc"/>
+                        <p:inputText id="rfc" value="#{rnGcUsuariosTblController.selected.rfc}" style="width: 160px" title="#{bundle.CreateRnGcUsuariosTblTitle_rfc}" required="true" requiredMessage="El RFC debe tener 13 caracteres para personas fisicas y 12 caracteres para personas morales">
+                            <f:validateLength minimum="12" maximum="13"/>
+                        </p:inputText>
+                        <p:outputLabel value="#{bundle.CreateRnGcUsuariosTblLabel_nombreCompleto}"  for="nombreCompleto" />
+                        <p:inputText id="nombreCompleto" value="#{rnGcUsuariosTblController.selected.nombreCompleto}" style="width: 160px" title="#{bundle.CreateRnGcUsuariosTblTitle_nombreCompleto}" required="true" requiredMessage="#{bundle.CreateRnGcUsuariosTblRequiredMessage_nombreCompleto}"/>
+                        <p:outputLabel value="Código Postal" for="codigoPostal"/>
+                        <p:inputText id="codigoPostal" value="#{rnGcUsuariosTblController.selected.codigoPostal}" style="width: 160px" required="true" requiredMessage="El código postal es necesario" />
+                        <p:outputLabel value="#{bundle.CreateRnGcUsuariosTblLabel_fechaAlta}" for="fechaAlta" />
+                        <p:calendar id="fechaAlta" pattern="dd/MM/yyyy" value="#{rnGcUsuariosTblController.selected.fechaAlta}" style="width: 160px" title="#{bundle.EditRnGcUsuariosTblTitle_fechaAlta}" required="true" requiredMessage="#{bundle.EditRnGcUsuariosTblRequiredMessage_fechaAlta}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcUsuariosTblLabel_fechaBaja}" for="fechaBaja" />
+                        <p:calendar id="fechaBaja" pattern="dd/MM/yyyy" value="#{rnGcUsuariosTblController.selected.fechaBaja}" style="width: 160px" title="#{bundle.EditRnGcUsuariosTblTitle_fechaBaja}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcUsuariosTblLabel_estado}" for="estado" />
+                        <p:selectOneMenu id="estado" value="#{rnGcUsuariosTblController.selected.estado}" title="#{bundle.CreateRnGcUsuariosTblTitle_estado}" required="true" requiredMessage="#{bundle.CreateRnGcUsuariosTblRequiredMessage_estado}" style="width: 145px">
+                            <f:selectItem itemLabel="Activo" itemValue="A"  />
+                            <f:selectItem itemLabel="Inactivo" itemValue="I" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcUsuariosTblLabel_noIntentos}" for="noIntentos" />
+                        <p:inputText id="noIntentos" value="#{rnGcUsuariosTblController.selected.noIntentos}" style="width: 160px" title="#{bundle.CreateRnGcUsuariosTblTitle_noIntentos}" required="true" requiredMessage="#{bundle.CreateRnGcUsuariosTblRequiredMessage_noIntentos}"/>
+                        <p:outputLabel value="Tipo Usuario" for="tipoUsuario" />
+                        <p:selectOneMenu id="tipoUsuario1" rendered="#{rnGcUsuariosTblController.buscarUsuario() != null}" style="width: 145px" value="#{rnGcUsuariosTblController.selected.tipoUsuario}" required="true" requiredMessage="Tipo Usuario es requerido">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcUsuariosTblController.listaTiposUsuarios}"
+                                           var="tiposUsuario"
+                                           itemLabel="#{tiposUsuario}"
+                                           itemValue="#{tiposUsuario}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Número Usuarios:" for="noUsuarios" rendered="#{rnGcUsuariosTblController.obtenerTipoUsuario()}" />
+                        <p:inputText id="noUsuarios" rendered="#{rnGcUsuariosTblController.obtenerTipoUsuario()}" value="#{rnGcUsuariosTblController.selected.noUsuarios}" style="width: 160px" title="Número Usarios"/>
+                        <p:outputLabel value="Regimen Fiscal:" for="regimen"/>
+                        <p:selectOneMenu id="regimen" style="width: 145px" value="#{rnGcUsuariosTblController.selected.regimenId}"
+                                         filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcRegimenfiscalTblController.itemsAvailableSelectOne}"
+                                           var="regimenIt"
+                                           itemLabel="#{regimenIt.claveRegimenFiscal} - #{regimenIt.descripcion}"
+                                           itemValue="#{regimenIt}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcUsuariosTblLabel_telefono}" for="telefono" />
+                        <p:inputText id="telefono" value="#{rnGcUsuariosTblController.selected.telefono}" style="width: 160px" title="#{bundle.CreateRnGcUsuariosTblTitle_telefono}" >
+                            <f:validateLength minimum="0" maximum="10"/>
+                        </p:inputText>
+                        <p:outputLabel id="tipoUsuario2" value="No se ha definido un tipo de usuario" rendered="#{rnGcUsuariosTblController.buscarUsuario() == null}"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcUsuariosTblController.create()}" value="#{bundle.Save}" update="display, :RnGcUsuariosTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcUsuariosTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcUsuariosTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

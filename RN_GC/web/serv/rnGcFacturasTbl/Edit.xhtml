@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcFacturasTblEditDlg" widgetVar="RnGcFacturasTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcFacturasTblTitle}">
+            <h:form id="RnGcFacturasTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcFacturasTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcFacturasTblController.selected.id}" title="#{bundle.EditRnGcFacturasTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_uuid}" for="uuid" />
+                        <p:inputText id="uuid" value="#{rnGcFacturasTblController.selected.uuid}" title="#{bundle.EditRnGcFacturasTblTitle_uuid}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_uuid}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_rfcEmisor}" for="rfcEmisor" />
+                        <p:inputText id="rfcEmisor" value="#{rnGcFacturasTblController.selected.rfcEmisor}" title="#{bundle.EditRnGcFacturasTblTitle_rfcEmisor}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_rfcEmisor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_nombreEmisor}" for="nombreEmisor" />
+                        <p:inputText id="nombreEmisor" value="#{rnGcFacturasTblController.selected.nombreEmisor}" title="#{bundle.EditRnGcFacturasTblTitle_nombreEmisor}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_nombreEmisor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_rfcReceptor}" for="rfcReceptor" />
+                        <p:inputText id="rfcReceptor" value="#{rnGcFacturasTblController.selected.rfcReceptor}" title="#{bundle.EditRnGcFacturasTblTitle_rfcReceptor}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_rfcReceptor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_nombreReceptor}" for="nombreReceptor" />
+                        <p:inputText id="nombreReceptor" value="#{rnGcFacturasTblController.selected.nombreReceptor}" title="#{bundle.EditRnGcFacturasTblTitle_nombreReceptor}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_nombreReceptor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_folio}" for="folio" />
+                        <p:inputText id="folio" value="#{rnGcFacturasTblController.selected.folio}" title="#{bundle.EditRnGcFacturasTblTitle_folio}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_folio}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_lugarExpedicion}" for="lugarExpedicion" />
+                        <p:inputText id="lugarExpedicion" value="#{rnGcFacturasTblController.selected.lugarExpedicion}" title="#{bundle.EditRnGcFacturasTblTitle_lugarExpedicion}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_lugarExpedicion}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_fechaExpedicion}" for="fechaExpedicion" />
+                        <p:calendar id="fechaExpedicion" pattern="MM/dd/yyyy" value="#{rnGcFacturasTblController.selected.fechaExpedicion}" title="#{bundle.EditRnGcFacturasTblTitle_fechaExpedicion}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_fechaExpedicion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_tipoComprobante}" for="tipoComprobante" />
+                        <p:inputText id="tipoComprobante" value="#{rnGcFacturasTblController.selected.tipoComprobante}" title="#{bundle.EditRnGcFacturasTblTitle_tipoComprobante}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_tipoComprobante}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_claveRegimenFiscal}" for="claveRegimenFiscal" />
+                        <p:inputText id="claveRegimenFiscal" value="#{rnGcFacturasTblController.selected.claveRegimenFiscal}" title="#{bundle.EditRnGcFacturasTblTitle_claveRegimenFiscal}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_claveRegimenFiscal}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_tipoRelacion}" for="tipoRelacion" />
+                        <p:inputText id="tipoRelacion" value="#{rnGcFacturasTblController.selected.tipoRelacion}" title="#{bundle.EditRnGcFacturasTblTitle_tipoRelacion}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_tipoRelacion}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_usoCfdi}" for="usoCfdi" />
+                        <p:inputText id="usoCfdi" value="#{rnGcFacturasTblController.selected.usoCfdi}" title="#{bundle.EditRnGcFacturasTblTitle_usoCfdi}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_usoCfdi}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_formaPago}" for="formaPago" />
+                        <p:inputText id="formaPago" value="#{rnGcFacturasTblController.selected.formaPago}" title="#{bundle.EditRnGcFacturasTblTitle_formaPago}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_formaPago}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_metodoPago}" for="metodoPago" />
+                        <p:inputText id="metodoPago" value="#{rnGcFacturasTblController.selected.metodoPago}" title="#{bundle.EditRnGcFacturasTblTitle_metodoPago}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_metodoPago}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_moneda}" for="moneda" />
+                        <p:inputText id="moneda" value="#{rnGcFacturasTblController.selected.moneda}" title="#{bundle.EditRnGcFacturasTblTitle_moneda}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_moneda}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_rngccfdistblId}" for="rngccfdistblId" />
+                        <p:inputText id="rngccfdistblId" value="#{rnGcFacturasTblController.selected.rngccfdistblId}" title="#{bundle.EditRnGcFacturasTblTitle_rngccfdistblId}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_rngccfdistblId}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcFacturasTblController.selected.creadoPor}" title="#{bundle.EditRnGcFacturasTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcFacturasTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcFacturasTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcFacturasTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcFacturasTblTitle_ultimaActualizacionPor}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_ultimaActualizacionPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcFacturasTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcFacturasTblTitle_ultimaFechaActualizacion}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_ultimaFechaActualizacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_importe}" for="importe" />
+                        <p:inputText id="importe" value="#{rnGcFacturasTblController.selected.importe}" title="#{bundle.EditRnGcFacturasTblTitle_importe}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_importe}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcFacturasTblLabel_rngcpersonastblId}" for="rngcpersonastblId" />
+                        <p:selectOneMenu id="rngcpersonastblId" value="#{rnGcFacturasTblController.selected.rngcpersonastblId}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_rngcpersonastblId}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcPersonasTblController.itemsAvailableSelectOne}"
+                                           var="rngcpersonastblIdItem"
+                                           itemValue="#{rngcpersonastblIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcFacturasTblController.update}" value="#{bundle.Save}" update="display,:RnGcFacturasTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcFacturasTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcFacturasTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpCartaPorteTblViewDlg" widgetVar="RnGcCpCartaPorteTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpCartaPorteTblTitle}">
+            <h:form id="RnGcCpCartaPorteTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpCartaPorteTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.id}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.clave}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_origen}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.origen}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_origen}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_destino}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.destino}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_destino}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_transporteInter}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.transporteInter}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_transporteInter}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_totalDistancia}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.totalDistancia}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_totalDistancia}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_fechaSalida}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.fechaSalida}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_fechaSalida}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_fechaLlegada}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.fechaLlegada}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_fechaLlegada}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_pesoBrutoTotal}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.pesoBrutoTotal}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_pesoBrutoTotal}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_unidadPeso}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.unidadPeso}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_unidadPeso}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_totalMercancia}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.totalMercancia}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_totalMercancia}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_tipoCartaPorte}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.tipoCartaPorte}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_tipoCartaPorte}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_unidadId}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.unidadId}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_unidadId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_conductorId}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.conductorId}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_conductorId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_dirConductorId}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.dirConductorId}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_dirConductorId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_clienteProveedorId}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.clienteProveedorId}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_clienteProveedorId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_dirClienteProveedorId}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.dirClienteProveedorId}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_dirClienteProveedorId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpCartaPorteTblLabel_cfdisId}"/>
+                        <h:outputText value="#{rnGcCpCartaPorteTblController.selected.cfdisId}" title="#{bundle.ViewRnGcCpCartaPorteTblTitle_cfdisId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpCartaPorteTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

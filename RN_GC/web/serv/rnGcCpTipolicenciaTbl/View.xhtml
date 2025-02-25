@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpTipolicenciaTblViewDlg" widgetVar="RnGcCpTipolicenciaTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpTipolicenciaTblTitle}">
+            <h:form id="RnGcCpTipolicenciaTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpTipolicenciaTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpTipolicenciaTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpTipolicenciaTblController.selected.id}" title="#{bundle.ViewRnGcCpTipolicenciaTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipolicenciaTblLabel_tipo}"/>
+                        <h:outputText value="#{rnGcCpTipolicenciaTblController.selected.tipo}" title="#{bundle.ViewRnGcCpTipolicenciaTblTitle_tipo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipolicenciaTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpTipolicenciaTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpTipolicenciaTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipolicenciaTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpTipolicenciaTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpTipolicenciaTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipolicenciaTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpTipolicenciaTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpTipolicenciaTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipolicenciaTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpTipolicenciaTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpTipolicenciaTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpTipolicenciaTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpTipolicenciaTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpTipolicenciaTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpTipolicenciaTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

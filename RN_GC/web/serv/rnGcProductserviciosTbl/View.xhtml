@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcProductserviciosTblViewDlg" widgetVar="RnGcProductserviciosTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcProductserviciosTblTitle}">
+            <h:form id="RnGcProductserviciosTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcProductserviciosTblController.selected != null}">
+                        <h:outputText value="Tipo"/>
+                        <h:outputText value="#{rnGcProductserviciosTblController.selected.tipoProdServ}" title="#{bundle.ViewRnGcProductserviciosTblTitle_tipoProdServ}"/>
+                        <h:outputText value="Clave del Producto o Servicio"/>
+                        <h:outputText value="#{rnGcProductserviciosTblController.selected.claveProductServ}" title="#{bundle.ViewRnGcProductserviciosTblTitle_claveProductServ}"/>
+                        <h:outputText value="No. Identificación"/>
+                        <h:outputText value="#{rnGcProductserviciosTblController.selected.noIdentificacion}" title="#{bundle.ViewRnGcProductserviciosTblTitle_noIdentificacion}"/>
+                        <h:outputText value="Clave Unidad"/>
+                        <h:outputText value="#{rnGcProductserviciosTblController.selected.claveUnidad}" title="#{bundle.ViewRnGcProductserviciosTblTitle_claveUnidad}"/>
+                        <h:outputText value="Unidad"/>
+                        <h:outputText value="#{rnGcProductserviciosTblController.selected.unidad}" title="#{bundle.ViewRnGcProductserviciosTblTitle_unidad}"/>
+                        <h:outputText value="Descripción"/>
+                        <h:outputText value="#{rnGcProductserviciosTblController.selected.descripcion}" title="#{bundle.ViewRnGcProductserviciosTblTitle_descripcion}"/>
+                        <h:outputText value="Valor Unitario"/>
+                        <h:outputText value="#{rnGcProductserviciosTblController.selected.valorunitario}" title="#{bundle.ViewRnGcProductserviciosTblTitle_valorunitario}">
+                            <f:convertNumber type="currency" currencySymbol="$"/>
+                        </h:outputText>
+                        <h:outputText value="Objeto Impuesto"/>
+                        <h:outputText value="#{rnGcProductserviciosTblController.selected.objetoImpId.descripcion}" title="Objeto impuesto"/>
+                        <h:outputText value="Tipo de Impuesto"/>
+                        <h:outputText value="#{rnGcProductserviciosTblController.selected.tipoImpuesto}" title="#{bundle.ViewRnGcProductserviciosTblTitle_tipoImpuesto}"/>
+                        <h:outputText value="Impuesto"/>
+                        <h:outputText value="#{rnGcProductserviciosTblController.selected.impuesto}" title="#{bundle.ViewRnGcProductserviciosTblTitle_impuesto}"/>
+                        <h:outputText value="Tipoo de Factor"/>
+                        <h:outputText value="#{rnGcProductserviciosTblController.selected.tipofactor}" title="#{bundle.ViewRnGcProductserviciosTblTitle_tipofactor}"/>
+                        <h:outputText value="Tipo de Tasa"/>
+                        <h:outputText value="#{rnGcProductserviciosTblController.selected.tipoTasa}%" title="#{bundle.ViewRnGcProductserviciosTblTitle_tipoTasa}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcProductserviciosTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

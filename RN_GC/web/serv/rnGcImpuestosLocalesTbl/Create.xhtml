@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcImpuestosLocalesTblCreateDlg" widgetVar="RnGcImpuestosLocalesTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcImpuestosLocalesTblTitle}">
+            <h:form id="RnGcImpuestosLocalesTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcImpuestosLocalesTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcImpuestosLocalesTblLabel_nombreImpuesto}" for="nombreImpuesto" />
+                        <p:inputText id="nombreImpuesto" value="#{rnGcImpuestosLocalesTblController.selected.nombreImpuesto}" title="#{bundle.CreateRnGcImpuestosLocalesTblTitle_nombreImpuesto}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcImpuestosLocalesTblLabel_tasaCuota}" for="tasaCuota" />
+                        <p:inputText id="tasaCuota" value="#{rnGcImpuestosLocalesTblController.selected.tasaCuota}" title="#{bundle.CreateRnGcImpuestosLocalesTblTitle_tasaCuota}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcImpuestosLocalesTblLabel_tipofactorId}" for="tipofactorId" />
+                        <p:selectOneMenu id="tipofactorId" value="#{rnGcImpuestosLocalesTblController.selected.tipofactorId}" required="true" requiredMessage="#{bundle.EditRnGcImpuestosLocalesTblRequiredMessage_tipofactorId}">
+                            <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                           var="tipofactorIdItem"
+                                           itemLabel="#{tipofactorIdItem.ctipoFactor}"
+                                           itemValue="#{tipofactorIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcImpuestosLocalesTblLabel_tipoimpuestoId}" for="tipoimpuestoId" />
+                        <p:selectOneMenu id="tipoimpuestoId" value="#{rnGcImpuestosLocalesTblController.selected.tipoimpuestoId}" required="true" requiredMessage="#{bundle.EditRnGcImpuestosLocalesTblRequiredMessage_tipoimpuestoId}">
+                            <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                           var="tipoimpuestoIdItem"
+                                           itemLabel="#{tipoimpuestoIdItem.tipoImpuesto}"
+                                           itemValue="#{tipoimpuestoIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcImpuestosLocalesTblController.create}" value="#{bundle.Save}" update="display,:RnGcImpuestosLocalesTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcImpuestosLocalesTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcImpuestosLocalesTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

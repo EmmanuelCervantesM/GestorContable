@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpMaterialpeligrososatTblCreateDlg" widgetVar="RnGcCpMaterialpeligrososatTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCpMaterialpeligrososatTblTitle}">
+            <h:form id="RnGcCpMaterialpeligrososatTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpMaterialpeligrososatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCpMaterialpeligrososatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpMaterialpeligrososatTblController.selected.id}" title="#{bundle.CreateRnGcCpMaterialpeligrososatTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcCpMaterialpeligrososatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpMaterialpeligrososatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpMaterialpeligrososatTblController.selected.clave}" title="#{bundle.CreateRnGcCpMaterialpeligrososatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpMaterialpeligrososatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpMaterialpeligrososatTblController.selected.descripcion}" title="#{bundle.CreateRnGcCpMaterialpeligrososatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpMaterialpeligrososatTblLabel_clase}" for="clase" />
+                        <p:inputText id="clase" value="#{rnGcCpMaterialpeligrososatTblController.selected.clase}" title="#{bundle.CreateRnGcCpMaterialpeligrososatTblTitle_clase}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpMaterialpeligrososatTblLabel_peligroSec}" for="peligroSec" />
+                        <p:inputText id="peligroSec" value="#{rnGcCpMaterialpeligrososatTblController.selected.peligroSec}" title="#{bundle.CreateRnGcCpMaterialpeligrososatTblTitle_peligroSec}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpMaterialpeligrososatTblLabel_nombreTecnico}" for="nombreTecnico" />
+                        <p:inputText id="nombreTecnico" value="#{rnGcCpMaterialpeligrososatTblController.selected.nombreTecnico}" title="#{bundle.CreateRnGcCpMaterialpeligrososatTblTitle_nombreTecnico}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpMaterialpeligrososatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpMaterialpeligrososatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpMaterialpeligrososatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpMaterialpeligrososatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpMaterialpeligrososatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpMaterialpeligrososatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpMaterialpeligrososatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpMaterialpeligrososatTblController.selected.creadoPor}" title="#{bundle.CreateRnGcCpMaterialpeligrososatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcCpMaterialpeligrososatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpMaterialpeligrososatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpMaterialpeligrososatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpMaterialpeligrososatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpMaterialpeligrososatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpMaterialpeligrososatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpMaterialpeligrososatTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcCpMaterialpeligrososatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpMaterialpeligrososatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpMaterialpeligrososatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpMaterialpeligrososatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpMaterialpeligrososatTblController.create}" value="#{bundle.Save}" update="display,:RnGcCpMaterialpeligrososatTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCpMaterialpeligrososatTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpMaterialpeligrososatTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

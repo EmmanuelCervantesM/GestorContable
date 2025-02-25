@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNumpedimentoaduanaTblCreateDlg" widgetVar="RnGcNumpedimentoaduanaTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcNumpedimentoaduanaTblTitle}">
+            <h:form id="RnGcNumpedimentoaduanaTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcNumpedimentoaduanaTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcNumpedimentoaduanaTblLabel_CAduana}" for="CAduana" />
+                        <p:inputText id="CAduana" value="#{rnGcNumpedimentoaduanaTblController.selected.CAduana}" title="#{bundle.CreateRnGcNumpedimentoaduanaTblTitle_CAduana}" required="true" requiredMessage="#{bundle.CreateRnGcNumpedimentoaduanaTblRequiredMessage_CAduana}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNumpedimentoaduanaTblLabel_patente}" for="patente" />
+                        <p:inputText id="patente" value="#{rnGcNumpedimentoaduanaTblController.selected.patente}" title="#{bundle.CreateRnGcNumpedimentoaduanaTblTitle_patente}" required="true" requiredMessage="#{bundle.CreateRnGcNumpedimentoaduanaTblRequiredMessage_patente}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNumpedimentoaduanaTblLabel_ejercicio}" for="ejercicio" />
+                        <p:inputText id="ejercicio" value="#{rnGcNumpedimentoaduanaTblController.selected.ejercicio}" title="#{bundle.CreateRnGcNumpedimentoaduanaTblTitle_ejercicio}" required="true" requiredMessage="#{bundle.CreateRnGcNumpedimentoaduanaTblRequiredMessage_ejercicio}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNumpedimentoaduanaTblLabel_cantidad}" for="cantidad" />
+                        <p:inputText id="cantidad" value="#{rnGcNumpedimentoaduanaTblController.selected.cantidad}" title="#{bundle.CreateRnGcNumpedimentoaduanaTblTitle_cantidad}" required="true" requiredMessage="#{bundle.CreateRnGcNumpedimentoaduanaTblRequiredMessage_cantidad}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNumpedimentoaduanaTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcNumpedimentoaduanaTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcNumpedimentoaduanaTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcNumpedimentoaduanaTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNumpedimentoaduanaTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcNumpedimentoaduanaTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcNumpedimentoaduanaTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNumpedimentoaduanaTblLabel_versionCFDI}" for="versionCFDI" />
+                        <p:inputText id="versionCFDI" value="#{rnGcNumpedimentoaduanaTblController.selected.versionCFDI}" title="#{bundle.CreateRnGcNumpedimentoaduanaTblTitle_versionCFDI}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNumpedimentoaduanaTblLabel_versionCatalogo}" for="versionCatalogo" />
+                        <p:inputText id="versionCatalogo" value="#{rnGcNumpedimentoaduanaTblController.selected.versionCatalogo}" title="#{bundle.CreateRnGcNumpedimentoaduanaTblTitle_versionCatalogo}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNumpedimentoaduanaTblController.create}" value="#{bundle.Save}" update="display,:RnGcNumpedimentoaduanaTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcNumpedimentoaduanaTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNumpedimentoaduanaTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

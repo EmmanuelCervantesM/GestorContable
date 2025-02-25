@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcNomNominasTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcNomNominasTblListForm">
+                <p:panel header="#{bundle.ListRnGcNomNominasTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcNomNominasTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcNomNominasTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="deleteButton verDatos download"/>
+                        <p:ajax event="rowUnselect" update="deleteButton verDatos download"/>
+                        
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcNomNominasTblTitle_nombreNomina}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombreNomina}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcNomNominasTblTitle_periodicidadPagoId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.periodicidadPagoId.descripcion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcNomNominasTblTitle_tipoNominaId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoNominaId.descripcion}"/>
+                        </p:column>
+                        <f:facet name="footer"> 
+                            <p:commandButton id="archivop" icon="ui-icon-plus"   value="Usar plantilla" actionListener="#{rnGcNomNominasTblController.prepareCreate}" update="RnGcNominaTblDocForm" oncomplete="PF('RnGcNominaTblDocDialog').show()"/>
+                            <p:commandButton id="verDatos"   icon="ui-icon-folder-open" value="Facturar Nómina" actionListener="#{rnGcNomSolicitudTrabajadorTblController.obtenerSolicitudesTrabajador(rnGcNomNominasTblController.selected)}" update=":RnGcSolicitudTrabajadorTblListForm" oncomplete="PF('RnGcSolicitudTrabajadorTblDocDialog').show()" disabled="#{empty rnGcNomNominasTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcNomNominasTblController.eliminarDatos()}" update=":growl,datalist" disabled="#{empty rnGcNomNominasTblController.selected}"/>
+                        </f:facet>
+                        
+                        <f:facet name="header">
+                            <p:commandButton id="download" icon="ui-icon-arrowthickstop-1-s" value="Descargar Plantilla Nómina" actionListener="#{rnGcNomNominasTblController.descargaPlantilla()}" ajax="false">
+                                <p:fileDownload value="#{rnGcNomNominasTblController.downLoadFile}"/>
+                            </p:commandButton>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+
+            <p:dialog id="RnGcNominaTblDocDlg" widgetVar="RnGcNominaTblDocDialog" modal="true" resizable="false" appendTo="@(body)" header="Cargar Nómina">
+                <h:form id="RnGcNominaTblDocForm">
+                    <p:panel header="Buscar plantilla">
+                        <f:facet name="header">
+                            <p:outputLabel value="Selecciona Plantilla" />
+                        </f:facet>
+                        <p:fileUpload id="plantilla" fileUploadListener="#{rnGcNomNominasTblController.leerPlantilla}" fileLimitMessage="Número máximo de archivos excedido" label="Buscar" cancelLabel="Cancelar" uploadLabel="Cargar" sequential="true"
+                                      mode="advanced" update="RnGcNomNominasTblListForm:datalist, :growl" dragDropSupport="true" sizeLimit="100000" fileLimit="20" allowTypes="/(\.|\/)(xlsx)$/">
+                            <p:growl life="10000" showDetail="true"/>      
+                        </p:fileUpload>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+
+            <p:dialog id="RnGcSolicitudTrabajadorTblDocDlg" widgetVar="RnGcSolicitudTrabajadorTblDocDialog" modal="true" resizable="false" appendTo="@(body)" header="Datos Nómina">
+                <h:form id="RnGcSolicitudTrabajadorTblListForm">
+                    <p:panel header="#{bundle.ListRnGcNomNominasTblTitle}">
+
+                        <h:panelGrid columns="4" cellpadding="5">
+                            <p:outputLabel style="font-weight: 900" value="#{bundle.EditRnGcCfdisTblLabel_claveRegimenFiscal}" for="claveRegimenFiscal"/>
+                            <p:selectOneMenu id="claveRegimenFiscal" style="width: 482px" value="#{rnGcNomSolicitudTrabajadorTblController.cfdisId2.claveRegimenFiscal}" filter="true" filterMatchMode="contains" required="true" requiredMessage="#{bundle.RnGcCfdisTblRequiredMessage_claveRegimenFiscal}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcRegimenfiscalTblController.itemsAvailableSelectOne}"
+                                               var="regimenItem"
+                                               itemLabel="#{regimenItem.claveRegimenFiscal} - #{regimenItem.descripcion}"
+                                               itemValue="#{regimenItem.claveRegimenFiscal}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel style="font-weight: 900" value="No. Certificado" for="certificado"/>
+                            <p:selectOneMenu id="certificado" style="width: 160px" value="#{rnGcNomSolicitudTrabajadorTblController.cfdisId2.certificados_Id}" required="true" requiredMessage="El numero de certificado es necesario">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcCertificadosTblController.listaCertificadosActivos()}"
+                                               var="certificadoItem"
+                                               itemLabel="#{certificadoItem.nombreCertificado} - #{rnGcNomSolicitudTrabajadorTblController.parseDate(certificadoItem.fechaVencimiento, 'dd/MM/yyyy')} - #{certificadoItem.numeroCertificado}"
+                                               itemValue="#{certificadoItem}"/>
+                                <p:ajax update="serie" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel style="font-weight: 900" value="#{bundle.EditRnGcCfdisTblLabel_fechaExpedicion}"  for="fechaExpedicion" />
+                            <p:calendar id="fechaExpedicion" style="width: 160px" pattern="dd/MM/yyyy HH:mm:ss" value="#{rnGcNomSolicitudTrabajadorTblController.cfdisId2.fechaExpedicion}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_fechaExpedicion}" showOn="button"/>
+
+                            <p:outputLabel style="font-weight: 900" value="#{bundle.EditRnGcCfdisTblLabel_lugarExpedicion}" for="lugarExpedicion" />
+                            <p:selectOneMenu id="lugarExpedicion" style="width: 160px" value="#{rnGcNomSolicitudTrabajadorTblController.cfdisId2.lugarExpedicion}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_lugarExpedicion}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{facturarContoller.codigosPostalesUsuario()}"
+                                               var="codigosItem"
+                                               itemLabel="#{codigosItem}"
+                                               itemValue="#{codigosItem.substring(0,5)}"/>
+                                <p:ajax event="change" update="@this"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel style="font-weight: 900" value="Condición Pago" for="condicionPago" />
+                            <p:inputText id="condicionPago" style="width: 175px" value="#{rnGcNomSolicitudTrabajadorTblController.cfdisId2.condicionPago}" disabled="#{facturarContoller.cfdisId.tipoComprobante == 'P'}"/>
+
+                            <p:outputLabel style="font-weight: 900" value="#{bundle.EditRnGcCfdisTblLabel_serie}" for="serie" />
+                            <p:selectOneMenu id="serie" value="#{rnGcNomSolicitudTrabajadorTblController.cfdisId2.serie}" style="width: 160px">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcFolioserieTblController.foliosPorCertifcado(rnGcNomSolicitudTrabajadorTblController.cfdisId2.certificados_Id)}"
+                                               var="serieItem"
+                                               itemLabel="#{serieItem.serie}"
+                                               itemValue="#{serieItem.serie}"/>
+                                <p:ajax update="folio1"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel style="font-weight: 900" value="Folio: " for="folio1"/>
+                            <p:selectOneMenu id="folio1" value="#{rnGcNomSolicitudTrabajadorTblController.cfdisId2.folio}" style="width: 160px">
+                                <f:selectItems value="#{facturarContoller.obtenerFolioPorUsuarioSerie(rnGcNomSolicitudTrabajadorTblController.cfdisId2.serie)}"
+                                               var="folioItem"
+                                               itemLabel="#{folioItem.folio}"
+                                               itemValue="#{folioItem.folio}"/>
+                            </p:selectOneMenu>
+
+                        </h:panelGrid>
+
+                        <p:dataTable id="datalist" value="#{rnGcNomSolicitudTrabajadorTblController.listaSolicitudesTrabajador}" var="item"
+                                     selection="#{rnGcNomSolicitudTrabajadorTblController.seleccionados}"
+                                     paginator="true" disabledSelection="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) == 'Timbrado de forma correcta'}"
+                                     rowKey="#{item.id}"
+                                     rows="10"
+                                     rowsPerPageTemplate="10,20,30,40,50"
+                                     >
+
+                            <p:ajax event="rowSelect" update="facturar"/>
+                            <p:ajax event="rowUnselect" update="facturar"/>
+
+                            <p:column selectionMode="multiple" style="width:16px;text-align:center" />
+                            <p:column >
+                                <f:facet name="header">
+                                    <h:outputText value="Fecha Inicio"/>
+                                </f:facet>
+                                <h:outputText value="#{item.solicitudId.periodoNominaId.fechaInicio}">
+                                    <f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Fecha Fin"/>
+                                </f:facet>
+                                <h:outputText value="#{item.solicitudId.periodoNominaId.fechaFin}">
+                                    <f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Estado"/>
+                                </f:facet>
+                                <h:outputText value="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item)}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.trabajadorId.nombreCompleto}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Nombre"/>
+                                </f:facet>
+                                <h:outputText value="#{item.trabajadorId.nombreCompleto}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.trabajadorId.rfc}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="RFC"/>
+                                </f:facet>
+                                <h:outputText value="#{item.trabajadorId.rfc}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.trabajadorId.curp}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="CURP"/>
+                                </f:facet>
+                                <h:outputText value="#{item.trabajadorId.curp}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.totalPercepciones}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Total Percepciones"/>
+                                </f:facet>
+                                <h:outputText value="#{item.totalPercepciones}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column filterBy="#{item.totalDeducciones}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Total Deducciones"/>
+                                </f:facet>
+                                <h:outputText value="#{item.totalDeducciones}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column filterBy="#{item.importeNeto}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Total"/>
+                                </f:facet>
+                                <h:outputText value="#{item.importeNeto}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="width:26px;text-align:center">
+                                <p:commandButton icon="ui-icon-arrowstop-1-s" title="Descargar PDF" disabled="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) == 'No Timbrado'}" actionListener="#{rnGcNomSolicitudTrabajadorTblController.descargarPDF(item)}" ajax="false">
+                                    <p:fileDownload value="#{rnGcNomSolicitudTrabajadorTblController.downLoadFile}"/>
+                                </p:commandButton>
+                            </p:column>
+                            <p:column style="width:26px;text-align:center">
+                                <p:commandButton icon="ui-icon-mail-closed" title="Reenviar archivo XML, PDF" disabled="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) == 'No Timbrado'}" actionListener="#{rnGcNomSolicitudTrabajadorTblController.enviarCorreo(item)}" ajax="false"/>
+                            </p:column>
+                            <p:column style="width:26px;text-align:center">
+                                <p:commandButton icon="ui-icon-cancel" title="Cancelar timbre" disabled="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) != 'Timbrado de forma correcta'}" actionListener="#{rnGcNomSolicitudTrabajadorTblController.cancelarTimbre(item)}" ajax="false"/>
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton id="facturar" actionListener="#{rnGcNomSolicitudTrabajadorTblController.obtenerSeleccionados()}" ajax="false" update="RnGcNomNominasTblListForm:datalist, RnGcSolicitudTrabajadorTblListForm:datalist" value="Facturar"/>
+                                <p:commandButton value="Vista Previa" ajax="false" actionListener="#{rnGcNomSolicitudTrabajadorTblController.descargarVistaPrevia()}">
+                                    <p:fileDownload value="#{rnGcNomSolicitudTrabajadorTblController.downLoadFile}" />
+                                </p:commandButton>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+
+        </ui:define>
+    </ui:composition>
+
+</html>

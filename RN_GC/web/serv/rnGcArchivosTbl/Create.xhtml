@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcArchivosTblCreateDlg" widgetVar="RnGcArchivosTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcArchivosTblTitle}">
+            <h:form id="RnGcArchivosTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcArchivosTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcArchivosTblLabel_archivoXml}" for="archivoXml" />
+                        <p:inputTextarea rows="4" cols="30" id="archivoXml" value="#{rnGcArchivosTblController.selected.archivoXml}" title="#{bundle.CreateRnGcArchivosTblTitle_archivoXml}" required="true" requiredMessage="#{bundle.CreateRnGcArchivosTblRequiredMessage_archivoXml}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcArchivosTblLabel_archivoPdf}" for="archivoPdf" />
+                        <p:inputTextarea rows="4" cols="30" id="archivoPdf" value="#{rnGcArchivosTblController.selected.archivoPdf}" title="#{bundle.CreateRnGcArchivosTblTitle_archivoPdf}" required="true" requiredMessage="#{bundle.CreateRnGcArchivosTblRequiredMessage_archivoPdf}"/>
+                       <p:outputLabel value="#{bundle.CreateRnGcArchivosTblLabel_rngccfdistblId}" for="rngccfdistblId" />
+                       <p:selectOneMenu id="rngccfdistblId" value="#{rnGcCfdisTblController.selected.id}" required="true" requiredMessage="#{bundle.EditRnGcArchivosTblRequiredMessage_rngccfdistblId}">
+                            <f:selectItems value="#{rnGcCfdisTblController.itemsAvailableSelectOne}"
+                                           var="rngccfdistblIdItem"
+                                           itemValue="#{rngccfdistblIdItem.nombreEmisor}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcArchivosTblController.create}" value="#{bundle.Save}" update="display,:RnGcArchivosTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcArchivosTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcArchivosTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

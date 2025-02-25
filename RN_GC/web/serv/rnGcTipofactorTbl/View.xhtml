@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTipofactorTblViewDlg" widgetVar="RnGcTipofactorTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcTipofactorTblTitle}">
+            <h:form id="RnGcTipofactorTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcTipofactorTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcTipofactorTblLabel_ctipoFactor}"/>
+                        <h:outputText value="#{rnGcTipofactorTblController.selected.ctipoFactor}" title="#{bundle.ViewRnGcTipofactorTblTitle_ctipoFactor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTipofactorTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcTipofactorTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcTipofactorTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcTipofactorTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcTipofactorTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcTipofactorTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcTipofactorTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

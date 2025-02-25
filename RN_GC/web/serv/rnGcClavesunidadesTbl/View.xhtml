@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcClavesunidadesTblViewDlg" widgetVar="RnGcClavesunidadesTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcClavesunidadesTblTitle}">
+            <h:form id="RnGcClavesunidadesTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcClavesunidadesTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.creadoPor}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_id}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.id}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_CClaveUnidadcol}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.CClaveUnidadcol}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_CClaveUnidadcol}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_nombre}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.nombre}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_nombre}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.descripcion}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_nota}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.nota}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_nota}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_fehaFinVigencia}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.fehaFinVigencia}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_fehaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_simbolo}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.simbolo}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_simbolo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_CFDICatalogoUsoId}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.CFDICatalogoUsoId}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_CFDICatalogoUsoId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcClavesunidadesTblLabel_rngccfdistblId}"/>
+                        <h:outputText value="#{rnGcClavesunidadesTblController.selected.rngccfdistblId}" title="#{bundle.ViewRnGcClavesunidadesTblTitle_rngccfdistblId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcClavesunidadesTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

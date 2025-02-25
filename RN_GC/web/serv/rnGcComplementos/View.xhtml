@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle2.ViewRnGcComplementosTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle2.ViewRnGcComplementosLabel_pkId}"/>
+                    <h:outputText value="#{rnGcComplementosController.selected.pkId}" title="#{bundle2.ViewRnGcComplementosTitle_pkId}"/>
+                    <h:outputText value="#{bundle2.ViewRnGcComplementosLabel_complementoSeleccionado}"/>
+                    <h:outputText value="#{rnGcComplementosController.selected.complementoSeleccionado}" title="#{bundle2.ViewRnGcComplementosTitle_complementoSeleccionado}"/>
+                    <h:outputText value="#{bundle2.ViewRnGcComplementosLabel_nombreAlumno}"/>
+                    <h:outputText value="#{rnGcComplementosController.selected.nombreAlumno}" title="#{bundle2.ViewRnGcComplementosTitle_nombreAlumno}"/>
+                    <h:outputText value="#{bundle2.ViewRnGcComplementosLabel_curp}"/>
+                    <h:outputText value="#{rnGcComplementosController.selected.curp}" title="#{bundle2.ViewRnGcComplementosTitle_curp}"/>
+                    <h:outputText value="#{bundle2.ViewRnGcComplementosLabel_nivelEducativo}"/>
+                    <h:outputText value="#{rnGcComplementosController.selected.nivelEducativo}" title="#{bundle2.ViewRnGcComplementosTitle_nivelEducativo}"/>
+                    <h:outputText value="#{bundle2.ViewRnGcComplementosLabel_autRVOE}"/>
+                    <h:outputText value="#{rnGcComplementosController.selected.autRVOE}" title="#{bundle2.ViewRnGcComplementosTitle_autRVOE}"/>
+                    <h:outputText value="#{bundle2.ViewRnGcComplementosLabel_rfcPago}"/>
+                    <h:outputText value="#{rnGcComplementosController.selected.rfcPago}" title="#{bundle2.ViewRnGcComplementosTitle_rfcPago}"/>
+                    <h:outputText value="#{bundle2.ViewRnGcComplementosLabel_complementoEscuela}"/>
+                    <h:outputText value="#{rnGcComplementosController.selected.complementoEscuela}" title="#{bundle2.ViewRnGcComplementosTitle_complementoEscuela}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{rnGcComplementosController.destroyAndView}" value="#{bundle2.ViewRnGcComplementosDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle2.ViewRnGcComplementosEditLink}"/>
+                <br />
+                <h:commandLink action="#{rnGcComplementosController.prepareCreate}" value="#{bundle2.ViewRnGcComplementosCreateLink}" />
+                <br />
+                <h:commandLink action="#{rnGcComplementosController.prepareList}" value="#{bundle2.ViewRnGcComplementosShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle2.ViewRnGcComplementosIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

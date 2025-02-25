@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Certificado="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" CondicionesDePago="CONTADO" Fecha="2018-09-11T15:20:30" Folio="44" FormaPago="99" LugarExpedicion="75700" MetodoPago="PPD" Moneda="MXN" NoCertificado="00001000000406258166" Sello="ScVZ/45B8QFiEHyeWhz2zMqQP2jXYKu/RodTyCNSn5Y/D68WspzBWJPE7EF+MCGGvvnGtfy/SfDsxjAB+AqPFbbY/kpxMzVjVMmROVDN2sypIEgvsO+jchOHXZx9lXfH0ulVVMwsR9bkmUK3Cavy4Y4/eOWz51/l7KgyCpBoNFdcfphGnuKca5aF3an/EtJFTL4NLr1BiPNV28+Zgj/irT0ftkBUN0tRN9k75Ylcw5a4172C49bZHGt543o6FhbU5GlFjxtacJftYpQvwHjrAtMb5zjOI+h1AVuRD0J3bsuynZ3XMVd0jnpbWH7ZInD4aZfL1X8ox8P61MYid7PIew==" Serie="S.I" SubTotal="64228.68" TipoCambio="1" TipoDeComprobante="I" Total="61231.32" Version="3.3" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd">
+    <cfdi:Emisor Nombre="Balderas Ramírez Georgina del Carmen" RegimenFiscal="606" Rfc="BARG561024PZ5" />
+    <cfdi:Receptor Nombre="Visión Prendaria, S.A. de C.V." Rfc="VPR081121AR9" UsoCFDI="G03" />
+    <cfdi:Conceptos>
+        <cfdi:Concepto Cantidad="1" ClaveProdServ="80131502" ClaveUnidad="E48" Descripcion="Renta del mes de septiembre, octubre, noviembre, diciembre 2018 y enero, febrero 2019.    / Registro predial: U-220" Importe="64228.68" NoIdentificacion="ARREND-01" Unidad="SERV" ValorUnitario="64228.68">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="64228.68" Importe="10276.59" Impuesto="002" TasaOCuota="0.160000" TipoFactor="Tasa" />
+                </cfdi:Traslados>
+                <cfdi:Retenciones>
+                    <cfdi:Retencion Base="64228.68" Importe="6422.87" Impuesto="001" TasaOCuota="0.100000" TipoFactor="Tasa" />
+                    <cfdi:Retencion Base="64228.68" Importe="6851.08" Impuesto="002" TasaOCuota="0.106667" TipoFactor="Tasa" />
+                </cfdi:Retenciones>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+    </cfdi:Conceptos>
+    <cfdi:Impuestos TotalImpuestosRetenidos="13273.95" TotalImpuestosTrasladados="10276.59">
+        <cfdi:Retenciones>
+            <cfdi:Retencion Importe="6422.87" Impuesto="001" />
+            <cfdi:Retencion Importe="6851.08" Impuesto="002" />
+        </cfdi:Retenciones>
+        <cfdi:Traslados>
+            <cfdi:Traslado Importe="10276.59" Impuesto="002" TasaOCuota="0.160000" TipoFactor="Tasa" />
+        </cfdi:Traslados>
+    </cfdi:Impuestos>
+    <cfdi:Complemento>
+        <tfd:TimbreFiscalDigital xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd" Version="1.1" UUID="4e96118a-1ea7-4166-a43e-1f933e4c6db0" FechaTimbrado="2018-09-11T15:21:32" RfcProvCertif="LSO1306189R5" SelloCFD="ScVZ/45B8QFiEHyeWhz2zMqQP2jXYKu/RodTyCNSn5Y/D68WspzBWJPE7EF+MCGGvvnGtfy/SfDsxjAB+AqPFbbY/kpxMzVjVMmROVDN2sypIEgvsO+jchOHXZx9lXfH0ulVVMwsR9bkmUK3Cavy4Y4/eOWz51/l7KgyCpBoNFdcfphGnuKca5aF3an/EtJFTL4NLr1BiPNV28+Zgj/irT0ftkBUN0tRN9k75Ylcw5a4172C49bZHGt543o6FhbU5GlFjxtacJftYpQvwHjrAtMb5zjOI+h1AVuRD0J3bsuynZ3XMVd0jnpbWH7ZInD4aZfL1X8ox8P61MYid7PIew==" NoCertificadoSAT="00001000000408254801" SelloSAT="iDsna8p8CG9vTUpZC6H67biRqTmRLmfYfi8/EyQaywzcmmLVec/IZRz+Ta148Hd5TqV/ThZk07nWzpK2aDNnDO6kwfLY7kT4c5m4S4FfqkZqA1UQPm9WnffA5BPe96NNzuztgMvCFYlzT21N27wpHA6zhywCxw5UoAXrJdLwosnC0U4KTWeA7yRhufe2gIV2TU0epX0SVyQ/wxkDKCvTl9m+2YkgP0ebYZlSqwHmMPIDTerviY2cBj11Rz8ocNnx7e3Fa+NsNEsgW4ytCttTwnsrUOGfCWjxi9YFYpwaM1QnddfEaEUVragT4T+QdL6nBh+XRoebWyy/rh9A+utxmw==" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+    </cfdi:Complemento>
+</cfdi:Comprobante>

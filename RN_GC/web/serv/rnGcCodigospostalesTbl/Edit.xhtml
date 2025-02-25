@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCodigospostalesTblEditDlg" widgetVar="RnGcCodigospostalesTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCodigospostalesTblTitle}">
+            <h:form id="RnGcCodigospostalesTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCodigospostalesTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCodigospostalesTblLabel_CCodigoPostal}" for="CCodigoPostal" />
+                        <p:inputText id="CCodigoPostal" value="#{rnGcCodigospostalesTblController.selected.CCodigoPostal}" title="#{bundle.CreateRnGcCodigospostalesTblTitle_CCodigoPostal}" required="true" requiredMessage="#{bundle.CreateRnGcCodigospostalesTblRequiredMessage_CCodigoPostal}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCodigospostalesTblLabel_CEstado}" for="CEstado" />
+                        <p:inputText id="CEstado" value="#{rnGcCodigospostalesTblController.selected.CEstado}" title="#{bundle.CreateRnGcCodigospostalesTblTitle_CEstado}" required="true" requiredMessage="#{bundle.CreateRnGcCodigospostalesTblRequiredMessage_CEstado}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCodigospostalesTblLabel_CMunicipio}" for="CMunicipio" />
+                        <p:inputText id="CMunicipio" value="#{rnGcCodigospostalesTblController.selected.CMunicipio}" title="#{bundle.CreateRnGcCodigospostalesTblTitle_CMunicipio}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCodigospostalesTblLabel_CLocalidad}" for="CLocalidad" />
+                        <p:inputText id="CLocalidad" value="#{rnGcCodigospostalesTblController.selected.CLocalidad}" title="#{bundle.CreateRnGcCodigospostalesTblTitle_CLocalidad}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCodigospostalesTblController.update}" value="#{bundle.Save}" update="display,:RnGcCodigospostalesTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCodigospostalesTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCodigospostalesTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

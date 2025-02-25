@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCatalogoCuentasTblCreateDlg" widgetVar="RnGcCatalogoCuentasTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCatalogoCuentasTblTitle}">
+             <h:form id="RnGcCatalogoCuentasTblCreateForm">
+                 <p:growl id="msg" life="5000" showDetail="true"/>
+                <!--<p:remoteCommand id="validarNumeroCuenta2" actionListener="#/{rnGcCatalogoCuentasTblController.validarCuenta()}" update=":growl"/>-->
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCatalogoCuentasTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogoCuentasTblLabel_numeroCuenta} *" for="numeroCuenta" />                        
+                        <p:autoComplete id="numeroCuenta" value="#{rnGcCatalogoCuentasTblController.selected.numeroCuenta}" completeMethod="#{rnGcCatalogoCuentasTblController.completarTexto}" style="width:350px">
+                            <p:ajax event="blur" update="nivel, numeroCuenta, msg" listener="#{rnGcCatalogoCuentasTblController.mostrarNivel()}"/>
+                        </p:autoComplete>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogoCuentasTblLabel_descripcionCuenta} *" for="descripcionCuenta" />
+                        <p:inputText id="descripcionCuenta" value="#{rnGcCatalogoCuentasTblController.selected.descripcionCuenta}" title="#{bundle.CreateRnGcCatalogoCuentasTblTitle_descripcionCuenta}" style="width:350px">
+                            <p:ajax event="blur" update="descripcionCuenta, msg" listener="#{rnGcCatalogoCuentasTblController.validarDescripcion()}"/>
+                        </p:inputText>
+                        <p:outputLabel value="Nivel de cuenta: *" for="nivel" />
+                        <p:inputText id="nivel" value="#{rnGcCatalogoCuentasTblController.selected.adicional2}" title="nivel" style="width:350px"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogoCuentasTblLabel_codigoAgrupadorSatId} *" for="codigoAgrupadorSatId" />
+                        <p:selectOneMenu id="codigoAgrupadorSatId" value="#{rnGcCatalogoCuentasTblController.selected.codigoAgrupadorSatId}" 
+                                         filter="true" filterMatchMode="contains" style="width:350px" panelStyle="width:350px">
+                            <f:selectItem itemLabel="Seleccionar..."/>
+                            <f:selectItems value="#{rnGcCodigoAgrupadorSatTblController.itemsAvailableSelectOne}"
+                                           var="codigoAgrupadorSatIdItem"
+                                           itemLabel="#{codigoAgrupadorSatIdItem.codigoAgrupador}  -  #{codigoAgrupadorSatIdItem.nombreCuenta}"
+                                           itemValue="#{codigoAgrupadorSatIdItem}"/>
+                            <p:ajax update="tipo, subTipo, naturaleza" listener="#{rnGcCatalogoCuentasTblController.ingresarTipos()}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Tipo: *" for="tipo" />
+                        <p:inputText id="tipo" value="#{rnGcCatalogoCuentasTblController.selected.tipo}" title="Tipo" style="width:350px"/>
+                        <p:outputLabel value="Subtipo: *" for="subTipo" />
+                        <p:inputText id="subTipo" value="#{rnGcCatalogoCuentasTblController.selected.subtipo}" title="Subtipo" style="width:350px"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogoCuentasTblLabel_naturaleza} *" for="naturaleza" />
+                        <p:selectOneMenu id="naturaleza" value="#{rnGcCatalogoCuentasTblController.selected.naturaleza}" style="width:350px">
+                            <f:selectItem itemLabel="Seleccionar..."/>
+                            <f:selectItem itemLabel="Deudora" itemValue="D" />
+                            <f:selectItem itemLabel="Acreedora" itemValue="A" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Moneda: " for="monedaId" />
+                        <p:selectOneMenu id="monedaId" value="#{rnGcCatalogoCuentasTblController.selected.monedaId}"
+                                         filter="true" filterMatchMode="contains" style="width:350px" panelStyle="width:350px">
+                            <f:selectItems value="#{rnGcMonedasTblController.itemsAvailableSelectOne}"
+                                           var="monedaItem"
+                                           itemLabel="#{monedaItem.CMoneda} - #{monedaItem.descripcion}"
+                                           itemValue="#{monedaItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="DIOT" for="diot" />
+                        <p:selectBooleanCheckbox value="#{rnGcCatalogoCuentasTblController.selected.adicional1}" itemLabel="Seleccionar" id="diot">
+                            <p:ajax update="msg, rfc" listener="#{rnGcCatalogoCuentasTblController.addMessage}" />
+                        </p:selectBooleanCheckbox>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogoCuentasTblLabel_rfc}" for="rfc" />
+                        <p:inputText id="rfc" value="#{rnGcCatalogoCuentasTblController.selected.rfc}" title="#{bundle.CreateRnGcCatalogoCuentasTblTitle_rfc}" required="#{rnGcCatalogoCuentasTblController.selected.adicional1}" requiredMessage="#{bundle.CreateRnGcCatalogoCuentasTblRequiredMessage_rfc}" style="width:350px">
+                            <p:ajax event="blur" update="rfc, msg" listener="#{rnGcCatalogoCuentasTblController.validarRFC()}"/>
+                        </p:inputText>
+                        <p:outputLabel value="#{bundle.CreateRnGcCatalogoCuentasTblLabel_inicioVigencia}" for="inicioVigencia" />
+                        <p:calendar id="inicioVigencia"  locale="mx" pattern="MM/yyyy" value="#{rnGcCatalogoCuentasTblController.selected.inicioVigencia}" title="#{bundle.EditRnGcCatalogoCuentasTblTitle_inicioVigencia}" showOn="button" style="width:350px"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCatalogoCuentasTblController.create}" value="#{bundle.Save}" update="display,:RnGcCatalogoCuentasTblListForm:datalist,:growl"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCatalogoCuentasTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+    </ui:composition>
+</html>

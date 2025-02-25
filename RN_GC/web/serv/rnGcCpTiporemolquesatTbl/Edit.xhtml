@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpTiporemolquesatTblEditDlg" widgetVar="RnGcCpTiporemolquesatTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpTiporemolquesatTblTitle}">
+            <h:form id="RnGcCpTiporemolquesatTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpTiporemolquesatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpTiporemolquesatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpTiporemolquesatTblController.selected.id}" title="#{bundle.EditRnGcCpTiporemolquesatTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcCpTiporemolquesatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTiporemolquesatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpTiporemolquesatTblController.selected.clave}" title="#{bundle.EditRnGcCpTiporemolquesatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTiporemolquesatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpTiporemolquesatTblController.selected.descripcion}" title="#{bundle.EditRnGcCpTiporemolquesatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTiporemolquesatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpTiporemolquesatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpTiporemolquesatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTiporemolquesatTblLabel_fechaFin}" for="fechaFin" />
+                        <p:calendar id="fechaFin" pattern="MM/dd/yyyy" value="#{rnGcCpTiporemolquesatTblController.selected.fechaFin}" title="#{bundle.EditRnGcCpTiporemolquesatTblTitle_fechaFin}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTiporemolquesatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpTiporemolquesatTblController.selected.creadoPor}" title="#{bundle.EditRnGcCpTiporemolquesatTblTitle_creadoPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTiporemolquesatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpTiporemolquesatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpTiporemolquesatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpTiporemolquesatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTiporemolquesatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpTiporemolquesatTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcCpTiporemolquesatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTiporemolquesatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpTiporemolquesatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpTiporemolquesatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpTiporemolquesatTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpTiporemolquesatTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpTiporemolquesatTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpTiporemolquesatTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

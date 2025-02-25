@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTipoimpuestoTblViewDlg" widgetVar="RnGcTipoimpuestoTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcTipoimpuestoTblTitle}">
+            <h:form id="RnGcTipoimpuestoTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcTipoimpuestoTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcTipoimpuestoTblLabel_id}"/>
+                        <h:outputText value="#{rnGcTipoimpuestoTblController.selected.id}" title="#{bundle.ViewRnGcTipoimpuestoTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTipoimpuestoTblLabel_tipoImpuesto}"/>
+                        <h:outputText value="#{rnGcTipoimpuestoTblController.selected.tipoImpuesto}" title="#{bundle.ViewRnGcTipoimpuestoTblTitle_tipoImpuesto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTipoimpuestoTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcTipoimpuestoTblController.selected.creadoPor}" title="#{bundle.ViewRnGcTipoimpuestoTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTipoimpuestoTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcTipoimpuestoTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcTipoimpuestoTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcTipoimpuestoTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcTipoimpuestoTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcTipoimpuestoTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTipoimpuestoTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcTipoimpuestoTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcTipoimpuestoTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcTipoimpuestoTblLabel_cfdiLineaId}"/>
+                        <h:outputText value="#{rnGcTipoimpuestoTblController.selected.cfdiLineaId}" title="#{bundle.ViewRnGcTipoimpuestoTblTitle_cfdiLineaId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcTipoimpuestoTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

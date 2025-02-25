@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcDocumentosRelacionadosTblViewDlg" widgetVar="RnGcDocumentosRelacionadosTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle}">
+            <h:form id="RnGcDocumentosRelacionadosTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcDocumentosRelacionadosTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_id}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.id}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_idDocumento}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.idDocumento}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_idDocumento}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_serie}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.serie}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_serie}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_folio}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.folio}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_folio}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_moneda}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.moneda}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_moneda}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_tipoCambio}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.tipoCambio}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_tipoCambio}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_metodoPago}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.metodoPago}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_metodoPago}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_numeroParcialidad}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.numeroParcialidad}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_numeroParcialidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_importeSaldoAnterior}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.importeSaldoAnterior}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_importeSaldoAnterior}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_importePagado}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.importePagado}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_importePagado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_importeSaldoInsoluto}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.importeSaldoInsoluto}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_importeSaldoInsoluto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.creadoPor}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcDocumentosRelacionadosTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcDocumentosRelacionadosTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcDocumentosRelacionadosTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcDocumentosRelacionadosTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

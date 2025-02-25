@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="Código Agrupador SAT"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcCodigoAgrupadorSatTblListForm">
+                <p:panel header="#{bundle.ListRnGcCodigoAgrupadorSatTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcCodigoAgrupadorSatTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcCodigoAgrupadorSatTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 widgetVar="codigoAgrupadorTable"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+                        <f:facet name="header">
+                            <p:outputPanel>
+                                <h:outputText value="Buscar en todos los campos:" />
+                                <p:inputText id="globalFilter" onkeyup="PF('codigoAgrupadorTable').filter()" style="width:150px" placeholder="Ingresa el texto"/>
+                            </p:outputPanel>
+                        </f:facet>
+                        <p:column filterBy="#{item.nivel}" headerText="nivel" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCodigoAgrupadorSatTblTitle_nivel}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nivel}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.codigoAgrupador}" headerText="codigoAgrupador" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCodigoAgrupadorSatTblTitle_codigoAgrupador}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.codigoAgrupador}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.nombreCuenta}" headerText="nombreCuenta" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcCodigoAgrupadorSatTblTitle_nombreCuenta}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombreCuenta}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcCodigoAgrupadorSatTblController.prepareCreate}" update=":RnGcCodigoAgrupadorSatTblCreateForm" oncomplete="PF('RnGcCodigoAgrupadorSatTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcCodigoAgrupadorSatTblViewForm" oncomplete="PF('RnGcCodigoAgrupadorSatTblViewDialog').show()" disabled="#{empty rnGcCodigoAgrupadorSatTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcCodigoAgrupadorSatTblEditForm" oncomplete="PF('RnGcCodigoAgrupadorSatTblEditDialog').show()" disabled="#{empty rnGcCodigoAgrupadorSatTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcCodigoAgrupadorSatTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcCodigoAgrupadorSatTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

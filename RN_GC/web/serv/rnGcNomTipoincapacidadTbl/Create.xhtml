@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomTipoincapacidadTblCreateDlg" widgetVar="RnGcNomTipoincapacidadTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcNomTipoincapacidadTblTitle}">
+            <h:form id="RnGcNomTipoincapacidadTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomTipoincapacidadTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTipoincapacidadTblLabel_cveTipoIncapacidad}" for="cveTipoIncapacidad" />
+                        <p:inputText id="cveTipoIncapacidad" value="#{rnGcNomTipoincapacidadTblController.selected.cveTipoIncapacidad}" title="#{bundle.CreateRnGcNomTipoincapacidadTblTitle_cveTipoIncapacidad}" required="true" requiredMessage="#{bundle.CreateRnGcNomTipoincapacidadTblRequiredMessage_cveTipoIncapacidad}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTipoincapacidadTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcNomTipoincapacidadTblController.selected.descripcion}" title="#{bundle.CreateRnGcNomTipoincapacidadTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTipoincapacidadTblLabel_version}" for="version" />
+                        <p:inputText id="version" value="#{rnGcNomTipoincapacidadTblController.selected.version}" title="#{bundle.CreateRnGcNomTipoincapacidadTblTitle_version}" required="true" requiredMessage="#{bundle.CreateRnGcNomTipoincapacidadTblRequiredMessage_version}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTipoincapacidadTblLabel_revision}" for="revision" />
+                        <p:inputText id="revision" value="#{rnGcNomTipoincapacidadTblController.selected.revision}" title="#{bundle.CreateRnGcNomTipoincapacidadTblTitle_revision}" required="true" requiredMessage="#{bundle.CreateRnGcNomTipoincapacidadTblRequiredMessage_revision}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTipoincapacidadTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomTipoincapacidadTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcNomTipoincapacidadTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcNomTipoincapacidadTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcNomTipoincapacidadTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcNomTipoincapacidadTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcNomTipoincapacidadTblTitle_fechaFinVigencia}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcNomTipoincapacidadTblController.create}" value="#{bundle.Save}" update="display,:RnGcNomTipoincapacidadTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcNomTipoincapacidadTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcNomTipoincapacidadTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

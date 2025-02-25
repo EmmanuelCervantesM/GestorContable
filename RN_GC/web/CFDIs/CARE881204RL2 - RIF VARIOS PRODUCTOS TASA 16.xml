@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Certificado="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" CondicionesDePago="CONTADO" Fecha="2018-08-30T14:43:17" Folio="100" FormaPago="03" LugarExpedicion="90117" MetodoPago="PUE" Moneda="MXN" NoCertificado="00001000000404659878" Sello="bgJdncGLcR0/T7t6rpy41PjCbPOHYlPo2CjAdKNlfx5ZiDFR1gQuzLfER193nE/E8k1oaumu0anh4fsQp9nNYDlOk4ycDMWG75BeRGLwhfpn6thc1l+zexF+CZLh8fkne9AxtBh6E4852fvy2+7ahs6PDOZDy0BrBDMt9FvkWDn+5RPIhdk8b+Yp3I0Ips9+VPNprmfWF8hm6UHFwiqvesKRGOq6DecMmgG39v+R40qwISvoeLSsnizO1/iDJ7UTf2+LXRj8yI6ZGm7Et6wn0bzXQFIpDOtfbB9x1UghvWPUQ3t1IhHa2jrKeuNiz9bCa5YUPvNa/j4gde2Oeod/iw==" Serie="SI" SubTotal="10243.48" TipoCambio="1" TipoDeComprobante="I" Total="11882.44" Version="3.3" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd">
+    <cfdi:Emisor Nombre="Cabrera Rivera Emmanuel" RegimenFiscal="621" Rfc="CARE881204RL2" />
+    <cfdi:Receptor Nombre="Hospital Humanitas De Tlaxcala S.A. de C.V." Rfc="HHT060202VA8" UsoCFDI="G03" />
+    <cfdi:Conceptos>
+        <cfdi:Concepto Cantidad="10" ClaveProdServ="14111704" ClaveUnidad="H87" Descripcion="PAPEL HIGIENICO MARLY JUMBO CJA C/12 ROLLOS 200MTS" Importe="2325.00" NoIdentificacion="PPLH" Unidad="PZA" ValorUnitario="232.50">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2325.00" Importe="372.00" Impuesto="002" TasaOCuota="0.160000" TipoFactor="Tasa" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto Cantidad="10" ClaveProdServ="14111703" ClaveUnidad="H87" Descripcion="TOALLA EN ROLLO MARLY BLANCA CJA C/ 6 ROLLOS 180 MTS" Importe="2380.00" NoIdentificacion="TLLPPL-01" Unidad="PZA" ValorUnitario="238.00">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2380.00" Importe="380.80" Impuesto="002" TasaOCuota="0.160000" TipoFactor="Tasa" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto Cantidad="4" ClaveProdServ="30181614" ClaveUnidad="H87" Descripcion="JABON EN ESPUMA POMEBERRY GOJO 1916-02" Importe="2204.00" NoIdentificacion="DIPSJAB" Unidad="PZA" ValorUnitario="551.00">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2204.00" Importe="352.64" Impuesto="002" TasaOCuota="0.160000" TipoFactor="Tasa" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto Cantidad="2" ClaveProdServ="30181614" ClaveUnidad="H87" Descripcion="KC JABON EN ESPUMA 92526 GRAL 800ML C/6 PZAS" Importe="2076.48" NoIdentificacion="DIPSJAB" Unidad="PZA" ValorUnitario="1038.24">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="2076.48" Importe="332.24" Impuesto="002" TasaOCuota="0.160000" TipoFactor="Tasa" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto Cantidad="1" ClaveProdServ="47131811" ClaveUnidad="H87" Descripcion="GUANTE SATINADO ROJO MED. 3 M" Importe="384.00" NoIdentificacion="PRDL" Unidad="PZA" ValorUnitario="384.00">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="384.00" Importe="61.44" Impuesto="002" TasaOCuota="0.160000" TipoFactor="Tasa" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto Cantidad="1" ClaveProdServ="47131811" ClaveUnidad="H87" Descripcion="GUANTE SATINADO AZUL MED. 3 M" Importe="384.00" NoIdentificacion="PRDL" Unidad="PZA" ValorUnitario="384.00">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="384.00" Importe="61.44" Impuesto="002" TasaOCuota="0.160000" TipoFactor="Tasa" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+        <cfdi:Concepto Cantidad="1" ClaveProdServ="47131811" ClaveUnidad="H87" Descripcion="JABON QUIRURGICO PROVON 1200 ml / 530604" Importe="490.00" NoIdentificacion="PRDL" Unidad="PZA" ValorUnitario="490.00">
+            <cfdi:Impuestos>
+                <cfdi:Traslados>
+                    <cfdi:Traslado Base="490.00" Importe="78.40" Impuesto="002" TasaOCuota="0.160000" TipoFactor="Tasa" />
+                </cfdi:Traslados>
+            </cfdi:Impuestos>
+        </cfdi:Concepto>
+    </cfdi:Conceptos>
+    <cfdi:Impuestos TotalImpuestosTrasladados="1638.96">
+        <cfdi:Traslados>
+            <cfdi:Traslado Importe="1638.96" Impuesto="002" TasaOCuota="0.160000" TipoFactor="Tasa" />
+        </cfdi:Traslados>
+    </cfdi:Impuestos>
+    <cfdi:Complemento>
+        <tfd:TimbreFiscalDigital xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd" Version="1.1" UUID="684aecd4-6621-4f8f-ad16-092f773eaf5f" FechaTimbrado="2018-08-30T14:44:19" RfcProvCertif="LSO1306189R5" SelloCFD="bgJdncGLcR0/T7t6rpy41PjCbPOHYlPo2CjAdKNlfx5ZiDFR1gQuzLfER193nE/E8k1oaumu0anh4fsQp9nNYDlOk4ycDMWG75BeRGLwhfpn6thc1l+zexF+CZLh8fkne9AxtBh6E4852fvy2+7ahs6PDOZDy0BrBDMt9FvkWDn+5RPIhdk8b+Yp3I0Ips9+VPNprmfWF8hm6UHFwiqvesKRGOq6DecMmgG39v+R40qwISvoeLSsnizO1/iDJ7UTf2+LXRj8yI6ZGm7Et6wn0bzXQFIpDOtfbB9x1UghvWPUQ3t1IhHa2jrKeuNiz9bCa5YUPvNa/j4gde2Oeod/iw==" NoCertificadoSAT="00001000000408254801" SelloSAT="CXsnriCItIZwo0vHvy/DDBYKiwFfOjTb+hT5Jv5uw0nMjsBqiUX8U4SIQQee1gHnF+0AUFoCfSTt+vPrWzLzWqomKalUO5hayOCeanGSXBG9gcoMw9quIo3unyy5XdEP0Bz17lsstpd6syzJq4mvEbS5aU1dr5Ry8gm7QiG6FzMQpGKpcGbfMMo+b5WI5D59iRagwv79UG7fIgYncAQxtVNKp0W4OKHdl9br9e7IRrPjWMSg+cBsMYbe1CJN12N0mdAeFShsSK51nDjA/pnx0kqZIQ8hZSagisGVNkO6yIpmBOfNGWS438kbVaxLsjZz/PepY9FE7CzN1X63st7cBA==" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+    </cfdi:Complemento>
+</cfdi:Comprobante>

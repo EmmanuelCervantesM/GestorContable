@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomSolicitudesLineasTblViewDlg" widgetVar="RnGcNomSolicitudesLineasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcNomSolicitudesLineasTblTitle}">
+            <h:form id="RnGcNomSolicitudesLineasTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomSolicitudesLineasTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudesLineasTblLabel_solicitudTrabajadorId}"/>
+                        <h:outputText value="#{rnGcNomSolicitudesLineasTblController.selected.solicitudTrabajadorId}" title="#{bundle.ViewRnGcNomSolicitudesLineasTblTitle_solicitudTrabajadorId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudesLineasTblLabel_totalGravado}"/>
+                        <h:outputText value="#{rnGcNomSolicitudesLineasTblController.selected.totalGravado}" title="#{bundle.ViewRnGcNomSolicitudesLineasTblTitle_totalGravado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudesLineasTblLabel_totalExento}"/>
+                        <h:outputText value="#{rnGcNomSolicitudesLineasTblController.selected.totalExento}" title="#{bundle.ViewRnGcNomSolicitudesLineasTblTitle_totalExento}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudesLineasTblLabel_tipoClave}"/>
+                        <h:outputText value="#{rnGcNomSolicitudesLineasTblController.selected.tipoClave}" title="#{bundle.ViewRnGcNomSolicitudesLineasTblTitle_tipoClave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudesLineasTblLabel_tipoConcepto}"/>
+                        <h:outputText value="#{rnGcNomSolicitudesLineasTblController.selected.tipoConcepto}" title="#{bundle.ViewRnGcNomSolicitudesLineasTblTitle_tipoConcepto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudesLineasTblLabel_percepcionId}"/>
+                        <h:outputText value="#{rnGcNomSolicitudesLineasTblController.selected.percepcionId}" title="#{bundle.ViewRnGcNomSolicitudesLineasTblTitle_percepcionId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomSolicitudesLineasTblLabel_deduccionId}"/>
+                        <h:outputText value="#{rnGcNomSolicitudesLineasTblController.selected.deduccionId}" title="#{bundle.ViewRnGcNomSolicitudesLineasTblTitle_deduccionId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcNomSolicitudesLineasTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

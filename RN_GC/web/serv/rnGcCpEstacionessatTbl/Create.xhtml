@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpEstacionessatTblCreateDlg" widgetVar="RnGcCpEstacionessatTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcCpEstacionessatTblTitle}">
+            <h:form id="RnGcCpEstacionessatTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpEstacionessatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcCpEstacionessatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpEstacionessatTblController.selected.id}" title="#{bundle.CreateRnGcCpEstacionessatTblTitle_id}" required="true" requiredMessage="#{bundle.CreateRnGcCpEstacionessatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpEstacionessatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpEstacionessatTblController.selected.clave}" title="#{bundle.CreateRnGcCpEstacionessatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpEstacionessatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpEstacionessatTblController.selected.descripcion}" title="#{bundle.CreateRnGcCpEstacionessatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpEstacionessatTblLabel_claveTransporte}" for="claveTransporte" />
+                        <p:inputText id="claveTransporte" value="#{rnGcCpEstacionessatTblController.selected.claveTransporte}" title="#{bundle.CreateRnGcCpEstacionessatTblTitle_claveTransporte}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpEstacionessatTblLabel_nacionalidad}" for="nacionalidad" />
+                        <p:inputText id="nacionalidad" value="#{rnGcCpEstacionessatTblController.selected.nacionalidad}" title="#{bundle.CreateRnGcCpEstacionessatTblTitle_nacionalidad}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpEstacionessatTblLabel_designador}" for="designador" />
+                        <p:inputText id="designador" value="#{rnGcCpEstacionessatTblController.selected.designador}" title="#{bundle.CreateRnGcCpEstacionessatTblTitle_designador}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpEstacionessatTblLabel_lineaFerrea}" for="lineaFerrea" />
+                        <p:inputText id="lineaFerrea" value="#{rnGcCpEstacionessatTblController.selected.lineaFerrea}" title="#{bundle.CreateRnGcCpEstacionessatTblTitle_lineaFerrea}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpEstacionessatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpEstacionessatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpEstacionessatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpEstacionessatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpEstacionessatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpEstacionessatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpEstacionessatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpEstacionessatTblController.selected.creadoPor}" title="#{bundle.CreateRnGcCpEstacionessatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.CreateRnGcCpEstacionessatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpEstacionessatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpEstacionessatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpEstacionessatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpEstacionessatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcCpEstacionessatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpEstacionessatTblController.selected.ultimaActualizacionPor}" title="#{bundle.CreateRnGcCpEstacionessatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcCpEstacionessatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpEstacionessatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpEstacionessatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpEstacionessatTblController.create}" value="#{bundle.Save}" update="display,:RnGcCpEstacionessatTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcCpEstacionessatTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpEstacionessatTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpTipoembalajesatTblEditDlg" widgetVar="RnGcCpTipoembalajesatTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpTipoembalajesatTblTitle}">
+            <h:form id="RnGcCpTipoembalajesatTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpTipoembalajesatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoembalajesatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpTipoembalajesatTblController.selected.id}" title="#{bundle.EditRnGcCpTipoembalajesatTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcCpTipoembalajesatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoembalajesatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpTipoembalajesatTblController.selected.clave}" title="#{bundle.EditRnGcCpTipoembalajesatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoembalajesatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpTipoembalajesatTblController.selected.descripcion}" title="#{bundle.EditRnGcCpTipoembalajesatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoembalajesatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpTipoembalajesatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpTipoembalajesatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoembalajesatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpTipoembalajesatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpTipoembalajesatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoembalajesatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpTipoembalajesatTblController.selected.creadoPor}" title="#{bundle.EditRnGcCpTipoembalajesatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.EditRnGcCpTipoembalajesatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoembalajesatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpTipoembalajesatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpTipoembalajesatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpTipoembalajesatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoembalajesatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpTipoembalajesatTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcCpTipoembalajesatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoembalajesatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpTipoembalajesatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpTipoembalajesatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpTipoembalajesatTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpTipoembalajesatTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpTipoembalajesatTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpTipoembalajesatTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

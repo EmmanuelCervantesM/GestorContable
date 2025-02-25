@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpConfigautotransportesatTblViewDlg" widgetVar="RnGcCpConfigautotransportesatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpConfigautotransportesatTblTitle}">
+            <h:form id="RnGcCpConfigautotransportesatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpConfigautotransportesatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigautotransportesatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpConfigautotransportesatTblController.selected.id}" title="#{bundle.ViewRnGcCpConfigautotransportesatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigautotransportesatTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpConfigautotransportesatTblController.selected.clave}" title="#{bundle.ViewRnGcCpConfigautotransportesatTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigautotransportesatTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpConfigautotransportesatTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpConfigautotransportesatTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigautotransportesatTblLabel_numeroEjes}"/>
+                        <h:outputText value="#{rnGcCpConfigautotransportesatTblController.selected.numeroEjes}" title="#{bundle.ViewRnGcCpConfigautotransportesatTblTitle_numeroEjes}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigautotransportesatTblLabel_numeroLlantas}"/>
+                        <h:outputText value="#{rnGcCpConfigautotransportesatTblController.selected.numeroLlantas}" title="#{bundle.ViewRnGcCpConfigautotransportesatTblTitle_numeroLlantas}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigautotransportesatTblLabel_remolque}"/>
+                        <h:outputText value="#{rnGcCpConfigautotransportesatTblController.selected.remolque}" title="#{bundle.ViewRnGcCpConfigautotransportesatTblTitle_remolque}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigautotransportesatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpConfigautotransportesatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpConfigautotransportesatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigautotransportesatTblLabel_fechaFin}"/>
+                        <h:outputText value="#{rnGcCpConfigautotransportesatTblController.selected.fechaFin}" title="#{bundle.ViewRnGcCpConfigautotransportesatTblTitle_fechaFin}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigautotransportesatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpConfigautotransportesatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpConfigautotransportesatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigautotransportesatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpConfigautotransportesatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpConfigautotransportesatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigautotransportesatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpConfigautotransportesatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpConfigautotransportesatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpConfigautotransportesatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpConfigautotransportesatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpConfigautotransportesatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpConfigautotransportesatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

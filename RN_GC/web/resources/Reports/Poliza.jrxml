@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Poliza" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="381f78d0-8ddb-4035-a311-17a4db48cf76">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="polizaHeaderId" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cargos" class="java.lang.Double"/>
+	<parameter name="abonos" class="java.lang.Double"/>
+	<queryString>
+		<![CDATA[select t3.*, t4.*
+from
+
+(SELECT t2.*
+FROM(SELECT t1.*, cc.numeroCuenta, cc.descripcionCuenta, cc.adicional1 ccConcepto
+ FROM
+		(SELECT ph.receptor, LEFT((ph.fecha),10) as fecha, ph.tipoPoliza, ph.numeroPoliza, ph.concepto phConcepto,
+        pl.sucursal, pl.cargo, pl.abono, pl.polizaHeaderId, pl.catalogoCuentasId
+
+
+         FROM rn_gc_db_test.rn_gc_poliza_header_tbl ph LEFT JOIN rn_gc_db_test.rn_gc_poliza_lineas_tbl pl ON ph.Id = pl.polizaHeaderId WHERE pl.polizaHeaderId = $P{polizaHeaderId}) t1
+
+			LEFT JOIN rn_gc_db_test.rn_gc_catalogo_cuentas_tbl cc ON t1.catalogoCuentasId = cc.Id) t2 ) t3,
+
+            (SELECT   SUM(pl.cargo) totalCargos, SUM(pl.abono) totalAbonos
+
+FROM rn_gc_db_test.rn_gc_poliza_header_tbl ph, rn_gc_db_test.rn_gc_poliza_lineas_tbl pl,
+ rn_gc_db_test.rn_gc_catalogo_cuentas_tbl cc
+
+ WHERE pl.polizaHeaderId = $P{polizaHeaderId}) t4;]]>
+	</queryString>
+	<field name="receptor" class="java.lang.String"/>
+	<field name="fecha" class="java.lang.String"/>
+	<field name="tipoPoliza" class="java.lang.String"/>
+	<field name="numeroPoliza" class="java.lang.Integer"/>
+	<field name="phConcepto" class="java.lang.String"/>
+	<field name="sucursal" class="java.lang.String"/>
+	<field name="cargo" class="java.lang.Double"/>
+	<field name="abono" class="java.lang.Double"/>
+	<field name="polizaHeaderId" class="java.lang.Integer"/>
+	<field name="catalogoCuentasId" class="java.lang.Integer"/>
+	<field name="numeroCuenta" class="java.lang.String"/>
+	<field name="descripcionCuenta" class="java.lang.String"/>
+	<field name="ccConcepto" class="java.lang.Double"/>
+	<field name="totalCargos" class="java.lang.Double"/>
+	<field name="totalAbonos" class="java.lang.Double"/>
+	<variable name="tipoPoliza_1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{tipoPoliza}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="117" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="0" width="555" height="117" uuid="43949cbd-0211-400c-a879-7938f2e8da72"/>
+			</rectangle>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="400" y="2" width="152" height="13" uuid="cd7f30fa-d2a3-44a8-9fef-20345e4fd274"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="129" y="70" width="57" height="20" uuid="65407423-0d98-42e8-abf6-e2d57463a672"/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="129" y="90" width="67" height="20" uuid="86c1da52-79e1-495a-899d-0cbb30cc2105"/>
+				<textFieldExpression><![CDATA[$F{tipoPoliza}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="70" width="250" height="20" uuid="fb020047-4323-45ce-9f49-f4dedca881e6"/>
+				<textFieldExpression><![CDATA[$F{numeroPoliza}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="90" width="250" height="20" uuid="8a4a0ef2-2a67-48ed-b48f-b7356e1fb5dc"/>
+				<textFieldExpression><![CDATA[$F{phConcepto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="70" width="116" height="20" uuid="706f12aa-bac4-47c3-ae00-8bb2f792cca5"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de elaboración]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="90" width="41" height="20" uuid="31e20381-907b-48c9-8f46-b1c91829c05c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="196" y="70" width="109" height="20" uuid="cf8c8465-3f54-4369-9a98-7d8e187a93b9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Póliza]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="196" y="90" width="109" height="20" uuid="65f6d0b6-40e9-4aed-966d-37b54e787839"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Concepto de la póliza]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="13" y="15" width="529" height="55" uuid="c966a455-f1c2-4ed3-9847-5b3e01772705"/>
+				<textElement verticalAlignment="Middle">
+					<font size="20" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receptor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="315" y="2" width="85" height="20" uuid="57c820a7-00d0-43bf-b149-c0695609e3d9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de emisión]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="73" height="20" uuid="9c7c2860-7e3f-4ec4-9a12-be7a6b05bc7f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cuenta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="73" y="0" width="170" height="20" uuid="5b3cdba9-5a74-4f55-b667-9296f91bd786"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="243" y="0" width="175" height="20" uuid="f2fc923c-81b3-4fcb-a08f-dd753e452470"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Concepto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="418" y="0" width="44" height="20" uuid="6d7e6aa5-fb54-43c7-81bb-fa731ba76c57"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sucursal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="462" y="0" width="46" height="20" uuid="45fb4bc0-e265-45fa-9e2b-d4f680078e48"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cargos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="508" y="0" width="47" height="20" uuid="919b78b4-28a6-4c80-bdcc-82f5e316c95d"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Abonos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="73" height="20" uuid="eb1f5731-672e-4b33-a757-fe8ec518c1b7"/>
+				<textFieldExpression><![CDATA[$F{numeroCuenta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="73" y="0" width="170" height="20" uuid="855fbf9f-73b9-4ff0-a3b2-55fc0a79a028"/>
+				<textFieldExpression><![CDATA[$F{descripcionCuenta}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="243" y="0" width="175" height="20" uuid="cf01da0d-77ee-4605-8b2e-e16d17a640dd"/>
+				<textFieldExpression><![CDATA[$F{ccConcepto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="418" y="0" width="44" height="20" uuid="cd8a3015-af1b-43e6-8c5f-681ae78d06de"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{sucursal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="462" y="0" width="46" height="20" uuid="82de0d69-e07f-49e5-940b-5203d5452292"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{cargo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="508" y="0" width="47" height="20" uuid="57787e44-0b57-4fba-82e6-9a285c6e138f"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{abono}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement x="413" y="0" width="49" height="20" uuid="aed35903-256e-4425-80ee-917db798634d"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTALES]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="462" y="0" width="46" height="20" uuid="8ca353ee-1b81-4881-9659-22e832efad6c"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{totalCargos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="508" y="0" width="47" height="20" uuid="b1474215-cd1e-4249-9fea-56a13581068c"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{totalAbonos}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcMenuslineasTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcMenuslineasTblListForm">
+                <p:panel header="#{bundle.ListRnGcMenuslineasTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcMenuslineasTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcMenuslineasTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcMenuslineasTblTitle_noSecuencia}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.noSecuencia}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcMenuslineasTblTitle_funcionesId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.funcionesId.funcionNombre}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcMenuslineasTblTitle_menuId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.menuId.menuNombre}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcMenuslineasTblController.prepareCreate}" update=":RnGcMenuslineasTblCreateForm" oncomplete="PF('RnGcMenuslineasTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcMenuslineasTblViewForm" oncomplete="PF('RnGcMenuslineasTblViewDialog').show()" disabled="#{empty rnGcMenuslineasTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcMenuslineasTblEditForm" oncomplete="PF('RnGcMenuslineasTblEditDialog').show()" disabled="#{empty rnGcMenuslineasTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcMenuslineasTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcMenuslineasTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

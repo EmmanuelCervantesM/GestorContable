@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCfdisTblEditDlg" widgetVar="RnGcCfdisTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCfdisTblTitle}">
+            <h:form id="RnGcCfdisTblEditForm">
+                <p:growl id="growl" life="10000"/>
+                <h:panelGroup id="display">
+                    <h:panelGrid columns="6" rendered="#{rnGcCfdisLineasTblController.cfdiId != null}">
+                        <p:outputLabel value="No. Certificado" for="noCertificado"/>
+                        <p:selectOneMenu id="noCertificado" style="width: 160px" value="#{rnGcCfdisLineasTblController.cfdiId.certificados_Id}" required="true" requiredMessage="El certificado es necesario">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCertificadosTblController.listaCertificadosActivos()}"
+                                           var="certificadoItem"
+                                           itemLabel="#{certificadoItem.numeroCertificado}"
+                                           itemValue="#{certificadoItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_rfcEmisor}" for="rfcEmisor" />
+                        <p:inputText id="rfcEmisor" style="width: 175px" value="#{rnGcCfdisLineasTblController.cfdiId.rfcEmisor}" title="#{bundle.EditRnGcCfdisTblTitle_rfcEmisor}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_rfcEmisor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_nombreEmisor}" for="nombreEmisor" />
+                        <p:inputTextarea id="nombreEmisor" style="width: 175px" value="#{rnGcCfdisLineasTblController.cfdiId.nombreEmisor}" title="#{bundle.EditRnGcCfdisTblTitle_nombreEmisor}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_nombreEmisor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_rfcReceptor}" for="rfcReceptor" />                        
+                        <p:selectOneMenu id="rfcReceptor" style="width: 160px" value="#{rnGcCfdisLineasTblController.cfdiId.rfcReceptor}" title="#{bundle.EditRnGcCfdisTblTitle_rfcReceptor}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_rfcReceptor}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcPersonas_clientesTblController.itemsCreadoPor()}"
+                                           var="rfcReceptorItem"
+                                           itemLabel="#{rfcReceptorItem.rfc}"
+                                           itemValue="#{rfcReceptorItem.rfc}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_nombreReceptor}" for="nombreReceptor" />
+                        <p:selectOneMenu id="nombreReceptor" style="width: 160px" value="#{rnGcCfdisLineasTblController.cfdiId.nombreReceptor}" title="#{bundle.EditRnGcCfdisTblTitle_nombreReceptor}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_nombreReceptor}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcPersonas_clientesTblController.itemsCreadoPor()}"
+                                           var="nombreReceptorItem"
+                                           itemLabel="#{nombreReceptorItem.nombre}"
+                                           itemValue="#{nombreReceptorItem.nombre}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_folio}" for="folio" />
+                        <p:inputText id="folio" style="width: 175px" value="#{rnGcCfdisLineasTblController.cfdiId.folio}" title="#{bundle.EditRnGcCfdisTblTitle_folio}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_serie}" for="serie" />
+                        <p:inputText id="serie" style="width: 175px" value="#{rnGcCfdisLineasTblController.cfdiId.serie}" title="#{bundle.EditRnGcCfdisTblTitle_serie}" />                        
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_formaPago}" for="formaPago" />
+                        <p:selectOneMenu id="formaPago" style="width: 160px" filter="true" filterMatchMode="contains" value="#{rnGcCfdisLineasTblController.cfdiId.formaPago}" title="#{bundle.EditRnGcCfdisTblTitle_formaPago}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_formaPago}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcFormaspagosTblController.itemsAvailableSelectOne}"
+                                           var="formaPagoItem"
+                                           itemLabel="#{formaPagoItem.CFormaPago} - #{formaPagoItem.descripcion}"
+                                           itemValue="#{formaPagoItem.CFormaPago}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_metodoPago}" for="metodoPago" />
+                        <p:selectOneMenu id="metodoPago" style="width: 160px" value="#{rnGcCfdisLineasTblController.cfdiId.metodoPago}" title="#{bundle.EditRnGcCfdisTblTitle_metodoPago}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_metodoPago}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcMetodospagosTblController.itemsAvailableSelectOne}"
+                                           var="metodoPagoItem"
+                                           itemLabel="#{metodoPagoItem.CMetodoPago} - #{metodoPagoItem.descripcion}"
+                                           itemValue="#{metodoPagoItem.CMetodoPago}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_condicionPago}" for="condicionPago" />
+                        <p:inputText id="condicionPago" style="width: 175px" value="#{rnGcCfdisLineasTblController.cfdiId.condicionPago}" title="#{bundle.EditRnGcCfdisTblTitle_condicionPago}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_tipoComprobante}" for="tipoComprobante" />
+                        <p:selectOneMenu id="tipoComprobante" style="width: 160px" value="#{rnGcCfdisLineasTblController.cfdiId.tipoComprobante}" title="#{bundle.EditRnGcCfdisTblTitle_tipoComprobante}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_tipoComprobante}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItem itemLabel="E - Egreso" itemValue="E"/>
+                            <f:selectItem itemLabel="I - Ingreso" itemValue="I"/>
+                            <f:selectItem itemLabel="T - Traslado" itemValue="T"/>
+                            <f:selectItem itemLabel="P - Pago" itemValue="P"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_fechaExpedicion}" for="fechaExpedicion" />
+                        <p:calendar id="fechaExpedicion" pattern="dd/MM/yyyy'T'hh:mm:ss" value="#{rnGcCfdisLineasTblController.cfdiId.fechaExpedicion}" title="#{bundle.EditRnGcCfdisTblTitle_fechaExpedicion}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_fechaExpedicion}" showOn="button"/>                        
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_lugarExpedicion}" for="lugarExpedicion" />
+                        <p:selectOneMenu id="lugarExpedicion" style="width: 160px" value="#{rnGcCfdisLineasTblController.cfdiId.lugarExpedicion}" title="#{bundle.EditRnGcCfdisTblTitle_lugarExpedicion}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_lugarExpedicion}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{facturarContoller.codigosPostalesUsuario()}"
+                                           var="codigoPostalItem"
+                                           itemLabel="#{codigoPostalItem}"
+                                           itemValue="#{codigoPostalItem.substring(0, 5)}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_claveRegimenFiscal}" for="claveRegimenFiscal" />
+                        <p:selectOneMenu id="claveRegimenFiscal" filter="true" filterMatchMode="contains" style="width: 160px" value="#{rnGcCfdisLineasTblController.cfdiId.claveRegimenFiscal}" title="#{bundle.EditRnGcCfdisTblTitle_claveRegimenFiscal}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_claveRegimenFiscal}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcRegimenfiscalTblController.itemsAvailableSelectOne}"
+                                           var="regimenFiscalItem"
+                                           itemLabel="#{regimenFiscalItem.claveRegimenFiscal} - #{regimenFiscalItem.descripcion}"
+                                           itemValue="#{regimenFiscalItem.claveRegimenFiscal}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_usoCfdi}" for="usoCfdi" />
+                        <p:selectOneMenu id="usoCfdi" style="width: 160px" filter="true" filterMatchMode="contains" value="#{rnGcCfdisLineasTblController.cfdiId.usoCfdi}" title="#{bundle.EditRnGcCfdisTblTitle_usoCfdi}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_usoCfdi}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCatalogosusosTblController.itemsAvailableSelectOne}"
+                                           var="usoCfdiITem"
+                                           itemLabel="#{usoCfdiITem.CUsoCFDI} - #{usoCfdiITem.descripcion}"
+                                           itemValue="#{usoCfdiITem.CUsoCFDI}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_moneda}" for="moneda" />
+                        <p:selectOneMenu id="moneda" style="width: 160px" filter="true" filterMatchMode="contains" value="#{rnGcCfdisLineasTblController.cfdiId.moneda}" title="#{bundle.EditRnGcCfdisTblTitle_moneda}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_moneda}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcMonedasTblController.itemsAvailableSelectOne}"
+                                           var="monedaItem"
+                                           itemLabel="#{monedaItem.CMoneda} - #{monedaItem.descripcion}"
+                                           itemValue="#{monedaItem.CMoneda}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcCfdisTblLabel_tipoRelacion}" for="tipoRelacion" />
+                        <p:selectOneMenu id="tipoRelacion" style="width: 160px" value="#{rnGcCfdisLineasTblController.cfdiId.tipoRelacion}" title="#{bundle.EditRnGcCfdisTblTitle_tipoRelacion}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcTiporelacionTblController.itemsAvailableSelectOne}"
+                                           var="relacionItem"
+                                           itemLabel="0#{relacionItem.claveTipoRelacion} - #{relacionItem.descripcion}"
+                                           itemValue="0#{relacionItem.claveTipoRelacion}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                </h:panelGroup>
+
+                <br/>
+
+                <p:panel header="Conceptos">
+                    <p:dataTable id="conceptosList" value="#{rnGcCfdisLineasTblController.itemsLineas}"
+                                 var="linea" selectionMode="single" selection="#{rnGcCfdisLineasTblController.selected}"
+                                 paginator="true" rowKey="#{linea.id}" rows="10">
+
+                        <p:ajax event="rowSelect" update="editButton"/>
+                        <p:ajax event="rowUnselect" update="editButton"/>
+
+                        <p:column headerText="Clave Producto/Servicio">
+                            <h:outputText value="#{linea.claveProdServ}"/>
+                        </p:column>
+                        <p:column headerText="No. Identificación">
+                            <h:outputText value="#{linea.noIdentificacion}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad">
+                            <h:outputText value="#{linea.cantidad}"/>
+                        </p:column>
+                        <p:column headerText="Clave Unidad">
+                            <h:outputText value="#{linea.claveUnidad}"/>
+                        </p:column>
+                        <p:column headerText="Unidad">
+                            <h:outputText value="#{linea.unidad}"/>
+                        </p:column>
+                        <p:column headerText="Descripción">
+                            <h:outputText value="#{linea.descripcion}"/>
+                        </p:column>
+                        <p:column headerText="Valor Unitario">
+                            <h:outputText value="#{linea.valorUnit}">
+                                <f:convertNumber type="currency" currencySymbol="$"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Importe">
+                            <h:outputText value="#{linea.importe}">
+                                <f:convertNumber type="currency" currencySymbol="$"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Impuesto">
+                            <h:outputText value="#{linea.impuesto}"/>
+                        </p:column>
+                        <p:column headerText="Tipo Factor">
+                            <h:outputText value="#{linea.tipoFactor}"/>
+                        </p:column>
+                        <p:column headerText="Tipo Tasa">
+                            <h:outputText value="#{linea.tipoTasa}"/>
+                        </p:column>
+                        <p:column headerText="Importe Impuesto">
+                            <h:outputText value="#{linea.importeimpuesto}">
+                                <f:convertNumber type="currency" currencySymbol="$"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Impuesto">
+                            <h:outputText value="#{linea.impuesto2}"/>
+                        </p:column>
+                        <p:column headerText="Tipo Factor">
+                            <h:outputText value="#{linea.tipoFactor2}"/>
+                        </p:column>
+                        <p:column headerText="Tipo Tasa">
+                            <h:outputText value="#{linea.tipoTasa2}"/>
+                        </p:column>
+                        <p:column headerText="Importe Impuesto">
+                            <h:outputText value="#{linea.importeImpuesto2}">
+                                <f:convertNumber type="currency" currencySymbol="$"/>
+                            </h:outputText>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="editButton" icon="ui-icon-pencil" value="Editar Concepto" update="conceptosEditForm" oncomplete="PF('conceptosEditDialog').show()" disabled="#{empty FacturacionController.lineas}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-pencil" value="Eliminar Concepto" update="RnGcCfdisTblEditForm:conceptosList, growl" actionListener="#{FacturacionController.destroyLinea()}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+                <h:form id="facturar">
+                    <p:growl id="growlFactura" showDetail="true" life="10000"/>
+                    <p:commandButton value="Facturar" actionListener="#{rnGcCfdisLineasTblController.facturar()}" update="RnGcCfdisTblListForm:datalist, growlFactura"/>
+                </h:form>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="conceptosEditDlg" widgetVar="conceptosEditDialog" modal="true" resizable="false" appendTo="@(body)" header="Editar Conceptos">
+            <h:form id="conceptosEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcCfdisLineasTblController.selected != null}">
+                        <a target="_blank" href="http://pys.sat.gob.mx/PyS/catPyS.aspx">Clave de Producto/Servicio</a>
+                        <p:selectOneMenu id="claveProducto" style="width: 145px" filter="true" editable="true" filterMatchMode="contains" value="#{rnGcCfdisLineasTblController.selected.claveProdServ}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_claveProdServ}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_claveProdServ}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}" />
+                            <f:selectItems value="#{rnGcProductserviciosTblController.itemscreadoPor()}"
+                                           var="productoItem"
+                                           itemLabel="#{productoItem.claveProductServ}"
+                                           itemValue="#{productoItem.claveProductServ}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="No. Identificacion" for="noIdentificacion" />
+                        <p:inputText id="noIdentificacion" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.noIdentificacion}" />
+
+                        <p:outputLabel value="Cantidad" for="cantidad" />
+                        <p:inputText id="cantidad" style="width: 160px" value="#{rnGcCfdisLineasTblController.selected.cantidad}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_cantidad}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_cantidad}">
+                            <p:ajax update="importeImpuesto"/>
+                            <p:ajax update="updateButton"/>
+                        </p:inputText>
+
+                        <a target="_blank" href="http://200.57.3.89/PyS/catUnidades.aspx">Clave de Unidad</a>
+                        <p:selectOneMenu id="claveUnidad" style="width: 145px" filter="true" editable="true" filterMatchMode="contains" value="#{rnGcCfdisLineasTblController.selected.claveUnidad}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_claveUnidad}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcProductserviciosTblController.itemscreadoPor()}"
+                                           var="claveUnidad"
+                                           itemLabel="#{claveUnidad.claveUnidad}"
+                                           itemValue="#{claveUnidad.claveUnidad}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Unidad" for="unidad" />
+                        <p:selectOneMenu id="unidad" style="width: 145px" editable="true" value="#{rnGcCfdisLineasTblController.selected.unidad}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_unidad}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcProductserviciosTblController.itemscreadoPor()}"
+                                           var="unidadItem"
+                                           itemLabel="#{unidadItem.unidad}"
+                                           itemValue="#{unidadItem.unidad}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Descripcion" for="descripcion" />
+                        <p:selectOneMenu id="descripcion" style="width: 145px" editable="true" value="#{rnGcCfdisLineasTblController.selected.descripcion}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_descripcion}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_descripcion}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcProductserviciosTblController.itemscreadoPor()}"
+                                           var="descripcionItem"
+                                           itemLabel="#{descripcionItem.descripcion}"
+                                           itemValue="#{descripcionItem.descripcion}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Valor Unitario" for="valorUnit" />
+                        <p:inputText id="valorUnit" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.valorUnit}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_valorUnit}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_valorUnit}">
+                            <p:ajax update="importeImpuesto" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto"/>
+                        <p:selectOneMenu id="tipoImpuesto" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.tipoImpuesto}" required="true" requiredMessage="El tipo de Impuesto es necesario">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                           var="tipoImpuestoItem"
+                                           itemLabel="#{tipoImpuestoItem.tipoImpuesto}"
+                                           itemValue="#{tipoImpuestoItem.tipoImpuesto}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Impuesto" for="impuesto" />
+                        <p:selectOneMenu id="impuesto" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.impuesto}" required="true" requiredMessage="El Impuesto es necesario">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                           var="impuestoItem"
+                                           itemLabel="#{impuestoItem.CImpuesto} - #{impuestoItem.descripcion}"
+                                           itemValue="#{impuestoItem.CImpuesto}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Tipo Factor" for="tipoFactor" />
+                        <p:selectOneMenu id="tipoFactor" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.tipoFactor}" title="#{bundle.CreateRnGcCfdisLineasTblTitle_tipoFactor}" required="true" requiredMessage="#{bundle.CreateRnGcCfdisLineasTblRequiredMessage_tipoFactor}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                           var="tipoFactorItem"
+                                           itemLabel="#{tipoFactorItem.ctipoFactor}"
+                                           itemValue="#{tipoFactorItem.ctipoFactor}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Tasa o Cuota" for="tipoTasa" />
+                        <p:inputText id="tipoTasa" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.tipoTasa}" title="Probando" required="true" requiredMessage="La tasa o cuota es necesaria.">
+                            <p:ajax update="importeImpuesto"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Importe Impuesto" for="importeImpuesto"/>
+                        <p:selectOneMenu id="importeImpuesto" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.importeimpuesto}" required="true">
+                            <f:selectItem itemLabel="#{rnGcCfdisLineasTblController.calcularImporteImpuesto(rnGcCfdisLineasTblController.selected.tipoTasa, rnGcCfdisLineasTblController.selected.cantidad, rnGcCfdisLineasTblController.selected.valorUnit)}"
+                                          itemValue="#{rnGcCfdisLineasTblController.calcularImporteImpuesto(rnGcCfdisLineasTblController.selected.tipoTasa, rnGcCfdisLineasTblController.selected.cantidad, rnGcCfdisLineasTblController.selected.valorUnit)}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Descuento1" for="descuento"/>
+                        <p:inputText id="descuento" value="#{rnGcCfdisLineasTblController.selected.descuento}"  style="width: 145px"/>
+                    </p:panelGrid>
+                    <p:panel header="Impuestos Adicionales" toggleable="true" collapsed="true">
+                        <p:panelGrid columns="4">
+                            <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto2"/>
+                            <p:selectOneMenu id="tipoImpuesto2" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.tipoImpuesto2}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                               var="tipoImpuesto2Item"
+                                               itemLabel="#{tipoImpuesto2Item.tipoImpuesto}"
+                                               itemValue="#{tipoImpuesto2Item.tipoImpuesto}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Impuesto" for="impuesto2"/>
+                            <p:selectOneMenu id="impuesto2" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.impuesto2}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                               var="impuesto2Item"
+                                               itemLabel="#{impuesto2Item.CImpuesto} - #{impuesto2Item.descripcion}"
+                                               itemValue="#{impuesto2Item.CImpuesto}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Tipo de Factor" for="tipoFactor2"/>
+                            <p:selectOneMenu id="tipoFactor2" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.tipoFactor2}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                               var="tipoFactor2Item"
+                                               itemLabel="#{tipoFactor2Item.ctipoFactor}"
+                                               itemValue="#{tipoFactor2Item.ctipoFactor}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Tasa o Cuota" for="tasa2"/>
+                            <p:inputText id="tasa2" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.tipoTasa2}">
+                                <p:ajax update="importeImpuesto2"/>
+                            </p:inputText>
+
+                            <p:outputLabel value="Importe Impuesto" for="importeImpuesto2"/>
+                            <p:selectOneMenu id="importeImpuesto2" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.importeImpuesto2}">
+                                <f:selectItem itemLabel="#{rnGcCfdisLineasTblController.calcularImporteImpuesto(rnGcCfdisLineasTblController.selected.tipoTasa2, rnGcCfdisLineasTblController.selected.cantidad, rnGcCfdisLineasTblController.selected.valorUnit)}"
+                                              itemValue="#{rnGcCfdisLineasTblController.calcularImporteImpuesto(rnGcCfdisLineasTblController.selected.tipoTasa2, rnGcCfdisLineasTblController.selected.cantidad, rnGcCfdisLineasTblController.selected.valorUnit)}"/>
+                            </p:selectOneMenu>
+                            <br/><p:outputLabel/>
+                            <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto3"/>
+                            <p:selectOneMenu id="tipoImpuesto3" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.tipoImpuesto3}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                               var="tipoImpuesto3Item"
+                                               itemLabel="#{tipoImpuesto3Item.tipoImpuesto}"
+                                               itemValue="#{tipoImpuesto3Item.tipoImpuesto}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Impuesto" for="impuesto3"/>
+                            <p:selectOneMenu id="impuesto3" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.impuesto3}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                               var="impuesto3Item"
+                                               itemLabel="#{impuesto3Item.CImpuesto} - #{impuesto3Item.descripcion}"
+                                               itemValue="#{impuesto3Item.CImpuesto}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Tipo de Factor" for="tipoFactor3"/>
+                            <p:selectOneMenu id="tipoFactor3" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.tipoFactor3}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                               var="factor3Item"
+                                               itemLabel="#{factor3Item.ctipoFactor}"
+                                               itemValue="#{factor3Item.ctipoFactor}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Tasa o Cuota" for="tasa3"/>
+                            <p:inputText id="tasa3" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.tipoTasa3}">
+                                <p:ajax update="importeImpuesto3"/>
+                            </p:inputText>
+
+                            <p:outputLabel value="Importe Impuesto" for="importeImpuesto3"/>
+                            <p:selectOneMenu id="importeImpuesto3" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.importeImpuesto3}">
+                                <f:selectItem itemLabel="#{rnGcCfdisLineasTblController.calcularImporteImpuesto(rnGcCfdisLineasTblController.selected.tipoTasa3, rnGcCfdisLineasTblController.selected.cantidad, rnGcCfdisLineasTblController.selected.valorUnit)}"
+                                              itemValue="#{rnGcCfdisLineasTblController.calcularImporteImpuesto(rnGcCfdisLineasTblController.selected.tipoTasa3, rnGcCfdisLineasTblController.selected.cantidad, rnGcCfdisLineasTblController.selected.valorUnit)}"/>
+                            </p:selectOneMenu>
+                            <br/><p:outputLabel/>
+                            <p:outputLabel value="Tipo de Impuesto" for="tipoImpuesto4"/>
+                            <p:selectOneMenu id="tipoImpuesto4" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.tipoImpuesto4}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipoimpuestoTblController.itemsAvailableSelectOne}"
+                                               var="tipoImpuesto4Item"
+                                               itemLabel="#{tipoImpuesto4Item.tipoImpuesto}"
+                                               itemValue="#{tipoImpuesto4Item.tipoImpuesto}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Impuesto" for="impuesto4"/>
+                            <p:selectOneMenu id="impuesto4" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.impuesto4}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcImpuestosTblController.itemsAvailableSelectOne}"
+                                               var="impuesto4Item"
+                                               itemLabel="#{impuesto4Item.CImpuesto} - #{impuesto4Item.descripcion}"
+                                               itemValue="#{impuesto4Item.CImpuesto}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Tipo de Factor" for="factor4"/>
+                            <p:selectOneMenu id="factor4" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.tipoFactor4}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcTipofactorTblController.itemsAvailableSelectOne}"
+                                               var="factor4Item"
+                                               itemLabel="#{factor4Item.ctipoFactor}"
+                                               itemValue="#{factor4Item.ctipoFactor}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Tasa o Cuota" for="tasa4"/>
+                            <p:inputText id="tasa4" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.tipoTasa4}">
+                                <p:ajax update="importeImpuesto4"/>
+                            </p:inputText>
+
+                            <p:outputLabel value="Importe Impuesto" for="importeImpuesto4"/>
+                            <p:selectOneMenu id="importeImpuesto4" style="width: 145px" value="#{rnGcCfdisLineasTblController.selected.importeImpuesto4}">
+                                <f:selectItem itemLabel="#{rnGcCfdisLineasTblController.calcularImporteImpuesto(rnGcCfdisLineasTblController.selected.tipoTasa4, rnGcCfdisLineasTblController.selected.cantidad, rnGcCfdisLineasTblController.selected.valorUnit)}"
+                                              itemValue="#{rnGcCfdisLineasTblController.calcularImporteImpuesto(rnGcCfdisLineasTblController.selected.tipoTasa4, rnGcCfdisLineasTblController.selected.cantidad, rnGcCfdisLineasTblController.selected.valorUnit)}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:commandButton id="updateButton" actionListener="#{rnGcCfdisLineasTblController.update()}"  value="Actualizar" update="RnGcCfdisTblEditForm:conceptosList, RnGcCfdisTblListForm:datalist" oncomplete="handleSubmit(args, 'conceptosEditDialog');" disabled="#{rnGcCfdisLineasTblController.selected.cantidad == 0.0}"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="conceptosViewDlg" widgetVar="conceptosViewDialog" modal="true" resizable="false" appendTo="@(body)" header="Vista de Conceptos">
+            <h:form id="conceptosViewForm">
+
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

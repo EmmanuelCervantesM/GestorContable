@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcArchivosTblEditDlg" widgetVar="RnGcArchivosTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcArchivosTblTitle}">
+            <h:form id="RnGcArchivosTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcArchivosTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcArchivosTblLabel_rngccfdistblId}" for="rngccfdistblId" />
+                        <p:selectOneMenu id="rngccfdistblId" value="#{rnGcArchivosTblController.selected.rngccfdistblId}" required="true" requiredMessage="#{bundle.EditRnGcArchivosTblRequiredMessage_rngccfdistblId}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCfdisTblController.itemsAvailableSelectOne}"
+                                           var="rngccfdistblIdItem"
+                                           itemValue="#{rngccfdistblIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditRnGcArchivosTblLabel_archivoXml}" for="archivoXml" />
+                        <p:inputTextarea rows="4" cols="30" id="archivoXml" value="#{rnGcArchivosTblController.selected.archivoXml}" title="#{bundle.EditRnGcArchivosTblTitle_archivoXml}" required="true" requiredMessage="#{bundle.EditRnGcArchivosTblRequiredMessage_archivoXml}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcArchivosTblLabel_archivoPdf}" for="archivoPdf" />
+                        <p:inputTextarea rows="4" cols="30" id="archivoPdf" value="#{rnGcArchivosTblController.selected.archivoPdf}" title="#{bundle.EditRnGcArchivosTblTitle_archivoPdf}" required="true" requiredMessage="#{bundle.EditRnGcArchivosTblRequiredMessage_archivoPdf}"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcArchivosTblController.update}" value="#{bundle.Save}" update="display,:RnGcArchivosTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcArchivosTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcArchivosTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

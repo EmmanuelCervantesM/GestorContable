@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle2.CreateRnGcComplementosTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle2.CreateRnGcComplementosLabel_pkId}" for="pkId" />
+                    <h:inputText id="pkId" value="#{rnGcComplementosController.selected.pkId}" title="#{bundle2.CreateRnGcComplementosTitle_pkId}" required="true" requiredMessage="#{bundle2.CreateRnGcComplementosRequiredMessage_pkId}"/>
+                    <h:outputLabel value="#{bundle2.CreateRnGcComplementosLabel_complementoSeleccionado}" for="complementoSeleccionado" />
+                    <h:inputText id="complementoSeleccionado" value="#{rnGcComplementosController.selected.complementoSeleccionado}" title="#{bundle2.CreateRnGcComplementosTitle_complementoSeleccionado}" />
+                    <h:outputLabel value="#{bundle2.CreateRnGcComplementosLabel_nombreAlumno}" for="nombreAlumno" />
+                    <h:inputText id="nombreAlumno" value="#{rnGcComplementosController.selected.nombreAlumno}" title="#{bundle2.CreateRnGcComplementosTitle_nombreAlumno}" />
+                    <h:outputLabel value="#{bundle2.CreateRnGcComplementosLabel_curp}" for="curp" />
+                    <h:inputText id="curp" value="#{rnGcComplementosController.selected.curp}" title="#{bundle2.CreateRnGcComplementosTitle_curp}" />
+                    <h:outputLabel value="#{bundle2.CreateRnGcComplementosLabel_nivelEducativo}" for="nivelEducativo" />
+                    <h:inputText id="nivelEducativo" value="#{rnGcComplementosController.selected.nivelEducativo}" title="#{bundle2.CreateRnGcComplementosTitle_nivelEducativo}" />
+                    <h:outputLabel value="#{bundle2.CreateRnGcComplementosLabel_autRVOE}" for="autRVOE" />
+                    <h:inputText id="autRVOE" value="#{rnGcComplementosController.selected.autRVOE}" title="#{bundle2.CreateRnGcComplementosTitle_autRVOE}" />
+                    <h:outputLabel value="#{bundle2.CreateRnGcComplementosLabel_rfcPago}" for="rfcPago" />
+                    <h:inputText id="rfcPago" value="#{rnGcComplementosController.selected.rfcPago}" title="#{bundle2.CreateRnGcComplementosTitle_rfcPago}" />
+                    <h:outputLabel value="#{bundle2.CreateRnGcComplementosLabel_complementoEscuela}" for="complementoEscuela" />
+                    <h:inputText id="complementoEscuela" value="#{rnGcComplementosController.selected.complementoEscuela}" title="#{bundle2.CreateRnGcComplementosTitle_complementoEscuela}" />
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{rnGcComplementosController.create}" value="#{bundle2.CreateRnGcComplementosSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{rnGcComplementosController.prepareList}" value="#{bundle2.CreateRnGcComplementosShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle2.CreateRnGcComplementosIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

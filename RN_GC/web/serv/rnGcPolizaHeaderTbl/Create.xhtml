@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPolizaHeaderTblCreateDlg" widgetVar="RnGcPolizaHeaderTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcPolizaHeaderTblTitle}">
+            <h:form id="RnGcPolizaHeaderTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panel header="Datos de la poliza">
+                    <p:panelGrid columns="8" rendered="#{rnGcPolizaHeaderTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaHeaderTblLabel_numeroPoliza}" for="numeroPoliza" />
+                        <p:inputText id="numeroPoliza" value="#{rnGcPolizaHeaderTblController.selected.numeroPoliza}" title="#{bundle.CreateRnGcPolizaHeaderTblTitle_numeroPoliza}" required="true" requiredMessage="#{bundle.CreateRnGcPolizaHeaderTblRequiredMessage_numeroPoliza}" disabled="true" style="opacity: 70%"/>
+                        <p:outputLabel value="Tipo de Poliza:" for="tipoPolizaId" />
+                        <p:selectOneMenu id="tipoPolizaId" value="#{rnGcPolizaHeaderTblController.selected.tipoPolizaId}" required="true" requiredMessage="El tipo de poliza es requerido" >
+                            <f:selectItem itemLabel="Seleccione..." itemValue=""/>
+                            <f:selectItems value="#{rnGcTipoPolizaController.obtenerTipoPolizaPorUsuario()}"
+                                           var="tipoPoliza"
+                                           itemValue="#{tipoPoliza}"
+                                           itemLabel="#{tipoPoliza.tipoPoliza} - #{tipoPoliza.descripcion}"/>
+                            <p:ajax event="change" listener="#{rnGcPolizaHeaderTblController.obtenerNumeroPoliza()}" update="numeroPoliza" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Tipo Cambio:" for="tipoCambio" />
+                        <p:inputText id="tipoCambio" value="#{rnGcPolizaHeaderTblController.selected.tipoCambio}" title="Tipo Cambio:"  required="true" requiredMessage="El tipo de cambio es necesario"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaHeaderTblLabel_concepto}" for="concepto" />
+                        <p:inputTextarea  id="concepto" value="#{rnGcPolizaHeaderTblController.selected.concepto}" title="#{bundle.CreateRnGcPolizaHeaderTblTitle_concepto}">
+                            <p:ajax update="concepto" event="blur"/>
+                        </p:inputTextarea>
+                        <p:outputLabel value="Periodo: " for="periodo" />
+                        <p:selectOneMenu id="periodo" value="#{rnGcPolizaHeaderTblController.selected.periodoId}" required="true" requiredMessage="El periodo es requerido" >
+                            <f:selectItem itemLabel="Seleccione..." itemValue=""/>
+                            <f:selectItems value="#{rnGcPeriodosTblController.obtenerPeriodoUsuario()}"
+                                           var="periodo"
+                                           itemValue="#{periodo}"
+                                           itemLabel="#{periodo.mes} #{periodo.año}"/>
+                            <p:ajax event="change" update="periodo"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Estatus: " for="estatus" />
+                        <p:selectOneMenu id="estatus" value="#{rnGcPolizaHeaderTblController.selected.estatus}">
+                            <f:selectItem itemLabel="Seleccione..."/>
+                            <f:selectItem itemLabel="Vigente" itemValue="V" />
+                            <f:selectItem itemLabel="Cancelado" itemValue="C" />
+                            <p:ajax event="change" update="estatus"/>
+                        </p:selectOneMenu>
+                         <p:outputLabel value="Moneda:" for="moneda" />
+                         <p:selectOneMenu id="moneda" value="#{rnGcPolizaHeaderTblController.selected.tipoMoneda}" >
+                             <f:selectItems value="#{rnGcMonedasTblController.itemsAvailableSelectOne}"
+                                           var="monedasItem"
+                                           itemLabel="#{monedasItem.CMoneda}"
+                                           itemValue="#{monedasItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcPolizaHeaderTblLabel_fecha}" for="fecha" />
+                        <p:calendar id="fecha" pattern="dd/MM/yyyy" value="#{rnGcPolizaHeaderTblController.selected.fecha}" required="true" requiredMessage="#{bundle.EditRnGcPolizaHeaderTblRequiredMessage_fecha}" showOn="button">
+                            <p:ajax event="dateSelect" update="fecha"/>
+                        </p:calendar> 
+                    </p:panelGrid>
+                    </p:panel>
+                    <p:separator/>
+                </h:panelGroup>
+            </h:form>
+            <br/>
+                <h:form id="form3">
+                    <p:commandButton value="Agregar nuevo asiento" process="@this" update=":form3:msgs1,polizaLineasEdittable1"
+                                             action="#{rnGcPolizaHeaderTblController.onAddNew()}" />
+
+                    <p:commandButton id="createButton1" icon="ui-icon-plus"   value="Agregar Nueva Cuenta" actionListener="#{rnGcCatalogoCuentasTblController.prepareCreate}" update=":RnGcCatalogoCuentasTblCreateForm" oncomplete="PF('RnGcCatalogoCuentasTblCreateDialog').show()"/>
+                    <p:growl id="msgs1" showDetail="true"/>
+                    <p:remoteCommand name="refreshFooter" update=":form3:polizaLineasEdittable1" process="@this"/>
+
+                    <p:dataTable id="polizaLineasEdittable1" var="itemPolizaLineas1" value="#{rnGcPolizaHeaderTblController.itemsPolizaLineas}" 
+                                 editable="true" style="margin-bottom:20px" selectionMode="single" selection="#{rnGcPolizaHeaderTblController.lineaSelected}"
+                                 rowKey="#{itemPolizaLineas1.id}"
+                                 >
+                        <p:ajax event="rowSelect"   update="deleteButton1"/>
+                        <p:ajax event="rowUnselect" update="deleteButton1"/>
+
+                        <f:facet name="header">
+                            Asientos
+                        </f:facet>                        
+                        <p:ajax event="rowEdit" listener="#{rnGcPolizaHeaderTblController.onRowEdit}" update=" :form3:msgs1" partialSubmit="true" oncomplete="refreshFooter()"/>
+                        <p:ajax event="rowEditCancel" listener="#{rnGcPolizaHeaderTblController.onRowCancel}" update=":form3:msgs1" />
+
+                        <p:column headerText="Número de Cuenta">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{itemPolizaLineas1.catalogoCuentasId.numeroCuenta}" /></f:facet>
+                                <f:facet name="input">
+                                    <p:selectOneMenu value="#{itemPolizaLineas1.catalogoCuentasId}" style="width:100%" filter="true" filterMatchMode="contains">
+                                        <f:selectItems value="#{rnGcCatalogoCuentasTblController.obtenerCuentasPorUsuario()}" var="cuentas" itemLabel="#{cuentas.numeroCuenta} - #{cuentas.descripcionCuenta}" itemValue="#{cuentas}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Descripción de Cuenta">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{itemPolizaLineas1.catalogoCuentasId.descripcionCuenta}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{itemPolizaLineas1.catalogoCuentasId.descripcionCuenta}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Concepto">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{itemPolizaLineas1.concepto}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{itemPolizaLineas1.concepto}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Cargo">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{itemPolizaLineas1.cargo}" style="text-align:right"/></f:facet>
+                                <f:facet name="input"><p:inputText value="#{itemPolizaLineas1.cargo}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Abono">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{itemPolizaLineas1.abono}" style="text-align:right"/></f:facet>
+                                <f:facet name="input"><p:inputText value="#{itemPolizaLineas1.abono}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>   
+                        <p:column style="width:32px">
+                            <p:rowEditor />
+                        </p:column>
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column colspan="3" style="text-align:right" footerText="Totales: "/>
+                                <p:column style="text-align:right" footerText="$#{rnGcPolizaHeaderTblController.cargos}"/>
+                                <p:column style="text-align:right" footerText="$#{rnGcPolizaHeaderTblController.abonos}"/>
+                                <p:column/>
+                            </p:row>
+                        </p:columnGroup>
+                        <f:facet name="footer">                             
+                            <p:commandButton id="deleteButton1" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcPolizaHeaderTblController.eliminarLinea()}" update=":growl,:form3:msgs1,polizaLineasEdittable1" disabled="#{empty rnGcPolizaHeaderTblController.lineaSelected}"/>
+                        </f:facet>                       
+                    </p:dataTable>  
+                    <p:commandButton ajax="false" actionListener="#{rnGcPolizaHeaderTblController.crear}" value="#{bundle.Save}" update=":RnGcPolizaHeaderTblCreateForm,:RnGcPolizaHeaderTblListForm,:growl" oncomplete="handleSubmit(args,'RnGcPolizaHeaderTblCreateDialog');"/>
+                    <!--<p:commandButton value="Cerrar ventana" onclick="RnGcPolizaHeaderTblCreateDialog.hide()"/>-->
+                </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

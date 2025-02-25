@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpTipoestacionsatTblEditDlg" widgetVar="RnGcCpTipoestacionsatTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpTipoestacionsatTblTitle}">
+            <h:form id="RnGcCpTipoestacionsatTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpTipoestacionsatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoestacionsatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpTipoestacionsatTblController.selected.id}" title="#{bundle.EditRnGcCpTipoestacionsatTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcCpTipoestacionsatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoestacionsatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpTipoestacionsatTblController.selected.clave}" title="#{bundle.EditRnGcCpTipoestacionsatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoestacionsatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpTipoestacionsatTblController.selected.descripcion}" title="#{bundle.EditRnGcCpTipoestacionsatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoestacionsatTblLabel_claveTransporte}" for="claveTransporte" />
+                        <p:inputText id="claveTransporte" value="#{rnGcCpTipoestacionsatTblController.selected.claveTransporte}" title="#{bundle.EditRnGcCpTipoestacionsatTblTitle_claveTransporte}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoestacionsatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpTipoestacionsatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpTipoestacionsatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoestacionsatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpTipoestacionsatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpTipoestacionsatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoestacionsatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpTipoestacionsatTblController.selected.creadoPor}" title="#{bundle.EditRnGcCpTipoestacionsatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.EditRnGcCpTipoestacionsatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoestacionsatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpTipoestacionsatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpTipoestacionsatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpTipoestacionsatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoestacionsatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpTipoestacionsatTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcCpTipoestacionsatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipoestacionsatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpTipoestacionsatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpTipoestacionsatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpTipoestacionsatTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpTipoestacionsatTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpTipoestacionsatTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpTipoestacionsatTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

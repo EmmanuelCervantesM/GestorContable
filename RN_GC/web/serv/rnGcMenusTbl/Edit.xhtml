@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcMenusTblEditDlg" widgetVar="RnGcMenusTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcMenusTblTitle}">
+            <h:form id="RnGcMenusTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcMenusTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcMenusTblLabel_menuNombre}" for="menuNombre" />
+                        <p:inputText id="menuNombre" value="#{rnGcMenusTblController.selected.menuNombre}" title="#{bundle.EditRnGcMenusTblTitle_menuNombre}" required="true" requiredMessage="#{bundle.EditRnGcMenusTblRequiredMessage_menuNombre}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcMenusTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcMenusTblController.selected.descripcion}" title="#{bundle.EditRnGcMenusTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcMenusTblLabel_estado}" for="estado" />
+                        <p:selectOneMenu id="estado" value="#{rnGcMenusTblController.selected.estado}" style="width: 140px" requiredMessage="#{bundle.EditRnGcMenusTblRequiredMessage_estado}" required="true">
+                            <f:selectItem itemLabel="Activo" itemValue="Activo"/>
+                            <f:selectItem itemLabel="Inactivo" itemValue="Inactivo" />
+                        </p:selectOneMenu>                        
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcMenusTblController.update}" value="#{bundle.Save}" update="display,:RnGcMenusTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcMenusTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcMenusTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

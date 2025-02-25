@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPersonasTblCreateDlg" widgetVar="RnGcPersonasTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcPersonasTblTitle}">
+            <h:form id="RnGcPersonasTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcPersonas_proveedoresTblController.selected != null}">                        
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_rfc}" for="rfc" />
+                        <p:inputText id="rfc" value="#{rnGcPersonas_proveedoresTblController.selected.rfc}" title="#{bundle.CreateRnGcPersonasTblTitle_rfc}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_rfc}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{rnGcPersonas_proveedoresTblController.selected.nombre}" title="#{bundle.CreateRnGcPersonasTblTitle_nombre}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_nombre}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_telefono}" for="telefono" />
+                        <p:inputText id="telefono" value="#{rnGcPersonas_proveedoresTblController.selected.telefono}" title="#{bundle.CreateRnGcPersonasTblTitle_telefono}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_pais}" for="pais" />
+                        <p:selectOneMenu id="pais" style="width: 140px" filter="true" filterMatchMode="contains" value="#{rnGcPersonas_proveedoresTblController.selected.pais}" title="#{bundle.CreateRnGcPersonasTblTitle_pais}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_pais}">
+                            <f:selectItems value="#{rnGcPaisesTblController.itemsAvailableSelectOne}"
+                                           var="paisItem"
+                                           itemLabel="#{paisItem.CPais} - #{paisItem.descripcion}"
+                                           itemValue="#{paisItem.CPais} - #{paisItem.descripcion}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_estado}" for="estado" />
+                        <p:inputText id="estado" value="#{rnGcPersonas_proveedoresTblController.selected.estado}" title="#{bundle.CreateRnGcPersonasTblTitle_estado}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_estado}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_codigoPostal}" for="codigoPostal" />
+                        <p:selectOneMenu id="codigoPostal" style="width: 140px" filter="true" filterMatchMode="contains" value="#{rnGcPersonas_proveedoresTblController.selected.codigoPostal}" title="#{bundle.CreateRnGcPersonasTblTitle_codigoPostal}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_codigoPostal}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCodigospostalesTblController.itemsSinRepetir()}"
+                                           var="codigoItem"
+                                           itemLabel="#{codigoItem.CCodigoPostal}"
+                                           itemValue="#{codigoItem.CCodigoPostal}"/>
+                            <p:ajax update="localidad"/>
+                            <p:ajax update="ciudad"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Municipio" for="ciudad" />
+                        <p:inputText id="ciudad" style="width: 140px" value="#{rnGcPersonas_proveedoresTblController.selected.ciudad}" required="true" requiredMessage="La ciudad es necesaria." title="#{bundle.CreateRnGcPersonasTblTitle_ciudad}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_localidad}" for="localidad" />
+                        <p:selectOneMenu id="localidad" style="width: 140px" filter="true" filterMatchMode="contains" value="#{rnGcPersonas_proveedoresTblController.selected.localidad}" title="#{bundle.CreateRnGcPersonasTblTitle_localidad}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCodigospostalesTblController.busquedaporCodigo(rnGcPersonas_proveedoresTblController.selected.codigoPostal)}"
+                                           var="localidadItem"
+                                           itemLabel="#{localidadItem.CLocalidad}"
+                                           itemValue="#{localidadItem.CLocalidad}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_calle}" for="calle" />
+                        <p:inputText id="calle" value="#{rnGcPersonas_proveedoresTblController.selected.domicilio}" title="#{bundle.CreateRnGcPersonasTblTitle_calle}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_calle}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_noExt}" for="noExt" />
+                        <p:inputText id="noExt" value="#{rnGcPersonas_proveedoresTblController.selected.noExt}" title="#{bundle.CreateRnGcPersonasTblTitle_noExt}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_noExt}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_noInt}" for="noInt" />
+                        <p:inputText id="noInt" value="#{rnGcPersonas_proveedoresTblController.selected.noInt}" title="#{bundle.CreateRnGcPersonasTblTitle_noInt}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_email}" for="email" />
+                        <p:inputText id="email" value="#{rnGcPersonas_proveedoresTblController.selected.email}" title="#{bundle.CreateRnGcPersonasTblTitle_email}" />                                            
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcPersonas_proveedoresTblController.create()}" value="#{bundle.Save}" update="display,:RnGcPersonasTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcPersonasTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcPersonasTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

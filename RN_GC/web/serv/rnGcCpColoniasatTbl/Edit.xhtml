@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpColoniasatTblEditDlg" widgetVar="RnGcCpColoniasatTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpColoniasatTblTitle}">
+            <h:form id="RnGcCpColoniasatTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpColoniasatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpColoniasatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpColoniasatTblController.selected.id}" title="#{bundle.EditRnGcCpColoniasatTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcCpColoniasatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpColoniasatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpColoniasatTblController.selected.descripcion}" title="#{bundle.EditRnGcCpColoniasatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpColoniasatTblLabel_clavePais}" for="clavePais" />
+                        <p:inputText id="clavePais" value="#{rnGcCpColoniasatTblController.selected.clavePais}" title="#{bundle.EditRnGcCpColoniasatTblTitle_clavePais}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpColoniasatTblLabel_claveColonia}" for="claveColonia" />
+                        <p:inputText id="claveColonia" value="#{rnGcCpColoniasatTblController.selected.claveColonia}" title="#{bundle.EditRnGcCpColoniasatTblTitle_claveColonia}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpColoniasatTblLabel_codigoPostal}" for="codigoPostal" />
+                        <p:inputText id="codigoPostal" value="#{rnGcCpColoniasatTblController.selected.codigoPostal}" title="#{bundle.EditRnGcCpColoniasatTblTitle_codigoPostal}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpColoniasatTblLabel_tipo}" for="tipo" />
+                        <p:inputText id="tipo" value="#{rnGcCpColoniasatTblController.selected.tipo}" title="#{bundle.EditRnGcCpColoniasatTblTitle_tipo}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpColoniasatTblLabel_fechaInicio}" for="fechaInicio" />
+                        <p:calendar id="fechaInicio" pattern="MM/dd/yyyy" value="#{rnGcCpColoniasatTblController.selected.fechaInicio}" title="#{bundle.EditRnGcCpColoniasatTblTitle_fechaInicio}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpColoniasatTblLabel_fechaFin}" for="fechaFin" />
+                        <p:calendar id="fechaFin" pattern="MM/dd/yyyy" value="#{rnGcCpColoniasatTblController.selected.fechaFin}" title="#{bundle.EditRnGcCpColoniasatTblTitle_fechaFin}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpColoniasatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpColoniasatTblController.selected.creadoPor}" title="#{bundle.EditRnGcCpColoniasatTblTitle_creadoPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpColoniasatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpColoniasatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpColoniasatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpColoniasatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpColoniasatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpColoniasatTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcCpColoniasatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpColoniasatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpColoniasatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpColoniasatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpColoniasatTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpColoniasatTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpColoniasatTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpColoniasatTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpConductoresTblEditDlg" widgetVar="RnGcCpConductoresTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpConductoresTblTitle}">
+            <h:form id="RnGcCpConductoresTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="6" rendered="#{rnGcCpConductoresTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpConductoresTblLabel_licencia}" for="licencia" />
+                        <p:inputText id="licencia" value="#{rnGcCpConductoresTblController.selected.licencia}" title="#{bundle.EditRnGcCpConductoresTblTitle_licencia}" required="true" requiredMessage="#{bundle.EditRnGcCpConductoresTblRequiredMessage_licencia}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConductoresTblLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{rnGcCpConductoresTblController.selected.nombre}" title="#{bundle.EditRnGcCpConductoresTblTitle_nombre}" required="true" requiredMessage="#{bundle.EditRnGcCpConductoresTblRequiredMessage_nombre}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConductoresTblLabel_apellidoPaterno}" for="apellidoPaterno" />
+                        <p:inputText id="apellidoPaterno" value="#{rnGcCpConductoresTblController.selected.apellidoPaterno}" title="#{bundle.EditRnGcCpConductoresTblTitle_apellidoPaterno}" required="true" requiredMessage="#{bundle.EditRnGcCpConductoresTblRequiredMessage_apellidoPaterno}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConductoresTblLabel_apellidoMaterno}" for="apellidoMaterno" />
+                        <p:inputText id="apellidoMaterno" value="#{rnGcCpConductoresTblController.selected.apellidoMaterno}" title="#{bundle.EditRnGcCpConductoresTblTitle_apellidoMaterno}" required="true" requiredMessage="#{bundle.EditRnGcCpConductoresTblRequiredMessage_apellidoMaterno}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConductoresTblLabel_telefono}" for="telefono" />
+                        <p:inputText id="telefono" value="#{rnGcCpConductoresTblController.selected.telefono}" title="#{bundle.EditRnGcCpConductoresTblTitle_telefono}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpConductoresTblLabel_estado}" for="estado" />
+                        <p:inputText id="estado" value="#{rnGcCpConductoresTblController.selected.estado}" title="#{bundle.EditRnGcCpConductoresTblTitle_estado}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpConductoresTblLabel_rfc}" for="rfc" />
+                        <p:inputText id="rfc" value="#{rnGcCpConductoresTblController.selected.rfc}" title="#{bundle.EditRnGcCpConductoresTblTitle_rfc}" required="true" requiredMessage="El RFC es requerido"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConductoresTblLabel_claveFigura}" for="claveFigura" />
+                        <p:inputText id="claveFigura" value="#{rnGcCpConductoresTblController.selected.claveFigura}" title="#{bundle.EditRnGcCpConductoresTblTitle_claveFigura}" required="true" requiredMessage="La clave figura es requerida"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConductoresTblLabel_numeroLicencia}" for="numeroLicencia" />
+                        <p:inputText id="numeroLicencia" value="#{rnGcCpConductoresTblController.selected.numeroLicencia}" title="#{bundle.EditRnGcCpConductoresTblTitle_numeroLicencia}" required="true" requiredMessage="La licencia es requerida"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpConductoresTblLabel_tipoLicenciaId}" for="tipoLicenciaId" />
+                        <p:selectOneMenu id="tipoLicenciaId" value="#{rnGcCpConductoresTblController.selected.tipoLicenciaId}" style="width: 120px" required="true" requiredMessage="#{bundle.EditRnGcCpConductoresTblRequiredMessage_tipoLicenciaId}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCpTipolicenciaTblController.itemsAvailableSelectOne}"
+                                           var="tipoLicenciaIdItem"
+                                           itemValue="#{tipoLicenciaIdItem}"
+                                           itemLabel="#{tipoLicenciaIdItem.descripcion}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpConductoresTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpConductoresTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpConductoresTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpConductoresTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

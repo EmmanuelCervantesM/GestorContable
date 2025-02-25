@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Clientes"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcPersonasTblListForm">
+                <p:panel header="Clientes">
+                    <p:dataTable id="datalist" value="#{rnGcPersonas_clientesTblController.itemsCreadoPor()}" var="item"
+                                 selectionMode="single" selection="#{rnGcPersonas_clientesTblController.selected}"
+                                 paginator="true" scrollable="true"
+                                 rowKey="#{item.id}"
+                                 widgetVar="clientesTable"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 emptyMessage="Aún no hay clientes registrados"
+                                 sortBy="#{item.rfc}, "
+                                 filteredValue="#{rnGcPersonas_clientesTblController.filteredPersonas}"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton direccionesButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton direccionesButton"/>
+
+                        <f:facet name="header">   <!--______________Busqueda Global____________-->
+                            <p:outputPanel>
+                                <h:outputText value="Buscar en todos lo campos: "/>
+                                <p:inputText id="globalFilter" onkeyup="PF('clientesTable').filter()" style="width: 150px" placeholder="Ingresa el texto" />
+                            </p:outputPanel>
+                        </f:facet>
+
+                        <p:column filterBy="#{item.rfc}" headerText="RFC" filterMatchMode="contains" width="100">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPersonasTblTitle_rfc}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rfc}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.nombre}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPersonasTblTitle_nombre}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre}"/>
+                        </p:column>
+
+                        <p:column width="100">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPersonasTblTitle_calle}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.domicilio}"/>
+                        </p:column>
+                        <p:column width="50">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPersonasTblTitle_noExt}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.noExt}"/>
+                        </p:column>
+                        <!--<p:column sortBy="#{item.noInt}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPersonasTblTitle_noInt}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.noInt}"/>
+                        </p:column>-->
+                        <p:column filterMatchMode="contains" filterBy="#{item.localidad}" width="100">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPersonasTblTitle_localidad}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.localidad}"/>
+                        </p:column>
+                        <p:column filterMatchMode="contains" filterBy="#{item.codigoPostal}" width="50">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPersonasTblTitle_codigoPostal}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.codigoPostal}"/>
+                        </p:column>
+                        <p:column filterMatchMode="contains" filterBy="#{item.ciudad}" width="60">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPersonasTblTitle_ciudad}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.ciudad}"/>
+                        </p:column>
+                        <!--<p:column sortBy="#{item.estado}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPersonasTblTitle_estado}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.estado}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.pais}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPersonasTblTitle_pais}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.pais}"/>
+                        </p:column>-->
+                        <p:column width="60">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPersonasTblTitle_telefono}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.telefono}"/>
+                        </p:column>
+                        <p:column width="100">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPersonasTblTitle_email}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.email}"/>
+                        </p:column>
+                        <!--<p:column sortBy="#{item.email2}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcPersonasTblTitle_email} 2"/>
+                            </f:facet>
+                            <h:outputText value="#{item.email2}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.tipoPersona}">
+                            <f:facet name="header">
+                                <h:outputText value="Tipo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoPersona}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Sucursales"/>
+                            </f:facet>
+                            <h:outputText value="#{rnGcDireccionesTblController.obtenerSucursales(item.id)}"  />
+                        </p:column>-->
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcPersonas_clientesTblController.prepareCreate}" update=":RnGcPersonasTblCreateForm" oncomplete="PF('RnGcPersonasTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton" icon="ui-icon-search" value="#{bundle.View}" update=":RnGcPersonasTblViewForm" oncomplete="PF('RnGcPersonasTblViewDialog').show()" disabled="#{empty rnGcPersonas_clientesTblController.selected}"/>
+                            <p:commandButton id="editButton" icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcPersonasTblEditForm" oncomplete="PF('RnGcPersonasTblEditDialog').show()" disabled="#{empty rnGcPersonas_clientesTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcPersonas_clientesTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcPersonas_clientesTblController.selected}"/>
+                            <p:commandButton id="direccionesButton" icon="ui-icon-person" value="Direcciones" actionListener="#{rnGcDireccionesTblController.prepararItemsPersona(rnGcPersonas_clientesTblController.selected)}" update=":RnGcDireccionesTblListForm:datalist" oncomplete="PF('RnGcDireccionesTblListDialog').show()" disabled="#{empty rnGcPersonas_clientesTblController.selected}" />
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="clientes_Create.xhtml"/>
+            <ui:include src="clientes_Edit.xhtml"/>
+            <ui:include src="clientes_View.xhtml"/>
+
+            <!-- Lista De  direcciones -->
+            <p:dialog id="RnGcDireccionesTblListDlg" widgetVar="RnGcDireccionesTblListDialog" modal="true" resizable="false" appendTo="@(body)" header="Agregar dirección para el cliente">
+                <h:form id="RnGcDireccionesTblListForm">
+                    <p:panel header="Lista de Direcciones">
+                        <p:dataTable id="datalist" value="#{rnGcDireccionesTblController.itemsPersonas}" var="item"
+                                     selectionMode="single" selection="#{rnGcDireccionesTblController.selected}"
+                                     paginator="true"
+                                     rowKey="#{item.id}"
+                                     rows="10"
+                                     rowsPerPageTemplate="10,20,30,40,50"
+                                     >
+
+                            <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                            <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                            <p:column><!--**********************************-->
+                                <f:facet name="header">
+                                    <h:outputText value="Tipo"/>
+                                </f:facet>
+                                <h:outputText value="#{item.tipo}"/>
+                            </p:column><!--**********************************-->
+                            <p:column><!--**********************************-->
+                                <f:facet name="header">
+                                    <h:outputText value="País"/>
+                                </f:facet>
+                                <h:outputText value="#{item.pais}"/>
+                            </p:column><!--**********************************-->
+                            <p:column><!--**********************************-->
+                                <f:facet name="header">
+                                    <h:outputText value="Estado"/>
+                                </f:facet>
+                                <h:outputText value="#{item.estado}"/>
+                            </p:column><!--**********************************-->
+                            <p:column><!--**********************************-->
+                                <f:facet name="header">
+                                    <h:outputText value="Municipio"/>
+                                </f:facet>
+                                <h:outputText value="#{item.municipio}"/>
+                            </p:column><!--**********************************-->
+                            <p:column><!--**********************************-->
+                                <f:facet name="header">
+                                    <h:outputText value="Colonia"/>
+                                </f:facet>
+                                <h:outputText value="#{item.colonia}"/>
+                            </p:column><!--**********************************-->
+                            <p:column><!--**********************************-->
+                                <f:facet name="header">
+                                    <h:outputText value="Código Postal"/>
+                                </f:facet>
+                                <h:outputText value="#{item.codigoPostal}"/>
+                            </p:column><!--**********************************-->
+                            <p:column><!--**********************************-->
+                                <f:facet name="header">
+                                    <h:outputText value="Calle"/>
+                                </f:facet>
+                                <h:outputText value="#{item.nombreCalle}"/>
+                            </p:column><!--**********************************-->
+                            <p:column><!--**********************************-->
+                                <f:facet name="header">
+                                    <h:outputText value="No. Exterior"/>
+                                </f:facet>
+                                <h:outputText value="#{item.numeroExterior}"/>
+                            </p:column><!--**********************************-->
+                            <p:column><!--**********************************-->
+                                <f:facet name="header">
+                                    <h:outputText value="No. Interior"/>
+                                </f:facet>
+                                <h:outputText value="#{item.numeroInterior}"/>
+                            </p:column><!--**********************************-->
+                            <f:facet name="footer">
+                                <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcDireccionesTblController.prepareCreate}" update=":RnGcDireccionesTblCreateForm" oncomplete="PF('RnGcDireccionesTblCreateDialog').show()"/>
+                                <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcDireccionesTblViewForm" oncomplete="PF('RnGcDireccionesTblViewDialog').show()" disabled="#{empty rnGcDireccionesTblController.selected}"/>
+                                <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcDireccionesTblEditForm" oncomplete="PF('RnGcDireccionesTblEditDialog').show()" disabled="#{empty rnGcDireccionesTblController.selected}"/>
+                                <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcDireccionesTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcDireccionesTblController.selected}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            <!-- Lista de Direcciones -->
+
+            <!-- Agregar nueva direccion -->
+            <p:dialog id="RnGcDireccionesTblCreateDlg" widgetVar="RnGcDireccionesTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcDireccionesTblTitle}">
+                <h:form id="RnGcDireccionesTblCreateForm">
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="4" rendered="#{rnGcDireccionesTblController.selected != null}">
+                            <p:outputLabel value="Tipo: " for="id" />
+                            <p:selectOneMenu id="id" style="width: 145px" value="#{rnGcDireccionesTblController.selected.tipo}" required="true" requiredMessage="El tipo es necesario">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItem itemLabel="Matriz" itemValue="Matriz"/>
+                                <f:selectItem itemLabel="Sucursal" itemValue="Sucursal"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="País: " for="pais"/>
+                            <p:selectOneMenu id="pais" filter="true" filterMatchMode="contains" style="width: 145px" value="#{rnGcDireccionesTblController.selected.pais}" required="true" requiredMessage="El país es necesario">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcPaisesTblController.itemsAvailableSelectOne}"
+                                               var="paisItem"
+                                               itemLabel="#{paisItem.CPais} - #{paisItem.descripcion}"
+                                               itemValue="#{paisItem.CPais} - #{paisItem.descripcion}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Estado: " for="estado"/>
+                            <p:selectOneMenu id="estado" filter="true" filterMatchMode="contains" style="width: 160px" value="#{rnGcDireccionesTblController.selected.estado}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcCodigospostalesTblController.itemsSinRepetir()}"
+                                               var="estados"
+                                               itemLabel="#{estados}"
+                                               itemValue="#{estados}"/>
+                                <p:ajax update="codPostal"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Municipio" for="municipio"/>
+                            <p:inputText id="municipio" style="width: 160px" value="#{rnGcDireccionesTblController.selected.municipio}"/>
+                            <p:outputLabel value="Colonia: " for="colonia"/>
+                            <p:inputText id="colonia" style="width: 160px" value="#{rnGcDireccionesTblController.selected.colonia}"/>
+                            <p:outputLabel value="Código Postal" for="codPostal"/>
+                            <p:selectOneMenu id="codPostal" filter="true" filterMatchMode="contains" style="width: 160px" value="#{rnGcDireccionesTblController.selected.codigoPostal}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcCodigospostalesTblController.obetenerCodigosPorEstado(rnGcDireccionesTblController.selected.estado)}"
+                                               var="codigoPostal"
+                                               itemLabel="#{codigoPostal.CCodigoPostal}"
+                                               itemValue="#{codigoPostal.CCodigoPostal}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Calle" for="calle"/>
+                            <p:inputText id="calle" style="width: 160px" value="#{rnGcDireccionesTblController.selected.nombreCalle}"/>
+                            <p:outputLabel value="No. Exterior" for="noExt"/>
+                            <p:inputText id="noExt" style="width: 160px" value="#{rnGcDireccionesTblController.selected.numeroExterior}"/>
+                            <p:outputLabel value="No. Interior" for="noInt"/>
+                            <p:inputText id="noInt" style="width: 160px" value="#{rnGcDireccionesTblController.selected.numeroInterior}"/>                            
+                            <p:outputLabel value="Cliente" for="cliente"/>
+                            <p:selectOneMenu id="cliente" style="width: 145px" value="#{rnGcDireccionesTblController.selected.personasId}" required="true" requiredMessage="El país es necesario">
+                                <f:selectItem itemLabel="#{rnGcPersonas_clientesTblController.selected.nombre}"
+                                              itemValue="#{rnGcPersonas_clientesTblController.selected}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:commandButton actionListener="#{rnGcDireccionesTblController.create}" value="#{bundle.Save}" update="display,:RnGcDireccionesTblListForm:datalist,:growl, :RnGcPersonasTblListForm:datalist" oncomplete="handleSubmit(args,'RnGcDireccionesTblCreateDialog');"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="RnGcDireccionesTblCreateDialog.hide()"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+            <!-- Agregar nueva direccion -->
+
+            <!-- Vista de direcciones -->
+            <p:dialog id="RnGcDireccionesTblViewDlg" widgetVar="RnGcDireccionesTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcDireccionesTblTitle}">
+                <h:form id="RnGcDireccionesTblViewForm">
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="2" rendered="#{rnGcDireccionesTblController.selected != null}">
+                            <h:outputText value="Tipo"/>
+                            <h:outputText value="#{rnGcDireccionesTblController.selected.tipo}"/>
+                            <h:outputText value="País"/>
+                            <h:outputText value="#{rnGcDireccionesTblController.selected.pais}"/>
+                            <h:outputText value="Estado"/>
+                            <h:outputText value="#{rnGcDireccionesTblController.selected.estado}"/>
+                            <h:outputText value="Municipio"/>
+                            <h:outputText value="#{rnGcDireccionesTblController.selected.municipio}"/>
+                            <h:outputText value="Colonia"/>
+                            <h:outputText value="#{rnGcDireccionesTblController.selected.colonia}"/>
+                            <h:outputText value="Código Postal"/>
+                            <h:outputText value="#{rnGcDireccionesTblController.selected.codigoPostal}"/>
+                            <h:outputText value="Calle"/>
+                            <h:outputText value="#{rnGcDireccionesTblController.selected.nombreCalle}"/>
+                            <h:outputText value="No. Interior"/>
+                            <h:outputText value="#{rnGcDireccionesTblController.selected.numeroInterior}"/>
+                            <h:outputText value="No. Exterior"/>
+                            <h:outputText value="#{rnGcDireccionesTblController.selected.numeroExterior}"/>
+
+                        </p:panelGrid>
+                        <p:commandButton value="#{bundle.Close}" onclick="RnGcDireccionesTblViewDialog.hide()"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+            <!-- Vista de direcciones -->
+
+            <!-- Editar direcciones -->
+            <p:dialog id="RnGcDireccionesTblEditDlg" widgetVar="RnGcDireccionesTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcDireccionesTblTitle}">
+                <h:form id="RnGcDireccionesTblEditForm">
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="4" rendered="#{rnGcDireccionesTblController.selected != null}">
+                            <p:outputLabel value="Tipo: " for="id" />
+                            <p:selectOneMenu id="id" style="width: 160px" value="#{rnGcDireccionesTblController.selected.tipo}" required="true" requiredMessage="El tipo es necesario">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItem itemLabel="Matriz" itemValue="Matriz"/>
+                                <f:selectItem itemLabel="Sucursal" itemValue="Sucursal"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="País: " for="pais"/>
+                            <p:selectOneMenu id="pais" style="width: 145px" value="#{rnGcDireccionesTblController.selected.pais}" required="true" requiredMessage="El país es necesario">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcPaisesTblController.itemsAvailableSelectOne}"
+                                               var="paisItem"
+                                               itemLabel="#{paisItem.CPais} - #{paisItem.descripcion}"
+                                               itemValue="#{paisItem.CPais} - #{paisItem.descripcion}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Estado: " for="estado"/>
+                            <p:selectOneMenu id="estado" filter="true" filterMatchMode="contains" style="width: 160px" value="#{rnGcDireccionesTblController.selected.estado}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcCodigospostalesTblController.itemsSinRepetir()}"
+                                               var="estado"
+                                               itemLabel="#{estado}"
+                                               itemValue="#{estado}"/>
+                                <p:ajax update="codPostal"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Municipio" for="municipio"/>
+                            <p:inputText id="municipio" style="width: 160px" value="#{rnGcDireccionesTblController.selected.municipio}"/>
+                            <p:outputLabel value="Colonia: " for="colonia"/>
+                            <p:inputText id="colonia" style="width: 160px" value="#{rnGcDireccionesTblController.selected.colonia}"/>
+                            <p:outputLabel value="Código Postal" for="codPostal"/>
+                            <p:selectOneMenu id="codPostal" filter="true" filterMatchMode="contains" style="width: 160px" value="#{rnGcDireccionesTblController.selected.codigoPostal}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcCodigospostalesTblController.obetenerCodigosPorEstado(rnGcDireccionesTblController.selected.estado)}"
+                                               var="codPostal"
+                                               itemLabel="#{codPostal.CCodigoPostal}"
+                                               itemValue="#{codPostal.CCodigoPostal}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Calle" for="calle"/>
+                            <p:inputText id="calle" style="width: 160px" value="#{rnGcDireccionesTblController.selected.nombreCalle}"/>
+                            <p:outputLabel value="No. Interior" for="noInt"/>
+                            <p:inputText id="noInt" style="width: 160px" value="#{rnGcDireccionesTblController.selected.numeroInterior}"/>
+                            <p:outputLabel value="No. Exterior" for="noExt"/>
+                            <p:inputText id="noExt" style="width: 160px" value="#{rnGcDireccionesTblController.selected.numeroExterior}"/>
+                            <p:outputLabel value="Cliente" for="cliente"/>
+                            <p:selectOneMenu id="cliente" style="width: 145px" value="#{rnGcDireccionesTblController.selected.personasId}" required="true" requiredMessage="El país es necesario">
+                                <f:selectItem itemLabel="#{rnGcPersonas_clientesTblController.selected.nombre}"
+                                              itemValue="#{rnGcPersonas_clientesTblController.selected}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:commandButton actionListener="#{rnGcDireccionesTblController.update}" value="#{bundle.Save}" update="display,:RnGcDireccionesTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcDireccionesTblEditDialog');"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="RnGcDireccionesTblEditDialog.hide()"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+            <!-- Editar direcciones -->
+
+        </ui:define>
+    </ui:composition>
+
+</html>

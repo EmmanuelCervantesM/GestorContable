@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title><ui:insert name="title">Default Title</ui:insert></title>
+        <h:outputStylesheet library="css" name="jsfcrudRN.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
+    </h:head>
+
+    <h:body>
+        <p:growl id="growl" life="3000" />
+
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="100" header="#{bundle.AppName}">
+                <ui:insert name="header">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tbody>
+                            <tr>
+                                <td style="width: 33.3333%;"><p:graphicImage value="/resources/images/logoAdminContable.png" height="85" width="85" cache="false"/></td>
+                                <td style="width: 33.3333%; text-align: center;"><h1>Bienvenido #{sessionScope['nombreCompleto']}</h1></td>
+                                <td style="width: 16.6667%; text-align: right;">
+                                    <h2>
+                                        <h:form>
+                                            <p:commandLink value="Cambiar Contraseña" action="/rnGcUsuariosTbl/cambioPwd" />
+                                        </h:form>
+                                    </h2>
+                                </td>    
+                                <td style="width: 16.6667%; text-align: center;">
+                                    <h2>
+                                        <h:form>
+                                            <p:commandLink action="#{login.logout}">
+                                                <p:graphicImage id="salirIcon"
+                                                                value="/resources/images/icons/exit.png"
+                                                                width="42"
+                                                                height="42">
+                                                </p:graphicImage>
+                                            </p:commandLink>
+                                        </h:form>
+                                    </h2>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ui:insert>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="175" header="Menu" collapsible="true">
+                <h:form>
+                    <p:menu toggleable="true" style="width: 155px">
+                        <p:submenu label="Acciones">
+                            <p:menuitem value="Ingresos" outcome="/serv/rnGcTransaccionesTbl/List.xhtml"  />
+                            <p:menuitem value="Egresos" outcome="/serv/rnGcFacturasTbl/List.xhtml" />
+                        </p:submenu>
+                        <p:submenu label="Facturas">
+                            <p:menuitem value="Facturas" outcome="/serv/rnGcTransaccionesTbl/List.xhtml" />
+                        </p:submenu>
+                    </p:menu>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="65">
+                <ui:insert name="footer">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tbody>
+                            <tr>
+                                <td style="width: 33.3333%;"></td>
+                                <td style="width: 33.3333%; text-align: center;"><h2>Administración Contable. 2018</h2></td>
+                                <td style="width: 33.3333%; text-align: right;">
+                                    <h:form>
+                                        <h2><p:clock /></h2>
+                                    </h:form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ui:insert> 
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+                <ui:insert name="body"/>
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+
+
+</html>

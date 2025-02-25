@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcFacturasTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcFacturasTblListForm">
+                <p:panel header="#{bundle.ListRnGcFacturasTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcFacturasTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcFacturasTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <f:facet name="header">   <!--______________Busqueda Global____________-->
+                            <p:outputPanel>
+                                <h:outputText value="Buscar en todos lo campos: "/>
+                                <p:inputText id="globalFilter" onkeyup="PF('facturasTable').filter()" style="width: 150px" placeholder="Ingresa el texto" />
+                            </p:outputPanel>
+                        </f:facet>                              
+                        
+                        <p:ajax event="rowSelect"   update="viewButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="viewButton deleteButton"/>
+                        
+                        <p:column filterBy="#{item.uuid}" headerText="uuid" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFacturasTblTitle_uuid}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.uuid}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.nombreEmisor}" headerText="nombreEmisor" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFacturasTblTitle_nombreEmisor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombreEmisor}"/>
+                        </p:column>                        
+                        <p:column filterBy="#{item.rfcEmisor}" headerText="rfcEmisor" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFacturasTblTitle_rfcEmisor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rfcEmisor}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.folio}" headerText="folio" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFacturasTblTitle_folio}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.folio}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.formaPago}" headerText="formaPago" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFacturasTblTitle_formaPago}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.formaPago}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.metodoPago}" headerText="metodoPago" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFacturasTblTitle_metodoPago}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.metodoPago}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.tipoComprobante}" headerText="tipoComprobante" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFacturasTblTitle_tipoComprobante}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoComprobante}"/>
+                        </p:column>                                                
+                        <p:column headerText="fechaExpedicion" sortBy="#{item.fechaExpedicion}" filterBy="#{item.fechaExpedicion}" filterFunction="#{rnGcFacturasTblController.filterByFecha}">
+                            <f:facet name="filter">
+                                <h:inputHidden id="filter"/>
+                            </f:facet>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFacturasTblTitle_fechaExpedicion}"/>
+                                <br/>
+                                <p:calendar id="from" pattern="dd/MM/yyyy">                                    
+                                    <p:ajax event="dateSelect" onstart="$(PrimeFaces.escapeClientId('#{p:component('filter')}'))[0].value = $(PrimeFaces.escapeClientId('#{p:component('from')}_input'))[0].value + '-' + $(PrimeFaces.escapeClientId('#{p:component('to')}_input'))[0].value" oncomplete="PF('facturasTable').filter()" />
+                                </p:calendar>
+                                <p:calendar id="to" pattern="dd/MM/yyyy">                                    
+                                    <p:ajax event="dateSelect" onstart="$(PrimeFaces.escapeClientId('#{p:component('filter')}'))[0].value = $(PrimeFaces.escapeClientId('#{p:component('from')}_input'))[0].value + '_' + $(PrimeFaces.escapeClientId('#{p:component('to')}_input'))[0].value" oncomplete="PF('facturasTable').filter()" />
+                                </p:calendar>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaExpedicion}">
+                                <f:convertDateTime type="date" dateStyle="medium" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column filterBy="#{item.usoCfdi}" headerText="usoCfdi" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFacturasTblTitle_usoCfdi}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.usoCfdi}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.moneda}" headerText="moneda" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFacturasTblTitle_moneda}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.moneda}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.importe}" headerText="importe" footerText="contiene" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcFacturasTblTitle_importe}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.importe}"/>
+                        </p:column>                        
+                        <f:facet name="footer">
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" actionListener="#{rnGcFacturaslineasTblController.prepareFactLines(rnGcFacturasTblController.selected)}" update=":RnGcFacturasTblViewForm" oncomplete="PF('RnGcFacturasTblViewDialog').show()" disabled="#{empty rnGcFacturasTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcFacturasTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcFacturasTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

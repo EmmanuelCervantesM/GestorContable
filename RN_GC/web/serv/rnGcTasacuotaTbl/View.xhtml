@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTasacuotaTblViewDlg" widgetVar="RnGcTasacuotaTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcTasacuotaTblTitle}">
+            <h:form id="RnGcTasacuotaTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcTasacuotaTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcTasacuotaTblLabel_rangoofijo}"/>
+                        <h:outputText value="#{rnGcTasacuotaTblController.selected.rangoofijo}" title="#{bundle.ViewRnGcTasacuotaTblTitle_rangoofijo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTasacuotaTblLabel_valorMaximo}"/>
+                        <h:outputText value="#{rnGcTasacuotaTblController.selected.valorMaximo}" title="#{bundle.ViewRnGcTasacuotaTblTitle_valorMaximo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTasacuotaTblLabel_impuesto}"/>
+                        <h:outputText value="#{rnGcTasacuotaTblController.selected.impuesto}" title="#{bundle.ViewRnGcTasacuotaTblTitle_impuesto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTasacuotaTblLabel_factor}"/>
+                        <h:outputText value="#{rnGcTasacuotaTblController.selected.factor}" title="#{bundle.ViewRnGcTasacuotaTblTitle_factor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTasacuotaTblLabel_traslado}"/>
+                        <h:outputText value="#{rnGcTasacuotaTblController.selected.traslado}" title="#{bundle.ViewRnGcTasacuotaTblTitle_traslado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTasacuotaTblLabel_retencion}"/>
+                        <h:outputText value="#{rnGcTasacuotaTblController.selected.retencion}" title="#{bundle.ViewRnGcTasacuotaTblTitle_retencion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTasacuotaTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcTasacuotaTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcTasacuotaTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcTasacuotaTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcTasacuotaTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcTasacuotaTblTitle_fechaFinVigencia}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcTasacuotaTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPagosRelacionadosTblViewDlg" widgetVar="RnGcPagosRelacionadosTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcPagosRelacionadosTblTitle}">
+            <h:form id="RnGcPagosRelacionadosTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcPagosRelacionadosTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_id}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.id}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_idDocumento}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.idDocumento}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_idDocumento}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_serie}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.serie}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_serie}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_folio}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.folio}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_folio}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_moneda}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.moneda}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_moneda}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_tipoCambio}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.tipoCambio}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_tipoCambio}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_metodoPago}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.metodoPago}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_metodoPago}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_numeroParcialidad}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.numeroParcialidad}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_numeroParcialidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_importeSaldoAnterior}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.importeSaldoAnterior}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_importeSaldoAnterior}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_importePagado}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.importePagado}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_importePagado}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_importeInsoluto}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.importeInsoluto}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_importeInsoluto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.creadoPor}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcPagosRelacionadosTblLabel_cfdisId}"/>
+                        <h:outputText value="#{rnGcPagosRelacionadosTblController.selected.cfdisId}" title="#{bundle.ViewRnGcPagosRelacionadosTblTitle_cfdisId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcPagosRelacionadosTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

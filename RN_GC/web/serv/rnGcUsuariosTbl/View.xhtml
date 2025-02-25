@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcUsuariosTblViewDlg" widgetVar="RnGcUsuariosTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcUsuariosTblTitle}">
+            <h:form id="RnGcUsuariosTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcUsuariosTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcUsuariosTblLabel_usuarioClave}"/>
+                        <h:outputText value="#{rnGcUsuariosTblController.selected.usuarioClave}" title="#{bundle.ViewRnGcUsuariosTblTitle_usuarioClave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcUsuariosTblLabel_nombreCompleto}"/>
+                        <h:outputText value="#{rnGcUsuariosTblController.selected.nombreCompleto}" title="#{bundle.ViewRnGcUsuariosTblTitle_nombreCompleto}"/>  
+                        <h:outputText value="#{bundle.ViewRnGcUsuariosTblLabel_rfc}"/>
+                        <h:outputText value="#{rnGcUsuariosTblController.selected.rfc}" title="#{bundle.ViewRnGcUsuariosTblTitle_rfc}"/> 
+                        <h:outputText value="#{bundle.ViewRnGcUsuariosTblLabel_telefono}"/>
+                        <h:outputText value="#{rnGcUsuariosTblController.selected.telefono}" title="#{bundle.ViewRnGcUsuariosTblTitle_telefono}"/>
+                        <h:outputText value="#{bundle.ViewRnGcUsuariosTblLabel_email}"/>
+                        <h:outputText value="#{rnGcUsuariosTblController.selected.email}" title="#{bundle.ViewRnGcUsuariosTblTitle_email}"/>
+                        <h:outputText value="#{bundle.ViewRnGcUsuariosTblLabel_fechaAlta}"/>
+                        <h:outputText value="#{rnGcUsuariosTblController.selected.fechaAlta}" title="#{bundle.ViewRnGcUsuariosTblTitle_fechaAlta}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                        <h:outputLabel value="Perfil de Usuario"/>
+                        <h:outputLabel value="#{rnGcUsuariosPerfilesTblController.obtenerUsuarioPerfil(rnGcUsuariosTblController.selected.id)}"/>
+                        <h:outputLabel value="Timbres Restantes/Timbres Usados"/>
+                        <h:outputLabel value="#{rnGcTimbresTblController.obtenerTimbres(rnGcUsuariosTblController.selected.id)}"/>
+                        <h:outputText value="#{bundle.ViewRnGcUsuariosTblLabel_fechaBaja}"/>
+                        <h:outputText value="#{rnGcUsuariosTblController.selected.fechaBaja}" title="#{bundle.ViewRnGcUsuariosTblTitle_fechaBaja}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcUsuariosTblLabel_estado}"/>
+                        <p:selectOneMenu id="estado" value="#{item.estado}" style="width:70px" disabled="true">                            
+                            <f:selectItem itemLabel="Activo" itemValue="A" />
+                            <f:selectItem itemLabel="Inactivo" itemValue="I" />
+                        </p:selectOneMenu>
+                        <h:outputText value="#{bundle.ViewRnGcUsuariosTblLabel_contrasenia}"/>
+                        <h:outputText value="#{rnGcUsuariosTblController.selected.contrasenia}" title="#{bundle.ViewRnGcUsuariosTblTitle_contrasenia}"/>
+                        <h:outputText value="#{bundle.ViewRnGcUsuariosTblLabel_fechaContrasenia}"/>
+                        <h:outputText value="#{rnGcUsuariosTblController.selected.fechaContrasenia}" title="#{bundle.ViewRnGcUsuariosTblTitle_fechaContrasenia}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcUsuariosTblLabel_noIntentos}"/>
+                        <h:outputText value="#{rnGcUsuariosTblController.selected.noIntentos}" title="#{bundle.ViewRnGcUsuariosTblTitle_noIntentos}"/>
+                        <p:outputLabel value="Tipo Usuario" />
+                        <h:outputText value="#{rnGcUsuariosTblController.selected.tipoUsuario}" title="Tipo de Usuario"/>
+                        <h:outputText value="Regimen Fiscal"/>
+                        <h:outputText value="#{rnGcUsuariosTblController.selected.regimenId.claveRegimenFiscal} - #{rnGcUsuariosTblController.selected.regimenId.descripcion}" title="Regimen Fiscal:"/>
+                        <h:outputText value="Número de Usuarios"/>
+                        <h:outputText value="#{rnGcUsuariosTblController.selected.noUsuarios}" title="Número de Usuarios"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcUsuariosTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

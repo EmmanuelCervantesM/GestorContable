@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomNominasTblViewDlg" widgetVar="RnGcNomNominasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcNomNominasTblTitle}">
+            <h:form id="RnGcNomNominasTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomNominasTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcNomNominasTblLabel_nombreNomina}"/>
+                        <h:outputText value="#{rnGcNomNominasTblController.selected.nombreNomina}" title="#{bundle.ViewRnGcNomNominasTblTitle_nombreNomina}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomNominasTblLabel_esConfidencial}"/>
+                        <h:outputText value="#{rnGcNomNominasTblController.selected.esConfidencial}" title="#{bundle.ViewRnGcNomNominasTblTitle_esConfidencial}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomNominasTblLabel_patronId}"/>
+                        <h:outputText value="#{rnGcNomNominasTblController.selected.patronId}" title="#{bundle.ViewRnGcNomNominasTblTitle_patronId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomNominasTblLabel_periodicidadPagoId}"/>
+                        <h:outputText value="#{rnGcNomNominasTblController.selected.periodicidadPagoId}" title="#{bundle.ViewRnGcNomNominasTblTitle_periodicidadPagoId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomNominasTblLabel_tipoNominaId}"/>
+                        <h:outputText value="#{rnGcNomNominasTblController.selected.tipoNominaId}" title="#{bundle.ViewRnGcNomNominasTblTitle_tipoNominaId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcNomNominasTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

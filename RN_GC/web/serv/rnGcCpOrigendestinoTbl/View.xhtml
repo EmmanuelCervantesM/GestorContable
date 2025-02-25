@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpOrigendestinoTblViewDlg" widgetVar="RnGcCpOrigendestinoTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpOrigendestinoTblTitle}">
+            <h:form id="RnGcCpOrigendestinoTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpOrigendestinoTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpOrigendestinoTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpOrigendestinoTblController.selected.id}" title="#{bundle.ViewRnGcCpOrigendestinoTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpOrigendestinoTblLabel_origen}"/>
+                        <h:outputText value="#{rnGcCpOrigendestinoTblController.selected.origen}" title="#{bundle.ViewRnGcCpOrigendestinoTblTitle_origen}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpOrigendestinoTblLabel_destino}"/>
+                        <h:outputText value="#{rnGcCpOrigendestinoTblController.selected.destino}" title="#{bundle.ViewRnGcCpOrigendestinoTblTitle_destino}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpOrigendestinoTblLabel_fechaSalida}"/>
+                        <h:outputText value="#{rnGcCpOrigendestinoTblController.selected.fechaSalida}" title="#{bundle.ViewRnGcCpOrigendestinoTblTitle_fechaSalida}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpOrigendestinoTblLabel_fechaLlegada}"/>
+                        <h:outputText value="#{rnGcCpOrigendestinoTblController.selected.fechaLlegada}" title="#{bundle.ViewRnGcCpOrigendestinoTblTitle_fechaLlegada}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpOrigendestinoTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpOrigendestinoTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpOrigendestinoTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpOrigendestinoTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpOrigendestinoTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpOrigendestinoTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpOrigendestinoTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpOrigendestinoTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpOrigendestinoTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpOrigendestinoTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpOrigendestinoTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpOrigendestinoTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpOrigendestinoTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

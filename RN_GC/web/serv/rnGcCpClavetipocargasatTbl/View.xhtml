@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpClavetipocargasatTblViewDlg" widgetVar="RnGcCpClavetipocargasatTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcCpClavetipocargasatTblTitle}">
+            <h:form id="RnGcCpClavetipocargasatTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpClavetipocargasatTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcCpClavetipocargasatTblLabel_id}"/>
+                        <h:outputText value="#{rnGcCpClavetipocargasatTblController.selected.id}" title="#{bundle.ViewRnGcCpClavetipocargasatTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpClavetipocargasatTblLabel_clave}"/>
+                        <h:outputText value="#{rnGcCpClavetipocargasatTblController.selected.clave}" title="#{bundle.ViewRnGcCpClavetipocargasatTblTitle_clave}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpClavetipocargasatTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcCpClavetipocargasatTblController.selected.descripcion}" title="#{bundle.ViewRnGcCpClavetipocargasatTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpClavetipocargasatTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcCpClavetipocargasatTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcCpClavetipocargasatTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpClavetipocargasatTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcCpClavetipocargasatTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcCpClavetipocargasatTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpClavetipocargasatTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcCpClavetipocargasatTblController.selected.creadoPor}" title="#{bundle.ViewRnGcCpClavetipocargasatTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpClavetipocargasatTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcCpClavetipocargasatTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcCpClavetipocargasatTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcCpClavetipocargasatTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcCpClavetipocargasatTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcCpClavetipocargasatTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcCpClavetipocargasatTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcCpClavetipocargasatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcCpClavetipocargasatTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcCpClavetipocargasatTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

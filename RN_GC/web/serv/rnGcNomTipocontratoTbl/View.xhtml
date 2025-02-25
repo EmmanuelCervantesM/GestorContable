@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomTipocontratoTblViewDlg" widgetVar="RnGcNomTipocontratoTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcNomTipocontratoTblTitle}">
+            <h:form id="RnGcNomTipocontratoTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomTipocontratoTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcNomTipocontratoTblLabel_version}"/>
+                        <h:outputText value="#{rnGcNomTipocontratoTblController.selected.version}" title="#{bundle.ViewRnGcNomTipocontratoTblTitle_version}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipocontratoTblLabel_revision}"/>
+                        <h:outputText value="#{rnGcNomTipocontratoTblController.selected.revision}" title="#{bundle.ViewRnGcNomTipocontratoTblTitle_revision}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipocontratoTblLabel_cveTipoContrato}"/>
+                        <h:outputText value="#{rnGcNomTipocontratoTblController.selected.cveTipoContrato}" title="#{bundle.ViewRnGcNomTipocontratoTblTitle_cveTipoContrato}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipocontratoTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcNomTipocontratoTblController.selected.descripcion}" title="#{bundle.ViewRnGcNomTipocontratoTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipocontratoTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcNomTipocontratoTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcNomTipocontratoTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcNomTipocontratoTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcNomTipocontratoTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcNomTipocontratoTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcNomTipocontratoTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

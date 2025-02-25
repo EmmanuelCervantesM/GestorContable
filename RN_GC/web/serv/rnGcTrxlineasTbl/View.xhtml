@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTrxlineasTblViewDlg" widgetVar="RnGcTrxlineasTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcTrxlineasTblTitle}">
+            <h:form id="RnGcTrxlineasTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcTrxlineasTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcTrxlineasTblLabel_claveProdServ}"/>
+                        <h:outputText value="#{rnGcTrxlineasTblController.selected.claveProdServ}" title="#{bundle.ViewRnGcTrxlineasTblTitle_claveProdServ}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrxlineasTblLabel_noIdentificacion}"/>
+                        <h:outputText value="#{rnGcTrxlineasTblController.selected.noIdentificacion}" title="#{bundle.ViewRnGcTrxlineasTblTitle_noIdentificacion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrxlineasTblLabel_cantidad}"/>
+                        <h:outputText value="#{rnGcTrxlineasTblController.selected.cantidad}" title="#{bundle.ViewRnGcTrxlineasTblTitle_cantidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrxlineasTblLabel_claveUnidad}"/>
+                        <h:outputText value="#{rnGcTrxlineasTblController.selected.claveUnidad}" title="#{bundle.ViewRnGcTrxlineasTblTitle_claveUnidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrxlineasTblLabel_unidad}"/>
+                        <h:outputText value="#{rnGcTrxlineasTblController.selected.unidad}" title="#{bundle.ViewRnGcTrxlineasTblTitle_unidad}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrxlineasTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcTrxlineasTblController.selected.descripcion}" title="#{bundle.ViewRnGcTrxlineasTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrxlineasTblLabel_valorUnit}"/>
+                        <h:outputText value="#{rnGcTrxlineasTblController.selected.valorUnit}" title="#{bundle.ViewRnGcTrxlineasTblTitle_valorUnit}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrxlineasTblLabel_importe}"/>
+                        <h:outputText value="#{rnGcTrxlineasTblController.selected.importe}" title="#{bundle.ViewRnGcTrxlineasTblTitle_importe}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrxlineasTblLabel_base}"/>
+                        <h:outputText value="#{rnGcTrxlineasTblController.selected.base}" title="#{bundle.ViewRnGcTrxlineasTblTitle_base}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrxlineasTblLabel_impuesto}"/>
+                        <h:outputText value="#{rnGcTrxlineasTblController.selected.impuesto}" title="#{bundle.ViewRnGcTrxlineasTblTitle_impuesto}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrxlineasTblLabel_tipoFactor}"/>
+                        <h:outputText value="#{rnGcTrxlineasTblController.selected.tipoFactor}" title="#{bundle.ViewRnGcTrxlineasTblTitle_tipoFactor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcTrxlineasTblLabel_tipoTasa}"/>
+                        <h:outputText value="#{rnGcTrxlineasTblController.selected.tipoTasa}" title="#{bundle.ViewRnGcTrxlineasTblTitle_tipoTasa}"/>                        
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcTrxlineasTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

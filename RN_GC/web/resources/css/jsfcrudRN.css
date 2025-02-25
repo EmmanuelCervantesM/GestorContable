@@ -1,0 +1,79 @@
+.ui-widget {
+    font-size: 12px !important;
+}
+.ui-layout-north {
+    z-index: 20 !important;
+    overflow: visible !important;;
+}
+.ui-layout-north .ui-layout-unit-content {
+    overflow: visible !important;
+    background: #ede7f6;                   
+}
+.ui-widget-header {
+    text-align: center;
+    text-transform: uppercase;
+}
+.ui-button {
+    margin-top: 10px !important;
+}
+.ui-layout-west .ui-layout-unit-content {
+    overflow: scroll !important;
+    background: #ede7f6;
+}
+.ui-layout-south .ui-layout-unit-content {
+    overflow: visible !important;
+    background: #ede7f6;
+}
+.marginauto {
+    margin: 10px auto 20px;
+    display: block;
+}
+.verticalhorizontal {
+    display: table-cell;
+    height: 500px;
+    text-align: center;
+    width: 500px;
+    vertical-align: middle;
+    align-self: center;
+}
+.text {
+    color: #503c23;
+}
+
+.descargarFicha {
+    color: #c9aa74; 
+}
+
+.descargarFicha:hover {
+    color: #a5844a;
+    font-weight: bold;
+}
+
+.boton{
+    border: 1px solid #a8a8a8;
+    background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
+    font-weight: bold;
+    color: #4f4f4f;
+    text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
+    height: 26px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.boton:hover{
+    background: #eac583;
+}
+
+.ui-datatable .ui-state-highlight {
+    background-image: none;
+    background-color: #1FB0E1;
+}
+
+.ui-selectonemenu-label {
+    background: #1FB0E1;
+}
+
+.unit{
+    overflow: scroll;
+    height: auto;
+}

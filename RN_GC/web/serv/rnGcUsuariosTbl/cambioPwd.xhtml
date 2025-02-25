@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition template="/templateRN.xhtml">
+        
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcUsuariosTblTitle}" />
+        </ui:define>
+        
+        <ui:define name="body">
+            <h:form id="cambioPwdForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcUsuariosTblController.buscarUsuarioPorClave(sessionScope['username']) != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcUsuariosTblLabel_usuarioClave}" for="usuarioClave" />
+                        <h:outputText id="usuarioClave" value="#{rnGcUsuariosTblController.selected.usuarioClave}" />
+                        <p:outputLabel value="#{bundle.EditRnGcUsuariosTblLabel_nombreCompleto}" for="nombreCompleto" />
+                        <h:outputText id="nombreCompleto" value="#{rnGcUsuariosTblController.selected.nombreCompleto}" />
+                    </p:panelGrid>
+                    <h:panelGrid columns="2" id="matchGrid" cellpadding="5">
+                        <p:outputLabel value="#{bundle.EditRnGcUsuariosTblLabel_contrasenia}" for="contrasenia" />
+                        <p:password id="contrasenia" value="#{rnGcUsuariosTblController.selected.contrasenia}" match="contraseniaCheck" label="Contraseña" title="#{bundle.EditRnGcUsuariosTblTitle_contrasenia}" required="true" requiredMessage="#{bundle.EditRnGcUsuariosTblRequiredMessage_contrasenia}">
+                            <f:validateLength minimum="8"/>
+                        </p:password>
+                        <p:outputLabel value="Repetir Contraseña" for="contraseniaCheck" />
+                        <p:password id="contraseniaCheck" value="#{rnGcUsuariosTblController.selected.contrasenia}" label="Repetir contraseña" title="#{bundle.EditRnGcusuariosTblTitle_contrasenia}" required="true" requiredMessage="#{bundle.EditRnGcUsuariosTblRequiredMessage_contrasenia}" >
+                            <f:validateLength minimum="8"/>
+                        </p:password>
+                    </h:panelGrid>
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" />
+                    <p:commandButton action="#{rnGcUsuariosTblController.updatePass()}" value="#{bundle.Save}" update="display,:cambioPwdForm,:growl,matchGrid" />
+                    <p:commandButton value="Limpiar Campos" update="matchGrid" process="@this" style="margin-right: 20px;">
+                        <p:resetInput target="matchGrid" />
+                    </p:commandButton>
+                </h:panelGroup>
+            </h:form>
+        </ui:define>
+        
+    </ui:composition>
+</html>

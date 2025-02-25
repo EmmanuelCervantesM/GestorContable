@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcNomTiporegimenTblViewDlg" widgetVar="RnGcNomTiporegimenTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcNomTiporegimenTblTitle}">
+            <h:form id="RnGcNomTiporegimenTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcNomTiporegimenTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcNomTiporegimenTblLabel_version}"/>
+                        <h:outputText value="#{rnGcNomTiporegimenTblController.selected.version}" title="#{bundle.ViewRnGcNomTiporegimenTblTitle_version}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTiporegimenTblLabel_revision}"/>
+                        <h:outputText value="#{rnGcNomTiporegimenTblController.selected.revision}" title="#{bundle.ViewRnGcNomTiporegimenTblTitle_revision}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTiporegimenTblLabel_cveTipoRegimen}"/>
+                        <h:outputText value="#{rnGcNomTiporegimenTblController.selected.cveTipoRegimen}" title="#{bundle.ViewRnGcNomTiporegimenTblTitle_cveTipoRegimen}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTiporegimenTblLabel_descripcion}"/>
+                        <h:outputText value="#{rnGcNomTiporegimenTblController.selected.descripcion}" title="#{bundle.ViewRnGcNomTiporegimenTblTitle_descripcion}"/>
+                        <h:outputText value="#{bundle.ViewRnGcNomTiporegimenTblLabel_fechaInicioVigencia}"/>
+                        <h:outputText value="#{rnGcNomTiporegimenTblController.selected.fechaInicioVigencia}" title="#{bundle.ViewRnGcNomTiporegimenTblTitle_fechaInicioVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcNomTiporegimenTblLabel_fechaFinVigencia}"/>
+                        <h:outputText value="#{rnGcNomTiporegimenTblController.selected.fechaFinVigencia}" title="#{bundle.ViewRnGcNomTiporegimenTblTitle_fechaFinVigencia}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcNomTiporegimenTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

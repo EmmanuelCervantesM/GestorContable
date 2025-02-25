@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcTasacuotaTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcTasacuotaTblListForm">
+                <p:panel header="#{bundle.ListRnGcTasacuotaTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcTasacuotaTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcTasacuotaTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column filterBy="#{item.rangoofijo}" filterMatchMode="contains" sortBy="#{item.rangoofijo}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTasacuotaTblTitle_rangoofijo}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rangoofijo}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.valorMaximo}" filterMatchMode="contains" sortBy="#{item.valorMaximo}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTasacuotaTblTitle_valorMaximo}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.valorMaximo}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.impuesto}" filterMatchMode="contains" sortBy="#{item.impuesto}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTasacuotaTblTitle_impuesto}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.impuesto}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.factor}" filterMatchMode="contains" sortBy="#{item.factor}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTasacuotaTblTitle_factor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.factor}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.traslado}" filterMatchMode="contains" sortBy="#{item.traslado}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTasacuotaTblTitle_traslado}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.traslado}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.retencion}" filterMatchMode="contains" sortBy="#{item.retencion}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTasacuotaTblTitle_retencion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.retencion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTasacuotaTblTitle_fechaInicioVigencia}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaInicioVigencia}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcTasacuotaTblTitle_fechaFinVigencia}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaFinVigencia}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcTasacuotaTblController.prepareCreate}" update=":RnGcTasacuotaTblCreateForm" oncomplete="PF('RnGcTasacuotaTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcTasacuotaTblViewForm" oncomplete="PF('RnGcTasacuotaTblViewDialog').show()" disabled="#{empty rnGcTasacuotaTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcTasacuotaTblEditForm" oncomplete="PF('RnGcTasacuotaTblEditDialog').show()" disabled="#{empty rnGcTasacuotaTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcTasacuotaTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcTasacuotaTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

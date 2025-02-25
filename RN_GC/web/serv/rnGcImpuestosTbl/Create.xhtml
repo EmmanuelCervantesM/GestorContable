@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcImpuestosTblCreateDlg" widgetVar="RnGcImpuestosTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcImpuestosTblTitle}">
+            <h:form id="RnGcImpuestosTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcImpuestosTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcImpuestosTblLabel_CImpuesto}" for="CImpuesto" />
+                        <p:inputText id="CImpuesto" value="#{rnGcImpuestosTblController.selected.CImpuesto}" title="#{bundle.CreateRnGcImpuestosTblTitle_CImpuesto}" required="true" requiredMessage="#{bundle.CreateRnGcImpuestosTblRequiredMessage_CImpuesto}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcImpuestosTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcImpuestosTblController.selected.descripcion}" title="#{bundle.CreateRnGcImpuestosTblTitle_descripcion}" required="true" requiredMessage="#{bundle.CreateRnGcImpuestosTblRequiredMessage_descripcion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcImpuestosTblLabel_retencion}" for="retencion" />
+                        <p:inputText id="retencion" value="#{rnGcImpuestosTblController.selected.retencion}" title="#{bundle.CreateRnGcImpuestosTblTitle_retencion}" required="true" requiredMessage="#{bundle.CreateRnGcImpuestosTblRequiredMessage_retencion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcImpuestosTblLabel_traslado}" for="traslado" />
+                        <p:inputText id="traslado" value="#{rnGcImpuestosTblController.selected.traslado}" title="#{bundle.CreateRnGcImpuestosTblTitle_traslado}" required="true" requiredMessage="#{bundle.CreateRnGcImpuestosTblRequiredMessage_traslado}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcImpuestosTblLabel_localFederal}" for="localFederal" />
+                        <p:inputText id="localFederal" value="#{rnGcImpuestosTblController.selected.localFederal}" title="#{bundle.CreateRnGcImpuestosTblTitle_localFederal}" required="true" requiredMessage="#{bundle.CreateRnGcImpuestosTblRequiredMessage_localFederal}"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcImpuestosTblController.create}" value="#{bundle.Save}" update="display,:RnGcImpuestosTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcImpuestosTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcImpuestosTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

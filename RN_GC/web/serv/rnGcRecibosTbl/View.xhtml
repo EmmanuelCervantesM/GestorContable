@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcRecibosTblViewDlg" widgetVar="RnGcRecibosTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewRnGcRecibosTblTitle}">
+            <h:form id="RnGcRecibosTblViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcRecibosTblController.selected != null}">
+                        <h:outputText value="#{bundle.ViewRnGcRecibosTblLabel_id}"/>
+                        <h:outputText value="#{rnGcRecibosTblController.selected.id}" title="#{bundle.ViewRnGcRecibosTblTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewRnGcRecibosTblLabel_creadoPor}"/>
+                        <h:outputText value="#{rnGcRecibosTblController.selected.creadoPor}" title="#{bundle.ViewRnGcRecibosTblTitle_creadoPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcRecibosTblLabel_fechaCreacion}"/>
+                        <h:outputText value="#{rnGcRecibosTblController.selected.fechaCreacion}" title="#{bundle.ViewRnGcRecibosTblTitle_fechaCreacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcRecibosTblLabel_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{rnGcRecibosTblController.selected.ultimaActualizacionPor}" title="#{bundle.ViewRnGcRecibosTblTitle_ultimaActualizacionPor}"/>
+                        <h:outputText value="#{bundle.ViewRnGcRecibosTblLabel_ultimaFechaActualizacion}"/>
+                        <h:outputText value="#{rnGcRecibosTblController.selected.ultimaFechaActualizacion}" title="#{bundle.ViewRnGcRecibosTblTitle_ultimaFechaActualizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewRnGcRecibosTblLabel_transaccionesId}"/>
+                        <h:outputText value="#{rnGcRecibosTblController.selected.transaccionesId}" title="#{bundle.ViewRnGcRecibosTblTitle_transaccionesId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcRecibosTblLabel_transaccionesPeriodoId}"/>
+                        <h:outputText value="#{rnGcRecibosTblController.selected.transaccionesPeriodoId}" title="#{bundle.ViewRnGcRecibosTblTitle_transaccionesPeriodoId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcRecibosTblLabel_transaccionesPersonaId}"/>
+                        <h:outputText value="#{rnGcRecibosTblController.selected.transaccionesPersonaId}" title="#{bundle.ViewRnGcRecibosTblTitle_transaccionesPersonaId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcRecibosTblLabel_rngctransaccionestblId}"/>
+                        <h:outputText value="#{rnGcRecibosTblController.selected.rngctransaccionestblId}" title="#{bundle.ViewRnGcRecibosTblTitle_rngctransaccionestblId}"/>
+                        <h:outputText value="#{bundle.ViewRnGcRecibosTblLabel_noRecibo}"/>
+                        <h:outputText value="#{rnGcRecibosTblController.selected.noRecibo}" title="#{bundle.ViewRnGcRecibosTblTitle_noRecibo}"/>
+                        <h:outputText value="#{bundle.ViewRnGcRecibosTblLabel_rngctransaccionestblId1}"/>
+                        <h:outputText value="#{rnGcRecibosTblController.selected.rngctransaccionestblId1}" title="#{bundle.ViewRnGcRecibosTblTitle_rngctransaccionestblId1}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="RnGcRecibosTblViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

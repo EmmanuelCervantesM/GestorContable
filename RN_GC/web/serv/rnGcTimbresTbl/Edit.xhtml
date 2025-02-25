@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcTimbresTblEditDlg" widgetVar="RnGcTimbresTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcTimbresTblTitle}">
+            <h:form id="RnGcTimbresTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcTimbresTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcTimbresTblLabel_proveedor}" for="proveedor" />
+                        <p:inputText id="proveedor" value="#{rnGcTimbresTblController.selected.proveedor}" title="#{bundle.CreateRnGcTimbresTblTitle_proveedor}" required="true" requiredMessage="#{bundle.CreateRnGcTimbresTblRequiredMessage_proveedor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTimbresTblLabel_timbresTotal}" for="timbresTotal" />
+                        <p:inputText id="timbresTotal" value="#{rnGcTimbresTblController.selected.timbresTotal}" title="#{bundle.CreateRnGcTimbresTblTitle_timbresTotal}" required="true" requiredMessage="#{bundle.CreateRnGcTimbresTblRequiredMessage_timbresTotal}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTimbresTblLabel_timbresRestantes}" for="timbresRestantes" />
+                        <p:inputText id="timbresRestantes" value="#{rnGcTimbresTblController.selected.timbresRestantes}" title="#{bundle.CreateRnGcTimbresTblTitle_timbresRestantes}" required="true" requiredMessage="#{bundle.CreateRnGcTimbresTblRequiredMessage_timbresRestantes}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTimbresTblLabel_fechaInicio}" for="fechaInicio" />
+                        <p:calendar id="fechaInicio" pattern="dd/MM/yyyy" value="#{rnGcTimbresTblController.selected.fechaInicio}" title="#{bundle.EditRnGcTimbresTblTitle_fechaInicio}" required="true" requiredMessage="#{bundle.EditRnGcTimbresTblRequiredMessage_fechaInicio}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcTimbresTblLabel_fechaFin}" for="fechaFin" />
+                        <p:calendar id="fechaFin" pattern="dd/MM/yyyy" value="#{rnGcTimbresTblController.selected.fechaFin}" title="#{bundle.EditRnGcTimbresTblTitle_fechaFin}"  showOn="button"/>                        
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcTimbresTblController.update}" value="#{bundle.Save}" update="display,:RnGcTimbresTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcTimbresTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcTimbresTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

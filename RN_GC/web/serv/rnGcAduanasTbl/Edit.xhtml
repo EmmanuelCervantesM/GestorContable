@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcAduanasTblEditDlg" widgetVar="RnGcAduanasTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcAduanasTblTitle}">
+            <h:form id="RnGcAduanasTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcAduanasTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcAduanasTblLabel_CAduana}" for="CAduana" />
+                        <p:inputText id="CAduana" value="#{rnGcAduanasTblController.selected.CAduana}" title="#{bundle.CreateRnGcAduanasTblTitle_CAduana}" required="true" requiredMessage="#{bundle.CreateRnGcAduanasTblRequiredMessage_CAduana}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcAduanasTblLabel_descricpion}" for="descricpion" />
+                        <p:inputText id="descricpion" value="#{rnGcAduanasTblController.selected.descricpion}" title="#{bundle.CreateRnGcAduanasTblTitle_descricpion}" required="true" requiredMessage="#{bundle.CreateRnGcAduanasTblRequiredMessage_descricpion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcAduanasTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="dd/MM/yyyy" value="#{rnGcAduanasTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcAduanasTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcAduanasTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcAduanasTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="dd/MM/yyyy" value="#{rnGcAduanasTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcAduanasTblTitle_fechaFinVigencia}" required="true" requiredMessage="#{bundle.EditRnGcAduanasTblRequiredMessage_fechaFinVigencia}" showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcAduanasTblController.update}" value="#{bundle.Save}" update="display,:RnGcAduanasTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcAduanasTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcAduanasTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

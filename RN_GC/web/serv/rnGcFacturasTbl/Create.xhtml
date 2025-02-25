@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcFacturasTblCreateDlg" widgetVar="RnGcFacturasTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcFacturasTblTitle}">
+            <h:form id="RnGcFacturasTblCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcFacturasTblController.selected != null}">                        
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_uuid}" for="uuid" />
+                        <p:inputText id="uuid" value="#{rnGcFacturasTblController.selected.uuid}" title="#{bundle.CreateRnGcFacturasTblTitle_uuid}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_uuid}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_rfcEmisor}" for="rfcEmisor" />
+                        <p:inputText id="rfcEmisor" value="#{rnGcFacturasTblController.selected.rfcEmisor}" title="#{bundle.CreateRnGcFacturasTblTitle_rfcEmisor}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_rfcEmisor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_nombreEmisor}" for="nombreEmisor" />
+                        <p:inputText id="nombreEmisor" value="#{rnGcFacturasTblController.selected.nombreEmisor}" title="#{bundle.CreateRnGcFacturasTblTitle_nombreEmisor}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_nombreEmisor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_rfcReceptor}" for="rfcReceptor" />
+                        <p:inputText id="rfcReceptor" value="#{rnGcFacturasTblController.selected.rfcReceptor}" title="#{bundle.CreateRnGcFacturasTblTitle_rfcReceptor}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_rfcReceptor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_nombreReceptor}" for="nombreReceptor" />
+                        <p:inputText id="nombreReceptor" value="#{rnGcFacturasTblController.selected.nombreReceptor}" title="#{bundle.CreateRnGcFacturasTblTitle_nombreReceptor}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_nombreReceptor}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_folio}" for="folio" />
+                        <p:inputText id="folio" value="#{rnGcFacturasTblController.selected.folio}" title="#{bundle.CreateRnGcFacturasTblTitle_folio}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_folio}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_lugarExpedicion}" for="lugarExpedicion" />
+                        <p:inputText id="lugarExpedicion" value="#{rnGcFacturasTblController.selected.lugarExpedicion}" title="#{bundle.CreateRnGcFacturasTblTitle_lugarExpedicion}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_lugarExpedicion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_fechaExpedicion}" for="fechaExpedicion" />
+                        <p:calendar id="fechaExpedicion" pattern="MM/dd/yyyy" value="#{rnGcFacturasTblController.selected.fechaExpedicion}" title="#{bundle.EditRnGcFacturasTblTitle_fechaExpedicion}" required="true" requiredMessage="#{bundle.EditRnGcFacturasTblRequiredMessage_fechaExpedicion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_tipoComprobante}" for="tipoComprobante" />
+                        <p:inputText id="tipoComprobante" value="#{rnGcFacturasTblController.selected.tipoComprobante}" title="#{bundle.CreateRnGcFacturasTblTitle_tipoComprobante}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_tipoComprobante}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_claveRegimenFiscal}" for="claveRegimenFiscal" />
+                        <p:inputText id="claveRegimenFiscal" value="#{rnGcFacturasTblController.selected.claveRegimenFiscal}" title="#{bundle.CreateRnGcFacturasTblTitle_claveRegimenFiscal}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_claveRegimenFiscal}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_tipoRelacion}" for="tipoRelacion" />
+                        <p:inputText id="tipoRelacion" value="#{rnGcFacturasTblController.selected.tipoRelacion}" title="#{bundle.CreateRnGcFacturasTblTitle_tipoRelacion}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_tipoRelacion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_usoCfdi}" for="usoCfdi" />
+                        <p:inputText id="usoCfdi" value="#{rnGcFacturasTblController.selected.usoCfdi}" title="#{bundle.CreateRnGcFacturasTblTitle_usoCfdi}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_usoCfdi}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_formaPago}" for="formaPago" />
+                        <p:inputText id="formaPago" value="#{rnGcFacturasTblController.selected.formaPago}" title="#{bundle.CreateRnGcFacturasTblTitle_formaPago}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_formaPago}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_metodoPago}" for="metodoPago" />
+                        <p:inputText id="metodoPago" value="#{rnGcFacturasTblController.selected.metodoPago}" title="#{bundle.CreateRnGcFacturasTblTitle_metodoPago}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_metodoPago}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_moneda}" for="moneda" />
+                        <p:inputText id="moneda" value="#{rnGcFacturasTblController.selected.moneda}" title="#{bundle.CreateRnGcFacturasTblTitle_moneda}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_moneda}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFacturasTblLabel_importe}" for="importe" />
+                        <p:inputText id="importe" value="#{rnGcFacturasTblController.selected.importe}" title="#{bundle.CreateRnGcFacturasTblTitle_importe}" required="true" requiredMessage="#{bundle.CreateRnGcFacturasTblRequiredMessage_importe}"/>                      
+                    </p:panelGrid>
+                    <br/>
+                    <p:dataTable id="concepto1" widgetVar="concepto1" var="concep" style="width: 985px; text-align: center" rows="8">
+                        <f:facet name="header">
+                            Conceptos
+                        </f:facet>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_claveProdServ}" style="width: 60px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_noIdentificacion}" style="width: 85px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_cantidad}" style="width: 55px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_claveUnidad}" style="width: 45px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_unidad}" style="width: 45px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_descripcion}" style="width: 75px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_valorUnit}" style="width: 55px" />
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_importe}" style="width: 50px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_base}" style="width: 40px" />
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_impuesto}" style="width: 58px" />
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_tipoFactor}" style="width: 50px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_tipoTasa}" style="width: 30px"/>
+                        <p:column headerText="#{bundle.CreateRnGcTrxlineasTblTitle_importe}" style="width: 50px"/>
+                    </p:dataTable>
+                    <br/>                       
+                    
+                    <p:commandButton actionListener="#{rnGcFacturasTblController.create}" value="#{bundle.Save}" update="display,:RnGcFacturasTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcFacturasTblCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcFacturasTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

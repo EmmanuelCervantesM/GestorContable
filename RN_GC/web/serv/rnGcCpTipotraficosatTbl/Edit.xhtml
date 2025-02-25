@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpTipotraficosatTblEditDlg" widgetVar="RnGcCpTipotraficosatTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpTipotraficosatTblTitle}">
+            <h:form id="RnGcCpTipotraficosatTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpTipotraficosatTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipotraficosatTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpTipotraficosatTblController.selected.id}" title="#{bundle.EditRnGcCpTipotraficosatTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcCpTipotraficosatTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipotraficosatTblLabel_clave}" for="clave" />
+                        <p:inputText id="clave" value="#{rnGcCpTipotraficosatTblController.selected.clave}" title="#{bundle.EditRnGcCpTipotraficosatTblTitle_clave}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipotraficosatTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcCpTipotraficosatTblController.selected.descripcion}" title="#{bundle.EditRnGcCpTipotraficosatTblTitle_descripcion}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipotraficosatTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpTipotraficosatTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcCpTipotraficosatTblTitle_fechaInicioVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipotraficosatTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="MM/dd/yyyy" value="#{rnGcCpTipotraficosatTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcCpTipotraficosatTblTitle_fechaFinVigencia}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipotraficosatTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpTipotraficosatTblController.selected.creadoPor}" title="#{bundle.EditRnGcCpTipotraficosatTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.EditRnGcCpTipotraficosatTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipotraficosatTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpTipotraficosatTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpTipotraficosatTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpTipotraficosatTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipotraficosatTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpTipotraficosatTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcCpTipotraficosatTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpTipotraficosatTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpTipotraficosatTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpTipotraficosatTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpTipotraficosatTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpTipotraficosatTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpTipotraficosatTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpTipotraficosatTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

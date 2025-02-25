@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="RnGcClavesunidadesTblListForm">
+                <p:panel header="#{bundle.ListRnGcClavesunidadesTblTitle}">
+                    <p:dataTable id="datalist" value="#{rnGcClavesunidadesTblController.items}" var="item"
+                                 selectionMode="single" selection="#{rnGcClavesunidadesTblController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_creadoPor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.creadoPor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_fechaCreacion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaCreacion}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_ultimaActualizacionPor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.ultimaActualizacionPor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_ultimaFechaActualizacion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.ultimaFechaActualizacion}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_id}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_CClaveUnidadcol}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.CClaveUnidadcol}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_nombre}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_descripcion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.descripcion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_nota}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nota}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_fechaInicioVigencia}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaInicioVigencia}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_fehaFinVigencia}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fehaFinVigencia}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_simbolo}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.simbolo}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_CFDICatalogoUsoId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.CFDICatalogoUsoId}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRnGcClavesunidadesTblTitle_rngccfdistblId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rngccfdistblId}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcClavesunidadesTblController.prepareCreate}" update=":RnGcClavesunidadesTblCreateForm" oncomplete="PF('RnGcClavesunidadesTblCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcClavesunidadesTblViewForm" oncomplete="PF('RnGcClavesunidadesTblViewDialog').show()" disabled="#{empty rnGcClavesunidadesTblController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcClavesunidadesTblEditForm" oncomplete="PF('RnGcClavesunidadesTblEditDialog').show()" disabled="#{empty rnGcClavesunidadesTblController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcClavesunidadesTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcClavesunidadesTblController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcFormaspagosTblEditDlg" widgetVar="RnGcFormaspagosTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcFormaspagosTblTitle}">
+            <h:form id="RnGcFormaspagosTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcFormaspagosTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_CFormaPago}" for="CFormaPago" />
+                        <p:inputText id="CFormaPago" value="#{rnGcFormaspagosTblController.selected.CFormaPago}" title="#{bundle.CreateRnGcFormaspagosTblTitle_CFormaPago}" required="true" requiredMessage="#{bundle.CreateRnGcFormaspagosTblRequiredMessage_CFormaPago}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rnGcFormaspagosTblController.selected.descripcion}" title="#{bundle.CreateRnGcFormaspagosTblTitle_descripcion}" required="true" requiredMessage="#{bundle.CreateRnGcFormaspagosTblRequiredMessage_descripcion}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_bancarizado}" for="bancarizado" />
+                        <p:inputText id="bancarizado" value="#{rnGcFormaspagosTblController.selected.bancarizado}" title="#{bundle.CreateRnGcFormaspagosTblTitle_bancarizado}" required="true" requiredMessage="#{bundle.CreateRnGcFormaspagosTblRequiredMessage_bancarizado}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_numOperacion}" for="numOperacion" />
+                        <p:inputText id="numOperacion" value="#{rnGcFormaspagosTblController.selected.numOperacion}" title="#{bundle.CreateRnGcFormaspagosTblTitle_numOperacion}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_RFCEmisorOrdenante}" for="RFCEmisorOrdenante" />
+                        <p:inputText id="RFCEmisorOrdenante" value="#{rnGcFormaspagosTblController.selected.RFCEmisorOrdenante}" title="#{bundle.CreateRnGcFormaspagosTblTitle_RFCEmisorOrdenante}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_cuentaOrdenante}" for="cuentaOrdenante" />
+                        <p:inputText id="cuentaOrdenante" value="#{rnGcFormaspagosTblController.selected.cuentaOrdenante}" title="#{bundle.CreateRnGcFormaspagosTblTitle_cuentaOrdenante}" required="true" requiredMessage="#{bundle.CreateRnGcFormaspagosTblRequiredMessage_cuentaOrdenante}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_patronCuentaOrdenante}" for="patronCuentaOrdenante" />
+                        <p:inputText id="patronCuentaOrdenante" value="#{rnGcFormaspagosTblController.selected.patronCuentaOrdenante}" title="#{bundle.CreateRnGcFormaspagosTblTitle_patronCuentaOrdenante}" required="true" requiredMessage="#{bundle.CreateRnGcFormaspagosTblRequiredMessage_patronCuentaOrdenante}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_RFCEmisorBenficiario}" for="RFCEmisorBenficiario" />
+                        <p:inputText id="RFCEmisorBenficiario" value="#{rnGcFormaspagosTblController.selected.RFCEmisorBenficiario}" title="#{bundle.CreateRnGcFormaspagosTblTitle_RFCEmisorBenficiario}" required="true" requiredMessage="#{bundle.CreateRnGcFormaspagosTblRequiredMessage_RFCEmisorBenficiario}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_cuentaBeneficiario}" for="cuentaBeneficiario" />
+                        <p:inputText id="cuentaBeneficiario" value="#{rnGcFormaspagosTblController.selected.cuentaBeneficiario}" title="#{bundle.CreateRnGcFormaspagosTblTitle_cuentaBeneficiario}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_patronCuentaBeneficiario}" for="patronCuentaBeneficiario" />
+                        <p:inputText id="patronCuentaBeneficiario" value="#{rnGcFormaspagosTblController.selected.patronCuentaBeneficiario}" title="#{bundle.CreateRnGcFormaspagosTblTitle_patronCuentaBeneficiario}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_tipoCadenaPago}" for="tipoCadenaPago" />
+                        <p:inputText id="tipoCadenaPago" value="#{rnGcFormaspagosTblController.selected.tipoCadenaPago}" title="#{bundle.CreateRnGcFormaspagosTblTitle_tipoCadenaPago}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_bancoEmisorCuentaOrdenante}" for="bancoEmisorCuentaOrdenante" />
+                        <p:inputText id="bancoEmisorCuentaOrdenante" value="#{rnGcFormaspagosTblController.selected.bancoEmisorCuentaOrdenante}" title="#{bundle.CreateRnGcFormaspagosTblTitle_bancoEmisorCuentaOrdenante}" />
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_fechaInicioVigencia}" for="fechaInicioVigencia" />
+                        <p:calendar id="fechaInicioVigencia" pattern="dd/MM/yyyy" value="#{rnGcFormaspagosTblController.selected.fechaInicioVigencia}" title="#{bundle.EditRnGcFormaspagosTblTitle_fechaInicioVigencia}" required="true" requiredMessage="#{bundle.EditRnGcFormaspagosTblRequiredMessage_fechaInicioVigencia}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcFormaspagosTblLabel_fechaFinVigencia}" for="fechaFinVigencia" />
+                        <p:calendar id="fechaFinVigencia" pattern="dd/MM/yyyy" value="#{rnGcFormaspagosTblController.selected.fechaFinVigencia}" title="#{bundle.EditRnGcFormaspagosTblTitle_fechaFinVigencia}" required="true" requiredMessage="#{bundle.EditRnGcFormaspagosTblRequiredMessage_fechaFinVigencia}" showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcFormaspagosTblController.update}" value="#{bundle.Save}" update="display,:RnGcFormaspagosTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcFormaspagosTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcFormaspagosTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

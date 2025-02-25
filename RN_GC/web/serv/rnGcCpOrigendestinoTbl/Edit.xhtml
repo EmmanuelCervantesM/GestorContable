@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcCpOrigendestinoTblEditDlg" widgetVar="RnGcCpOrigendestinoTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcCpOrigendestinoTblTitle}">
+            <h:form id="RnGcCpOrigendestinoTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcCpOrigendestinoTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcCpOrigendestinoTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcCpOrigendestinoTblController.selected.id}" title="#{bundle.EditRnGcCpOrigendestinoTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcCpOrigendestinoTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpOrigendestinoTblLabel_origen}" for="origen" />
+                        <p:inputText id="origen" value="#{rnGcCpOrigendestinoTblController.selected.origen}" title="#{bundle.EditRnGcCpOrigendestinoTblTitle_origen}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpOrigendestinoTblLabel_destino}" for="destino" />
+                        <p:inputText id="destino" value="#{rnGcCpOrigendestinoTblController.selected.destino}" title="#{bundle.EditRnGcCpOrigendestinoTblTitle_destino}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpOrigendestinoTblLabel_fechaSalida}" for="fechaSalida" />
+                        <p:calendar id="fechaSalida" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpOrigendestinoTblController.selected.fechaSalida}" title="#{bundle.EditRnGcCpOrigendestinoTblTitle_fechaSalida}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpOrigendestinoTblLabel_fechaLlegada}" for="fechaLlegada" />
+                        <p:calendar id="fechaLlegada" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpOrigendestinoTblController.selected.fechaLlegada}" title="#{bundle.EditRnGcCpOrigendestinoTblTitle_fechaLlegada}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpOrigendestinoTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcCpOrigendestinoTblController.selected.creadoPor}" title="#{bundle.EditRnGcCpOrigendestinoTblTitle_creadoPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpOrigendestinoTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpOrigendestinoTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcCpOrigendestinoTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcCpOrigendestinoTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcCpOrigendestinoTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcCpOrigendestinoTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcCpOrigendestinoTblTitle_ultimaActualizacionPor}" />
+                        <p:outputLabel value="#{bundle.EditRnGcCpOrigendestinoTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcCpOrigendestinoTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcCpOrigendestinoTblTitle_ultimaFechaActualizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcCpOrigendestinoTblController.update}" value="#{bundle.Save}" update="display,:RnGcCpOrigendestinoTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCpOrigendestinoTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCpOrigendestinoTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

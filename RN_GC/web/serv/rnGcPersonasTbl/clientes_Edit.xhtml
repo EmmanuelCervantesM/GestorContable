@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcPersonasTblEditDlg" widgetVar="RnGcPersonasTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcPersonasTblTitle}">
+            <h:form id="RnGcPersonasTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" rendered="#{rnGcPersonas_clientesTblController.selected != null}">
+                        <p:outputLabel value="RFC" for="rfc" />
+                        <p:inputText id="rfc" value="#{rnGcPersonas_clientesTblController.selected.rfc}"  title="#{bundle.CreateRnGcPersonasTblTitle_rfc}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_rfc}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{rnGcPersonas_clientesTblController.selected.nombre}" style="width: 500px" title="#{bundle.CreateRnGcPersonasTblTitle_nombre}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_nombre}"/>
+                        <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_telefono}" for="telefono" />
+                        <p:inputText id="telefono" value="#{rnGcPersonas_clientesTblController.selected.telefono}" style="width: 160px" title="#{bundle.CreateRnGcPersonasTblTitle_telefono}" />
+                        <p:outputLabel value="Regimen Fiscal" for="regimen" />
+                        <p:selectOneMenu id="regimen" style="width: 500px" value="#{rnGcPersonas_clientesTblController.selected.regimenFiscalId}" 
+                                         title="Regimen Fiscal" required="true" requiredMessage="Se requiere el Regimen Fiscal" filterMatchMode="contains" filter="true">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcRegimenfiscalTblController.itemsAvailableSelectOne}"
+                                           var="regimenItem"
+                                           itemLabel="#{regimenItem.claveRegimenFiscal} - #{regimenItem.descripcion}"
+                                           itemValue="#{regimenItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Uso CFDI" for="uso" />
+                        <p:selectOneMenu id="uso" style="width: 500px" value="#{rnGcPersonas_clientesTblController.selected.usocfdiId}" 
+                                         title="Uso CFDI" required="true" requiredMessage="Se requiere el Uso CFDI" filterMatchMode="contains" filter="true">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcCatalogosusosTblController.itemsAvailableSelectOne}"
+                                           var="usoItem"
+                                           itemLabel="#{usoItem.CUsoCFDI} - #{usoItem.descripcion}"
+                                           itemValue="#{usoItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Tipo de Persona" for="tipoPersona" />
+                        <p:selectOneMenu id="tipoPersona" style="width: 160px" value="#{rnGcPersonas_clientesTblController.selected.tipoPersonaSat}" 
+                                         required="true" requiredMessage="Se requiere el Tipo de Persona" filterMatchMode="contains" filter="true">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItem itemLabel="Fisica" itemValue="Fisica"/>
+                            <f:selectItem itemLabel="Moral" itemValue="Moral"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+
+                    <br/>
+
+                    <p:panel header="E-mails">
+                        <p:panelGrid columns="4">
+                            <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_email}:" for="email" />
+                            <p:inputText id="email" style="width: 250px" value="#{rnGcPersonas_clientesTblController.selected.email}" title="#{bundle.CreateRnGcPersonasTblTitle_email}" required="true" requiredMessage="El correo electrónico es necesario"/>
+                            <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_email} 2:" for="email2" />
+                            <p:inputText id="email2" style="width: 250px" value="#{rnGcPersonas_clientesTblController.selected.email2}"/>
+                        </p:panelGrid>
+                    </p:panel>
+
+                    <br/>
+
+                    <p:panel header="Domicilio">
+                        <p:panelGrid columns="6" >
+                            <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_pais}" for="pais" />
+                            <p:selectOneMenu id="pais" style="width: 145px" filter="true" filterMatchMode="contains" value="#{rnGcPersonas_clientesTblController.selected.pais}" title="#{bundle.CreateRnGcPersonasTblTitle_pais}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_pais}">
+                                <f:selectItems value="#{rnGcPaisesTblController.itemsAvailableSelectOne}"
+                                               var="paisItem"
+                                               itemLabel="#{paisItem.CPais} - #{paisItem.descripcion}"
+                                               itemValue="#{paisItem.CPais} - #{paisItem.descripcion}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_estado}" for="estado" />
+                             <p:selectOneMenu id="estado" style="width: 160px" filter="true" filterMatchMode="contains" value="#{rnGcPersonas_clientesTblController.selected.estado}" title="#{bundle.CreateRnGcPersonasTblTitle_estado}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_estado}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcEstadosTblController.itemsAvailableSelectOne}"
+                                               var="estado"
+                                               itemLabel="#{estado.CEstado} - #{estado.nombreEstado}"
+                                               itemValue="#{estado.CEstado}"/>
+                                <p:ajax update="codigoPostal"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Municipio" for="ciudad" />
+                            <p:inputText id="ciudad" style="width: 160px" value="#{rnGcPersonas_clientesTblController.selected.ciudad}" required="true" requiredMessage="La ciudad es necesaria." title="#{bundle.CreateRnGcPersonasTblTitle_ciudad}" />
+                            <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_localidad}" for="localidad" />
+                            <p:inputText id="localidad" style="width: 160px" value="#{rnGcPersonas_clientesTblController.selected.localidad}" title="#{bundle.CreateRnGcPersonasTblTitle_localidad}"/>
+                            <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_codigoPostal}" for="codigoPostal" />
+                            <p:selectOneMenu id="codigoPostal" filter="true" filterMatchMode="contains" style="width: 160px" value="#{rnGcPersonas_clientesTblController.selected.codigoPostal}" title="#{bundle.CreateRnGcPersonasTblTitle_codigoPostal}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_codigoPostal}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcCodigospostalesTblController.obetenerCodigosPorEstado(rnGcPersonas_clientesTblController.selected.estado)}"
+                                               var="codPostal"
+                                               itemLabel="#{codPostal.CCodigoPostal}"
+                                               itemValue="#{codPostal.CCodigoPostal}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_calle}" for="calle" />
+                            <p:inputText id="calle" style="width: 160px" value="#{rnGcPersonas_clientesTblController.selected.domicilio}" title="#{bundle.CreateRnGcPersonasTblTitle_calle}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_calle}"/>
+                            <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_noExt}" for="noExt" />
+                            <p:inputText id="noExt" style="width: 160px" value="#{rnGcPersonas_clientesTblController.selected.noExt}" title="#{bundle.CreateRnGcPersonasTblTitle_noExt}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_noExt}"/>
+                            <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_noInt}" for="noInt" />
+                            <p:inputText id="noInt" style="width: 160px" value="#{rnGcPersonas_clientesTblController.selected.noInt}" title="#{bundle.CreateRnGcPersonasTblTitle_noInt}" />
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:commandButton actionListener="#{rnGcPersonas_clientesTblController.update()}" value="#{bundle.Save}" update="display,:RnGcPersonasTblListForm,:growl" oncomplete="handleSubmit(args,'RnGcPersonasTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcPersonasTblCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

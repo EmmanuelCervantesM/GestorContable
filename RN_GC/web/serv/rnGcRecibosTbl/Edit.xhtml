@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RnGcRecibosTblEditDlg" widgetVar="RnGcRecibosTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditRnGcRecibosTblTitle}">
+            <h:form id="RnGcRecibosTblEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{rnGcRecibosTblController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRnGcRecibosTblLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{rnGcRecibosTblController.selected.id}" title="#{bundle.EditRnGcRecibosTblTitle_id}" required="true" requiredMessage="#{bundle.EditRnGcRecibosTblRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcRecibosTblLabel_creadoPor}" for="creadoPor" />
+                        <p:inputText id="creadoPor" value="#{rnGcRecibosTblController.selected.creadoPor}" title="#{bundle.EditRnGcRecibosTblTitle_creadoPor}" required="true" requiredMessage="#{bundle.EditRnGcRecibosTblRequiredMessage_creadoPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcRecibosTblLabel_fechaCreacion}" for="fechaCreacion" />
+                        <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcRecibosTblController.selected.fechaCreacion}" title="#{bundle.EditRnGcRecibosTblTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditRnGcRecibosTblRequiredMessage_fechaCreacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcRecibosTblLabel_ultimaActualizacionPor}" for="ultimaActualizacionPor" />
+                        <p:inputText id="ultimaActualizacionPor" value="#{rnGcRecibosTblController.selected.ultimaActualizacionPor}" title="#{bundle.EditRnGcRecibosTblTitle_ultimaActualizacionPor}" required="true" requiredMessage="#{bundle.EditRnGcRecibosTblRequiredMessage_ultimaActualizacionPor}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcRecibosTblLabel_ultimaFechaActualizacion}" for="ultimaFechaActualizacion" />
+                        <p:calendar id="ultimaFechaActualizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{rnGcRecibosTblController.selected.ultimaFechaActualizacion}" title="#{bundle.EditRnGcRecibosTblTitle_ultimaFechaActualizacion}" required="true" requiredMessage="#{bundle.EditRnGcRecibosTblRequiredMessage_ultimaFechaActualizacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditRnGcRecibosTblLabel_transaccionesId}" for="transaccionesId" />
+                        <p:inputText id="transaccionesId" value="#{rnGcRecibosTblController.selected.transaccionesId}" title="#{bundle.EditRnGcRecibosTblTitle_transaccionesId}" required="true" requiredMessage="#{bundle.EditRnGcRecibosTblRequiredMessage_transaccionesId}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcRecibosTblLabel_transaccionesPeriodoId}" for="transaccionesPeriodoId" />
+                        <p:inputText id="transaccionesPeriodoId" value="#{rnGcRecibosTblController.selected.transaccionesPeriodoId}" title="#{bundle.EditRnGcRecibosTblTitle_transaccionesPeriodoId}" required="true" requiredMessage="#{bundle.EditRnGcRecibosTblRequiredMessage_transaccionesPeriodoId}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcRecibosTblLabel_transaccionesPersonaId}" for="transaccionesPersonaId" />
+                        <p:inputText id="transaccionesPersonaId" value="#{rnGcRecibosTblController.selected.transaccionesPersonaId}" title="#{bundle.EditRnGcRecibosTblTitle_transaccionesPersonaId}" required="true" requiredMessage="#{bundle.EditRnGcRecibosTblRequiredMessage_transaccionesPersonaId}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcRecibosTblLabel_rngctransaccionestblId}" for="rngctransaccionestblId" />
+                        <p:inputText id="rngctransaccionestblId" value="#{rnGcRecibosTblController.selected.rngctransaccionestblId}" title="#{bundle.EditRnGcRecibosTblTitle_rngctransaccionestblId}" required="true" requiredMessage="#{bundle.EditRnGcRecibosTblRequiredMessage_rngctransaccionestblId}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcRecibosTblLabel_noRecibo}" for="noRecibo" />
+                        <p:inputText id="noRecibo" value="#{rnGcRecibosTblController.selected.noRecibo}" title="#{bundle.EditRnGcRecibosTblTitle_noRecibo}" required="true" requiredMessage="#{bundle.EditRnGcRecibosTblRequiredMessage_noRecibo}"/>
+                        <p:outputLabel value="#{bundle.EditRnGcRecibosTblLabel_rngctransaccionestblId1}" for="rngctransaccionestblId1" />
+                        <p:selectOneMenu id="rngctransaccionestblId1" value="#{rnGcRecibosTblController.selected.rngctransaccionestblId1}" required="true" requiredMessage="#{bundle.EditRnGcRecibosTblRequiredMessage_rngctransaccionestblId1}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rnGcTransaccionesTblController.itemsAvailableSelectOne}"
+                                           var="rngctransaccionestblId1Item"
+                                           itemValue="#{rngctransaccionestblId1Item}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{rnGcRecibosTblController.update}" value="#{bundle.Save}" update="display,:RnGcRecibosTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcRecibosTblEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="RnGcRecibosTblEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
