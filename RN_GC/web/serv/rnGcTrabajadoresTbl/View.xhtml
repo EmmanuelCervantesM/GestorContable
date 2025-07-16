@@ -12,12 +12,23 @@
             <h:form id="RnGcTrabajadoresTblViewForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{rnGcTrabajadoresTblController.selected != null}">
+                        
+                         <h:outputText value="Asimilado/Salariado"/>
+                         <h:outputText value="#{rnGcTrabajadoresTblController.selected.tipoEmpleado}" title="Tipo de Empleado"/>
+                         
+                         <p:outputLabel value="No. Empleado"/>
+                         <h:outputText value="#{rnGcTrabajadoresTblController.selected.noTrabajador}" title="No. Empleado"/>
+                        
+                         <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_nombre}"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.nombre}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_nombre}"/>
+                        
                         <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_apPaterno}"/>
                         <h:outputText value="#{rnGcTrabajadoresTblController.selected.apPaterno}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_apPaterno}"/>
+                        
                         <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_apMaterno}"/>
                         <h:outputText value="#{rnGcTrabajadoresTblController.selected.apMaterno}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_apMaterno}"/>
-                        <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_nombre}"/>
-                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.nombre}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_nombre}"/>
+                        
+                   
                         <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_nombreCompleto}"/>
                         <h:outputText value="#{rnGcTrabajadoresTblController.selected.nombreCompleto}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_nombreCompleto}"/>
                         <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_curp}"/>
@@ -26,12 +37,54 @@
                         <h:outputText value="#{rnGcTrabajadoresTblController.selected.rfc}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_rfc}"/>
                         <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_nss}"/>
                         <h:outputText value="#{rnGcTrabajadoresTblController.selected.nss}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_nss}"/>
+                        
+                         <h:outputText value="Salario base:"/>
+                         <h:outputText value="#{rnGcTrabajadoresTblController.selected.salarioBase}" title="Salario base"/>
+                        
+                        
                         <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_sdi}"/>
                         <h:outputText value="#{rnGcTrabajadoresTblController.selected.sdi}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_sdi}"/>
+                        
                         <h:outputText value="#{bundle.ViewRnGcTrabajadoresTblLabel_tipoPersona}"/>
                         <h:outputText value="#{rnGcTrabajadoresTblController.selected.tipoPersona}" title="#{bundle.ViewRnGcTrabajadoresTblTitle_tipoPersona}"/>
+                        
                         <h:outputText value="Correo Electronico"/>
                         <h:outputText value="#{rnGcTrabajadoresTblController.selected.email1}" title="Correo Electronico"/>
+                        
+                        <h:outputText value="Banco"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.banco}" title="Banco"/>
+                        
+                        <h:outputText value="Cuenta Bancaria"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.cuentaBancaria}" title="Cuenta Bancaria"/>
+                        
+                        <h:outputText value="Correo Electronico"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.email1}" title="Correo Electronico"/>
+                        
+                        <h:outputText value="Fecha Inicio Laboral"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.fechaInicio}" title="Fecha Inicio Laboral">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="Dias"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.diasDesdeFechaInicio}" title="Días"/>
+                        
+                        <h:outputText value="Entidad Federativa"/>
+                       <h:outputText value="#{rnGcTrabajadoresTblController.selected.entidadFederativaId.cveEstado} - #{rnGcTrabajadoresTblController.selected.entidadFederativaId.nombre}" title="Entidad Federativa"/>
+                       
+                       <h:outputText value="Codigo Postal"/>
+                       <h:outputText value="#{rnGcTrabajadoresTblController.selected.codigoPostal}" title="Codigo Postal"/>
+                       
+                       <h:outputText value="Riesgo del puesto"/>
+                       <h:outputText value="#{rnGcTrabajadoresTblController.selected.riesgoPuestoTblId.cveRiesgoPuesto} - #{rnGcTrabajadoresTblController.selected.riesgoPuestoTblId.descripcion}" title="Riesgo del puesto"/>
+                       
+                        <h:outputText value="Tipo de Jornada"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.tipoJornadaTblId.cveTipoJornada} - #{rnGcTrabajadoresTblController.selected.tipoJornadaTblId.descripcion}" title="Tipo de Jornada"/>
+                       
+                        <h:outputText value="Sindicalizado"/>
+                        <h:outputText value="#{rnGcTrabajadoresTblController.selected.sindicalizado eq 'S' ? 'Sí' : 'No'}" title="Sindicalizado"/>
+                        
+                        
+                        
+                        
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="RnGcTrabajadoresTblViewDialog.hide()"/>
                 </h:panelGroup>
