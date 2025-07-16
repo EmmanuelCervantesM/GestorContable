@@ -82,6 +82,9 @@ public class RnGcNomNominasTbl implements Serializable {
     @JoinColumn(name = "periodicidadPagoId", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private RnGcNomPeriodicidadpagoTbl periodicidadPagoId;
+    @JoinColumn(name = "origenRecursoId", referencedColumnName = "id")
+    @ManyToOne(optional = true)
+    private RnGcNomOrigenrecursoTbl origenRecursoId;
     @JoinColumn(name = "tipoNominaId", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private RnGcNomTiponominaTbl tipoNominaId;
@@ -175,6 +178,14 @@ public class RnGcNomNominasTbl implements Serializable {
         this.periodicidadPagoId = periodicidadPagoId;
     }
 
+    public RnGcNomOrigenrecursoTbl getOrigenRecursoId() {
+        return origenRecursoId;
+    }
+
+    public void setOrigenRecursoId(RnGcNomOrigenrecursoTbl origenRecursoId) {
+        this.origenRecursoId = origenRecursoId;
+    }
+    
     public RnGcNomTiponominaTbl getTipoNominaId() {
         return tipoNominaId;
     }

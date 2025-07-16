@@ -74,7 +74,7 @@ public class RnGcNomPeriodonominaTbl implements Serializable {
     private Date ultimaFechaActualizacion;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
+    @Size(min = 1, max = 60)
     @Column(name = "nombrePeriodo")
     private String nombrePeriodo;
     @Basic(optional = false)
