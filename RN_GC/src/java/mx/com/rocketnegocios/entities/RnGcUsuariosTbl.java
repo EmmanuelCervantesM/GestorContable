@@ -86,6 +86,16 @@ public class RnGcUsuariosTbl implements Serializable {
     @NotNull
     @Size(min = 1, max = 120)
     private String nombreCompleto;
+    
+    @Size(min = 18, max = 18, message = "La CURP debe tener exactamente 18 caracteres")
+    private String curp;
+       
+    @Size(max = 30)
+    private String riesgoClavePatronal;
+    
+    @Size(max = 30)
+    private String numeroRegistroPatronal;
+    
     @Size(max = 30)
     private String telefono;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
@@ -166,12 +176,15 @@ public class RnGcUsuariosTbl implements Serializable {
         this.id = id;
     }
 
-    public RnGcUsuariosTbl(Integer id, String usuarioClave, String tipoUsuario, int noUsuarios, String rfc, String nombreCompleto, int codigoPostal, Date fechaAlta, String estado, String contrasenia, Date fechaContrasenia, int noIntentos, int creadoPor, Date fechaCreacion, int ultimaActualizacionPor, Date ultimaFechaActualizacion) {
+    public RnGcUsuariosTbl(Integer id, String usuarioClave, String tipoUsuario, int noUsuarios, String rfc, String nombreCompleto, String curp, String riesgoClavePatronal, String numeroRegistroPatronal, int codigoPostal, Date fechaAlta, String estado, String contrasenia, Date fechaContrasenia, int noIntentos, int creadoPor, Date fechaCreacion, int ultimaActualizacionPor, Date ultimaFechaActualizacion) {
         this.id = id;
         this.usuarioClave = usuarioClave;
         this.tipoUsuario = tipoUsuario;
         this.noUsuarios = noUsuarios;
         this.rfc = rfc;
+        this.curp = curp;
+        this.riesgoClavePatronal = riesgoClavePatronal;
+        this.numeroRegistroPatronal = numeroRegistroPatronal;
         this.nombreCompleto = nombreCompleto;
         this.codigoPostal = codigoPostal;
         this.fechaAlta = fechaAlta;
@@ -231,6 +244,14 @@ public class RnGcUsuariosTbl implements Serializable {
 
     public void setNombreCompleto(String nombreCompleto) {
         this.nombreCompleto = nombreCompleto;
+    }
+    
+    public String getCurp() {
+        return curp;
+    }
+
+    public void setCurp(String curp) {
+        this.curp = curp;
     }
 
     public String getTelefono() {
@@ -403,6 +424,24 @@ public class RnGcUsuariosTbl implements Serializable {
 
     public String getPasswordEmail() {
         return passwordEmail;
+    }
+
+
+
+    public void setRiesgoClavePatronal(String riesgoClavePatronal) {
+        this.riesgoClavePatronal = riesgoClavePatronal;
+    }
+    
+    public String getRiesgoClavePatronal() {
+        return riesgoClavePatronal;
+    }
+
+    public void setNumeroRegistroPatronal(String numeroRegistroPatronal) {
+        this.numeroRegistroPatronal = numeroRegistroPatronal;
+    }
+    
+    public String getNumeroRegistroPatronal() {
+        return numeroRegistroPatronal;
     }
 
     public void setPasswordEmail(String passwordEmail) {
