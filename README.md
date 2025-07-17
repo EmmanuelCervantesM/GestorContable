@@ -87,7 +87,54 @@ Una vez realizados estos pasos, ya puedes ejecutar el proyecto desde NetBeans.
    ![Ejecutar el proyecto](imagenes/run_proyecto.png)
 
 ---
+## 🧩 Flujo de trabajo con Git
 
+Este proyecto sigue una estructura de ramas para asegurar un desarrollo ordenado y controlado. Las dos ramas principales son:
+
+- **`main`**: Contiene la versión final y estable del proyecto. Solo se actualiza cuando se ha probado y verificado que todo funciona correctamente.
+- **`dev`**: Rama principal de desarrollo donde se integran los cambios antes de pasar a producción.
+
+### 🚧 ¿Cómo trabajar correctamente con ramas?
+
+1. **Crear una nueva rama a partir de `dev`**
+
+   Antes de comenzar a desarrollar una nueva funcionalidad o corrección, crea una rama desde `dev`:
+
+   ```bash
+   git checkout dev
+   git pull origin dev
+   git checkout -b nombre-de-tu-rama
+
+2. **Realiza tus cambios y súbelos a `origen` (nombre de tu rama)**
+   
+   Una vez que termines tu trabajo:
+   
+   ```bash
+   git add .
+   git commit -m "Descripción de los cambios realizados"
+   git push origin nombre-de-tu-rama
+
+3. **Sube los cambios a la rama `dev` (vía Merge Request / Pull Request)**
+
+   - Desde tu plataforma de Git, abre un **Pull Request** o **Merge Request** hacia la rama `dev`.
+   - Alguien del equipo revisará tus cambios y los aprobará.
+
+4. **Verifica en `dev`**
+
+   - Una vez que tus cambios estén en dev, compila y prueba el sistema.
+   - Asegúrate de que no haya errores ni conflictos.
+
+5. **Merge a `main`**
+
+   Cuando los cambios en `dev` hayan sido validados completamente, se procede a hacer un merge a la rama `main`:
+
+   ```bash
+   git checkout main
+   git pull origin main
+   git merge dev
+   git push origin main
+   
+---
 ## 📌 Notas adicionales
 
 - El proyecto utiliza tecnologías Java EE con el servidor GlassFish.
