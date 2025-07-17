@@ -42,4 +42,5 @@ public class RnGcNomDeduccionesTblFacade extends AbstractFacade<RnGcNomDeduccion
         return deduccion;
     }
     
+    
 }

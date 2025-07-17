@@ -42,4 +42,5 @@ public class RnGcRegimenfiscalTblFacade extends AbstractFacade<RnGcRegimenfiscal
         }
         return lista;
     }
+    
 }

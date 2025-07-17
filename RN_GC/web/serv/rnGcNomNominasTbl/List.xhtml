@@ -48,6 +48,7 @@
                         <f:facet name="footer"> 
                             <p:commandButton id="archivop" icon="ui-icon-plus"   value="Usar plantilla" actionListener="#{rnGcNomNominasTblController.prepareCreate}" update="RnGcNominaTblDocForm" oncomplete="PF('RnGcNominaTblDocDialog').show()"/>
                             <p:commandButton id="verDatos"   icon="ui-icon-folder-open" value="Facturar Nómina" actionListener="#{rnGcNomSolicitudTrabajadorTblController.obtenerSolicitudesTrabajador(rnGcNomNominasTblController.selected)}" update=":RnGcSolicitudTrabajadorTblListForm" oncomplete="PF('RnGcSolicitudTrabajadorTblDocDialog').show()" disabled="#{empty rnGcNomNominasTblController.selected}"/>
+                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="Ver" update=":RnGcNomNominasTblDatosGeneralesViewForm" oncomplete="PF('RnGcNomNominasDatosGeneralesTblViewDialog').show()" disabled="#{empty rnGcNomNominasTblController.selected}"/>
                             <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcNomNominasTblController.eliminarDatos()}" update=":growl,datalist" disabled="#{empty rnGcNomNominasTblController.selected}"/>
                         </f:facet>
                         
@@ -63,6 +64,7 @@
             <ui:include src="Create.xhtml"/>
             <ui:include src="Edit.xhtml"/>
             <ui:include src="View.xhtml"/>
+            <ui:include src="ViewDatosGenerales.xhtml"/>
 
             <p:dialog id="RnGcNominaTblDocDlg" widgetVar="RnGcNominaTblDocDialog" modal="true" resizable="false" appendTo="@(body)" header="Cargar Nómina">
                 <h:form id="RnGcNominaTblDocForm">
@@ -135,7 +137,32 @@
                                                itemLabel="#{folioItem.folio}"
                                                itemValue="#{folioItem.folio}"/>
                             </p:selectOneMenu>
+                            
+                            
 
+                              
+                                <!-- Fila nueva para Select + Botón juntos -->
+ 
+   <h:outputText value="" /> 
+        <p:outputLabel style="font-weight: 900; margin-right: 8px;" value="Agregar Trabajador:" for="agregarTrabajador" />
+        <h:panelGroup layout="block" style="display: flex; align-items: center; gap: 8px;">
+    <p:selectOneMenu id="agregarTrabajador"
+                     value="#{rnGcNomSolicitudTrabajadorTblController.cfdisId2.folio}"
+                     style="width: 160px;">
+        <f:selectItems value="#{facturarContoller.obtenerFolioPorUsuarioSerie(rnGcNomSolicitudTrabajadorTblController.cfdisId2.serie)}"
+                       var="folioItem"
+                       itemLabel="#{folioItem.folio}"
+                       itemValue="#{folioItem.folio}"/>
+    </p:selectOneMenu>
+
+    <p:commandButton icon="ui-icon-plus" title="Agregar Percepción"
+                     actionListener="#{rnGcNomSolicitudTrabajadorTblController.agregarPercepcion}" />
+</h:panelGroup>
+ 
+    <!-- Colocar elementos vacíos para completar las columnas -->
+    <h:outputText value="" />
+    <h:outputText value="" />
+                              
                         </h:panelGrid>
 
                         <p:dataTable id="datalist" value="#{rnGcNomSolicitudTrabajadorTblController.listaSolicitudesTrabajador}" var="item"
@@ -225,8 +252,16 @@
                             <p:column style="width:26px;text-align:center">
                                 <p:commandButton icon="ui-icon-cancel" title="Cancelar timbre" disabled="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) != 'Timbrado de forma correcta'}" actionListener="#{rnGcNomSolicitudTrabajadorTblController.cancelarTimbre(item)}" ajax="false"/>
                             </p:column>
+                            <p:column style="width:26px;text-align:center">
+                                <p:commandButton icon="ui-icon-pencil" title="Editar Percepciones y Deducciones" 
+                                                  action="#{rnGcNomSolicitudTrabajadorTblController.setSelected(item)}"
+                                                    update=":formPercepcionesDeducciones"
+                                                     oncomplete="PF('dialogEditarPercepciones').show()"
+                                                 actionListener="#{rnGcNomSolicitudTrabajadorTblController.prepararEdicionPercepcionesDeducciones}" 
+                                                   process="@this"/>
+                            </p:column>
                             <f:facet name="footer">
-                                <p:commandButton id="facturar" actionListener="#{rnGcNomSolicitudTrabajadorTblController.obtenerSeleccionados()}" ajax="false" update="RnGcNomNominasTblListForm:datalist, RnGcSolicitudTrabajadorTblListForm:datalist" value="Facturar"/>
+                                <p:commandButton id="facturar" action="#{rnGcNomSolicitudTrabajadorTblController.obtenerSeleccionados()}" ajax="true" update="RnGcNomNominasTblListForm:datalist, RnGcSolicitudTrabajadorTblListForm:datalist" value="Facturar"/>
                                 <p:commandButton value="Vista Previa" ajax="false" actionListener="#{rnGcNomSolicitudTrabajadorTblController.descargarVistaPrevia()}">
                                     <p:fileDownload value="#{rnGcNomSolicitudTrabajadorTblController.downLoadFile}" />
                                 </p:commandButton>
@@ -235,7 +270,102 @@
                     </p:panel>
                 </h:form>
             </p:dialog>
+           
 
+            <p:dialog id="dialogEditarPercepciones" widgetVar="dialogEditarPercepciones"
+          header="Editar Percepciones y Deducciones" modal="true" resizable="false"
+          appendTo="@(body)" closable="true" width="700">
+
+    <h:form id="formPercepcionesDeducciones">
+
+        <!-- Sección de Percepciones -->
+        <h3>Percepciones</h3>
+        <p:commandButton icon="ui-icon-plus" title="Agregar Percepción"
+                         actionListener="#{rnGcNomSolicitudTrabajadorTblController.agregarPercepcion}" update="@form" />
+
+        <p:dataTable value="#{rnGcNomSolicitudTrabajadorTblController.listaPercepciones}" var="p" editable="true"
+                     style="margin-top:10px">
+
+            <p:column headerText="Tipo Clave">
+                <p:selectOneMenu id="tipoClavePercepcion"  style="width: 150px" value="#{p.percepcionId}"  required="true" >
+                            <f:selectItem itemLabel="Selecciona Tipo de percepción"/>
+                            <f:selectItems value="#{rnGcNomPercepcionesTblController.items}" var="percepcion"
+                                           itemLabel="#{percepcion.cveTipoPercepcion} - #{percepcion.descripcion}"
+                                           itemValue="#{percepcion.id}"/>
+                        </p:selectOneMenu>
+            </p:column>
+
+            <p:column headerText="Gravado">
+    <p:inputNumber id="gravadoPercepcion" value="#{p.totalGravado}" required="true" decimalSeparator="." decimalPlaces="2" thousandSeparator=""/>
+
+</p:column>
+
+            <p:column headerText="Exento">
+                <p:inputNumber id="exentoPercepcion" value="#{p.totalGravado}" required="true" decimalSeparator="." decimalPlaces="2" thousandSeparator="" />
+        
+            </p:column>
+
+            <p:column style="width:40px">
+                <p:commandButton icon="ui-icon-close" title="Eliminar"
+                                 actionListener="#{rnGcNomSolicitudTrabajadorTblController.eliminarPercepcion(p)}"
+                                 update="@form" />
+            </p:column>
+
+        </p:dataTable>
+
+        <!-- Sección de Deducciones -->
+        <h3 style="margin-top:20px">Deducciones</h3>
+        <p:commandButton icon="ui-icon-plus" title="Agregar Deducción"
+                         actionListener="#{rnGcNomSolicitudTrabajadorTblController.agregarDeduccion}" update="@form" />
+
+        <p:dataTable value="#{rnGcNomSolicitudTrabajadorTblController.listaDeducciones}" var="d" editable="true"
+                     style="margin-top:10px">
+
+            <p:column headerText="Tipo Clave">
+                <p:selectOneMenu id="tipoDeduccion" style="width: 150px" value="#{d.deduccionId}"  required="true" >
+                            <f:selectItem itemLabel="Selecciona Tipo de deduccion"/>
+                            <f:selectItems value="#{rnGcNomDeduccionesTblController.items}" var="deduccion"
+                                           itemLabel="#{deduccion.cveTipoDeduccion} - #{deduccion.descripcion}"
+                                           itemValue="#{deduccion.id}"/>
+                        </p:selectOneMenu>
+            </p:column>
+
+
+            <p:column headerText="Gravado">
+                <p:inputNumber id="gravadoDeduccion" value="#{d.totalGravado}" required="true" decimalSeparator="." decimalPlaces="2" thousandSeparator=""/>
+            </p:column>
+
+            <p:column headerText="Exento">
+                <p:inputNumber id="exentoDeduccion" value="#{d.totalExento}" required="true" decimalSeparator="." decimalPlaces="2" thousandSeparator=""/>
+            </p:column>
+
+            <p:column style="width:40px">
+                <p:commandButton icon="ui-icon-close" title="Eliminar"
+                                 actionListener="#{rnGcNomSolicitudTrabajadorTblController.eliminarDeduccion(d)}"
+                                 update="@form" />
+            </p:column>
+
+        </p:dataTable>
+
+        <!-- Sección de Deducciones -->
+        <h3 style="margin-top:20px">Incapacidad</h3>
+      
+        <p:separator/>
+
+        <p:commandButton value="Guardar cambios" icon="ui-icon-check"
+                         actionListener="#{rnGcNomSolicitudTrabajadorTblController.guardarLineasEditadas}"
+                         update="@form"
+                         oncomplete="PF('dialogEditarPercepciones').hide()" />
+<p:commandButton value="Cancelar" icon="ui-icon-close"
+                 process="@this"
+                 actionListener="#{rnGcNomSolicitudTrabajadorTblController.cancelarCambiosPercepcionesDeducciones}"
+                 oncomplete="PF('dialogEditarPercepciones').hide();"
+                 style="margin-left:10px" />
+    </h:form>
+</p:dialog>
+
+            
+            
         </ui:define>
     </ui:composition>
 

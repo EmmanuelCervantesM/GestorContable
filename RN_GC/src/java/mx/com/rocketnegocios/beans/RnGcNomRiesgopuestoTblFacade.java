@@ -7,6 +7,7 @@ package mx.com.rocketnegocios.beans;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import mx.com.rocketnegocios.entities.RnGcNomRiesgopuestoTbl;
 
@@ -29,4 +30,16 @@ public class RnGcNomRiesgopuestoTblFacade extends AbstractFacade<RnGcNomRiesgopu
         super(RnGcNomRiesgopuestoTbl.class);
     }
     
+
+    public RnGcNomRiesgopuestoTbl obtenerByDescripcion(String descripcion){
+        RnGcNomRiesgopuestoTbl riesgoPuesto = null;
+        try{
+            riesgoPuesto = em.createNamedQuery("RnGcNomRiesgopuestoTbl.findByDescripcion", RnGcNomRiesgopuestoTbl.class)
+                    .setParameter("descripcion", descripcion)
+                    .getSingleResult();
+        }catch(NoResultException ex){
+            System.out.println("No se encontraron obtenerByDescripcion");
+        }
+        return riesgoPuesto;
+    }
 }

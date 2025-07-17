@@ -7,6 +7,7 @@ package mx.com.rocketnegocios.beans;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import mx.com.rocketnegocios.entities.RnGcNomTipootropagoTbl;
 
@@ -27,6 +28,18 @@ public class RnGcNomTipootropagoTblFacade extends AbstractFacade<RnGcNomTipootro
 
     public RnGcNomTipootropagoTblFacade() {
         super(RnGcNomTipootropagoTbl.class);
+    }
+    
+    public RnGcNomTipootropagoTbl obtenerXClave(String clave){
+        RnGcNomTipootropagoTbl tipoPago = null;
+        try{
+            tipoPago = em.createNamedQuery("RnGcNomTipootropagoTbl.findByCveTipoOtroPago", RnGcNomTipootropagoTbl.class)
+                    .setParameter("cveTipoOtroPago", clave)
+                    .getSingleResult();
+        }catch(NoResultException ex){
+            System.out.println(ex);
+        }
+        return tipoPago;
     }
     
 }

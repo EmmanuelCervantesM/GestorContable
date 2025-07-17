@@ -54,4 +54,28 @@ public class RnGcNomTipocontratoTblFacade extends AbstractFacade<RnGcNomTipocont
         return tipoContrato;
     }
     
+    public RnGcNomTipocontratoTbl obtenerBy(Integer tipoId){
+        RnGcNomTipocontratoTbl tipoContrato = null;
+        try{
+            tipoContrato = em.createNamedQuery("RnGcNomTipocontratoTbl.findById", RnGcNomTipocontratoTbl.class)
+                    .setParameter("id", tipoId)
+                    .getSingleResult();
+        }catch(NoResultException ex){
+            System.out.println("No se encontraron tipoContratoXId");
+        }
+        return tipoContrato;
+    }
+
+            
+    public RnGcNomTipocontratoTbl obtenerByDescripcion(String descripcion){
+        RnGcNomTipocontratoTbl tipoContrato = null;
+        try{
+            tipoContrato = em.createNamedQuery("RnGcNomTipocontratoTbl.findByDescripcion", RnGcNomTipocontratoTbl.class)
+                    .setParameter("descripcion", descripcion)
+                    .getSingleResult();
+        }catch(NoResultException ex){
+            System.out.println("No se encontraron obtenerByDescripcion");
+        }
+        return tipoContrato;
+    }
 }

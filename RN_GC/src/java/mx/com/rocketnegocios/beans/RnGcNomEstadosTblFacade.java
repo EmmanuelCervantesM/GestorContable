@@ -59,4 +59,16 @@ public class RnGcNomEstadosTblFacade extends AbstractFacade<RnGcNomEstadosTbl> {
         estadoLocal = em.merge(estado);
         return estadoLocal;
     }    
+    
+    public RnGcNomEstadosTbl obtenerByNombre(String nombre){
+        RnGcNomEstadosTbl estado = null;
+        try{
+            estado = em.createNamedQuery("RnGcNomEstadosTbl.findByNombre", RnGcNomEstadosTbl.class)
+                    .setParameter("nombre", nombre)
+                    .getSingleResult();
+        }catch(NoResultException ex){
+            System.out.println("No se encontro obtenerByNombre");
+        }
+        return estado;
+    }
 }

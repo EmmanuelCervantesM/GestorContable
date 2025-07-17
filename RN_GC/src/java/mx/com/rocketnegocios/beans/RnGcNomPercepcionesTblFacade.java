@@ -30,16 +30,19 @@ public class RnGcNomPercepcionesTblFacade extends AbstractFacade<RnGcNomPercepci
         super(RnGcNomPercepcionesTbl.class);
     }
     
-    public RnGcNomPercepcionesTbl obtenerXClave(String clave){
-        RnGcNomPercepcionesTbl percepcion = null;
-        try{
-            percepcion = em.createNamedQuery("RnGcNomPercepcionesTbl.findByCveTipoPercepcion", RnGcNomPercepcionesTbl.class)
-                    .setParameter("cveTipoPercepcion", clave)
-                    .getSingleResult();
-        }catch(NoResultException ex){
-            System.out.println(ex);
-        }
-        return percepcion;
+   public RnGcNomPercepcionesTbl obtenerXClave(String clave) {
+    try {
+        return em.createNamedQuery("RnGcNomPercepcionesTbl.findByCveTipoPercepcion", RnGcNomPercepcionesTbl.class)
+                 .setParameter("cveTipoPercepcion", clave)
+                 .getSingleResult();
+    } catch (NoResultException ex) {
+        System.out.println("No se encontró la percepción con clave: " + clave);
+        return null;
+    } catch (Exception ex) {
+        System.err.println("Error al obtener percepción por clave: " + clave);
+        ex.printStackTrace();
+        return null;
     }
+}
     
 }

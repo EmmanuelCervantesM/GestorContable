@@ -36,7 +36,7 @@ public class RnGcNomPeriodicidadpagoTblFacade extends AbstractFacade<RnGcNomPeri
         return periodicidad;
     }
     
-    public RnGcNomPeriodicidadpagoTbl obtenerXDescr(String descripcion){
+    public RnGcNomPeriodicidadpagoTbl obtenerXDescripcion(String descripcion){
         RnGcNomPeriodicidadpagoTbl periodicidadNomina = new RnGcNomPeriodicidadpagoTbl();
         try{
             periodicidadNomina = em.createNamedQuery("RnGcNomPeriodicidadpagoTbl.findByDescripcion", RnGcNomPeriodicidadpagoTbl.class)
