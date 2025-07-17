@@ -79,9 +79,11 @@ Los archivos `.jasper` generados por iReport se integran en el sistema y son uti
 
 Una vez realizados estos pasos, ya puedes ejecutar el proyecto desde NetBeans.
 
-1. Levantar el servidor de GlassFish
+1. Levantar el servidor de GlassFish.
+   
    ![Levantar el servidor de GlassFish Server](imagenes/levantar_servidor.png)
-2. Ejecutar el proyecto
+2. Ejecutar el proyecto.
+   
    ![Ejecutar el proyecto](imagenes/run_proyecto.png)
 
 ---
