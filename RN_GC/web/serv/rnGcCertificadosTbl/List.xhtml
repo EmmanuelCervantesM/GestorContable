@@ -15,32 +15,55 @@
 
         <ui:define name="body">
             <h:form id="RnGcCertificadosTblListForm">
-                <p:panel header="Datos del Usuario" rendered="#{rnGcUsuariosTblController.user != null}">
+  <p:panel header="Datos del Usuario" rendered="#{rnGcUsuariosTblController.user != null}">
                     <p:growl life="10000" showDetail="true"/>
                     <p:commandButton actionListener="#{rnGcUsuariosTblController.valores()}" value="Editar datos" update=" :RnGcCertificadosTblListForm"/>
-                    <p:panelGrid id="displays" columns="6" rendered="#{rnGcUsuariosTblController.usuarioCert != null}">
+                    <p:panelGrid id="displays"  columns="6" rendered="#{rnGcUsuariosTblController.usuarioCert != null}">
+                       
                         <p:outputLabel value="Regimen Fiscal" for="regimen"/>
-                        <p:selectOneMenu id="regimen" style="width: 500px" value="#{rnGcUsuariosTblController.usuarioCert.regimenId}"
+                        <p:selectOneMenu id="regimen" style="width: 400px" value="#{rnGcUsuariosTblController.usuarioCert.regimenId}"
                                          filter="true" filterMatchMode="contains" disabled="#{rnGcUsuariosTblController.editar == false}">
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{rnGcRegimenfiscalTblController.itemsAvailableSelectOne}"
                                            var="regimenIt"
                                            itemLabel="#{regimenIt.claveRegimenFiscal} - #{regimenIt.descripcion}"
                                            itemValue="#{regimenIt}"/>
+                       
                         </p:selectOneMenu>
                         <p:outputLabel value="Código Postal" for="codigo"/>
                         <p:inputText id="codigo" value="#{rnGcUsuariosTblController.usuarioCert.codigoPostal}" style="width: 150px" disabled="#{rnGcUsuariosTblController.editar == false}"/>
                         <p:outputLabel value="#{bundle.CreateRnGcUsuariosTblLabel_telefono}" for="telefono" />
                         <p:inputText id="telefono" value="#{rnGcUsuariosTblController.usuarioCert.telefono}" style="width: 150px" disabled="#{rnGcUsuariosTblController.editar == false}" />
                         <p:outputLabel value="E-mail: "  for="correo" />
-                        <p:inputText id="correo" value="#{rnGcUsuariosTblController.usuarioCert.email}" style="width: 515px" title="E-mail" required="false" requiredMessage="Se requiere el E-mail" disabled="#{rnGcUsuariosTblController.editar == false}"/>
+                        <p:inputText id="correo" value="#{rnGcUsuariosTblController.usuarioCert.email}" style="width: 400px" title="E-mail" required="false" requiredMessage="Se requiere el E-mail" disabled="#{rnGcUsuariosTblController.editar == false}"/>
                         <p:outputLabel value="Contraseña e-mail:" for="contraseniaCorreo" />
                         <p:inputText id="contraseniaCorreo" value="#{rnGcUsuariosTblController.usuarioCert.passwordEmail}" style="width: 150px" title="Contraseña e-mail" required="false" requiredMessage="Se requiere la contraseña para el e-mail" disabled="#{rnGcUsuariosTblController.editar == false}">
                             <f:validateLength minimum="8"/>
-                        </p:inputText>
+                        </p:inputText>          
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{rnGcUsuariosTblController.actualizarUsuario()}" value="Guardar edición de datos" update=":growl, :RnGcCertificadosTblListForm"/>
-                    <p:commandButton id="direcciones" icon="ui-icon-person" value="Direcciones" actionListener="#{rnGcDireccionesUsuariosTblController.prepararItemUsuario(rnGcUsuariosTblController.usuarioCert)}" update=":RnGcDireccionesUsuariosTblListForm:datalist" oncomplete="PF('RnGcDireccionesUsuariosTblListDialog').show()"/>
+                    <h3 style="#{rnGcUsuariosTblController.editar ? '' : 'display:none;'}">Datos del patrón</h3>
+                    <p:panelGrid id="displayPatron"  columns="6" rendered="#{rnGcUsuariosTblController.usuarioCert != null}">
+                         <p:outputLabel value="CURP" for="curpPatron"/>
+                         <p:inputText id="curpPatron" value="#{rnGcUsuariosTblController.usuarioCert.curp}" style="width: 150px" disabled="#{rnGcUsuariosTblController.editar == false}"/>
+                                 
+                          <p:outputLabel value="Clave de  riesgo" for="riesgoClavePatronal" />
+                        <p:selectOneMenu id="riesgoClavePatronal" style="width: 150px" value="#{rnGcUsuariosTblController.usuarioCert.riesgoClavePatronal}"  title="#{bundle.CreateRnGcTrabajadoresTblTitle_tipoPersona}" disabled="#{rnGcUsuariosTblController.editar == false}" >
+                            <f:selectItem itemLabel="Selecciona clave del riesgo"  itemValue="#{null}"/>
+                            <f:selectItems value="#{rnGcNomRiesgopuestoTblController.items}" var="riesgoPuesto"
+                                           itemLabel="#{riesgoPuesto.cveRiesgoPuesto} - #{riesgoPuesto.descripcion}"
+                                           itemValue="#{riesgoPuesto.cveRiesgoPuesto}"/>
+                        </p:selectOneMenu>
+                          
+                         <p:outputLabel value="Número de registro patronal" for="numeroRegistroPatronal"/>
+                        <p:inputText id="numeroRegistroPatronal"
+                         value="#{rnGcUsuariosTblController.usuarioCert.numeroRegistroPatronal}"
+                         style="width: 100px;"
+                         disabled="#{rnGcUsuariosTblController.editar == false}" />
+                    </p:panelGrid>
+                    <p:outputPanel>
+                        <p:commandButton actionListener="#{rnGcUsuariosTblController.actualizarUsuario()}" value="Guardar edición de datos" update=":growl, :RnGcCertificadosTblListForm"/>
+                        <p:commandButton id="direcciones" icon="ui-icon-person" value="Direcciones" actionListener="#{rnGcDireccionesUsuariosTblController.prepararItemUsuario(rnGcUsuariosTblController.usuarioCert)}" update=":RnGcDireccionesUsuariosTblListForm:datalist" oncomplete="PF('RnGcDireccionesUsuariosTblListDialog').show()"/>
+                    </p:outputPanel>
                 </p:panel>
                 <p:panel header="Lista de Certificados">
                     <p:dataTable id="datalist" value="#{rnGcCertificadosTblController.itemsXUsuario()}" var="item"

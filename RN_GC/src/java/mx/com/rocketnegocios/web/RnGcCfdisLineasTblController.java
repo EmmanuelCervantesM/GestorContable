@@ -121,7 +121,7 @@ import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.AffineTransform;
 import com.itextpdf.kernel.pdf.PdfPage;
-import javafx.scene.text.TextAlignment;
+//import javafx.scene.text.TextAlignment;
 import org.apache.poi.ss.usermodel.Color;
 
 
