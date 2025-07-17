@@ -1,6 +1,11 @@
 /RN_GC/dist/
 /RN_GC/build/
 /RN_GC/nbproject/private/
+
+# NetBeans metadata
+RN_GC/nbproject/private/
+RN_GC/nbproject/genfiles.properties
+RN_GC/nbproject/build-impl.xml
 # Compiled source #
 ###################
 *.com
