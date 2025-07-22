@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="previo1.2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f5442764-2fa5-409c-8f5c-f06acc18c3f8">
 	<property name="ireport.zoom" value="1.331000000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="452"/>
+	<property name="ireport.y" value="119"/>
 	<subDataset name="dataset1" uuid="a1db0985-00d3-4f68-becb-424cb2f38516">
 		<parameter name="descripcion" class="java.lang.String">
 			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -91,11 +91,15 @@
 	<parameter name="texto" class="java.lang.String"/>
 	<parameter name="motivo" class="java.lang.String"/>
 	<parameter name="uuidRel" class="java.lang.String"/>
+	<parameter name="alumno" class="java.lang.String"/>
+	<parameter name="nivelRFC" class="java.lang.String"/>
+	<parameter name="rvoe" class="java.lang.String"/>
+	<parameter name="arrenda" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="191" splitType="Stretch">
+		<band height="198" splitType="Stretch">
 			<rectangle radius="10">
 				<reportElement x="135" y="0" width="420" height="42" uuid="4e5e55dd-811a-46c3-afa4-8a0c4e37ea40"/>
 			</rectangle>
@@ -103,7 +107,7 @@
 				<reportElement x="135" y="46" width="420" height="42" uuid="9207fb41-5501-44f4-92d2-caa236f5609d"/>
 			</rectangle>
 			<rectangle radius="10">
-				<reportElement x="-1" y="92" width="555" height="68" backcolor="#FFFFBF" uuid="f386d7a4-7d45-4fcb-a8a6-061d6901f608"/>
+				<reportElement x="-1" y="92" width="555" height="77" backcolor="#FFFFBF" uuid="f386d7a4-7d45-4fcb-a8a6-061d6901f608"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="135" y="0" width="419" height="11" uuid="1bfbe6ec-5dcb-4fac-a8a9-b7230df16c4c"/>
@@ -162,112 +166,112 @@
 				<textFieldExpression><![CDATA[$P{RegimenFiscal}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="114" width="102" height="22" uuid="20ff6a09-a870-4ce4-b27a-10c24f0bba27"/>
+				<reportElement x="0" y="124" width="85" height="22" uuid="20ff6a09-a870-4ce4-b27a-10c24f0bba27"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Uso CFDI:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="102" y="114" width="190" height="22" uuid="d4e5b2c1-a8f7-4dbb-8efa-e1b8263be08d"/>
+				<reportElement x="85" y="124" width="190" height="22" uuid="d4e5b2c1-a8f7-4dbb-8efa-e1b8263be08d"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{Uso_CFDI}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="136" width="102" height="11" uuid="30e6c6cc-fc86-4916-8e33-202c342bb561"/>
+				<reportElement x="0" y="146" width="85" height="11" uuid="30e6c6cc-fc86-4916-8e33-202c342bb561"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[UUID:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="102" y="136" width="190" height="11" uuid="ce3b0d84-e4b4-4a55-ac01-660332445acf"/>
+				<reportElement x="85" y="146" width="190" height="11" uuid="ce3b0d84-e4b4-4a55-ac01-660332445acf"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{Uuid}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="292" y="136" width="108" height="11" uuid="8077db42-3de8-4f2f-a056-b5a45108402b"/>
-				<textElement verticalAlignment="Middle">
+				<reportElement x="277" y="136" width="75" height="21" uuid="8077db42-3de8-4f2f-a056-b5a45108402b"/>
+				<textElement verticalAlignment="Top">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha y Hora de Emisión:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="400" y="136" width="153" height="11" uuid="a5fac4c8-6a59-47a7-8c2d-ec5dadf3de89"/>
+				<reportElement x="352" y="136" width="201" height="21" uuid="a5fac4c8-6a59-47a7-8c2d-ec5dadf3de89"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{FechaHora_Emision}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="292" y="114" width="108" height="11" uuid="ec74d040-d34c-48dc-8d8c-0e36eb7c2d1d"/>
+				<reportElement x="277" y="114" width="75" height="11" uuid="ec74d040-d34c-48dc-8d8c-0e36eb7c2d1d"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Forma de Pago:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="400" y="114" width="154" height="11" uuid="2234986e-c49d-4cea-9e0d-6276e310563b"/>
+				<reportElement x="352" y="114" width="201" height="11" uuid="2234986e-c49d-4cea-9e0d-6276e310563b"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{FormaPago}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="292" y="125" width="108" height="11" uuid="09a720b8-8bb6-4355-af85-7e03e90d95a7"/>
+				<reportElement x="277" y="125" width="75" height="11" uuid="09a720b8-8bb6-4355-af85-7e03e90d95a7"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Método de Pago:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="400" y="125" width="153" height="11" uuid="7f19db08-b9ce-40f1-9f4d-e9868cb5fcc9"/>
+				<reportElement x="352" y="125" width="201" height="11" uuid="7f19db08-b9ce-40f1-9f4d-e9868cb5fcc9"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{MetodoPago}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="103" width="111" height="11" uuid="b1e5e0c4-ee7c-4456-96a9-28c00a0a2f56"/>
+				<reportElement x="0" y="103" width="85" height="22" uuid="b1e5e0c4-ee7c-4456-96a9-28c00a0a2f56"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tipo de Comprobante:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="101" y="103" width="190" height="11" uuid="81067042-4b59-426f-a995-996ef5e659a6"/>
+				<reportElement x="85" y="103" width="190" height="21" uuid="81067042-4b59-426f-a995-996ef5e659a6"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{EfectoComprobante}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="291" y="103" width="26" height="11" uuid="2bed29e4-a335-4936-809b-d90be9ee84a3"/>
+				<reportElement x="277" y="103" width="32" height="11" uuid="2bed29e4-a335-4936-809b-d90be9ee84a3"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Serie:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="317" y="103" width="83" height="11" uuid="ab5337b0-f63c-406b-9998-834cb9a89707"/>
+				<reportElement x="309" y="103" width="43" height="11" uuid="ab5337b0-f63c-406b-9998-834cb9a89707"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{NoSerie_CSD}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="400" y="103" width="31" height="11" uuid="f4274d1f-873b-4556-bfc8-866cd03ef8d2"/>
+				<reportElement x="353" y="103" width="31" height="11" uuid="f4274d1f-873b-4556-bfc8-866cd03ef8d2"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Folio:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="431" y="103" width="123" height="11" uuid="abca135f-bb60-459d-99c1-b2f5127aeb25"/>
+				<reportElement x="384" y="103" width="169" height="11" uuid="abca135f-bb60-459d-99c1-b2f5127aeb25"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
@@ -285,7 +289,7 @@
 				<imageExpression><![CDATA[$P{Logo}]]></imageExpression>
 			</image>
 			<frame>
-				<reportElement mode="Opaque" x="0" y="175" width="554" height="16" backcolor="#C1BFAD" uuid="a67e1b69-9b20-4f5e-bd20-7032b9531d96"/>
+				<reportElement mode="Opaque" x="0" y="181" width="554" height="16" backcolor="#C1BFAD" uuid="a67e1b69-9b20-4f5e-bd20-7032b9531d96"/>
 				<staticText>
 					<reportElement x="0" y="0" width="68" height="16" uuid="2539ea42-7ad8-4848-be15-3dd9013d1479"/>
 					<box>
@@ -430,7 +434,7 @@ unidad]]></text>
 				</staticText>
 			</frame>
 			<staticText>
-				<reportElement x="0" y="163" width="86" height="12" uuid="955e94d9-14c2-4565-99fe-67de3c7cbd29"/>
+				<reportElement x="0" y="169" width="86" height="12" uuid="955e94d9-14c2-4565-99fe-67de3c7cbd29"/>
 				<textElement verticalAlignment="Top">
 					<font size="9" isBold="true"/>
 				</textElement>
@@ -451,28 +455,28 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{CodigoPostalReceptor}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="147" width="102" height="11" uuid="aa96138a-9c7a-4d09-96a8-559e33adc6df"/>
+				<reportElement x="0" y="156" width="85" height="11" uuid="aa96138a-9c7a-4d09-96a8-559e33adc6df"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CFDI Relacionado: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="293" y="147" width="108" height="11" uuid="9636304f-682a-4308-b003-abef7a280c6e"/>
+				<reportElement x="277" y="157" width="75" height="11" uuid="9636304f-682a-4308-b003-abef7a280c6e"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Causa relación:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="401" y="147" width="153" height="11" uuid="9efea7d0-1390-42e0-98dd-1b6b03a61b86"/>
+				<reportElement x="352" y="157" width="201" height="11" uuid="9efea7d0-1390-42e0-98dd-1b6b03a61b86"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{motivo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="103" y="147" width="188" height="11" uuid="68698cd3-0bf7-40bd-8c39-7a4ea6afcc4a"/>
+				<reportElement x="85" y="156" width="190" height="11" uuid="68698cd3-0bf7-40bd-8c39-7a4ea6afcc4a"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -559,7 +563,7 @@ unidad]]></text>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{claveUnidad}]]></textFieldExpression>
 						</textField>
-						<textField pattern="$ #,##0.00">
+						<textField pattern="$ #,##0.00" isBlankWhenNull="true">
 							<reportElement x="254" y="0" width="55" height="8" uuid="4b8edb2c-ae4c-4452-9b7b-ab6258fef854"/>
 							<box>
 								<pen lineWidth="0.5"/>
@@ -573,7 +577,7 @@ unidad]]></text>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{valorUnit}]]></textFieldExpression>
 						</textField>
-						<textField pattern="$ #,##0.00">
+						<textField pattern="$ #,##0.00" isBlankWhenNull="true">
 							<reportElement x="309" y="0" width="55" height="8" uuid="d0246678-5a01-4697-ac51-80cd5b1ac94b"/>
 							<box>
 								<pen lineWidth="0.5"/>
@@ -585,7 +589,7 @@ unidad]]></text>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="6"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$ $F{importe}]]></textFieldExpression>
 						</textField>
 						<staticText>
 							<reportElement x="310" y="8" width="40" height="8" uuid="80c37e3b-4641-4a4d-bb4e-6d8424b64462"/>
@@ -882,25 +886,25 @@ unidad]]></text>
 		</band>
 	</detail>
 	<summary>
-		<band height="226" splitType="Stretch">
+		<band height="246" splitType="Stretch">
 			<image scaleImage="FillFrame" hAlign="Center" vAlign="Top">
-				<reportElement stretchType="RelativeToBandHeight" x="-16" y="60" width="106" height="104" uuid="ad07942a-00e5-40c4-8c24-617d26386fc9"/>
+				<reportElement stretchType="RelativeToBandHeight" x="-16" y="85" width="106" height="104" uuid="ad07942a-00e5-40c4-8c24-617d26386fc9"/>
 				<imageExpression><![CDATA[$P{QR}]]></imageExpression>
 			</image>
 			<rectangle radius="5">
-				<reportElement x="312" y="75" width="120" height="10" backcolor="#C1BFAD" uuid="cf99ce1b-c9a2-4184-8df6-d6d870956492"/>
+				<reportElement x="312" y="96" width="120" height="10" backcolor="#C1BFAD" uuid="cf99ce1b-c9a2-4184-8df6-d6d870956492"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle radius="5">
-				<reportElement x="312" y="98" width="120" height="10" backcolor="#C1BFAD" uuid="73d1ca29-1af2-4742-aba1-185a07f191f1"/>
+				<reportElement x="312" y="119" width="120" height="10" backcolor="#C1BFAD" uuid="73d1ca29-1af2-4742-aba1-185a07f191f1"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</rectangle>
 			<textField isBlankWhenNull="true">
-				<reportElement x="312" y="110" width="120" height="57" uuid="a7ecf9df-fa49-4276-865c-b14a9532a57a"/>
+				<reportElement x="312" y="131" width="120" height="57" uuid="a7ecf9df-fa49-4276-865c-b14a9532a57a"/>
 				<textElement textAlignment="Justified">
 					<font size="5"/>
 				</textElement>
@@ -914,94 +918,94 @@ unidad]]></text>
 				<text><![CDATA[Subtotal:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="434" y="110" width="120" height="57" uuid="312de8d3-415d-4ad8-90d7-6f9e403a3264"/>
+				<reportElement x="434" y="131" width="120" height="57" uuid="312de8d3-415d-4ad8-90d7-6f9e403a3264"/>
 				<textElement verticalAlignment="Top">
 					<font size="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{sello_SAT}]]></textFieldExpression>
 			</textField>
 			<rectangle radius="5">
-				<reportElement x="434" y="75" width="120" height="10" backcolor="#C1BFAD" uuid="a2d1de4d-263f-4262-b154-ae5dd045c6ab"/>
+				<reportElement x="434" y="96" width="120" height="10" backcolor="#C1BFAD" uuid="a2d1de4d-263f-4262-b154-ae5dd045c6ab"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="312" y="75" width="120" height="10" uuid="f097c6b4-3f16-4ae4-891f-6db5fa027b7d"/>
+				<reportElement x="312" y="96" width="120" height="10" uuid="f097c6b4-3f16-4ae4-891f-6db5fa027b7d"/>
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Número de certificado SAT:]]></text>
 			</staticText>
 			<rectangle radius="5">
-				<reportElement x="434" y="98" width="120" height="10" backcolor="#C1BFAD" uuid="827a1d7f-93dc-45ff-9e3b-fb1981a6680d"/>
+				<reportElement x="434" y="119" width="120" height="10" backcolor="#C1BFAD" uuid="827a1d7f-93dc-45ff-9e3b-fb1981a6680d"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="434" y="75" width="120" height="10" uuid="333b6f95-b097-4c8d-a2f8-74721c4d624e"/>
+				<reportElement x="434" y="96" width="120" height="10" uuid="333b6f95-b097-4c8d-a2f8-74721c4d624e"/>
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha y hora de certificación:]]></text>
 			</staticText>
 			<rectangle radius="5">
-				<reportElement x="85" y="97" width="224" height="10" backcolor="#C1BFAD" uuid="9fc5b678-c2e8-4efd-bb1a-a23a276029d4"/>
+				<reportElement x="85" y="118" width="224" height="10" backcolor="#C1BFAD" uuid="9fc5b678-c2e8-4efd-bb1a-a23a276029d4"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="85" y="97" width="225" height="10" uuid="03b523e6-d4bc-4b9c-bdfd-5ffba194c2ce"/>
+				<reportElement x="85" y="118" width="225" height="10" uuid="03b523e6-d4bc-4b9c-bdfd-5ffba194c2ce"/>
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cadena original del complemento de certificación digital del SAT:]]></text>
 			</staticText>
 			<textField pattern="dd-MM-yyyy&apos;T&apos;HH:mm:ss" isBlankWhenNull="true">
-				<reportElement x="434" y="86" width="120" height="10" uuid="f55f67f5-ed51-4250-a640-88167389368d"/>
+				<reportElement x="434" y="107" width="120" height="10" uuid="f55f67f5-ed51-4250-a640-88167389368d"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fechaCertificacion}]]></textFieldExpression>
 			</textField>
 			<rectangle radius="5">
-				<reportElement mode="Opaque" x="85" y="75" width="224" height="10" backcolor="#C1BFAD" uuid="106e12af-3c43-41c5-9cab-049a749b37ed"/>
+				<reportElement mode="Opaque" x="85" y="96" width="224" height="10" backcolor="#C1BFAD" uuid="106e12af-3c43-41c5-9cab-049a749b37ed"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="312" y="98" width="120" height="10" backcolor="#C1BFAD" uuid="c468699a-04c5-4d25-8821-84eba66d40bb"/>
+				<reportElement x="312" y="119" width="120" height="10" backcolor="#C1BFAD" uuid="c468699a-04c5-4d25-8821-84eba66d40bb"/>
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Sello digital del CFDI:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="312" y="86" width="120" height="10" uuid="ac4fc8fb-9931-4892-b918-95f0787438f3"/>
+				<reportElement x="312" y="107" width="120" height="10" uuid="ac4fc8fb-9931-4892-b918-95f0787438f3"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{noCertificadoSAT}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="85" y="110" width="225" height="57" uuid="49738e9d-47ff-490e-9592-8c2a59e2f0a8"/>
+				<reportElement x="85" y="131" width="225" height="57" uuid="49738e9d-47ff-490e-9592-8c2a59e2f0a8"/>
 				<textElement verticalAlignment="Top">
 					<font size="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{cadenaOriginal}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="85" y="75" width="225" height="10" uuid="b40f4093-0623-4e10-965c-d216da2ecee3"/>
+				<reportElement x="85" y="96" width="225" height="10" uuid="b40f4093-0623-4e10-965c-d216da2ecee3"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[RFC proveedor de certificación:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="434" y="98" width="120" height="10" uuid="8897e5f7-0597-4b95-8082-82874b59de55"/>
+				<reportElement x="434" y="119" width="120" height="10" uuid="8897e5f7-0597-4b95-8082-82874b59de55"/>
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
@@ -1042,46 +1046,46 @@ unidad]]></text>
 				</graphicElement>
 			</line>
 			<rectangle>
-				<reportElement x="-20" y="216" width="595" height="9" forecolor="#CCCCCC" backcolor="#C1BFAD" uuid="b162f522-9ed2-4925-a2fa-1cc366b7584c"/>
+				<reportElement x="-20" y="236" width="595" height="9" forecolor="#CCCCCC" backcolor="#C1BFAD" uuid="b162f522-9ed2-4925-a2fa-1cc366b7584c"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="-20" y="215" width="554" height="9" uuid="26c1de28-c661-49ac-a24a-c92d792ad505"/>
+				<reportElement x="-20" y="236" width="554" height="9" uuid="26c1de28-c661-49ac-a24a-c92d792ad505"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Este documento es una Representación impresa de un CFDI]]></text>
 			</staticText>
 			<line>
-				<reportElement x="3" y="200" width="100" height="1" uuid="55f83694-286d-4d98-9c13-18167b664f1f">
+				<reportElement x="3" y="221" width="100" height="1" uuid="55f83694-286d-4d98-9c13-18167b664f1f">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="114" y="200" width="100" height="1" uuid="f85190e7-e20a-4891-8257-acf17f9d0100">
+				<reportElement x="114" y="221" width="100" height="1" uuid="f85190e7-e20a-4891-8257-acf17f9d0100">
 					<printWhenExpression><![CDATA[$P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="225" y="200" width="100" height="1" uuid="99c98306-6f08-47d4-a52d-3e03e6e93ff4">
+				<reportElement x="225" y="221" width="100" height="1" uuid="99c98306-6f08-47d4-a52d-3e03e6e93ff4">
 					<printWhenExpression><![CDATA[$P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="337" y="200" width="100" height="1" uuid="4f8f04ce-635e-4987-8962-a59c7166ecc4">
+				<reportElement x="337" y="221" width="100" height="1" uuid="4f8f04ce-635e-4987-8962-a59c7166ecc4">
 					<printWhenExpression><![CDATA[$P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement mode="Opaque" x="449" y="200" width="100" height="1" uuid="c0bdd423-90ed-493b-a2a0-865b8e09cf1a">
+				<reportElement mode="Opaque" x="449" y="221" width="100" height="1" uuid="c0bdd423-90ed-493b-a2a0-865b8e09cf1a">
 					<printWhenExpression><![CDATA[$P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="3" y="189" width="100" height="10" uuid="25135057-ab03-4793-ba13-89bf7d714229">
+				<reportElement x="3" y="210" width="100" height="10" uuid="25135057-ab03-4793-ba13-89bf7d714229">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
@@ -1091,7 +1095,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="3" y="202" width="100" height="12" uuid="a1ddd912-967d-4cc9-8195-6ecaa2337475">
+				<reportElement x="3" y="223" width="100" height="12" uuid="a1ddd912-967d-4cc9-8195-6ecaa2337475">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
@@ -1101,7 +1105,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="114" y="189" width="100" height="10" uuid="95f37500-658d-4ac4-b19a-fea085d8e8f9">
+				<reportElement x="114" y="210" width="100" height="10" uuid="95f37500-658d-4ac4-b19a-fea085d8e8f9">
 					<printWhenExpression><![CDATA[$P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
@@ -1111,7 +1115,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre2}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="225" y="189" width="100" height="10" uuid="79b26a40-26e0-4b35-80cd-62298946b838">
+				<reportElement x="225" y="210" width="100" height="10" uuid="79b26a40-26e0-4b35-80cd-62298946b838">
 					<printWhenExpression><![CDATA[$P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre5} != null && $P{nombre5}.trim().trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
@@ -1121,7 +1125,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre3}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="337" y="189" width="100" height="10" uuid="959d156d-8ce3-4082-9f2f-95909bf6d635">
+				<reportElement x="337" y="210" width="100" height="10" uuid="959d156d-8ce3-4082-9f2f-95909bf6d635">
 					<printWhenExpression><![CDATA[$P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
@@ -1131,7 +1135,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre4}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="449" y="189" width="100" height="10" uuid="d49fb8d0-987c-4cd2-84a0-1bd40da0b323">
+				<reportElement x="449" y="210" width="100" height="10" uuid="d49fb8d0-987c-4cd2-84a0-1bd40da0b323">
 					<printWhenExpression><![CDATA[$P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
@@ -1140,7 +1144,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre5}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="449" y="202" width="100" height="12" uuid="8f93648f-6598-4652-885b-8c9e0baabe62">
+				<reportElement x="449" y="223" width="100" height="12" uuid="8f93648f-6598-4652-885b-8c9e0baabe62">
 					<printWhenExpression><![CDATA[$P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -1149,7 +1153,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo5}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="337" y="202" width="100" height="12" uuid="dfb4530f-6597-4be9-98c6-c4ff3697f46e">
+				<reportElement x="337" y="223" width="100" height="12" uuid="dfb4530f-6597-4be9-98c6-c4ff3697f46e">
 					<printWhenExpression><![CDATA[$P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
@@ -1159,7 +1163,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo4}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="225" y="202" width="100" height="12" uuid="ecb0b532-cc44-4359-a6fc-50df3dc294b2">
+				<reportElement x="225" y="223" width="100" height="12" uuid="ecb0b532-cc44-4359-a6fc-50df3dc294b2">
 					<printWhenExpression><![CDATA[$P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
@@ -1169,7 +1173,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo3}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="114" y="202" width="100" height="12" uuid="848c572e-4b11-4776-bc96-3fe672eab65d">
+				<reportElement x="114" y="223" width="100" height="12" uuid="848c572e-4b11-4776-bc96-3fe672eab65d">
 					<printWhenExpression><![CDATA[$P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre5} != null && $P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")]]></printWhenExpression>
 				</reportElement>
@@ -1214,28 +1218,28 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[( $P{totalDescuento} == null ? 0.00 : $P{totalDescuento} )]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="23" width="100" height="12" uuid="0d7db97e-a76f-4a01-a06d-1945024dc318"/>
+				<reportElement x="0" y="54" width="100" height="12" uuid="0d7db97e-a76f-4a01-a06d-1945024dc318"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[IMPORTE CON LETRA:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="35" width="347" height="27" uuid="9e38cf97-9680-4a42-bbc9-1fe2096220dd"/>
+				<reportElement x="0" y="66" width="347" height="22" uuid="9e38cf97-9680-4a42-bbc9-1fe2096220dd"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{importeLetra}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="90" y="86" width="219" height="10" uuid="21287785-a444-4c97-8433-d17b6b8837a8"/>
+				<reportElement x="90" y="107" width="219" height="10" uuid="21287785-a444-4c97-8433-d17b6b8837a8"/>
 				<textElement textAlignment="Center">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{rfcProvCertif}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="0" y="169" width="555" height="20" isPrintWhenDetailOverflows="true" uuid="16e634bd-ae67-4524-889f-5dbb893b13c8">
+				<reportElement x="0" y="190" width="555" height="20" isPrintWhenDetailOverflows="true" uuid="16e634bd-ae67-4524-889f-5dbb893b13c8">
 					<printWhenExpression><![CDATA[$P{texto} != '-' && $P{texto} != ' ']]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -1244,7 +1248,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{texto}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="59" y="189" width="100" height="10" uuid="8dd37bf7-f132-428e-b8db-9250e2eba140">
+				<reportElement x="59" y="210" width="100" height="10" uuid="8dd37bf7-f132-428e-b8db-9250e2eba140">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
@@ -1255,7 +1259,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="59" y="202" width="100" height="12" uuid="5815f00a-7c5f-41d9-9c97-54baad2ad98b">
+				<reportElement x="59" y="223" width="100" height="12" uuid="5815f00a-7c5f-41d9-9c97-54baad2ad98b">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
@@ -1266,7 +1270,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="393" y="189" width="100" height="10" uuid="d672071f-2366-4cde-982f-f4867a53ea98">
+				<reportElement x="393" y="210" width="100" height="10" uuid="d672071f-2366-4cde-982f-f4867a53ea98">
 					<printWhenExpression><![CDATA[$P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
 				</reportElement>
@@ -1276,7 +1280,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre4}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="170" y="202" width="100" height="12" uuid="b21e5dde-77f8-43c2-99ed-ae05f4a7b471">
+				<reportElement x="170" y="223" width="100" height="12" uuid="b21e5dde-77f8-43c2-99ed-ae05f4a7b471">
 					<printWhenExpression><![CDATA[$P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
@@ -1287,13 +1291,13 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo2}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="393" y="200" width="100" height="1" uuid="d687bed5-b100-4797-a550-b7ecf5292278">
+				<reportElement x="393" y="221" width="100" height="1" uuid="d687bed5-b100-4797-a550-b7ecf5292278">
 					<printWhenExpression><![CDATA[$P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
 				</reportElement>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="281" y="202" width="100" height="12" uuid="4681625a-1076-4c6a-92bb-c545226e3eea">
+				<reportElement x="281" y="223" width="100" height="12" uuid="4681625a-1076-4c6a-92bb-c545226e3eea">
 					<printWhenExpression><![CDATA[$P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
@@ -1304,7 +1308,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo3}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="281" y="189" width="100" height="10" uuid="03f84e6d-c28f-4404-b480-8b0fe7ba6e51">
+				<reportElement x="281" y="210" width="100" height="10" uuid="03f84e6d-c28f-4404-b480-8b0fe7ba6e51">
 					<printWhenExpression><![CDATA[$P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
@@ -1315,7 +1319,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre3}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="393" y="202" width="100" height="12" uuid="0c8dc7d7-77ff-4b32-af2a-5d1ded730b5a">
+				<reportElement x="393" y="223" width="100" height="12" uuid="0c8dc7d7-77ff-4b32-af2a-5d1ded730b5a">
 					<printWhenExpression><![CDATA[$P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
 				</reportElement>
@@ -1325,7 +1329,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo4}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="170" y="189" width="100" height="10" uuid="bb2e43d8-1db8-4f61-886f-0b06e74169a3">
+				<reportElement x="170" y="210" width="100" height="10" uuid="bb2e43d8-1db8-4f61-886f-0b06e74169a3">
 					<printWhenExpression><![CDATA[$P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
@@ -1336,28 +1340,28 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre2}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="170" y="200" width="100" height="1" uuid="ef5da957-07e7-4476-91f3-63882f027dd8">
+				<reportElement x="170" y="221" width="100" height="1" uuid="ef5da957-07e7-4476-91f3-63882f027dd8">
 					<printWhenExpression><![CDATA[$P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="59" y="200" width="100" height="1" uuid="e051949b-a8e8-4d81-b0ed-eaadd5090de8">
+				<reportElement x="59" y="221" width="100" height="1" uuid="e051949b-a8e8-4d81-b0ed-eaadd5090de8">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="281" y="200" width="100" height="1" uuid="4684f162-49a0-4703-b54c-d5865ce9629a">
+				<reportElement x="281" y="221" width="100" height="1" uuid="4684f162-49a0-4703-b54c-d5865ce9629a">
 					<printWhenExpression><![CDATA[$P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre4} != null && $P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
 				</reportElement>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="117" y="202" width="100" height="12" uuid="e5041c8b-f2fe-47c7-bc0b-ddbafc547472">
+				<reportElement x="117" y="223" width="100" height="12" uuid="e5041c8b-f2fe-47c7-bc0b-ddbafc547472">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
@@ -1370,7 +1374,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="117" y="189" width="100" height="10" uuid="6b8029e0-513a-4165-81d1-9baa6037a093">
+				<reportElement x="117" y="210" width="100" height="10" uuid="6b8029e0-513a-4165-81d1-9baa6037a093">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
@@ -1383,7 +1387,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="339" y="189" width="100" height="10" uuid="922e3b68-414c-4bd2-99da-ff15c536eec3">
+				<reportElement x="339" y="210" width="100" height="10" uuid="922e3b68-414c-4bd2-99da-ff15c536eec3">
 					<printWhenExpression><![CDATA[$P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre4} == null || !$P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
@@ -1394,7 +1398,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre3}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="228" y="202" width="100" height="12" uuid="6a30138b-7e24-43a8-a1ee-a8e3f550c7a5">
+				<reportElement x="228" y="223" width="100" height="12" uuid="6a30138b-7e24-43a8-a1ee-a8e3f550c7a5">
 					<printWhenExpression><![CDATA[$P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre4} == null || !$P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
@@ -1406,7 +1410,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo2}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="228" y="200" width="100" height="1" uuid="c674b23c-403a-441f-aeca-8eb5e0f115b6">
+				<reportElement x="228" y="221" width="100" height="1" uuid="c674b23c-403a-441f-aeca-8eb5e0f115b6">
 					<printWhenExpression><![CDATA[$P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre4} == null || !$P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
@@ -1414,14 +1418,14 @@ unidad]]></text>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="339" y="200" width="100" height="1" uuid="a1fe9283-988c-42ac-8bc2-8a22318854ef">
+				<reportElement x="339" y="221" width="100" height="1" uuid="a1fe9283-988c-42ac-8bc2-8a22318854ef">
 					<printWhenExpression><![CDATA[$P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre4} == null || !$P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
 				</reportElement>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="339" y="202" width="100" height="12" uuid="05a4736c-1a2a-46e4-8921-6497b4f3b8df">
+				<reportElement x="339" y="223" width="100" height="12" uuid="05a4736c-1a2a-46e4-8921-6497b4f3b8df">
 					<printWhenExpression><![CDATA[$P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre4} == null || !$P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
 && ($P{nombre5} == null || !$P{nombre5}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))]]></printWhenExpression>
@@ -1432,7 +1436,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo3}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="117" y="200" width="100" height="1" uuid="9500fabd-4c66-40d1-9d8e-f42791aada4f">
+				<reportElement x="117" y="221" width="100" height="1" uuid="9500fabd-4c66-40d1-9d8e-f42791aada4f">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
@@ -1441,7 +1445,7 @@ unidad]]></text>
 				</reportElement>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="228" y="189" width="100" height="10" uuid="cb7565b2-2b4d-4371-86cb-9a65fd440ecc">
+				<reportElement x="228" y="210" width="100" height="10" uuid="cb7565b2-2b4d-4371-86cb-9a65fd440ecc">
 					<printWhenExpression><![CDATA[$P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre3} != null && $P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre4} == null || !$P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
@@ -1453,7 +1457,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre2}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="171" y="200" width="100" height="1" uuid="e0230708-a241-4b21-beee-4fb6bd267a82">
+				<reportElement x="171" y="221" width="100" height="1" uuid="e0230708-a241-4b21-beee-4fb6bd267a82">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre3} == null || !$P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
@@ -1462,7 +1466,7 @@ unidad]]></text>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="282" y="200" width="100" height="1" uuid="d11e8d41-7613-4660-9712-439e9a704ae2">
+				<reportElement x="282" y="221" width="100" height="1" uuid="d11e8d41-7613-4660-9712-439e9a704ae2">
 					<printWhenExpression><![CDATA[$P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre3} == null || !$P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
 && ($P{nombre4} == null || !$P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
@@ -1470,7 +1474,7 @@ unidad]]></text>
 				</reportElement>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="171" y="202" width="100" height="12" uuid="1c4cd091-84ee-4ee4-848d-6776e3855c14">
+				<reportElement x="171" y="223" width="100" height="12" uuid="1c4cd091-84ee-4ee4-848d-6776e3855c14">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre3} == null || !$P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
@@ -1483,7 +1487,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="171" y="189" width="100" height="10" uuid="d97e150a-69f6-4787-8ee7-a088947a6f6f">
+				<reportElement x="171" y="210" width="100" height="10" uuid="d97e150a-69f6-4787-8ee7-a088947a6f6f">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && $P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre3} == null || !$P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
@@ -1496,7 +1500,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="282" y="202" width="100" height="12" uuid="105922b5-14d3-497e-aead-d6f1e927e831">
+				<reportElement x="282" y="223" width="100" height="12" uuid="105922b5-14d3-497e-aead-d6f1e927e831">
 					<printWhenExpression><![CDATA[$P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre3} == null || !$P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
 && ($P{nombre4} == null || !$P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
@@ -1508,7 +1512,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo2}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="282" y="189" width="100" height="10" uuid="abf70e81-e064-4990-b6cb-2b42ae0d6d90">
+				<reportElement x="282" y="210" width="100" height="10" uuid="abf70e81-e064-4990-b6cb-2b42ae0d6d90">
 					<printWhenExpression><![CDATA[$P{nombre2} != null && $P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre3} == null || !$P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
 && ($P{nombre4} == null || !$P{nombre4}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
@@ -1520,7 +1524,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{nombre2}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="228" y="200" width="100" height="1" uuid="6402c375-02b8-41e3-8eaf-3d11d9b8f132">
+				<reportElement x="228" y="221" width="100" height="1" uuid="6402c375-02b8-41e3-8eaf-3d11d9b8f132">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre2} == null || !$P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
 && ($P{nombre3} == null || !$P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
@@ -1529,7 +1533,7 @@ unidad]]></text>
 				</reportElement>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="228" y="202" width="100" height="12" uuid="8d27c13c-564b-4c9e-894c-a391918b4544">
+				<reportElement x="228" y="223" width="100" height="12" uuid="8d27c13c-564b-4c9e-894c-a391918b4544">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre2} == null || !$P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
 && ($P{nombre3} == null || !$P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
@@ -1542,7 +1546,7 @@ unidad]]></text>
 				<textFieldExpression><![CDATA[$P{cargo1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="228" y="189" width="100" height="10" uuid="1980ab24-083a-4417-a597-f76b3bc3d67f">
+				<reportElement x="228" y="210" width="100" height="10" uuid="1980ab24-083a-4417-a597-f76b3bc3d67f">
 					<printWhenExpression><![CDATA[$P{nombre1} != null && $P{nombre1}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+")
 && ($P{nombre2} == null || !$P{nombre2}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
 && ($P{nombre3} == null || !$P{nombre3}.trim().matches("[\\p{L}&A-Za-z,.'\"\\s-]+"))
@@ -1553,6 +1557,78 @@ unidad]]></text>
 					<font size="4"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombre1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="85" y="19" width="262" height="12" uuid="5a8341a9-a365-4023-b7aa-fbc543298f78">
+					<printWhenExpression><![CDATA[$P{alumno} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{alumno}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="8" width="154" height="12" uuid="2971b40c-3776-4484-a116-d14ea7d93651">
+					<printWhenExpression><![CDATA[$P{alumno} != null || $P{arrenda} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DEL COMPLEMENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="19" width="85" height="12" uuid="7b56ff05-1ffd-4a00-b532-e5fcdcdb663d">
+					<printWhenExpression><![CDATA[$P{alumno} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre y CURP:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="30" width="85" height="12" uuid="2cc03393-91f2-473e-8740-45af709fc44c">
+					<printWhenExpression><![CDATA[$P{alumno} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nivel y RFC pago:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="41" width="85" height="12" uuid="83aecff8-908e-40f1-a535-741d733be288">
+					<printWhenExpression><![CDATA[$P{alumno} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Autorización RVOE:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="85" y="30" width="262" height="11" uuid="f0513a86-3191-4d25-834a-b16fd35e1c1a">
+					<printWhenExpression><![CDATA[$P{alumno} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nivelRFC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="85" y="41" width="262" height="12" uuid="9a66d635-a85a-4eeb-a017-4a3e64573e0c">
+					<printWhenExpression><![CDATA[$P{alumno} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{rvoe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="23" width="347" height="13" uuid="b4c02a3c-3ca0-4299-bf41-06d954177905">
+					<printWhenExpression><![CDATA[$P{arrenda} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{arrenda}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

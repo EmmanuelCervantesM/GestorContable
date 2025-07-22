@@ -41,7 +41,7 @@
                             <p:fileDownload value="#{facturarContoller.downLoadFile3}"/>
                         </p:commandButton>                        
                         <p:commandButton id="addButton" value="Carta Porte" oncomplete="PF('addComplementoPorteDialog').show()" actionListener="#{facturarContoller.configCartaPorte}" update=":addComplementPorteForm"/>
-                        <p:commandButton id="complementosButton" value="Abrir Modal" oncomplete="PF('modalDialog').show()" update=":addComplementoForm3"/>
+                        <p:commandButton id="complementosButton" value="Complementos" oncomplete="PF('modalDialog').show()" update=":addComplementoForm3"/>
                     </h:panelGrid>
                     <p:accordionPanel  multiple="true" activeIndex="0,1,2">
                         <p:tab title="Datos del Receptor">
@@ -976,10 +976,10 @@
                                     <f:selectItem itemLabel="Producto" itemValue="Producto"/>
                                     <f:selectItem itemLabel="Servicio" itemValue="Servicio"/>
                                 </p:selectOneMenu>
-                                <p:outputLabel value="No. de Pedimento" for="noPedimento"/>
+                                <!--<p:outputLabel value="No. de Pedimento" for="noPedimento"/>
                                 <p:inputText id="noPedimento" value="#{facturarContoller.lineas.noPedimento}"  style="width: 160px"/>
                                 <p:outputLabel value="No. de Cuenta Predial" for="cuentaPredial"/>
-                                <p:inputText id="cuentaPredial" value="#{facturarContoller.lineas.noCuentaPredial}"  style="width: 160px"/>
+                                <p:inputText id="cuentaPredial" value="#{facturarContoller.lineas.noCuentaPredial}"  style="width: 160px"/>-->
                             </p:panelGrid>
 
                             <p:panel header="Impuestos Adicionales" toggleable="true" collapsed="true">
@@ -2446,14 +2446,25 @@
               <h:form id="addComplementoForm3">
                   <p:selectOneRadio value="#{facturarContoller.complementoSeleccionado}">
                       <f:selectItem itemLabel="Educativo" itemValue="educativo" />
+                      <!--<f:selectItem itemLabel="Carta porte traslado" itemValue="porteTraslado" />
+                      <f:selectItem itemLabel="Carta porte ingreso" itemValue="porteIngreso" />-->
                       <f:selectItem itemLabel="Arrendamiento" itemValue="arrendamiento" />
                       <f:selectItem itemLabel="Mantenimiento" itemValue="mantenimiento" />
                       <p:ajax listener="#{facturarContoller.onComplementoChange}" update="accordionPanel" />
                   </p:selectOneRadio>
 
-                  <p:accordionPanel id="accordionPanel" activeIndex="#{facturarContoller.complementoSeleccionado eq 'educativo' ? 0 : (facturarContoller.complementoSeleccionado eq 'arrendamiento' ? 1 : 2)}">
+                  <p:accordionPanel id="accordionPanel" >
                       <p:tab id="tabEducativo" title="Educacional" disabled="#{facturarContoller.complementoSeleccionado ne 'educativo'}">
                           <!-- Formulario para el complemento educativo -->
+                          <p:outputLabel value="Elegir alumno " for="alumno"/>
+                            <p:selectOneMenu id="alumno" filter="true" filterMatchMode="contains" style="width: 160px" value="#{facturarContoller.alumno}" disabled="#{facturarContoller.complementoSeleccionado ne 'educativo'}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{rnGcDatosAlumnosTblController.getItemsSelectOne(facturarContoller.personas)}"
+                                               var="datos"
+                                               itemLabel="#{datos.nombre}"
+                                               itemValue="#{datos}"/>
+                                <p:ajax listener="#{facturarContoller.asignarAlumno()}" update="nombreAlumno,CURP, nivelEducativo, autRVOE, rfcPago"/>
+                            </p:selectOneMenu>
                           <h:panelGrid columns="2" style="width: 300px;">
                               <p:outputLabel for="nombreAlumno" value="Nombre del Alumno:" style="width: 200px;"/>
                               <p:inputText id="nombreAlumno" value="#{facturarContoller.nombreAlumno}" required="true" disabled="#{facturarContoller.complementoSeleccionado ne 'educativo'}"  style="width: 300px;"/>
@@ -2473,14 +2484,18 @@
                       </p:tab>
                       <p:tab id="tabArrendamiento" title="Arrendamiento" disabled="#{facturarContoller.complementoSeleccionado ne 'arrendamiento'}">
                           <!-- Formulario para el complemento de arrendamiento -->
+                            <h:panelGrid columns="2" style="width: 300px;">
+                                <p:outputLabel value="No. de Cuenta Predial" for="cuentaPredial"/>
+                                <p:inputText id="cuentaPredial" value="#{facturarContoller.cuentaPredial}" required="true" disabled="#{facturarContoller.complementoSeleccionado ne 'arrendamiento'}"/>
+                            </h:panelGrid>
                       </p:tab>
                       <p:tab id="tabMantenimiento" title="Mantenimiento" disabled="#{facturarContoller.complementoSeleccionado ne 'mantenimiento'}">
                           <!-- Formulario para el complemento de mantenimiento -->
                       </p:tab>
                   </p:accordionPanel>
         <!-- Botón de aceptar -->
-        <p:commandButton value="Confirmar" update="addComplementoForm3" actionListener="#{facturarContoller.confirmarComplemento()}" oncomplete="handleSubmit(args, 'modalDialog');"/>
-        <p:commandButton value="Cancelar" onclick="addComplementoDialog.hide()"/>
+        <p:commandButton value="Cancelar" update="addComplementoForm3" actionListener="#{facturarContoller.confirmarComplemento()}" oncomplete="handleSubmit(args, 'modalDialog');"/>
+        <p:commandButton value="Confirmar" oncomplete="handleSubmit(args, 'modalDialog');" update="addComplementoForm3"/>
     </h:form>
 </p:dialog>
 

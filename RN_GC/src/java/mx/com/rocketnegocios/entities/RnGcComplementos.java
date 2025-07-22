@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcComplementos.findByNivelEducativo", query = "SELECT r FROM RnGcComplementos r WHERE r.nivelEducativo = :nivelEducativo")
     , @NamedQuery(name = "RnGcComplementos.findByAutRVOE", query = "SELECT r FROM RnGcComplementos r WHERE r.autRVOE = :autRVOE")
     , @NamedQuery(name = "RnGcComplementos.findByRfcPago", query = "SELECT r FROM RnGcComplementos r WHERE r.rfcPago = :rfcPago")
-    , @NamedQuery(name = "RnGcComplementos.findByComplementoEscuela", query = "SELECT r FROM RnGcComplementos r WHERE r.complementoEscuela = :complementoEscuela")})
+    , @NamedQuery(name = "RnGcComplementos.findByComplementoEscuela", query = "SELECT r FROM RnGcComplementos r WHERE r.complementoEscuela = :complementoEscuela")
+    , @NamedQuery(name = "RnGcComplementos.findByCfdiId", query = "SELECT r FROM RnGcComplementos r WHERE r.cfdiId = :cfdi order by r.pkId desc")})
 public class RnGcComplementos implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -57,7 +58,7 @@ public class RnGcComplementos implements Serializable {
     @Size(max = 50)
     @Column(name = "nivelEducativo")
     private String nivelEducativo;
-    @Size(max = 50)
+    @Size(max = 100)
     @Column(name = "autRVOE")
     private String autRVOE;
     @Size(max = 13)

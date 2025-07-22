@@ -134,7 +134,8 @@
                             <p:commandButton id="viewButton" icon="ui-icon-search" value="#{bundle.View}" update=":RnGcPersonasTblViewForm" oncomplete="PF('RnGcPersonasTblViewDialog').show()" disabled="#{empty rnGcPersonas_clientesTblController.selected}"/>
                             <p:commandButton id="editButton" icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcPersonasTblEditForm" oncomplete="PF('RnGcPersonasTblEditDialog').show()" disabled="#{empty rnGcPersonas_clientesTblController.selected}"/>
                             <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcPersonas_clientesTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcPersonas_clientesTblController.selected}"/>
-                            <p:commandButton id="direccionesButton" icon="ui-icon-person" value="Direcciones" actionListener="#{rnGcDireccionesTblController.prepararItemsPersona(rnGcPersonas_clientesTblController.selected)}" update=":RnGcDireccionesTblListForm:datalist" oncomplete="PF('RnGcDireccionesTblListDialog').show()" disabled="#{empty rnGcPersonas_clientesTblController.selected}" />
+                            <p:commandButton id="direccionesButton" icon="ui-icon-home" value="Direcciones" actionListener="#{rnGcDireccionesTblController.prepararItemsPersona(rnGcPersonas_clientesTblController.selected)}" update=":RnGcDireccionesTblListForm:datalist" oncomplete="PF('RnGcDireccionesTblListDialog').show()" disabled="#{empty rnGcPersonas_clientesTblController.selected}" />
+                            <p:commandButton id="alumnosButton" icon="ui-icon-person" value="Alumnos" actionListener="#{rnGcDatosAlumnosTblController.prepararItemsPersona(rnGcPersonas_clientesTblController.selected)}" update=":RnGcAlumnosTblListForm:datalist" oncomplete="PF('RnGcAlumnosTblListDialog').show()" disabled="#{empty rnGcPersonas_clientesTblController.selected}" />
                         </f:facet>
                     </p:dataTable>
                 </p:panel>
@@ -374,6 +375,138 @@
             </p:dialog>
             <!-- Editar direcciones -->
 
+            <p:dialog id="RnGcAlumnosTblListDlg" widgetVar="RnGcAlumnosTblListDialog" modal="true" resizable="false" appendTo="@(body)" header="Datos Alumnos">
+                <h:form id="RnGcAlumnosTblListForm">
+                    <p:panel header="Lista de Alumnos">
+                        <p:dataTable id="datalist" value="#{rnGcDatosAlumnosTblController.itemsPersonas}" var="item"
+                                     selectionMode="single" selection="#{rnGcDatosAlumnosTblController.selected}"
+                                     paginator="true"
+                                     rowKey="#{item.id}"
+                                     rows="10"
+                                     rowsPerPageTemplate="10,20,30,40,50"
+                                     >
+
+                            <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                            <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nombre"/>
+                                </f:facet>
+                                <h:outputText value="#{item.nombre}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="CURP"/>
+                                </f:facet>
+                                <h:outputText value="#{item.curp}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nivel Educativo"/>
+                                </f:facet>
+                                <h:outputText value="#{item.nivelEducativo}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="autRVOE"/>
+                                </f:facet>
+                                <h:outputText value="#{item.autRVOE}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="RFC Pago"/>
+                                </f:facet>
+                                <h:outputText value="#{item.rfcPago}"/>
+                            </p:column>
+                            
+                            <f:facet name="footer">
+                                <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcDatosAlumnosTblController.prepareCreate}" update=":RnGcAlumnosTblCreateForm" oncomplete="PF('RnGcAlumnosTblCreateDialog').show()"/>
+                                <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcAlumnosTblViewForm" oncomplete="PF('RnGcAlumnosTblViewDialog').show()" disabled="#{empty rnGcDatosAlumnosTblController.selected}"/>
+                                <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcAlumnosTblEditForm" oncomplete="PF('RnGcAlumnosTblEditDialog').show()" disabled="#{empty rnGcDatosAlumnosTblController.selected}"/>
+                                <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcDatosAlumnosTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcDatosAlumnosTblController.selected}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            
+            <p:dialog id="RnGcAlumnosTblCreateDlg" widgetVar="RnGcAlumnosTblCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="Nuevos datos alumno">
+                <h:form id="RnGcAlumnosTblCreateForm">
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="6">
+                            <p:outputLabel value="Nivel Educativo: " for="nivel" />
+                            <p:selectOneMenu id="nivel" style="width: 145px" value="#{rnGcDatosAlumnosTblController.selected.nivelEducativo}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItem itemLabel="Preescolar" itemValue="Preescolar"/>
+                                <f:selectItem itemLabel="Primaria" itemValue="Primaria"/>
+                                <f:selectItem itemLabel="Secundaria" itemValue="Secundaria"/>
+                                <f:selectItem itemLabel="Profesional técnico" itemValue="Profesional técnico"/>
+                                <f:selectItem itemLabel="Bachillerato o su equivalente" itemValue="Bachillerato o su equivalente"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Nombre: " for="name"/>
+                            <p:inputText id="name" style="width: 160px" value="#{rnGcDatosAlumnosTblController.selected.nombre}"/>
+                            <p:outputLabel value="CURP: " for="curp"/>
+                            <p:inputText id="curp" style="width: 160px" value="#{rnGcDatosAlumnosTblController.selected.curp}"/>
+                            <p:outputLabel value="autRVOE: " for="aut"/>
+                            <p:inputText id="aut" style="width: 160px" value="#{rnGcDatosAlumnosTblController.selected.autRVOE}"/>
+                            <p:outputLabel value="RFC pago: " for="rfc"/>
+                            <p:inputText id="rfc" style="width: 160px" value="#{rnGcDatosAlumnosTblController.selected.rfcPago}"/>
+                        </p:panelGrid>
+                        <p:commandButton actionListener="#{rnGcDatosAlumnosTblController.create}" value="#{bundle.Save}" update="display,:RnGcAlumnosTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcAlumnosTblCreateDialog');"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="RnGcAlumnosTblCreateDialog.hide()"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+            
+            <p:dialog id="RnGcAlumnosTblEditDlg" widgetVar="RnGcAlumnosTblEditDialog" modal="true" resizable="false" appendTo="@(body)" header="Editar datos alumno">
+                <h:form id="RnGcAlumnosTblEditForm">
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="6" rendered="#{rnGcDatosAlumnosTblController.selected != null}">
+                            <p:outputLabel value="Nivel Educativo: " for="nivel" />
+                            <p:selectOneMenu id="nivel" style="width: 145px" value="#{rnGcDatosAlumnosTblController.selected.nivelEducativo}">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItem itemLabel="Preescolar" itemValue="Preescolar"/>
+                                <f:selectItem itemLabel="Primaria" itemValue="Primaria"/>
+                                <f:selectItem itemLabel="Secundaria" itemValue="Secundaria"/>
+                                <f:selectItem itemLabel="Profesional técnico" itemValue="Profesional técnico"/>
+                                <f:selectItem itemLabel="Bachillerato o su equivalente" itemValue="Bachillerato o su equivalente"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Nombre: " for="name"/>
+                            <p:inputText id="name" style="width: 160px" value="#{rnGcDatosAlumnosTblController.selected.nombre}"/>
+                            <p:outputLabel value="CURP: " for="curp"/>
+                            <p:inputText id="curp" style="width: 160px" value="#{rnGcDatosAlumnosTblController.selected.curp}"/>
+                            <p:outputLabel value="autRVOE: " for="aut"/>
+                            <p:inputText id="aut" style="width: 160px" value="#{rnGcDatosAlumnosTblController.selected.autRVOE}"/>
+                            <p:outputLabel value="RFC pago: " for="rfc"/>
+                            <p:inputText id="rfc" style="width: 160px" value="#{rnGcDatosAlumnosTblController.selected.rfcPago}"/>
+                        </p:panelGrid>
+                        <p:commandButton actionListener="#{rnGcDatosAlumnosTblController.create}" value="#{bundle.Save}" update="display,:RnGcAlumnosTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcAlumnosTblEditDialog');"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="RnGcAlumnosTblEditDialog.hide()"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+            
+            <p:dialog id="RnGcAlumnosTblViewDlg" widgetVar="RnGcAlumnosTblViewDialog" modal="true" resizable="false" appendTo="@(body)" header="Datos alumno">
+                <h:form id="RnGcAlumnosTblViewForm">
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="6" rendered="#{rnGcDatosAlumnosTblController.selected != null}">
+                            <h:outputText value="Nivel Educativo: "/>
+                            <h:outputText value="#{rnGcDatosAlumnosTblController.selected.nivelEducativo}"/>
+                            <h:outputText value="Nombre: " />
+                            <h:outputText value="#{rnGcDatosAlumnosTblController.selected.nombre}"/>
+                            <h:outputText value="CURP: "/>
+                            <h:outputText value="#{rnGcDatosAlumnosTblController.selected.curp}"/>
+                            <h:outputText value="autRVOE: " />
+                            <h:outputText value="#{rnGcDatosAlumnosTblController.selected.autRVOE}"/>
+                            <h:outputText value="RFC pago: " />
+                            <h:outputText value="#{rnGcDatosAlumnosTblController.selected.rfcPago}"/>
+                        </p:panelGrid>
+                        <p:commandButton value="#{bundle.Close}" onclick="RnGcAlumnosTblViewDialog.hide()"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+            
         </ui:define>
     </ui:composition>
 

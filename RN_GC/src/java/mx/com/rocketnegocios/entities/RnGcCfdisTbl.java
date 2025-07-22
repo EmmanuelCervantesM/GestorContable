@@ -72,8 +72,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "RnGcCfdisTbl.findByCfdisComplementos", query = "SELECT r FROM RnGcCfdisTbl r WHERE r.rfcReceptor = :rfcReceptor AND r.saldoInsoluto != 0 AND r.uuid != 'null' AND r.tipoComprobante != 'P' and r.estatus != 'Cancelado'")
     , @NamedQuery(name = "RnGcCfdisTbl.findByRfcReceptorFecha", query = "SELECT r FROM RnGcCfdisTbl r WHERE r.rfcReceptor = :rfcReceptor and r.fechaExpedicion between :fInicial and :fFinal and r.estatus not in ('Cancelado')")
     , @NamedQuery(name = "RnGcCfdisTbl.findByRfcReceptorPPD", query = "SELECT r FROM RnGcCfdisTbl r WHERE r.rfcReceptor = :rfcReceptor and r.uuid is not null and r.metodoPago = :metodoPago and r.saldoInsoluto > 0")
-    , @NamedQuery(name = "RnGcCfdisTbl.findByRfcReceptorCreadoPorGuardado", query = "SELECT r FROM RnGcCfdisTbl r WHERE r.rfcReceptor = :rfcReceptor AND r.creadoPor = :creadoPor AND r.estatus = 'Guardado'")
-    , @NamedQuery(name = "RnGcCfdisTbl.findByRfcReceptorCreadoPorPlantilla", query = "SELECT r FROM RnGcCfdisTbl r WHERE r.rfcReceptor = :rfcReceptor AND r.creadoPor = :creadoPor AND r.estatus = 'Timbrado'")})
+    , @NamedQuery(name = "RnGcCfdisTbl.findByRfcReceptorCreadoPorGuardado", query = "SELECT r FROM RnGcCfdisTbl r WHERE r.rfcReceptor = :rfcReceptor AND r.creadoPor = :creadoPor AND r.estatus = 'Guardado' order by r.id desc")
+    , @NamedQuery(name = "RnGcCfdisTbl.findByRfcReceptorCreadoPorPlantilla", query = "SELECT r FROM RnGcCfdisTbl r WHERE r.rfcReceptor = :rfcReceptor AND r.creadoPor = :creadoPor AND r.estatus = 'Timbrado' order by r.id desc")})
 public class RnGcCfdisTbl implements Serializable {
 
     @Column(name = "texto")

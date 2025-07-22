@@ -5,9 +5,12 @@
  */
 package mx.com.rocketnegocios.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import mx.com.rocketnegocios.entities.RnGcCfdisTbl;
 import mx.com.rocketnegocios.entities.RnGcComplementos;
 
 /**
@@ -35,4 +38,16 @@ public class RnGcComplementosFacade extends AbstractFacade<RnGcComplementos> {
         return complementolocal;
     }
     
+     public List<RnGcComplementos> obtenerXcfdiID(RnGcCfdisTbl cfdi) {
+        List<RnGcComplementos> lista = null;
+        try {
+            lista = em.createNamedQuery("RnGcComplementos.findByCfdiId", RnGcComplementos.class)
+                    .setParameter("cfdi", cfdi)
+                    .getResultList();
+        } catch (NoResultException ex) {
+            System.out.println("No hay datos; " + ex);
+        }
+        System.out.println("El tamaño de la lista es: " + lista.size());
+        return lista;
+    }
 }

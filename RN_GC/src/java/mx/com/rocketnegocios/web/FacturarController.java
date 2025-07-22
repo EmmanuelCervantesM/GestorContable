@@ -151,6 +151,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import mx.com.rocketnegocios.entities.RnGcComplementos;
 import mx.com.rocketnegocios.entities.RnGcCpProductosDestinosTbl;
+import mx.com.rocketnegocios.entities.RnGcDatosalumnoTbl;
 //import sun.misc.BASE64Decoder;
 
 @SessionScoped
@@ -1485,19 +1486,29 @@ public class FacturarController implements Serializable {
                                     System.out.println("-------------- // Fin de insertar el archivo // ------------");
                                     System.out.println("-------------- // El id del archivo es:  // ------------    "+archivo.getId());
                                     
-                                    System.out.println("-------------- // Entro a insertar el los datos del complemento escolar // ------------");
-                                    complementoE.setCfdiId(cfdisId);
-                                    complementoE.setAutRVOE(autRVOE);
-                                    complementoE.setCurp(curp);
-                                    complementoE.setNivelEducativo(nivelEducativo);
-                                    complementoE.setNombreAlumno(nombreAlumno);
-                                    complementoE.setRfcPago(rfcPago);
-                                    complementoE.setComplementoEscuela(true);
-                                    complementoE.setComplementoSeleccionado(complementoSeleccionado);
-                                    complementoE = ComplementosFacade.refreshFromDB(complementoE);
-                                    System.out.println("-------------- // Fin de insertar el complemento // ------------");
-                                    System.out.println("-------------- // El id del complemento es:  // ------------    "+complementoE.getPkId());
-                                    
+                                    if(complementoSeleccionado != null && !complementoSeleccionado.isEmpty()){
+                                        System.out.println("-------------- // Entro a insertar el los datos del complemento escolar // ------------");
+                                        complementoE.setCfdiId(cfdisId);
+                                        if(complementoSeleccionado.equals("educativo")){
+                                            complementoE.setComplementoEscuela(true);
+                                            complementoE.setNombreAlumno(nombreAlumno);
+                                            complementoE.setAutRVOE(autRVOE);
+                                            complementoE.setCurp(curp);
+                                            complementoE.setNivelEducativo(nivelEducativo);
+                                            complementoE.setRfcPago(rfcPago);
+                                        }else if(complementoSeleccionado.equals("arrendamiento")){
+                                            complementoE.setComplementoEscuela(false);
+                                            complementoE.setNombreAlumno(cuentaPredial);
+                                            complementoE.setAutRVOE("");
+                                            complementoE.setCurp("");
+                                            complementoE.setNivelEducativo("");
+                                            complementoE.setRfcPago("");
+                                        }
+                                        complementoE.setComplementoSeleccionado(complementoSeleccionado);
+                                        complementoE = ComplementosFacade.refreshFromDB(complementoE);
+                                        System.out.println("-------------- // Fin de insertar el complemento // ------------");
+                                        System.out.println("-------------- // El id del complemento es:  // ------------    "+complementoE.getPkId());
+                                    }
                                     
                                     System.out.println("Documentos Relacionados");
                                     if (listaCfdisRelacionados != null && listaCfdisRelacionados.size() > 0) {
@@ -1996,6 +2007,10 @@ public class FacturarController implements Serializable {
         Double trasladosIva = 0.0;
         if (cfdisLineas != null) {
             for (int i = 0; i < cfdisLineas.size(); i++) {
+                String objClave = "02";
+                if(cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null)
+                    objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
+                if(objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")){
                 if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("002") && cfdisLineas.get(i).getTipoImpuesto().equals("Traslado") && cfdisLineas.get(i).getTipoFactor().equals("Exento")) {
                     trasladosIva += cfdisLineas.get(i).getBase();
                 }
@@ -2008,6 +2023,7 @@ public class FacturarController implements Serializable {
                 if (cfdisLineas.get(i).getImpuesto4() != null && cfdisLineas.get(i).getImpuesto4().equals("002") && cfdisLineas.get(i).getTipoImpuesto4().equals("Traslado") && cfdisLineas.get(i).getTipoFactor4().equals("Exento")) {
                     trasladosIva += cfdisLineas.get(i).getBase();
                 }
+                }
             }
         }
         return new DecimalFormat("0.00").format(trasladosIva);
@@ -2017,6 +2033,10 @@ public class FacturarController implements Serializable {
         Double trasladosIva = 0.0;
         if (cfdisLineas != null) {
             for (int i = 0; i < cfdisLineas.size(); i++) {
+                String objClave = "02";
+                if(cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null)
+                    objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
+                if(objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")){
                 if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("002") && cfdisLineas.get(i).getTipoImpuesto().equals("Traslado") && !cfdisLineas.get(i).getTipoFactor().equals("Exento")) {
                     trasladosIva += cfdisLineas.get(i).getImporteimpuesto();
                 }
@@ -2029,6 +2049,7 @@ public class FacturarController implements Serializable {
                 if (cfdisLineas.get(i).getImpuesto4() != null && cfdisLineas.get(i).getImpuesto4().equals("002") && cfdisLineas.get(i).getTipoImpuesto4().equals("Traslado") && !cfdisLineas.get(i).getTipoFactor4().equals("Exento")) {
                     trasladosIva += cfdisLineas.get(i).getImporteImpuesto4();
                 }
+                }
             }
         }
         return new DecimalFormat("0.00").format(trasladosIva);
@@ -2038,6 +2059,10 @@ public class FacturarController implements Serializable {
         Double trasladosIsr = 0.0;
         if (cfdisLineas != null) {
             for (int i = 0; i < cfdisLineas.size(); i++) {
+                String objClave = "02";
+                if(cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null)
+                    objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
+                if(objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")){
                 if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("001") && cfdisLineas.get(i).getTipoImpuesto().equals("Traslado")) {
                     trasladosIsr += cfdisLineas.get(i).getImporteimpuesto();
                 }
@@ -2050,6 +2075,7 @@ public class FacturarController implements Serializable {
                 if (cfdisLineas.get(i).getImpuesto4() != null && cfdisLineas.get(i).getImpuesto4().equals("001") && cfdisLineas.get(i).getTipoImpuesto4().equals("Traslado")) {
                     trasladosIsr += cfdisLineas.get(i).getImporteImpuesto4();
                 }
+                }
             }
         }
         return new DecimalFormat("0.00").format(trasladosIsr);
@@ -2059,6 +2085,10 @@ public class FacturarController implements Serializable {
         Double trasladadosIEPS = 0.0;
         if (cfdisLineas != null) {
             for (int i = 0; i < cfdisLineas.size(); i++) {
+                String objClave = "02";
+                if(cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null)
+                    objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
+                if(objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")){
                 if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("003") && cfdisLineas.get(i).getTipoImpuesto().equals("Traslado")) {
                     trasladadosIEPS += cfdisLineas.get(i).getImporteimpuesto();
                 }
@@ -2071,6 +2101,7 @@ public class FacturarController implements Serializable {
                 if (cfdisLineas.get(i).getImpuesto4() != null && cfdisLineas.get(i).getImpuesto4().equals("003") && cfdisLineas.get(i).getTipoImpuesto4().equals("Traslado")) {
                     trasladadosIEPS += cfdisLineas.get(i).getImporteImpuesto4();
                 }
+                }
             }
         }
         return new DecimalFormat("0.00").format(trasladadosIEPS);
@@ -2080,6 +2111,10 @@ public class FacturarController implements Serializable {
         Double retenidosIva = 0.0;
         if (cfdisLineas != null) {
             for (int i = 0; i < cfdisLineas.size(); i++) {
+                String objClave = "02";
+                if(cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null)
+                    objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
+                if(objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")){
                 if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("002") && cfdisLineas.get(i).getTipoImpuesto().equals("Retención")) {
                     retenidosIva += cfdisLineas.get(i).getImporteimpuesto();
                 }
@@ -2092,6 +2127,7 @@ public class FacturarController implements Serializable {
                 if (cfdisLineas.get(i).getImpuesto4() != null && cfdisLineas.get(i).getImpuesto4().equals("002") && cfdisLineas.get(i).getTipoImpuesto4().equals("Retención")) {
                     retenidosIva += cfdisLineas.get(i).getImporteImpuesto4();
                 }
+                }
             }
         }
         return new DecimalFormat("0.00").format(retenidosIva);
@@ -2101,6 +2137,10 @@ public class FacturarController implements Serializable {
         Double retenidosIsr = 0.0;
         if (cfdisLineas != null) {
             for (int i = 0; i < cfdisLineas.size(); i++) {
+                String objClave = "02";
+                if(cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null)
+                    objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
+                if(objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")){
                 if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("001") && cfdisLineas.get(i).getTipoImpuesto().equals("Retención")) {
                     retenidosIsr += cfdisLineas.get(i).getImporteimpuesto();
                 }
@@ -2113,6 +2153,7 @@ public class FacturarController implements Serializable {
                 if (cfdisLineas.get(i).getImpuesto4() != null && cfdisLineas.get(i).getImpuesto4().equals("001") && cfdisLineas.get(i).getTipoImpuesto4().equals("Retención")) {
                     retenidosIsr += cfdisLineas.get(i).getImporteImpuesto4();
                 }
+                }
             }
         }
         return new DecimalFormat("0.00").format(retenidosIsr);
@@ -2122,6 +2163,10 @@ public class FacturarController implements Serializable {
         Double retenidosIEPS = 0.0;
         if (cfdisLineas != null) {
             for (int i = 0; i < cfdisLineas.size(); i++) {
+                String objClave = "02";
+                if(cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null)
+                    objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
+                if(objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")){
                 if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("003") && cfdisLineas.get(i).getTipoImpuesto().equals("Retención")) {
                     retenidosIEPS += cfdisLineas.get(i).getImporteimpuesto();
                 }
@@ -2133,6 +2178,7 @@ public class FacturarController implements Serializable {
                 }
                 if (cfdisLineas.get(i).getImpuesto4() != null && cfdisLineas.get(i).getImpuesto4().equals("003") && cfdisLineas.get(i).getTipoImpuesto4().equals("Retención")) {
                     retenidosIEPS += cfdisLineas.get(i).getImporteImpuesto4();
+                }
                 }
             }
         }
@@ -2185,7 +2231,7 @@ public class FacturarController implements Serializable {
         System.out.println("Total: " + total);
         return total;
     }
-
+ 
     public String importeLetra() {
         NumeroALetra numLetra = new NumeroALetra();
         String importeLetra = String.valueOf(new DecimalFormat("0.00").format(calcularTotal()));
@@ -2209,9 +2255,6 @@ public class FacturarController implements Serializable {
             File xslt = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Archivos/cadenaoriginal_4_0.xslt"));            //Inicio calcula cadena original
             StreamSource sourceXSL = new StreamSource(xslt);
             System.out.println("Probando2");
-            /*if(complementoEscuela){
-            valor = crearXmlEscuela();
-            }SE COMENTA PARA OTRA NUEVA VERSION*/ 
             if (cfdisId.getTipoComprobante().equals("I") || cfdisId.getTipoComprobante().equals("E")) {
                 valor = crearXmlIngEgre();
             }
@@ -2611,6 +2654,11 @@ public class FacturarController implements Serializable {
                     parametros.put("tipoCambio", cfdisId.getTipoCambio());
                 }
             }
+            if(complementoSeleccionado != null && !complementoSeleccionado.isEmpty() && complementoSeleccionado.equals("educativo")){
+                parametros.put("alumno", nombreAlumno + ", " + curp + ", " + nivelEducativo + ", " + autRVOE + ", " + rfcPago + ".");
+            }else if(complementoSeleccionado != null && !complementoSeleccionado.isEmpty() && complementoSeleccionado.equals("arrendamiento")){
+                parametros.put("alumno", "Cuenta predial: " + cuentaPredial + ".");
+            }
             parametros.put("RegimenFiscalReceptor", personas.getRegimenFiscalId().getClaveRegimenFiscal() + " - " + personas.getRegimenFiscalId().getDescripcion());
             parametros.put("CodigoPostalReceptor", ""+personas.getcodigoPostal());
             System.out.println("ListaConceptossss: " + cfdisLineas);
@@ -2818,9 +2866,7 @@ public class FacturarController implements Serializable {
                     + "-" + lista.get(i).getProductoId().getObjetoImpId().getDescripcion());
         }
         parametros.put("conceptos", lista);
-        for(int i = 0; i < lista.size(); i++){
-            lista.get(i).setNoCuentaPredial(null);
-        }
+        
         parametros.put("CFDIsRelacionados", listaCfdisRelacionados);
         if ((listaCfdisRelacionados != null && !listaCfdisRelacionados.isEmpty()) && listaCfdisRelacionados.get(0).getUuid() != null){
             parametros.put("uuidRel", listaCfdisRelacionados.get(0).getUuid());
@@ -2830,6 +2876,13 @@ public class FacturarController implements Serializable {
                     if(cfdisId.getTipoRelacion().equals(relac.getClaveTipoRelacion()))
                         parametros.put("motivo", relac.getClaveTipoRelacion() + " - " + relac.getDescripcion());
             }
+        }
+        if(complementoSeleccionado != null && !complementoSeleccionado.isEmpty() && complementoSeleccionado.equals("educativo")){
+            parametros.put("alumno", nombreAlumno + ", " + curp + ".");
+            parametros.put("nivelRFC", nivelEducativo + ", " + rfcPago + ".");
+            parametros.put("rvoe", autRVOE + ".");
+        }else if(complementoSeleccionado != null && !complementoSeleccionado.isEmpty() && complementoSeleccionado.equals("arrendamiento")){
+            parametros.put("arrenda", "Cuenta predial: " + cuentaPredial + ".");
         }
         parametros.put("Subtotal", Double.parseDouble(calcularSubtotal()));
         parametros.put("Total", calcularTotal());
@@ -2980,6 +3033,9 @@ public class FacturarController implements Serializable {
         InputStream streamPdf = bis;
         downLoadFile3 = new DefaultStreamedContent(streamPdf, "application/zip", "CFDI-" + cfdisId.getSerie() + "-" + cfdisId.getFolio() + "-" + cfdisId.getNombreReceptor() + ".zip");
         System.out.println("PDF guardado");
+        for(int i = 0; i < cfdisLineas.size(); i++){
+            cfdisLineas.get(i).setNoCuentaPredial(null);
+        }
     }
 
     public void crearPDFPago(String selloSAT, String noCertSAT, String fechaTimbrado, String Uuid, String selloCFDI, byte[] codigoQR, String cadenaOrig, String rfcProvCertif) throws IOException, JRException, ParseException {
@@ -4153,6 +4209,10 @@ public class FacturarController implements Serializable {
                             Attr tipoFactorTDR = doc.createAttribute("TipoFactorDR"); 
                             tipoFactorTDR.setValue(listaCfd.get(b).getTipoFactor());
                             trasladoDR.setAttributeNode(tipoFactorTDR);
+                            if(listaCfd.get(b).getTipoTasa() > 1){
+                                listaCfd.get(b).setTipoTasa(listaCfd.get(b).getTipoTasa() / 100);
+                            }
+                            
                             if(!tipoFactorTDR.getValue().equals("Exento")){
                                 Attr tasaCuotaTDR = doc.createAttribute("TasaOCuotaDR"); 
                                 tasaCuotaTDR.setValue(new DecimalFormat("0.000000").format(listaCfd.get(b).getTipoTasa()));
@@ -4194,6 +4254,9 @@ public class FacturarController implements Serializable {
                             Attr tipoFactorTDR = doc.createAttribute("TipoFactorDR"); 
                             tipoFactorTDR.setValue(listaCfd.get(b).getTipoFactor2());
                             retencionDR.setAttributeNode(tipoFactorTDR);
+                            if(listaCfd.get(b).getTipoTasa2() > 1){
+                                listaCfd.get(b).setTipoTasa2(listaCfd.get(b).getTipoTasa2() / 100);
+                            }
                             Attr tasaCuotaTDR = doc.createAttribute("TasaOCuotaDR"); 
                             tasaCuotaTDR.setValue(new DecimalFormat("0.000000").format(listaCfd.get(b).getTipoTasa2()));
                             retencionDR.setAttributeNode(tasaCuotaTDR);
@@ -4224,6 +4287,9 @@ public class FacturarController implements Serializable {
                             Attr tipoFactorTDR = doc.createAttribute("TipoFactorDR"); 
                             tipoFactorTDR.setValue(listaCfd.get(b).getTipoFactor3());
                             retencionDR.setAttributeNode(tipoFactorTDR);
+                            if(listaCfd.get(b).getTipoTasa3() > 1){
+                                listaCfd.get(b).setTipoTasa3(listaCfd.get(b).getTipoTasa3() / 100);
+                            }
                             Attr tasaCuotaTDR = doc.createAttribute("TasaOCuotaDR"); 
                             tasaCuotaTDR.setValue(new DecimalFormat("0.000000").format(listaCfd.get(b).getTipoTasa3()));
                             retencionDR.setAttributeNode(tasaCuotaTDR);
@@ -4254,6 +4320,9 @@ public class FacturarController implements Serializable {
                             Attr tipoFactorTDR = doc.createAttribute("TipoFactorDR"); 
                             tipoFactorTDR.setValue(listaCfd.get(b).getTipoFactor4());
                             retencionDR.setAttributeNode(tipoFactorTDR);
+                            if(listaCfd.get(b).getTipoTasa4() > 1){
+                                listaCfd.get(b).setTipoTasa4(listaCfd.get(b).getTipoTasa4() / 100);
+                            }
                             Attr tasaCuotaTDR = doc.createAttribute("TasaOCuotaDR"); 
                             tasaCuotaTDR.setValue(new DecimalFormat("0.000000").format(listaCfd.get(b).getTipoTasa4()));
                             retencionDR.setAttributeNode(tasaCuotaTDR);
@@ -4551,8 +4620,12 @@ public class FacturarController implements Serializable {
                 Attr cartaPorte3 = doc.createAttribute("xmlns:cartaporte31");
                 cartaPorte3.setValue("http://www.sat.gob.mx/CartaPorte31");
                 rootElement.setAttributeNode(cartaPorte3);
-            }else
-                esquema.setValue("http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.sat.gob.mx/implocal http://www.sat.gob.mx/sitio_internet/cfd/implocal/implocal.xsd");
+            }else{
+                if(complementoSeleccionado != null && !complementoSeleccionado.isEmpty() && complementoSeleccionado.equals("educativo"))
+                    esquema.setValue("http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.sat.gob.mx/implocal http://www.sat.gob.mx/sitio_internet/cfd/implocal/implocal.xsd http://www.sat.gob.mx/iedu http://www.sat.gob.mx/sitio_internet/cfd/iedu/iedu.xsd");
+                else
+                    esquema.setValue("http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.sat.gob.mx/implocal http://www.sat.gob.mx/sitio_internet/cfd/implocal/implocal.xsd");
+            }
             rootElement.setAttributeNode(esquema);
             //Nodo CfdiRelacionados
             if (cfdisId.getTipoRelacion() != null && listaCfdisRelacionados.size() > 0) {
@@ -4655,10 +4728,13 @@ public class FacturarController implements Serializable {
                     descuento.setValue(new DecimalFormat("0.00").format(cfdisLineas.get(i).getDescuento()));
                     concepto.setAttributeNode(descuento);
                 }
+                String objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
+                if(objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")){
                 //nodo impuestos
+                System.out.println("llego hasta impuestos..");
                 Element impuestos = doc.createElement("cfdi:Impuestos");
                 concepto.appendChild(impuestos);
-                System.out.println("llego hasta impuestos..");
+                if(!objClave.equals("06") && !objClave.equals("08")){
                 if (cfdisLineas.get(i).getTipoImpuesto().equals("Traslado") || cfdisLineas.get(i).getTipoImpuesto2().equals("Traslado")
                         || cfdisLineas.get(i).getTipoImpuesto3().equals("Traslado") || cfdisLineas.get(i).getTipoImpuesto4().equals("Traslado")) {
                     //nodo traslados
@@ -4667,6 +4743,13 @@ public class FacturarController implements Serializable {
                     if (cfdisLineas.get(i).getTipoImpuesto() != null && cfdisLineas.get(i).getTipoImpuesto().equals("Traslado")) {
                         System.out.println("1T");
                         //nodo traslado
+                        boolean validarObjeto = false;
+                        if(objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto()))){
+                            validarObjeto = true;
+                        }else if(objClave.equals("02")){
+                            validarObjeto = true;
+                        }
+                        if(validarObjeto){
                         Element traslado = doc.createElement("cfdi:Traslado");
                         traslados.appendChild(traslado);
                         //atributos traslado
@@ -4693,11 +4776,19 @@ public class FacturarController implements Serializable {
                                 traslado.setAttributeNode(tasa1);
                             }
                         }
+                        }
                     }
                     System.out.println("dato1");
                     if (cfdisLineas.get(i).getTipoImpuesto2() != null && cfdisLineas.get(i).getTipoImpuesto2().equals("Traslado")) {
                         System.out.println("2T");
                         //nodo traslado
+                        boolean validarObjeto = false;
+                        if(objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto2()))){
+                            validarObjeto = true;
+                        }else if(objClave.equals("02")){
+                            validarObjeto = true;
+                        }
+                        if(validarObjeto){
                         Element traslado = doc.createElement("cfdi:Traslado");
                         traslados.appendChild(traslado);
                         //atributos traslado
@@ -4724,11 +4815,19 @@ public class FacturarController implements Serializable {
                             importeImpuesto2.setValue(new DecimalFormat("0.00").format(cfdisLineas.get(i).getImporteImpuesto2()));
                             traslado.setAttributeNode(importeImpuesto2);
                         }
+                        }
                     }
                     System.out.println("dato2");
                     if (cfdisLineas.get(i).getTipoImpuesto3() != null && cfdisLineas.get(i).getTipoImpuesto3().equals("Traslado")) {
                         System.out.println("3T");
                         //nodo traslado
+                        boolean validarObjeto = false;
+                        if(objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto3()))){
+                            validarObjeto = true;
+                        }else if(objClave.equals("02")){
+                            validarObjeto = true;
+                        }
+                        if(validarObjeto){
                         Element traslado = doc.createElement("cfdi:Traslado");
                         traslados.appendChild(traslado);
                         //atributos traslado
@@ -4755,11 +4854,19 @@ public class FacturarController implements Serializable {
                             importeImpuesto3.setValue(new DecimalFormat("0.00").format(cfdisLineas.get(i).getImporteImpuesto3()));
                             traslado.setAttributeNode(importeImpuesto3);
                         }
+                        }
                     }
                     System.out.println("dato3");
                     if (cfdisLineas.get(i).getTipoImpuesto4() != null && cfdisLineas.get(i).getTipoImpuesto4().equals("Traslado")) {
                         System.out.println("4T");
                         //nodo traslado
+                        boolean validarObjeto = false;
+                        if(objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto4()))){
+                            validarObjeto = true;
+                        }else if(objClave.equals("02")){
+                            validarObjeto = true;
+                        }
+                        if(validarObjeto){
                         Element traslado = doc.createElement("cfdi:Traslado");
                         traslados.appendChild(traslado);
                         //atributos traslado
@@ -4786,8 +4893,10 @@ public class FacturarController implements Serializable {
                             importeImpuesto4.setValue(new DecimalFormat("0.00").format(cfdisLineas.get(i).getImporteImpuesto4()));
                             traslado.setAttributeNode(importeImpuesto4);
                         }
+                        }
                     }
                     System.out.println("dato4");
+                }
                 }
                 System.out.println("salto el primer impuesto");
                 if (((cfdisLineas.get(i).getTipoImpuesto() != null) && cfdisLineas.get(i).getTipoImpuesto().equals("Retención"))
@@ -4800,6 +4909,15 @@ public class FacturarController implements Serializable {
                     if (cfdisLineas.get(i).getTipoImpuesto() != null && cfdisLineas.get(i).getTipoImpuesto().equals("Retención")) {
                         System.out.println("1R");
                         //nodo retencion
+                        boolean validarObjeto = false;
+                        if((objClave.equals("06") || objClave.equals("08") || objClave.equals("07")) && "001".equals(String.valueOf(cfdisLineas.get(i).getImpuesto()))){
+                            validarObjeto = true;
+                        }else if(objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto()))){
+                            validarObjeto = true;
+                        }else if(objClave.equals("02")){
+                            validarObjeto = true;
+                        }
+                        if(validarObjeto){
                         Element retencion = doc.createElement("cfdi:Retencion");
                         retenciones.appendChild(retencion);
                         //atributos traslado
@@ -4824,11 +4942,21 @@ public class FacturarController implements Serializable {
                         Attr importeR1 = doc.createAttribute("Importe");               //Importe
                         importeR1.setValue(new DecimalFormat("0.00").format(cfdisLineas.get(i).getImporteimpuesto()));
                         retencion.setAttributeNode(importeR1);
+                        }
                     }
                     System.out.println("dato5");
                     if (cfdisLineas.get(i).getTipoImpuesto2() != null && cfdisLineas.get(i).getTipoImpuesto2().equals("Retención")) {
                         System.out.println("2R");
                         //nodo retencion
+                        boolean validarObjeto = false;
+                        if((objClave.equals("06") || objClave.equals("08") || objClave.equals("07")) && "001".equals(String.valueOf(cfdisLineas.get(i).getImpuesto2()))){
+                            validarObjeto = true;
+                        }else if(objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto2()))){
+                            validarObjeto = true;
+                        }else if(objClave.equals("02")){
+                            validarObjeto = true;
+                        }
+                        if(validarObjeto){
                         Element retencion = doc.createElement("cfdi:Retencion");
                         retenciones.appendChild(retencion);
                         //atributos traslado
@@ -4853,11 +4981,21 @@ public class FacturarController implements Serializable {
                         Attr importeR2 = doc.createAttribute("Importe");               //Importe
                         importeR2.setValue(new DecimalFormat("0.00").format(cfdisLineas.get(i).getImporteImpuesto2()));
                         retencion.setAttributeNode(importeR2);
+                        }
                     }
                     System.out.println("dato6");
                     if (cfdisLineas.get(i).getTipoImpuesto3() != null && cfdisLineas.get(i).getTipoImpuesto3().equals("Retención")) {
                         System.out.println("3R");
                         //nodo retencion
+                        boolean validarObjeto = false;
+                        if((objClave.equals("06") || objClave.equals("08") || objClave.equals("07")) && "001".equals(String.valueOf(cfdisLineas.get(i).getImpuesto3()))){
+                            validarObjeto = true;
+                        }else if(objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto3()))){
+                            validarObjeto = true;
+                        }else if(objClave.equals("02")){
+                            validarObjeto = true;
+                        }
+                        if(validarObjeto){
                         Element retencion = doc.createElement("cfdi:Retencion");
                         retenciones.appendChild(retencion);
                         //atributos traslado
@@ -4882,11 +5020,21 @@ public class FacturarController implements Serializable {
                         Attr importeR3 = doc.createAttribute("Importe");               //Importe
                         importeR3.setValue(new DecimalFormat("0.00").format(cfdisLineas.get(i).getImporteImpuesto3()));
                         retencion.setAttributeNode(importeR3);
+                        }
                     }
                     System.out.println("dato7");
                     if (cfdisLineas.get(i).getTipoImpuesto4() != null && cfdisLineas.get(i).getTipoImpuesto4().equalsIgnoreCase("Retención")) {
                         System.out.println("4R");
                         //nodo retencion
+                        boolean validarObjeto = false;
+                        if((objClave.equals("06") || objClave.equals("08") || objClave.equals("07")) && "001".equals(String.valueOf(cfdisLineas.get(i).getImpuesto4()))){
+                            validarObjeto = true;
+                        }else if(objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto4()))){
+                            validarObjeto = true;
+                        }else if(objClave.equals("02")){
+                            validarObjeto = true;
+                        }
+                        if(validarObjeto){
                         Element retencion = doc.createElement("cfdi:Retencion");
                         retenciones.appendChild(retencion);
                         //atributos traslado
@@ -4911,21 +5059,73 @@ public class FacturarController implements Serializable {
                         Attr importeR4 = doc.createAttribute("Importe");               //Importe
                         importeR4.setValue(new DecimalFormat("0.00").format(cfdisLineas.get(i).getImporteImpuesto4()));
                         retencion.setAttributeNode(importeR4);
+                        }
                     }
                     System.out.println("dato8");
+                }
+                }
+                if(complementoSeleccionado != null && !complementoSeleccionado.isEmpty() && complementoSeleccionado.equals("educativo")){
+                    // Creamos el nodo <cfdi:ComplementoConcepto>
+                    Element complementoConcepto = doc.createElement("cfdi:ComplementoConcepto");
+                    concepto.appendChild(complementoConcepto);
+           
+                    // Añadimos los atributos al elemento <iedu:instEducativas>
+                    Element instEducativas = doc.createElement("iedu:instEducativas");
+                    complementoConcepto.appendChild(instEducativas);
+                    
+                    Attr iedu = doc.createAttribute("xmlns:iedu");
+                    iedu.setValue("http://www.sat.gob.mx/iedu");
+                    instEducativas.setAttributeNode(iedu);
+
+                    Attr alumno = doc.createAttribute("nombreAlumno");
+                    alumno.setValue(nombreAlumno);
+                    instEducativas.setAttributeNode(alumno);
+
+                    Attr CURP = doc.createAttribute("CURP");
+                    CURP.setValue(curp);
+                    instEducativas.setAttributeNode(CURP);
+
+                    Attr nivelEducativ = doc.createAttribute("nivelEducativo");
+                    nivelEducativ.setValue(nivelEducativo);
+                    instEducativas.setAttributeNode(nivelEducativ);
+
+                    Attr RVOE = doc.createAttribute("autRVOE");
+                    RVOE.setValue(autRVOE);
+                    instEducativas.setAttributeNode(RVOE);
+
+                    Attr rfcPagos = doc.createAttribute("rfcPago");
+                    rfcPagos.setValue(rfcPago);
+                    instEducativas.setAttributeNode(rfcPagos);
+
+                    Attr versionesc = doc.createAttribute("version");
+                    versionesc.setValue("1.0");
+                    instEducativas.setAttributeNode(versionesc);
+                }
+                if(complementoSeleccionado != null && !complementoSeleccionado.isEmpty() && complementoSeleccionado.equals("arrendamiento")){
+                    // Creamos el nodo <cfdi:ComplementoConcepto>
+                    Element complementoConcepto = doc.createElement("cfdi:CuentaPredial");
+                    concepto.appendChild(complementoConcepto);
+           
+                    // Añadimos los atributos
+                    Attr numero = doc.createAttribute("Numero");
+                    numero.setValue(cuentaPredial);
+                    complementoConcepto.setAttributeNode(numero);
                 }
             }
             System.out.println("Termino Impuestos");
             //nodo impuestos
             System.out.println("crearXML4");
             Element impuestos = doc.createElement("cfdi:Impuestos");
-            rootElement.appendChild(impuestos);
-            if (Double.parseDouble(retenidosISR()) > 0.0 || Double.parseDouble(retenidosIva()) > 0.0 || Double.parseDouble(retenidosIEPS()) > 0.0) {
+            if (Double.parseDouble(trasladadoISR()) > 0.0 || (Double.parseDouble(trasladadoIva()) > 0.0 || iva0() || Double.parseDouble(trasladadoExento()) > 0.0) || Double.parseDouble(trasladadoIEPS()) > 0.0 || Double.parseDouble(retenidosISR()) > 0.0 || Double.parseDouble(retenidosIva()) > 0.0 || Double.parseDouble(retenidosIEPS()) > 0.0)
+                rootElement.appendChild(impuestos); 
+            if (Double.parseDouble(retenidosISR()) > 0.0 || Double.parseDouble(retenidosIva()) > 0.0 || Double.parseDouble(retenidosIEPS()) > 0.0) {             
                 //Atributos impuestos
                 System.out.println("Retenidos");
                 Attr totalRetenidos = doc.createAttribute("TotalImpuestosRetenidos");
                 totalRetenidos.setValue(new DecimalFormat("0.00").format(Double.parseDouble(retenidosISR()) + Double.parseDouble(retenidosIva()) + Double.parseDouble(retenidosIEPS())));
-                impuestos.setAttributeNode(totalRetenidos);
+                if(Double.parseDouble(totalRetenidos.getNodeValue()) > 0){
+                    impuestos.setAttributeNode(totalRetenidos);
+                }
                 //nodo retenciones
                 Element retenciones = doc.createElement("cfdi:Retenciones");
                 impuestos.appendChild(retenciones);
@@ -4970,7 +5170,10 @@ public class FacturarController implements Serializable {
                 System.out.println("Trasladados");
                 Attr totalTrasladado = doc.createAttribute("TotalImpuestosTrasladados");
                 totalTrasladado.setValue(new DecimalFormat("0.00").format(Double.parseDouble(trasladadoISR()) + Double.parseDouble(trasladadoIva()) + Double.parseDouble(trasladadoIEPS())));
-                impuestos.setAttributeNode(totalTrasladado);
+                if(Double.parseDouble(totalTrasladado.getNodeValue()) > 0){
+                    impuestos.setAttributeNode(totalTrasladado);
+                }
+                
                 //nodo traslados
                 Element traslados = doc.createElement("cfdi:Traslados");
                 impuestos.appendChild(traslados);
@@ -5952,8 +6155,8 @@ System.out.println("remolques");
             bytes = baos.toByteArray();
             baos.close();
             String xml = new String(bytes, "UTF-8");
-            //Sefactura sf = new Sefactura("http://pruebas.sefactura.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Pruebas
-            Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
+            Sefactura sf = new Sefactura("http://pruebas.sefactura.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Pruebas
+            //Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
             RespuestaTimbrado rt = sf.timbrado(xml);
             System.out.println("xmltimbrado: " + rt.getXml());
             System.out.println("resultado: " + rt.getResultado());
@@ -6965,6 +7168,20 @@ System.out.println("remolques");
         cfdisId.setFolio(obtenerFolioPorUsuarioSerieYCertificado(cfdisId.getSerie(), cfdisId.getCertificados_Id()).get(0).getFolio());
         cfdisId.setFechaExpedicion(new Date());
         System.out.println("CertificadoId: "+cfdisId.getCertificados_Id().getId());
+        List<RnGcComplementos> complementos = ComplementosFacade.obtenerXcfdiID(cfdisId);
+        if (complementos != null && !complementos.isEmpty()) {
+            complementoE = complementos.get(0);
+            if(complementos.get(0).getComplementoSeleccionado().equals("educativo")){
+                nombreAlumno = complementos.get(0).getNombreAlumno();
+                curp = complementos.get(0).getCurp();
+                nivelEducativo = complementos.get(0).getNivelEducativo();
+                autRVOE = complementos.get(0).getAutRVOE();
+                rfcPago = complementos.get(0).getRfcPago();
+            }else if(complementos.get(0).getComplementoSeleccionado().equals("arrendamiento")){
+                cuentaPredial = complementos.get(0).getNombreAlumno();
+            }
+            
+        }
         personas = cfdisId.getPersonaId();
         cfdisLineas = lineasCfdisFacade.obtenerCfdisLineas(cfdisId);
         elegirFormaPago();
@@ -6982,7 +7199,7 @@ System.out.println("remolques");
     
     public void agregarCFDIPlantilla(){
         System.out.println("Entro a agregar Plantilla: " );
-        System.out.println("CFDI RELASIONADO: " + cfdiRelacionado.getId()+" || "+ cfdiRelacionado.getImporteLetra());
+        System.out.println("CFDI RELACIONADO: " + cfdiRelacionado.getId()+" || "+ cfdiRelacionado.getImporteLetra());
         cfdisId = new RnGcCfdisTbl();
         cfdisId.setNombreEmisor(cfdiRelacionado.getNombreEmisor());
         cfdisId.setRfcEmisor(cfdiRelacionado.getRfcEmisor());
@@ -6999,6 +7216,28 @@ System.out.println("remolques");
         cfdisId.setPersonaId(cfdiRelacionado.getPersonaId());
         cfdisId.setRfcReceptor(cfdiRelacionado.getRfcReceptor());
         cfdisId.setSerie(cfdiRelacionado.getSerie());
+        
+        List<RnGcComplementos> complementos = ComplementosFacade.obtenerXcfdiID(cfdiRelacionado);
+        if (complementos != null && !complementos.isEmpty()) {
+            complementoE = new RnGcComplementos();
+            complementoE.setComplementoEscuela(complementos.get(0).getComplementoEscuela());
+            complementoE.setComplementoSeleccionado(complementos.get(0).getComplementoSeleccionado());
+            complementoE.setNombreAlumno(complementos.get(0).getNombreAlumno());
+            if(complementos.get(0).getComplementoSeleccionado().equals("educativo")){
+                nombreAlumno = complementos.get(0).getNombreAlumno();
+                curp = complementos.get(0).getCurp();
+                nivelEducativo = complementos.get(0).getNivelEducativo();
+                autRVOE = complementos.get(0).getAutRVOE();
+                rfcPago = complementos.get(0).getRfcPago();
+                complementoE.setAutRVOE(complementos.get(0).getAutRVOE());
+                complementoE.setCurp(complementos.get(0).getCurp());
+                complementoE.setNivelEducativo(complementos.get(0).getNivelEducativo());
+                complementoE.setRfcPago(complementos.get(0).getRfcPago());
+            }else if(complementos.get(0).getComplementoSeleccionado().equals("arrendamiento")){
+                cuentaPredial = complementos.get(0).getNombreAlumno();
+            }
+        }
+        
         //cfdisId.setFolio(obtenerFolioPorUsuarioSerieCert(cfdisId.getSerie(),cfdisId.getCertificados_Id()).get(0).getFolio());
         List<RnGcFolioserieTbl> listaFolioss = obtenerFolioPorUsuarioSerieCert(cfdisId.getSerie(), cfdisId.getCertificados_Id());
         // Verifica si la lista devuelta no es nula y no está vacía
@@ -7069,301 +7308,23 @@ System.out.println("remolques");
         cfdiRelacionado = null;
         listaCfdisRelacionados = null;
     }
-    
-     public boolean crearXmlEscuela() {
-        File tempFile = null;
-        System.out.println("crearXmlEscuela");
-        String cadOrig = "";
-        boolean valor = false;
-        try {
-            System.out.println("crearXMLEscuela2");
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            //Raiz
-            Document doc = docBuilder.newDocument();
-            Element rootElement = doc.createElement("cfdi:Comprobante");
-            doc.appendChild(rootElement);
-            //Atributos Raiz
-            Attr version = doc.createAttribute("Version");
-            version.setValue("4.0");
-            rootElement.setAttributeNode(version);
-            Attr exportacion = doc.createAttribute("Exportacion");
-            exportacion.setValue(cfdisId.getExportacionId().getClave());
-            //exportacion.setValue("01");
-            rootElement.setAttributeNode(exportacion);
-            
-            //System.out.println(cfdisId.getSerie());
-            if (cfdisId.getSerie() != null) {
-                Attr serie = doc.createAttribute("Serie");
-                serie.setValue(cfdisId.getSerie());
-                rootElement.setAttributeNode(serie);
-            }
-            if (cfdisId.getFolio() != null) {
-                Attr folio1 = doc.createAttribute("Folio");
-                folio1.setValue(String.valueOf(cfdisId.getFolio()));
-                rootElement.setAttributeNode(folio1);
-            }//*/
-            Attr fecha = doc.createAttribute("Fecha");
-            fecha.setValue(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(cfdisId.getFechaExpedicion()));
-            rootElement.setAttributeNode(fecha);
-            Attr sello = doc.createAttribute("Sello");
-            sello.setValue("");
-            rootElement.setAttributeNode(sello);
-            Attr formaPago = doc.createAttribute("FormaPago");
-            formaPago.setValue(cfdisId.getFormaPago());
-            rootElement.setAttributeNode(formaPago);
-            Attr noCertificado = doc.createAttribute("NoCertificado");
-            noCertificado.setValue(cfdisId.getCertificados_Id().getNumeroCertificado());
-            rootElement.setAttributeNode(noCertificado);
-            Attr certificado1 = doc.createAttribute("Certificado");
-            certificado1.setValue("");
-            rootElement.setAttributeNode(certificado1);
-            Attr subTotal = doc.createAttribute("SubTotal");
-            subTotal.setValue(calcularSubtotal());
-            rootElement.setAttributeNode(subTotal);
-            Attr moneda = doc.createAttribute("Moneda");
-            moneda.setValue(cfdisId.getMoneda());
-            rootElement.setAttributeNode(moneda);
-            if (cfdisId.getMoneda().equals("MXN") || cfdisId.getMoneda().equals("XXX")) {
-                Attr tipoCambio = doc.createAttribute("TipoCambio");
-                tipoCambio.setValue("1");
-                rootElement.setAttributeNode(tipoCambio);
-                cfdisId.setTipoCambio(1.0);
-            } else {
-                Attr tipoCambio = doc.createAttribute("TipoCambio");
-                tipoCambio.setValue(String.valueOf(cfdisId.getTipoCambio()));
-                rootElement.setAttributeNode(tipoCambio);
-            }
-            Attr total = doc.createAttribute("Total");
-            total.setValue(new DecimalFormat("0.00").format(calcularTotal()));
-            rootElement.setAttributeNode(total);
-            Attr tipoCfdi = doc.createAttribute("TipoDeComprobante");
-            tipoCfdi.setValue(cfdisId.getTipoComprobante());
-            rootElement.setAttributeNode(tipoCfdi);
-            Attr metodoPago = doc.createAttribute("MetodoPago");
-            metodoPago.setValue(cfdisId.getMetodoPago());
-            rootElement.setAttributeNode(metodoPago);
-            Attr lugarExp = doc.createAttribute("LugarExpedicion");
-            lugarExp.setValue(String.valueOf(cfdisId.getLugarExpedicion()));
-            rootElement.setAttributeNode(lugarExp);
-
-            Attr cfdi = doc.createAttribute("xmlns:cfdi");
-            cfdi.setValue("http://www.sat.gob.mx/cfd/4");
-            rootElement.setAttributeNode(cfdi);
-            Attr xsi = doc.createAttribute("xmlns:xsi");
-            xsi.setValue("http://www.w3.org/2001/XMLSchema-instance");
-            rootElement.setAttributeNode(xsi);
-            Attr esquema = doc.createAttribute("xsi:schemaLocation");
-            esquema.setValue("http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.sat.gob.mx/iedu http://www.sat.gob.mx/sitio_internet/cfd/iedu/iedu.xsd");
-            rootElement.setAttributeNode(esquema);
-            //Nodo emisor
-            Element emisor = doc.createElement("cfdi:Emisor");
-            rootElement.appendChild(emisor);
-            //Atributos Emisor
-            Attr rfcE = doc.createAttribute("Rfc");
-            rfcE.setValue(stripAccents(cfdisId.getRfcEmisor()));
-            emisor.setAttributeNode(rfcE);
-            Attr nombreE = doc.createAttribute("Nombre");
-            nombreE.setValue(cfdisId.getNombreEmisor());
-            emisor.setAttributeNode(nombreE);
-            Attr regimen = doc.createAttribute("RegimenFiscal");
-            regimen.setValue(cfdisId.getClaveRegimenFiscal());
-            emisor.setAttributeNode(regimen);
-            //nodo receptor
-            Element receptor = doc.createElement("cfdi:Receptor");
-            rootElement.appendChild(receptor);
-            //Atributos Receptor
-            Attr rfcR = doc.createAttribute("Rfc");
-            rfcR.setValue(personas.getRfc());
-            receptor.setAttributeNode(rfcR);
-            Attr nombreR = doc.createAttribute("Nombre");
-            nombreR.setValue(personas.getNombre());
-            System.out.print("nombreee " + personas.getNombre());
-            System.out.print("nombre strip escuelaaa " + stripAccents(personas.getNombre()));
-            receptor.setAttributeNode(nombreR);
-            Attr uso = doc.createAttribute("UsoCFDI");
-            uso.setValue(cfdisId.getUsoCfdi());
-            receptor.setAttributeNode(uso);
-            Attr regimenReceptor = doc.createAttribute("RegimenFiscalReceptor");
-            //regimenReceptor.setValue("605");
-            regimenReceptor.setValue(String.valueOf(personas.getRegimenFiscalId().getClaveRegimenFiscal()));
-            receptor.setAttributeNode(regimenReceptor);
-            Attr domicilioReceptor = doc.createAttribute("DomicilioFiscalReceptor");
-            //domicilioReceptor.setValue("90000");
-            domicilioReceptor.setValue(personas.getcodigoPostal());
-            receptor.setAttributeNode(domicilioReceptor);
-            
-            System.out.println("crearXMLescuelaa3");
-            //Nodo conceptos
-            Element conceptos = doc.createElement("cfdi:Conceptos");
-            rootElement.appendChild(conceptos);
-            String nsURI = "http://www.sat.gob.mx/iedu";
-            String nsPrefix = "iedu";
-            doc.getDocumentElement().setAttribute("xmlns:" + nsPrefix, nsURI);
-            for (int i = 0; i < cfdisLineas.size(); i++) {
-                //Atributos conceptos
-                System.out.println("Entro a lineas**");
-                Element concepto = doc.createElement("cfdi:Concepto");
-                conceptos.appendChild(concepto);
-                Attr claveProd = doc.createAttribute("ClaveProdServ");
-                claveProd.setValue(String.valueOf(cfdisLineas.get(i).getClaveProdServ()));
-                concepto.setAttributeNode(claveProd);
-                Attr objetoImp = doc.createAttribute("ObjetoImp");
-                //objetoImp.setValue("02");
-                objetoImp.setValue(cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave());
-                concepto.setAttributeNode(objetoImp);
-                if (cfdisLineas.get(i).getNoIdentificacion() != null && !cfdisLineas.get(i).getNoIdentificacion().isEmpty()) {
-                    Attr noIdenti = doc.createAttribute("NoIdentificacion");
-                    noIdenti.setValue(cfdisLineas.get(i).getNoIdentificacion());
-                    concepto.setAttributeNode(noIdenti);
-                }
-                 // Creamos el nodo <cfdi:ComplementoConcepto>
-            Element complementoConcepto = doc.createElement("cfdi:ComplementoConcepto");
-            concepto.appendChild(complementoConcepto);
-            
-            // Agregar namespace para el nodo complemento
-            Element instEducativas = doc.createElementNS("http://www.sat.gob.mx/iedu", "iedu:instEducativas");
-            complementoConcepto.appendChild(instEducativas);
-
-// Añadimos los atributos al elemento <iedu:instEducativas>
-                // Añadir atributo 'nombreAlumno'
-                Attr nombreAlumno = doc.createAttribute("nombreAlumno");
-                nombreAlumno.setValue("LARA VELAZQUEZ JOHANNA");
-                instEducativas.setAttributeNode(nombreAlumno);
-
-// Añadir atributo 'CURP'
-                Attr CURP = doc.createAttribute("CURP");
-                CURP.setValue("LAVJ041105MHGRLHA9");
-                instEducativas.setAttributeNode(CURP);
-
-// Añadir atributo 'nivelEducativo'
-                Attr nivelEducativo = doc.createAttribute("nivelEducativo");
-                nivelEducativo.setValue("Bachillerato o su equivalente");
-                instEducativas.setAttributeNode(nivelEducativo);
-
-// Añadir atributo 'autRVOE'
-                Attr autRVOE = doc.createAttribute("autRVOE");
-                autRVOE.setValue("131");
-                instEducativas.setAttributeNode(autRVOE);
-
-// Añadir atributo 'rfcPago'
-                Attr rfcPago = doc.createAttribute("rfcPago");
-                rfcPago.setValue("LABJ681217JL6");
-                instEducativas.setAttributeNode(rfcPago);
-// Añadir atributo 'version'
-Attr versionesc = doc.createAttribute("version");
-versionesc.setValue("1.0");
-instEducativas.setAttributeNode(versionesc);
-
-                
-                
-                Attr cantidad = doc.createAttribute("Cantidad");
-                cantidad.setValue(new DecimalFormat("0").format(cfdisLineas.get(i).getCantidad()));
-                concepto.setAttributeNode(cantidad);
-                Attr claveUnidad = doc.createAttribute("ClaveUnidad");
-                claveUnidad.setValue(cfdisLineas.get(i).getClaveUnidad());
-                concepto.setAttributeNode(claveUnidad);
-                if (cfdisLineas.get(i).getUnidad() != null && !cfdisLineas.get(i).getUnidad().isEmpty()) {
-                    Attr unidad = doc.createAttribute("Unidad");
-                    unidad.setValue(cfdisLineas.get(i).getUnidad());
-                    concepto.setAttributeNode(unidad);
-                }
-                Attr descripcion = doc.createAttribute("Descripcion");
-                descripcion.setValue(stripAccents(cfdisLineas.get(i).getDescripcion()));
-                concepto.setAttributeNode(descripcion);
-                Attr valorUnit = doc.createAttribute("ValorUnitario");
-                valorUnit.setValue(new DecimalFormat("0.00").format(cfdisLineas.get(i).getValorUnit()));
-                concepto.setAttributeNode(valorUnit);
-                Attr importe = doc.createAttribute("Importe");
-                importe.setValue(new DecimalFormat("0.00").format(cfdisLineas.get(i).getImporte()));
-                concepto.setAttributeNode(importe);
-                
-                
-                
-                System.out.println("salto el primer impuesto");
-                if (((cfdisLineas.get(i).getTipoImpuesto() != null) && cfdisLineas.get(i).getTipoImpuesto().equals("Retención"))
-                        || ((cfdisLineas.get(i).getTipoImpuesto3() != null) && cfdisLineas.get(i).getTipoImpuesto3().equals("Retención"))
-                        || ((cfdisLineas.get(i).getTipoImpuesto2() != null) && cfdisLineas.get(i).getTipoImpuesto2().equals("Retención"))
-                        || ((cfdisLineas.get(i).getTipoImpuesto4() != null) && cfdisLineas.get(i).getTipoImpuesto4().equals("Retención"))) {
-                    //nodo retenciones
-                    
-                  
-                    System.out.println("dato6");
-                    
-                    System.out.println("dato8");
-                }
-            }
-            System.out.println("Termino Impuestos");
-            //nodo impuestos
-            
-           //Complemento
-          
-            System.out.println("Trasladados2");
-            System.out.println("Probando");
-            File xslt = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Archivos/cadenaoriginal_4_0.xslt"));
-            StreamSource sourceXSL = new StreamSource(xslt);
-            System.out.println("Probando2");
-
-            DOMSource source = new DOMSource(doc);
-            System.out.println("Probando3");
-            tempFile = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Archivos/xmlTemp.xml"));
-            //tempFile = new File("C:\\Users\\Developer1\\Desktop\\Nueva carpeta\\NuevoPrueba.xml");
-            System.out.println("Probando3.1");
-            //FileWriter writer = new FileWriter(tempFile);
-            System.out.println("Probando3.2");
-            StreamResult sourceXml = new StreamResult(tempFile);
-            TransformerFactory trasnformerFactory = TransformerFactory.newInstance();
-            Transformer trasnformer = trasnformerFactory.newTransformer();
-            trasnformer.transform(source, sourceXml);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();           //CadenaOrignal
-            StreamResult cadenaOriginal = new StreamResult(baos);
-            StreamSource sourceXml2 = new StreamSource(tempFile);
-            TransformerFactory tFactory = TransformerFactory.newInstance();
-            Transformer trasnformer2 = tFactory.newTransformer(sourceXSL);
-            trasnformer2.transform(sourceXml2, cadenaOriginal);
-            cadOrig = baos.toString();                                          //CadenaOriginal
-            crearSello(cadOrig);
-            crearCertificado();
-            leerCfdi(tempFile);
-            if (modificarXml(cadOrig, tempFile)) {
-                valor = true;
-            } else {
-                valor = false;
-            }//*/
-            System.out.println("Probando4");
-            
-            
-              // Convertir el documento XML en una cadena de texto
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = null;
-        try {
-            transformer = transformerFactory.newTransformer();
-        } catch (TransformerConfigurationException ex) {
-            Logger.getLogger(FacturarController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        StringWriter writer = new StringWriter();
-        transformer.transform(new DOMSource(doc), new StreamResult(writer));
-        String xmlString = writer.getBuffer().toString();
-        
-        // Imprimir la cadena XML
-        System.out.println("/////////////////////////////////////////////////XML generado:");
-        System.out.println(xmlString);
-        System.out.println("/////////////////////////////////////////////////XML generado fin:");
-            
-        } catch (Exception ex) {
-            System.out.println("ErrorIngEgrem: " + ex.getMessage() + " | " + ex.getLocalizedMessage());
-        }
-                 
-        
-        return valor;
-    }
-    
+ 
 private String complementoSeleccionado;
 private String nombreAlumno;
 private String curp;
 private String nivelEducativo;
 private String autRVOE;
 private String rfcPago;
+private String cuentaPredial;
+private RnGcDatosalumnoTbl alumno;
+
+    public RnGcDatosalumnoTbl getAlumno() {
+        return alumno;
+    }
+
+    public void setAlumno(RnGcDatosalumnoTbl alumno) {
+        this.alumno = alumno;
+    }
 
     public String getNombreAlumno() {
         return nombreAlumno;
@@ -7405,9 +7366,6 @@ private String rfcPago;
         this.rfcPago = rfcPago;
     }
 
-
-      
-
     public String getComplementoSeleccionado() {
         return complementoSeleccionado;
     }
@@ -7422,19 +7380,33 @@ private String rfcPago;
     }
     
     public void confirmarComplemento(){
-        System.out.println("Complemento guardado");
-}
+        //System.out.println("Complemento guardado");
+        complementoSeleccionado = "";
+    }
     
     public int getActiveIndex() {
-    if ("educativo".equals(complementoSeleccionado)) {
-        return 0;
-    } else if ("arrendamiento".equals(complementoSeleccionado)) {
-        return 1;
-    } else {
-        return 2;
+        if ("educativo".equals(complementoSeleccionado)) {
+            return 0;
+        } else if ("arrendamiento".equals(complementoSeleccionado)) {
+            return 1;
+        } else {
+            return 2;
+        }
     }
-}
 
+    public String getCuentaPredial() {
+        return cuentaPredial;
+    }
 
+    public void setCuentaPredial(String cuentaPredial) {
+        this.cuentaPredial = cuentaPredial;
+    }
     
+    public void asignarAlumno(){
+        nombreAlumno = alumno.getNombre();
+        curp = alumno.getCurp();
+        nivelEducativo = alumno.getNivelEducativo();
+        autRVOE = alumno.getAutRVOE();
+        rfcPago = alumno.getRfcPago();
+    }
 }
