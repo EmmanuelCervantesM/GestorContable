@@ -289,6 +289,19 @@ public class RnGcNomNominasTblController implements Serializable {
         return listaNominas;
     }
 
+    public void guardarNombreNomina() {
+        if (selected != null) {
+            try {
+                ejbFacade.edit(selected); // O el método que uses para actualizar
+                JsfUtil.addSuccessMessage("Nombre de nómina actualizado.");
+            } catch (Exception e) {
+                JsfUtil.addErrorMessage("Error al actualizar el nombre de la nómina: " + e.getMessage());
+            }
+        } else {
+            JsfUtil.addErrorMessage("No hay nómina seleccionada.");
+        }
+    }
+
     public void inicializar() {
         selected = new RnGcNomNominasTbl();
         periodoNomina = new RnGcNomPeriodonominaTbl();

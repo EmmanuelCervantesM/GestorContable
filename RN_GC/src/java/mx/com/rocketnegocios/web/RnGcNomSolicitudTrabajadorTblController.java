@@ -28,6 +28,9 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
@@ -84,6 +87,7 @@ import mx.com.rocketnegocios.beans.RnGcNomSolicitudesTblFacade;
 import mx.com.rocketnegocios.beans.RnGcNomTipocontratoTblFacade;
 import mx.com.rocketnegocios.beans.RnGcNomTrabajadorCfdisTblFacade;
 import mx.com.rocketnegocios.beans.RnGcTimbresTblFacade;
+import mx.com.rocketnegocios.beans.RnGcTrabajadoresTblFacade;
 import mx.com.rocketnegocios.beans.RnGcUsuariosTblFacade;
 import mx.com.rocketnegocios.entities.RnGcArchivosTbl;
 import mx.com.rocketnegocios.entities.RnGcCertificadosTbl;
@@ -97,6 +101,7 @@ import mx.com.rocketnegocios.entities.RnGcNomSolicitudesTbl;
 import mx.com.rocketnegocios.entities.RnGcNomTipocontratoTbl;
 import mx.com.rocketnegocios.entities.RnGcNomTrabajadorCfdisTbl;
 import mx.com.rocketnegocios.entities.RnGcTimbresTbl;
+import mx.com.rocketnegocios.entities.RnGcTrabajadoresTbl;
 import mx.com.rocketnegocios.entities.RnGcUsuariosTbl;
 import mx.com.rocketnegocios.util.UsuarioFirmado;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -139,6 +144,9 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
     private RnGcNomNominasTblFacade nominaFacade;
 
     @EJB
+    private RnGcTrabajadoresTblFacade trabajadoresFacade;
+
+    @EJB
     private RnGcNomSolicitudesLineasTblFacade solicitudLineasFacade;
 
     @EJB
@@ -177,10 +185,14 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
     private RnGcNomNominasTbl nomina;
     private List<RnGcNomSolicitudesLineasTbl> listaPercepciones;
     private List<RnGcNomSolicitudesLineasTbl> listaDeducciones;
+    private List<RnGcNomSolicitudesLineasTbl> listaIncapacidad;
     private List<RnGcNomSolicitudesLineasTbl> percepcionesOriginal;
     private List<RnGcNomSolicitudesLineasTbl> deduccionesOriginal;
+    private List<RnGcNomSolicitudesLineasTbl> incapacidadOriginal;
     private List<RnGcNomSolicitudesLineasTbl> percepcionesEliminadas = new ArrayList<>();
     private List<RnGcNomSolicitudesLineasTbl> deduccionesEliminadas = new ArrayList<>();
+    private List<RnGcNomSolicitudesLineasTbl> incapacidadEliminadas = new ArrayList<>();
+    private RnGcTrabajadoresTbl selectedTrabajadorId;
 
     private RnGcNomTipocontratoTbl tipoContrato;
     private RnGcNomEstadosTbl estado;
@@ -195,6 +207,15 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
 
     ///
     public List<RnGcNomSolicitudesLineasTbl> getListaPercepciones() {
+        if (listaPercepciones == null) {
+            System.out.println("listaPercepciones está vacía (null)");
+        } else {
+            System.out.println("Lista Percepciones contiene " + listaPercepciones.size() + " elementos:");
+            for (RnGcNomSolicitudesLineasTbl item : listaPercepciones) {
+                System.out.println(" - Id: " + item.getId() + ", TipoConcepto: " + item.getTipoConcepto() + ", TotalGravado: " + item.getTotalGravado());
+                // agrega aquí más campos que quieras ver
+            }
+        }
         return listaPercepciones;
     }
 
@@ -203,18 +224,121 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
     }
 
     public List<RnGcNomSolicitudesLineasTbl> getListaDeducciones() {
+        if (listaDeducciones == null) {
+            System.out.println("listaDeducciones está vacía (null)");
+        } else {
+            System.out.println("Lista deducciones contiene " + listaDeducciones.size() + " elementos:");
+            for (RnGcNomSolicitudesLineasTbl item : listaDeducciones) {
+                System.out.println(" - Id: " + item.getId() + ", TipoConcepto: " + item.getTipoConcepto() + ", TotalGravado: " + item.getTotalGravado());
+                // agrega aquí más campos que quieras ver
+            }
+        }
         return listaDeducciones;
+    }
+
+    public void setListaIncapacidad(List<RnGcNomSolicitudesLineasTbl> listaIncapacidad) {
+        this.listaIncapacidad = listaIncapacidad;
+    }
+
+    public List<RnGcNomSolicitudesLineasTbl> getListaIncapacidad() {
+        if (listaIncapacidad == null) {
+            System.out.println("listaIncapacidad está vacía (null)");
+        } else {
+            System.out.println("Lista incapacidad contiene " + listaIncapacidad.size() + " elementos:");
+            for (RnGcNomSolicitudesLineasTbl item : listaIncapacidad) {
+                System.out.println(" - Id: " + item.getId() + ", TipoConcepto: " + item.getTipoConcepto() + ", TotalGravado: " + item.getTotalGravado());
+                // agrega aquí más campos que quieras ver
+            }
+        }
+        return listaIncapacidad;
     }
 
     public void setListaDeducciones(List<RnGcNomSolicitudesLineasTbl> listaDeducciones) {
         this.listaDeducciones = listaDeducciones;
     }
 
+    public RnGcTrabajadoresTbl getSelectedTrabajadorId() {
+        return selectedTrabajadorId;
+    }
+
+    public void setSelectedTrabajadorId(RnGcTrabajadoresTbl selectedTrabajadorId) {
+        this.selectedTrabajadorId = selectedTrabajadorId;
+    }
+
+    public void agregarTrabajador() {
+        System.out.println("Entro a la función");
+        if (selectedTrabajadorId == null) {
+            JsfUtil.addErrorMessage("Debes seleccionar un trabajador.");
+            return;
+        }
+
+        // Evitar duplicados
+        boolean yaExiste = listaSolicitudesTrabajador != null && listaSolicitudesTrabajador.stream()
+                .anyMatch(s -> s.getTrabajadorId() != null
+                && s.getTrabajadorId().getId().equals(selectedTrabajadorId.getId()));
+
+        if (yaExiste) {
+            JsfUtil.addErrorMessage("El trabajador ya está agregado a esta solicitud.");
+            return;
+        }
+
+        // Obtener el trabajador desde BD (suponiendo que tienes acceso a su facade o lista)
+        RnGcTrabajadoresTbl trabajador = trabajadoresFacade.obtenerPorId(selectedTrabajadorId.getId()); // Ajusta según tu arquitectura
+
+        if (trabajador == null) {
+            JsfUtil.addErrorMessage("No se pudo encontrar el trabajador seleccionado.");
+            return;
+        }
+
+        RnGcNomSolicitudTrabajadorTbl nuevoTrabajador = new RnGcNomSolicitudTrabajadorTbl();
+        nuevoTrabajador.setTrabajadorId(trabajador);
+        nuevoTrabajador.setSolicitudId(solicitud);
+        nuevoTrabajador.setSdi(new BigDecimal(trabajador.getSdi()));
+        nuevoTrabajador.setEstatus("A");
+
+        if (listaSolicitudesTrabajador == null || listaSolicitudesTrabajador.isEmpty()) {
+            JsfUtil.addErrorMessage("No hay trabajadores en la lista para copiar los datos.");
+            return;
+        }
+
+        RnGcNomSolicitudTrabajadorTbl data = listaSolicitudesTrabajador.get(0);
+
+        nuevoTrabajador.setDiasPagados(data.getDiasPagados());
+        nuevoTrabajador.setFechaPago(data.getFechaPago());
+
+        nuevoTrabajador = ejbFacade.refreshFromDB(nuevoTrabajador);
+
+        listaSolicitudesTrabajador.add(nuevoTrabajador);
+        //nuevo.setSolicitudId(solicitud); // Asegúrate de que `solicitud` esté inicializada correctamente
+
+        try {
+            ejbFacade.create(nuevoTrabajador); // Guardar en BD
+            if (listaSolicitudesTrabajador == null) {
+                listaSolicitudesTrabajador = new ArrayList<>();
+            }
+            listaSolicitudesTrabajador.add(nuevoTrabajador); // Agregar a lista local
+
+            JsfUtil.addSuccessMessage("Trabajador agregado correctamente.");
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage("Error al guardar el trabajador: " + e.getMessage());
+        }
+    }
+
 // Cargar datos existentes
     public void cargarLineas() {
         if (selected != null && selected.getId() != null) {
-            listaPercepciones = solicitudLineasFacade.obtenerPercepciones(selected.getId());
-            listaDeducciones = solicitudLineasFacade.obtenerDeducciones(selected.getId());
+            List<RnGcNomSolicitudesLineasTbl> percepciones = solicitudLineasFacade.obtenerPercepciones(selected.getId());
+            listaPercepciones = percepciones != null ? percepciones : new ArrayList<>();
+
+            List<RnGcNomSolicitudesLineasTbl> deducciones = solicitudLineasFacade.obtenerDeducciones(selected.getId());
+            listaDeducciones = deducciones != null ? deducciones : new ArrayList<>();
+
+            List<RnGcNomSolicitudesLineasTbl> incapacidades = solicitudLineasFacade.obtenerIncapacidad(selected.getId());
+            listaIncapacidad = incapacidades != null ? incapacidades : new ArrayList<>();
+        } else {
+            listaPercepciones = new ArrayList<>();
+            listaDeducciones = new ArrayList<>();
+            listaIncapacidad = new ArrayList<>();
         }
     }
 
@@ -222,6 +346,9 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
     public void agregarPercepcion() {
         RnGcNomSolicitudesLineasTbl nueva = new RnGcNomSolicitudesLineasTbl();
         nueva.setSolicitudTrabajadorId(selected.getId());
+        nueva.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
+        nueva.setUltimaFechaActualizacion(new Date());
+        nueva.setFechaCreacion(new Date());
         listaPercepciones.add(nueva);
     }
 
@@ -229,7 +356,20 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
     public void agregarDeduccion() {
         RnGcNomSolicitudesLineasTbl nueva = new RnGcNomSolicitudesLineasTbl();
         nueva.setSolicitudTrabajadorId(selected.getId());
+        nueva.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
+        nueva.setUltimaFechaActualizacion(new Date());
+        nueva.setFechaCreacion(new Date());
         listaDeducciones.add(nueva);
+    }
+
+    // Agregar una nueva incapacidad vacía
+    public void agregarIncapacidad() {
+        RnGcNomSolicitudesLineasTbl nueva = new RnGcNomSolicitudesLineasTbl();
+        nueva.setSolicitudTrabajadorId(selected.getId());
+        nueva.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
+        nueva.setUltimaFechaActualizacion(new Date());
+        nueva.setFechaCreacion(new Date());
+        listaIncapacidad.add(nueva);
     }
 
 // Eliminar percepción
@@ -247,6 +387,13 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         listaDeducciones.remove(item);
     }
 
+    public void eliminarIncapacidad(RnGcNomSolicitudesLineasTbl item) {
+        if (item.getId() != null) {
+            incapacidadEliminadas.add(item);
+        }
+        listaIncapacidad.remove(item);
+    }
+
     private RnGcNomSolicitudesLineasTbl clonarLinea(RnGcNomSolicitudesLineasTbl original) {
         RnGcNomSolicitudesLineasTbl copia = new RnGcNomSolicitudesLineasTbl();
         copia.setId(original.getId()); // puedes omitir si vas a insertar como nuevo
@@ -260,8 +407,9 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
     }
 
     public void prepararEdicionPercepcionesDeducciones() {
+        System.out.println("Cargando deducciones...");
         cargarLineas(); // ✅ Asegura que cargas los datos antes de clonar
-
+        System.out.println(".../Iniciando..");
         // Clonar listas actuales
         this.percepcionesOriginal = new ArrayList<>();
         for (RnGcNomSolicitudesLineasTbl p : listaPercepciones) {
@@ -273,25 +421,46 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             this.deduccionesOriginal.add(clonarLinea(d));
         }
 
+        this.incapacidadOriginal = new ArrayList<>();
+        for (RnGcNomSolicitudesLineasTbl i : listaIncapacidad) {
+            this.incapacidadOriginal.add(clonarLinea(i));
+        }
+
         // Limpiar posibles eliminaciones anteriores
         percepcionesEliminadas.clear();
         deduccionesEliminadas.clear();
+        incapacidadEliminadas.clear();
     }
 
     public void cancelarCambiosPercepcionesDeducciones() {
         this.listaPercepciones = percepcionesOriginal != null ? new ArrayList<>(percepcionesOriginal) : new ArrayList<>();
         this.listaDeducciones = deduccionesOriginal != null ? new ArrayList<>(deduccionesOriginal) : new ArrayList<>();
+        this.listaIncapacidad = listaIncapacidad != null ? new ArrayList<>(incapacidadOriginal) : new ArrayList<>();
         percepcionesEliminadas.clear();
         deduccionesEliminadas.clear();
+        incapacidadEliminadas.clear();
     }
 
     public void guardarLineas() {
         for (RnGcNomSolicitudesLineasTbl p : listaPercepciones) {
+            System.out.println("Id: " + p.getId());
+            System.out.println("SolicitudTrabajadorId: " + p.getSolicitudTrabajadorId());
+            System.out.println("TipoClave: " + p.getTipoClave());
+            System.out.println("TipoConcepto: " + p.getTipoConcepto());
+            System.out.println("TotalGravado: " + p.getTotalGravado());
+            System.out.println("TotalExento: " + p.getTotalExento());
+            System.out.println("FechaCreacion: " + p.getFechaCreacion());
+            System.out.println("UltimaFechaActualizacion: " + p.getUltimaFechaActualizacion());
+            System.out.println("-------------------------");
             solicitudLineasFacade.edit(p);
         }
 
         for (RnGcNomSolicitudesLineasTbl d : listaDeducciones) {
             solicitudLineasFacade.edit(d);
+        }
+
+        for (RnGcNomSolicitudesLineasTbl i : listaIncapacidad) {
+            solicitudLineasFacade.edit(i);
         }
 
         for (RnGcNomSolicitudesLineasTbl p : percepcionesEliminadas) {
@@ -302,11 +471,17 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             solicitudLineasFacade.remove(d);
         }
 
+        for (RnGcNomSolicitudesLineasTbl i : incapacidadEliminadas) {
+            solicitudLineasFacade.remove(i);
+        }
+
         // Limpiar las listas temporales
         percepcionesOriginal = null;
         deduccionesOriginal = null;
+        incapacidadOriginal = null;
         percepcionesEliminadas.clear();
         deduccionesEliminadas.clear();
+        incapacidadEliminadas.clear();
 
         JsfUtil.addSuccessMessage("Percepciones y deducciones actualizadas.");
     }
@@ -319,7 +494,11 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         for (RnGcNomSolicitudesLineasTbl d : listaDeducciones) {
             solicitudLineasFacade.edit(d);
         }
+        for (RnGcNomSolicitudesLineasTbl i : listaIncapacidad) {
+            solicitudLineasFacade.edit(i);
+        }
         JsfUtil.addSuccessMessage("Percepciones y deducciones actualizadas.");
+
     }
 
     ///
@@ -336,9 +515,11 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         if (selected != null && selected.getId() != null) {
             listaPercepciones = solicitudLineasFacade.obtenerPercepciones(selected.getId());
             listaDeducciones = solicitudLineasFacade.obtenerDeducciones(selected.getId());
+            listaIncapacidad = solicitudLineasFacade.obtenerIncapacidad(selected.getId());
         } else {
             listaPercepciones = new ArrayList<>();
             listaDeducciones = new ArrayList<>();
+            listaIncapacidad = new ArrayList<>();
         }
     }
 
@@ -1533,8 +1714,10 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
     }
 
     public void descargarVistaPrevia() {
+        System.out.println("Inicando vista previa");
         try {
             if (seleccionados != null && !seleccionados.isEmpty() && seleccionados.size() > 0) {
+                System.out.println("Entro al if");
                 cfdisId.setClaveRegimenFiscal(cfdisId2.getClaveRegimenFiscal());
                 cfdisId.setLugarExpedicion(cfdisId2.getLugarExpedicion());
                 FileOutputStream fos = new FileOutputStream(new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/responsivo.png")));
@@ -1545,22 +1728,46 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                         .getRealPath("/resources/images/responsivo.png");//*/
                 String imagenqr = FacesContext.getCurrentInstance()
                         .getExternalContext()
-                        .getRealPath("/resources/images/qr.png");
+                        .getRealPath("/resources/images/qr_ejemplo.png");
+                
+                System.out.println("Ruta de imagenes");
+System.out.println("Ruta 1 " + imagenLogo);
+System.out.println("Ruta 2 " + imagenqr);
                 List<byte[]> pdfs = new ArrayList<>();
+                System.out.println("Parte 2");
                 for (RnGcNomSolicitudTrabajadorTbl soliTrabajador : seleccionados) {
                     nomina = new RnGcNomNominasTbl();
                     tipoContrato = new RnGcNomTipocontratoTbl();
                     estado = new RnGcNomEstadosTbl();
+                    //tipoJornada = new RnGcNomTipojornadaTbl();
+                    //riesgoPuesto = new RnGcNomRiesgopuestoTbl();
+
                     listaPercepciones = new ArrayList<>();
                     listaDeducciones = new ArrayList<>();
+
                     nomina = nominaFacade.obtenerNominaPorIdUnico(soliTrabajador.getSolicitudId().getNominaId());
                     tipoContrato = tipoContratoFacade.obtenerXId(soliTrabajador.getTrabajadorId().getTipoContratoId());
-                    estado = estadoFacade.obtenerXId(soliTrabajador.getTrabajadorId().getEstadoId());
+                    estado = estadoFacade.obtenerXId(soliTrabajador.getTrabajadorId().getEntidadFederativaId().getId());
+                    System.out.println("Id de estado: " + soliTrabajador.getTrabajadorId().getEntidadFederativaId().getId());
+
                     listaPercepciones = solicitudLineasFacade.obtenerPercepciones(soliTrabajador.getId());
                     listaDeducciones = solicitudLineasFacade.obtenerDeducciones(soliTrabajador.getId());
+
                     cfdisId.setImporte(soliTrabajador.getImporteNeto().doubleValue());
                     cfdisId.setSaldoPagado(soliTrabajador.getImporteNeto().doubleValue());
                     cfdisId.setSaldoInsoluto(soliTrabajador.getImporteNeto().doubleValue());
+                    
+                    Date fechaInicio = soliTrabajador.getTrabajadorId().getFechaInicio();
+                    LocalDate inicio = fechaInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    LocalDate hoy = LocalDate.now();
+
+                    long semanas = ChronoUnit.WEEKS.between(inicio, hoy);
+
+                    // Formato para XML CFDI: "PnnnW"
+                    String antiguedadFormato = String.format("P%03dW", semanas);
+                    System.out.println("Antigüedad para el XML: " + antiguedadFormato);
+                    
+                    System.out.println("Parte Media");
                     Map<String, Object> parametros = new HashMap<String, Object>();
                     parametros.put("Nombre_Emisor", cfdisId.getNombreEmisor());
                     parametros.put("RFC_Emisor", cfdisId.getRfcEmisor());
@@ -1679,14 +1886,29 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                     parametros.put("totalDeducciones", String.valueOf(soliTrabajador.getTotalDeducciones().doubleValue()));
                     parametros.put("importeNeto", String.valueOf(soliTrabajador.getImporteNeto().doubleValue()));
 
+                    
+                    parametros.put("antiguedad", antiguedadFormato);
+                    parametros.put("tipoJornada", soliTrabajador.getTrabajadorId().getTipoJornadaTblId().getCveTipoJornada() + " - " + soliTrabajador.getTrabajadorId().getTipoJornadaTblId().getDescripcion());
+                    parametros.put("sindicalizado", soliTrabajador.getTrabajadorId().getSindicalizado());
+                    //parametros.put("diasPagados", soliTrabajador.getDiasPagados());
+                    
+                    
                     File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Reports/complemento_nomina.jasper"));
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametros, new JREmptyDataSource());
-                    pdfs.add(JasperExportManager.exportReportToPdf(jasperPrint));
+
+                    try {
+                        JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametros, new JREmptyDataSource());
+                        pdfs.add(JasperExportManager.exportReportToPdf(jasperPrint));
+                    } catch (Exception e) {
+                        System.out.println("Error al generar el PDF para " + soliTrabajador.getTrabajadorId().getNombreCompleto());
+                        e.printStackTrace();
+                    }
+                    System.out.println("Parte 3");
+                    System.out.println("Total de PDFs generados: " + pdfs.size());
                 }
 
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 ZipOutputStream zout = new ZipOutputStream(bos);
-
+                System.out.println("Parte 4");
                 for (int i = 0; i < pdfs.size(); i++) {
                     System.out.println("pdfs2: " + pdfs.get(i) + " | " + new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss").format(new Date()) + " | " + (i + 1));
                     ZipEntry entry = new ZipEntry("VistaPreviaNomina_" + seleccionados.get(i).getTrabajadorId().getNombre() + "_" + new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss").format(new Date()) + ".pdf");
@@ -1703,6 +1925,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                 downLoadFile = new DefaultStreamedContent(streamPdf, "application/zip", "Factura_Nomina_" + new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss").format(new Date()) + ".zip");
                 System.out.println("Descarga2");
             } else {
+                System.out.println("No entro al if");
                 JsfUtil.addSuccessMessage("No se seleccionaron trabajadores");
             }
         } catch (Exception ex) {

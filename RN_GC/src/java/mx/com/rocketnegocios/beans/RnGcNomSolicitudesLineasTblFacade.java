@@ -62,6 +62,18 @@ public class RnGcNomSolicitudesLineasTblFacade extends AbstractFacade<RnGcNomSol
         return listaDeducciones;
     }
     
+    public List<RnGcNomSolicitudesLineasTbl> obtenerIncapacidad(Integer soliTrabajador){
+        List<RnGcNomSolicitudesLineasTbl> listaIncapacidad = null;
+        try{
+            listaIncapacidad = em.createNamedQuery("RnGcNomSolicitudesLineasTbl.obtenerIncapacidad", RnGcNomSolicitudesLineasTbl.class)
+                    .setParameter("solicitudTrabajadorId", soliTrabajador)
+                    .getResultList();
+        }catch(NoResultException ex){
+            System.out.println("No se encontraron deducciones");
+        }
+        return listaIncapacidad;
+    }
+    
     public List<RnGcNomSolicitudesLineasTbl> obtenerXSoliTrabajador(Integer soliTrabajadorUno, Integer soliTrabajadorDos){
         List<RnGcNomSolicitudesLineasTbl> listaLineas = null;
         try{
