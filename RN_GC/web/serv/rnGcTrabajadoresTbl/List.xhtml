@@ -33,32 +33,15 @@
                                 <h:outputText value="No. Trabajador"/>
                             </f:facet>
                             <h:outputText value="#{item.noTrabajador}"/>
-                        </p:column>
-                        <p:column>
+                        </p:column>     
+                        <p:column filterBy="#{item.tipoEmpleado}" filterMatchMode="contains">
                             <f:facet name="header">
-                                <h:outputText value="Fecha Inicio Labores"/>
+                                <h:outputText value="SYS / ASIM"/>
                             </f:facet>
-                            <h:outputText value="#{item.fechaInicio}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </h:outputText>
+                            <h:outputText value="#{rnGcTrabajadoresTblController.obtenerDescripcionTipoPersona(item.tipoPersona)}"/>
                         </p:column>
-                        <p:column filterBy="#{item.nombre}" filterMatchMode="contains">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_nombre}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.nombre}"/>
-                        </p:column>
-                        <p:column filterBy="#{item.apPaterno}" filterMatchMode="contains">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_apPaterno}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.apPaterno}"/>
-                        </p:column>
-                        <p:column filterBy="#{item.apMaterno}" filterMatchMode="contains">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_apMaterno}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.apMaterno}"/>
+                        <p:column headerText="Nombre completo" filterBy="#{item.nombre} #{item.apPaterno} #{item.apMaterno}" filterMatchMode="contains">
+                            <h:outputText value="#{item.nombre} #{item.apPaterno} #{item.apMaterno}" />
                         </p:column>
                         <p:column filterBy="#{item.curp}" filterMatchMode="contains">
                             <f:facet name="header">
@@ -78,6 +61,14 @@
                             </f:facet>
                             <h:outputText value="#{item.nss}"/>
                         </p:column>
+                                                <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Fecha Inicio Labores"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaInicio}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column> 
                         <p:column filterBy="#{item.salarioBase}" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="Salario Base"/>
@@ -88,23 +79,11 @@
                         </p:column>
                         <p:column filterBy="#{item.sdi}" filterMatchMode="contains">
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_sdi}"/>
+                                <h:outputText value="Salario Diario Integrado"/>
                             </f:facet>
                             <h:outputText value="#{item.sdi}">
                                 <f:convertNumber type="currency" currencySymbol="$" />
                             </h:outputText>
-                        </p:column>
-                        <p:column filterBy="#{item.banco}" filterMatchMode="contains">
-                            <f:facet name="header">
-                                <h:outputText value="Banco"/>
-                            </f:facet>
-                            <h:outputText value="#{item.banco}"/>
-                        </p:column>
-                        <p:column filterBy="#{item.cuentaBancaria}" filterMatchMode="contains">
-                            <f:facet name="header">
-                                <h:outputText value="Cuenta Bancaria"/>
-                            </f:facet>
-                            <h:outputText value="#{item.cuentaBancaria}"/>
                         </p:column>
                         <p:column filterBy="#{item.email1}" filterMatchMode="contains">
                             <f:facet name="header">
@@ -139,7 +118,7 @@
                         <p:outputLabel value="Selecciona catalogo" />
                     </f:facet>
                     <p:fileUpload id="plantilla" fileUploadListener="#{rnGcTrabajadoresTblController.leerPlantilla}" fileLimitMessage="Número máximo de archivos excedido" label="Buscar" cancelLabel="Cancelar" uploadLabel="Cargar" sequential="true"
-                                  mode="advanced" update=":RnGcTrabajadoresTblListForm:datalist, :growl" dragDropSupport="true" sizeLimit="100000" fileLimit="20" allowTypes="/(\.|\/)(xlsx)$/">
+                                  mode="advanced" update=":RnGcTrabajadoresTblListForm:datalist, :growl" dragDropSupport="true" sizeLimit="1048576" fileLimit="20"  allowTypes="/(\.|\/)(xlsx|xlsm)$/">
                         <p:growl life="10000" showDetail="true"/>      
                     </p:fileUpload>
                 </p:panel>

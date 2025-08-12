@@ -12,42 +12,137 @@
             <h:form id="RnGcTrabajadoresTblCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="4" rendered="#{rnGcTrabajadoresTblController.selected != null}">
+                        
+                        <p:outputLabel value="Asimilado/Salariado" for="tipoEmpleado" />
+                        <p:selectOneMenu id="tipoEmpleado"
+                 value="#{rnGcTrabajadoresTblController.selected.tipoEmpleado}"
+                 style="width: 120px"
+                 title="Tipo de empleo"
+                 required="true">
+       <f:selectItem itemLabel="Selecciona el tipo de trabajador"  itemValue="#{null}"/>                       
+    <f:selectItem itemLabel="Salariado" itemValue="Salariado"/>
+    <f:selectItem itemLabel="Asimilado" itemValue="Asimilado"/>  
+
+    <!-- ⬇️ AQUÍ VA el p:ajax -->
+    <p:ajax event="change"
+            listener="#{rnGcTrabajadoresTblController.cambiarTipoEmpleado}"
+            update="nss salarioBase sdi fechaInicioLaboral riesgoPuesto tipoJornada sindicalizado regimenContratacion tipoContrato entidadFederativa" />
+
+</p:selectOneMenu>
+                        
                         <p:outputLabel value="No. Empleado" for="noEmpleado" />
-                        <p:inputText id="noEmpleado" value="#{rnGcTrabajadoresTblController.selected.noTrabajador}" title="No. Empleado" />
+                        <p:inputText id="noEmpleado" value="#{rnGcTrabajadoresTblController.selected.noTrabajador}" title="No. Empleado" readonly="true"/>
+                        
                         <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_nombre}" for="nombre" />
-                        <p:inputText id="nombre" value="#{rnGcTrabajadoresTblController.selected.nombre}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_nombre}" />
-                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_apPaterno}" for="apPaterno" />
-                        <p:inputText id="apPaterno" value="#{rnGcTrabajadoresTblController.selected.apPaterno}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_apPaterno}" />
-                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_apMaterno}" for="apMaterno" />
-                        <p:inputText id="apMaterno" value="#{rnGcTrabajadoresTblController.selected.apMaterno}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_apMaterno}" />
-                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_curp}" for="curp" />
-                        <p:inputText id="curp" value="#{rnGcTrabajadoresTblController.selected.curp}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_curp}" />
+                        <p:inputText id="nombre" value="#{rnGcTrabajadoresTblController.selected.nombre}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_nombre}" required="true" />
+                        
+                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_apPaterno}" for="apPaterno" />   
+                        <p:inputText id="apPaterno" value="#{rnGcTrabajadoresTblController.selected.apPaterno}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_apPaterno}" required="true"  />
+                        
+                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_apMaterno}" for="apMaterno" />                     
+                        <p:inputText id="apMaterno" value="#{rnGcTrabajadoresTblController.selected.apMaterno}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_apMaterno}" required="true"  />
+                        
+                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_curp}" for="curp"  />
+                        <p:inputText id="curp" value="#{rnGcTrabajadoresTblController.selected.curp}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_curp}"   maxlength="18"  required="true" />
+                                  
                         <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_rfc}" for="rfc" />
-                        <p:inputText id="rfc" value="#{rnGcTrabajadoresTblController.selected.rfc}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_rfc}" />
+                        <p:inputText id="rfc" value="#{rnGcTrabajadoresTblController.selected.rfc}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_rfc}"  maxlength="13"  required="true"/>
+                       
                         <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_nss}" for="nss" />
-                        <p:inputText id="nss" value="#{rnGcTrabajadoresTblController.selected.nss}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_nss}" />
+                        <p:inputText id="nss" value="#{rnGcTrabajadoresTblController.selected.nss}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_nss}" required="#{rnGcTrabajadoresTblController.esSalariado()}"/>                    
+                        
                         <p:outputLabel value="Salario Base" for="salarioBase" />
-                        <p:inputText id="salarioBase" value="#{rnGcTrabajadoresTblController.selected.salarioBase}" title="Salario Base" />
+                        <p:inputNumber id="salarioBase" value="#{rnGcTrabajadoresTblController.selected.salarioBase}" title="Salario Base" required="#{rnGcTrabajadoresTblController.esSalariado()}"  decimalSeparator="." decimalPlaces="2" thousandSeparator="" />
+                        
                         <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_sdi}" for="sdi" />
-                        <p:inputText id="sdi" value="#{rnGcTrabajadoresTblController.selected.sdi}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_sdi}" />
+                        <p:inputNumber  id="sdi" value="#{rnGcTrabajadoresTblController.selected.sdi}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_sdi}" required="#{rnGcTrabajadoresTblController.esSalariado()}" decimalSeparator="." decimalPlaces="2" thousandSeparator="" />
+                        
                         <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_tipoPersona}" for="tipoPersona" />
-                        <p:selectOneMenu id="tipoPersona" style="width: 120px" value="#{rnGcTrabajadoresTblController.selected.tipoPersona}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_tipoPersona}">
+                        <p:selectOneMenu id="tipoPersona" style="width: 120px" value="#{rnGcTrabajadoresTblController.selected.tipoPersona}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_tipoPersona}" required="true" >
                             <f:selectItem itemLabel="Selecciona Tipo Regimen"/>
                             <f:selectItems value="#{rnGcNomTiporegimenTblController.items}" var="regimen"
                                            itemLabel="#{regimen.cveTipoRegimen} - #{regimen.descripcion}"
                                            itemValue="#{regimen.cveTipoRegimen}"/>
                         </p:selectOneMenu>
+                        
                         <p:outputLabel value="Banco" for="banco" />
-                        <p:selectOneMenu id="banco" style="width: 117px" value="#{rnGcTrabajadoresTblController.selected.banco}" title="Clave Banco" required="true">
+                        <p:selectOneMenu id="banco" style="width: 117px" value="#{rnGcTrabajadoresTblController.selected.banco}" title="Clave Banco" required="false">
                             <f:selectItem itemLabel="Selecciona un Banco"/>
                             <f:selectItems value="#{rnGcNomBancosTblController.items}" var="banco"
                                            itemLabel="#{banco.cveBanco} - #{banco.nombre}"
                                            itemValue="#{banco.cveBanco}"/>
                         </p:selectOneMenu>    
+                        
                         <p:outputLabel value="Cuenta Bancaria" for="cuentaBancaria" />
-                        <p:inputText id="cuentaBancaria" value="#{rnGcTrabajadoresTblController.selected.cuentaBancaria}" title="Cuenta Bancaria" required="true"/>
+                        <p:inputNumber id="cuentaBancaria" value="#{rnGcTrabajadoresTblController.selected.cuentaBancaria}" title="Cuenta Bancaria" required="false" decimalPlaces="0" thousandSeparator=""/>
+                        
                         <p:outputLabel value="Correo Electronico" for="email" />
-                        <p:inputText id="email" value="#{rnGcTrabajadoresTblController.selected.email1}" title="Correo electronico" />
+                        <p:inputText id="email" value="#{rnGcTrabajadoresTblController.selected.email1}" title="Correo electronico" required="true"/>
+                        
+                        <p:outputLabel value="Fecha Inicio Laboral" for="fechaInicioLaboral" />
+                        <p:calendar id="fechaInicioLaboral" value="#{rnGcTrabajadoresTblController.selected.fechaInicio}" title="Fecha Inicio Laboral" pattern="dd/MM/yyyy" navigator="true" required="#{rnGcTrabajadoresTblController.esSalariado()}"/>
+                         
+                        <p:outputLabel value="Entidad Federativa" for="entidadFederativa" />
+                        <p:selectOneMenu id="entidadFederativa"  value="#{rnGcTrabajadoresTblController.selected.entidadFederativaId}"   style="width: 120px" title="#{bundle.CreateRnGcTrabajadoresTblTitle_tipoPersona}" required="true">
+                            <f:selectItem itemLabel="Selecciona un tipo de jornada"  itemValue="#{null}"/>
+                            <f:selectItems value="#{rnGcNomEstadosTblController.items}" var="entidadFederativa"
+                                           itemLabel="#{entidadFederativa.cveEstado} - #{entidadFederativa.nombre}"
+                                           itemValue="#{entidadFederativa}"/>
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="Codigo Postal" for="codigoPostal" />
+                   
+                         <p:inputText id="codigoPostal"
+             value="#{rnGcTrabajadoresTblController.selected.codigoPostal}"
+             title="Código Postal"
+             maxlength="5"
+             required="true">
+    <p:keyFilter regEx="/[0-9]/" />
+    <f:validateRegex pattern="^\d{5}$" />
+</p:inputText>
+                         
+                         
+                        <p:outputLabel value="Riesgo del puesto"  for="riesgoPuesto" />
+                        <p:selectOneMenu id="riesgoPuesto" value="#{rnGcTrabajadoresTblController.selected.riesgoPuestoTblId}" style="width: 120px"  required="#{rnGcTrabajadoresTblController.esSalariado()}" >
+                            <f:selectItem itemLabel="Selecciona riesgo del puesto"  itemValue="#{null}"/>
+                            <f:selectItems value="#{rnGcNomRiesgopuestoTblController.items}" var="riesgoPuesto"
+                                           itemLabel="#{riesgoPuesto.cveRiesgoPuesto} - #{riesgoPuesto.descripcion}"
+                                           itemValue="#{riesgoPuesto}"/>
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="Tipo de Jornada" for="tipoJornada" />
+                        <p:selectOneMenu id="tipoJornada"  value="#{rnGcTrabajadoresTblController.selected.tipoJornadaTblId}"  style="width: 120px" title="#{bundle.CreateRnGcTrabajadoresTblTitle_tipoPersona}" required="#{rnGcTrabajadoresTblController.esSalariado()}" >
+                            <f:selectItem itemLabel="Selecciona un tipo de jornada"  itemValue="#{null}"/>
+                            <f:selectItems value="#{rnGcNomTipojornadaTblController.items}" var="tipoJornada"
+                                           itemLabel="#{tipoJornada.cveTipoJornada} - #{tipoJornada.descripcion}"
+                                           itemValue="#{tipoJornada}"/>
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="Sindicalizado" for="sindicalizado" />
+                        <p:selectOneMenu id="sindicalizado" value="#{rnGcTrabajadoresTblController.selected.sindicalizado}" style="width: 120px" title="Sindicalizado" required="#{rnGcTrabajadoresTblController.esSalariado()}">
+                            <f:selectItem itemLabel="Selecciona una opción" itemValue="#{null}"/>
+                            <f:selectItem itemLabel="Sí" itemValue="S"/>
+                            <f:selectItem itemLabel="No" itemValue="N"/>
+                        </p:selectOneMenu>
+                        
+                         <p:outputLabel value="Regimen de Contratación" for="regimenContratacion" />
+                        <p:selectOneMenu id="regimenContratacion"  value="#{rnGcTrabajadoresTblController.selected.regimenContratacionId}" style="width: 120px" title="#{bundle.CreateRnGcTrabajadoresTblTitle_tipoPersona}" required="true">
+                            <f:selectItem itemLabel="Selecciona un regimen de contratacion"  itemValue="#{null}"/>
+                            <f:selectItems value="#{rnGcNomTiporegimencontratacionTblController.items}" var="regimenContratacion"
+                                           itemLabel="#{regimenContratacion.cveTipoRegimenContratacion} - #{regimenContratacion.descripcion}"
+                                           itemValue="#{regimenContratacion}"/>
+                        </p:selectOneMenu>
+                        
+                          <p:outputLabel value="Tipo de Contrato" for="tipoContrato" />
+                        <p:selectOneMenu id="tipoContrato"  value="#{rnGcTrabajadoresTblController.selected.tipoContratoId}"  style="width: 120px" title="#{bundle.CreateRnGcTrabajadoresTblTitle_tipoPersona}" required="true">
+                            <f:selectItem itemLabel="Selecciona un tipo de jornada"  itemValue="#{null}"/>
+                            <f:selectItems value="#{rnGcNomTipocontratoTblController.items}" var="tipoContrato"
+                                           itemLabel="#{tipoContrato.cveTipoContrato} - #{tipoContrato.descripcion}"
+                                           itemValue="#{tipoContrato.id}"/>
+                        </p:selectOneMenu>
+                        
+               
+                        
                     </p:panelGrid>
                     <p:commandButton actionListener="#{rnGcTrabajadoresTblController.create}" value="#{bundle.Save}" update="display,:RnGcTrabajadoresTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcTrabajadoresTblCreateDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="RnGcTrabajadoresTblCreateDialog.hide()"/>

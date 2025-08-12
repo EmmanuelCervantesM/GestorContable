@@ -7,6 +7,7 @@ package mx.com.rocketnegocios.beans;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import mx.com.rocketnegocios.entities.RnGcNomTipojornadaTbl;
 
@@ -27,6 +28,18 @@ public class RnGcNomTipojornadaTblFacade extends AbstractFacade<RnGcNomTipojorna
 
     public RnGcNomTipojornadaTblFacade() {
         super(RnGcNomTipojornadaTbl.class);
+    }
+    
+    public RnGcNomTipojornadaTbl obtenerByDescripcion(String descripcion){
+        RnGcNomTipojornadaTbl tipoJornada = null;
+        try{
+            tipoJornada = em.createNamedQuery("RnGcNomTipojornadaTbl.findByDescripcion", RnGcNomTipojornadaTbl.class)
+                    .setParameter("descripcion", descripcion)
+                    .getSingleResult();
+        }catch(NoResultException ex){
+            System.out.println("No se encontraron obtenerByDescripcion");
+        }
+        return tipoJornada;
     }
     
 }

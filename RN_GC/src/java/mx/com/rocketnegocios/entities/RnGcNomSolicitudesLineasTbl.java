@@ -46,7 +46,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.findByTotalExento", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.totalExento = :totalExento")
     , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.findByTipoClave", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.tipoClave = :tipoClave")
     , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.findByTipoConcepto", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.tipoConcepto = :tipoConcepto")
-    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.findBySoliTrabajador", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId between :soliTrabajadorUno and :soliTrabajadorDos")})
+    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.findBySoliTrabajador", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId between :soliTrabajadorUno and :soliTrabajadorDos")
+    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.obtenerIncapacidad", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId = :solicitudTrabajadorId and r.tipoIncapacidadId is not null")})
 public class RnGcNomSolicitudesLineasTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -88,12 +89,17 @@ public class RnGcNomSolicitudesLineasTbl implements Serializable {
     @Size(max = 80)
     @Column(name = "tipoConcepto")
     private String tipoConcepto;
+    @Column(name = "diasIncapacidad")
+    private Integer diasIncapacidad;
     @JoinColumn(name = "percepcionId", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private RnGcNomPercepcionesTbl percepcionId;
     @JoinColumn(name = "deduccionId", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private RnGcNomDeduccionesTbl deduccionId;
+    @JoinColumn(name = "tipoIncapacidadId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private RnGcNomTipoincapacidadTbl tipoIncapacidadId;
 
     public RnGcNomSolicitudesLineasTbl() {
     }
@@ -207,6 +213,22 @@ public class RnGcNomSolicitudesLineasTbl implements Serializable {
         this.deduccionId = deduccionId;
     }
 
+    public RnGcNomTipoincapacidadTbl getTipoIncapacidadId() {
+        return tipoIncapacidadId;
+    }
+
+    public void setTipoIncapacidadId(RnGcNomTipoincapacidadTbl tipoIncapacidadId) {
+        this.tipoIncapacidadId = tipoIncapacidadId;
+    }
+    
+    public Integer getDiasIncapacidad() {
+        return diasIncapacidad;
+    }
+
+    public void setDiasIncapacidad(Integer diasIncapacidad) {
+        this.diasIncapacidad = diasIncapacidad;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -231,5 +253,5 @@ public class RnGcNomSolicitudesLineasTbl implements Serializable {
     public String toString() {
         return "mx.com.rocketnegocios.entities.RnGcNomSolicitudesLineasTbl[ id=" + id + " ]";
     }
-    
+
 }

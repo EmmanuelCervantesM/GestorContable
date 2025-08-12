@@ -11,14 +11,17 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import mx.com.rocketnegocios.entities.RnGcNomSolicitudTrabajadorTbl;
 import mx.com.rocketnegocios.web.util.JsfUtil;
 import mx.com.rocketnegocios.web.util.JsfUtil.PersistAction;
 import mx.com.rocketnegocios.beans.RnGcNomSolicitudTrabajadorTblFacade;
 
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.Signature;
@@ -26,6 +29,9 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
@@ -34,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
@@ -44,6 +51,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -61,6 +69,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -80,6 +89,7 @@ import mx.com.rocketnegocios.beans.RnGcNomSolicitudesTblFacade;
 import mx.com.rocketnegocios.beans.RnGcNomTipocontratoTblFacade;
 import mx.com.rocketnegocios.beans.RnGcNomTrabajadorCfdisTblFacade;
 import mx.com.rocketnegocios.beans.RnGcTimbresTblFacade;
+import mx.com.rocketnegocios.beans.RnGcTrabajadoresTblFacade;
 import mx.com.rocketnegocios.beans.RnGcUsuariosTblFacade;
 import mx.com.rocketnegocios.entities.RnGcArchivosTbl;
 import mx.com.rocketnegocios.entities.RnGcCertificadosTbl;
@@ -93,6 +103,7 @@ import mx.com.rocketnegocios.entities.RnGcNomSolicitudesTbl;
 import mx.com.rocketnegocios.entities.RnGcNomTipocontratoTbl;
 import mx.com.rocketnegocios.entities.RnGcNomTrabajadorCfdisTbl;
 import mx.com.rocketnegocios.entities.RnGcTimbresTbl;
+import mx.com.rocketnegocios.entities.RnGcTrabajadoresTbl;
 import mx.com.rocketnegocios.entities.RnGcUsuariosTbl;
 import mx.com.rocketnegocios.util.UsuarioFirmado;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -135,6 +146,9 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
     private RnGcNomNominasTblFacade nominaFacade;
 
     @EJB
+    private RnGcTrabajadoresTblFacade trabajadoresFacade;
+
+    @EJB
     private RnGcNomSolicitudesLineasTblFacade solicitudLineasFacade;
 
     @EJB
@@ -173,23 +187,363 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
     private RnGcNomNominasTbl nomina;
     private List<RnGcNomSolicitudesLineasTbl> listaPercepciones;
     private List<RnGcNomSolicitudesLineasTbl> listaDeducciones;
+    private List<RnGcNomSolicitudesLineasTbl> listaIncapacidad;
+    private List<RnGcNomSolicitudesLineasTbl> percepcionesOriginal;
+    private List<RnGcNomSolicitudesLineasTbl> deduccionesOriginal;
+    private List<RnGcNomSolicitudesLineasTbl> incapacidadOriginal;
+    private List<RnGcNomSolicitudesLineasTbl> percepcionesEliminadas = new ArrayList<>();
+    private List<RnGcNomSolicitudesLineasTbl> deduccionesEliminadas = new ArrayList<>();
+    private List<RnGcNomSolicitudesLineasTbl> incapacidadEliminadas = new ArrayList<>();
+    private RnGcTrabajadoresTbl selectedTrabajadorId;
+
     private RnGcNomTipocontratoTbl tipoContrato;
     private RnGcNomEstadosTbl estado;
     private RnGcArchivosTbl archivo = new RnGcArchivosTbl();
     private RnGcNomTrabajadorCfdisTbl trabajadorCfdi;
     private List<RnGcTimbresTbl> timbre;
     private StreamedContent downLoadFile;
+    private StreamedContent downLoadFileNomina;
     private List<RnGcFolioserieTbl> folioSerie;
+
+    private File archivoXmlTimbrado; // Archivo XML timbrado actual
+    private String uuidTimbreArchivo; // Archivo XML timbrado actual
+    private byte[] archivoPdfGlobal; // Archivo PDF timbrado actual
 
     public RnGcNomSolicitudTrabajadorTblController() {
     }
 
+    public byte[] getArchivoPdfGlobal() {
+        return archivoPdfGlobal;
+    }
+
+    public void setArchivoPdfGlobal(byte[] archivoPdfGlobal) {
+        this.archivoPdfGlobal = archivoPdfGlobal;
+    }
+
+    ///
+    public List<RnGcNomSolicitudesLineasTbl> getListaPercepciones() {
+        if (listaPercepciones == null) {
+            System.out.println("listaPercepciones está vacía (null)");
+        } else {
+            System.out.println("Lista Percepciones contiene " + listaPercepciones.size() + " elementos:");
+            for (RnGcNomSolicitudesLineasTbl item : listaPercepciones) {
+                System.out.println(" - Id: " + item.getId() + ", TipoConcepto: " + item.getTipoConcepto() + ", TotalGravado: " + item.getTotalGravado());
+                // agrega aquí más campos que quieras ver
+            }
+        }
+        return listaPercepciones;
+    }
+
+    public void setListaPercepciones(List<RnGcNomSolicitudesLineasTbl> listaPercepciones) {
+        this.listaPercepciones = listaPercepciones;
+    }
+
+    public List<RnGcNomSolicitudesLineasTbl> getListaDeducciones() {
+        if (listaDeducciones == null) {
+            System.out.println("listaDeducciones está vacía (null)");
+        } else {
+            System.out.println("Lista deducciones contiene " + listaDeducciones.size() + " elementos:");
+            for (RnGcNomSolicitudesLineasTbl item : listaDeducciones) {
+                System.out.println(" - Id: " + item.getId() + ", TipoConcepto: " + item.getTipoConcepto() + ", TotalGravado: " + item.getTotalGravado());
+                // agrega aquí más campos que quieras ver
+            }
+        }
+        return listaDeducciones;
+    }
+
+    public void setListaIncapacidad(List<RnGcNomSolicitudesLineasTbl> listaIncapacidad) {
+        this.listaIncapacidad = listaIncapacidad;
+    }
+
+    public List<RnGcNomSolicitudesLineasTbl> getListaIncapacidad() {
+        if (listaIncapacidad == null) {
+            System.out.println("listaIncapacidad está vacía (null)");
+        } else {
+            System.out.println("Lista incapacidad contiene " + listaIncapacidad.size() + " elementos:");
+            for (RnGcNomSolicitudesLineasTbl item : listaIncapacidad) {
+                System.out.println(" - Id: " + item.getId() + ", TipoConcepto: " + item.getTipoConcepto() + ", TotalGravado: " + item.getTotalGravado());
+                // agrega aquí más campos que quieras ver
+            }
+        }
+        return listaIncapacidad;
+    }
+
+    public void setListaDeducciones(List<RnGcNomSolicitudesLineasTbl> listaDeducciones) {
+        this.listaDeducciones = listaDeducciones;
+    }
+
+    public RnGcTrabajadoresTbl getSelectedTrabajadorId() {
+        return selectedTrabajadorId;
+    }
+
+    public void setSelectedTrabajadorId(RnGcTrabajadoresTbl selectedTrabajadorId) {
+        this.selectedTrabajadorId = selectedTrabajadorId;
+    }
+
+    public String getUuidTimbreArchivo() {
+        return uuidTimbreArchivo;
+    }
+
+    public void setUuidTimbreArchivo(String uuidTimbreArchivo) {
+        this.uuidTimbreArchivo = uuidTimbreArchivo;
+    }
+
+    public void agregarTrabajador() {
+        System.out.println("Entro a la función");
+        if (selectedTrabajadorId == null) {
+            JsfUtil.addErrorMessage("Debes seleccionar un trabajador.");
+            return;
+        }
+
+        // Evitar duplicados
+        boolean yaExiste = listaSolicitudesTrabajador != null && listaSolicitudesTrabajador.stream()
+                .anyMatch(s -> s.getTrabajadorId() != null
+                && s.getTrabajadorId().getId().equals(selectedTrabajadorId.getId()));
+
+        if (yaExiste) {
+            JsfUtil.addErrorMessage("El trabajador ya está agregado a esta solicitud.");
+            return;
+        }
+
+        // Obtener el trabajador desde BD (suponiendo que tienes acceso a su facade o lista)
+        RnGcTrabajadoresTbl trabajador = trabajadoresFacade.obtenerPorId(selectedTrabajadorId.getId()); // Ajusta según tu arquitectura
+
+        if (trabajador == null) {
+            JsfUtil.addErrorMessage("No se pudo encontrar el trabajador seleccionado.");
+            return;
+        }
+
+        RnGcNomSolicitudTrabajadorTbl nuevoTrabajador = new RnGcNomSolicitudTrabajadorTbl();
+        nuevoTrabajador.setTrabajadorId(trabajador);
+        nuevoTrabajador.setSolicitudId(solicitud);
+        nuevoTrabajador.setSdi(new BigDecimal(trabajador.getSdi()));
+        nuevoTrabajador.setEstatus("A");
+
+        if (listaSolicitudesTrabajador == null || listaSolicitudesTrabajador.isEmpty()) {
+            JsfUtil.addErrorMessage("No hay trabajadores en la lista para copiar los datos.");
+            return;
+        }
+
+        RnGcNomSolicitudTrabajadorTbl data = listaSolicitudesTrabajador.get(0);
+
+        nuevoTrabajador.setDiasPagados(data.getDiasPagados());
+        nuevoTrabajador.setFechaPago(data.getFechaPago());
+
+        nuevoTrabajador = ejbFacade.refreshFromDB(nuevoTrabajador);
+
+        listaSolicitudesTrabajador.add(nuevoTrabajador);
+        //nuevo.setSolicitudId(solicitud); // Asegúrate de que `solicitud` esté inicializada correctamente
+
+        try {
+            ejbFacade.create(nuevoTrabajador); // Guardar en BD
+            if (listaSolicitudesTrabajador == null) {
+                listaSolicitudesTrabajador = new ArrayList<>();
+            }
+            listaSolicitudesTrabajador.add(nuevoTrabajador); // Agregar a lista local
+
+            JsfUtil.addSuccessMessage("Trabajador agregado correctamente.");
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage("Error al guardar el trabajador: " + e.getMessage());
+        }
+    }
+
+// Cargar datos existentes
+    public void cargarLineas() {
+        if (selected != null && selected.getId() != null) {
+            List<RnGcNomSolicitudesLineasTbl> percepciones = solicitudLineasFacade.obtenerPercepciones(selected.getId());
+            listaPercepciones = percepciones != null ? percepciones : new ArrayList<>();
+
+            List<RnGcNomSolicitudesLineasTbl> deducciones = solicitudLineasFacade.obtenerDeducciones(selected.getId());
+            listaDeducciones = deducciones != null ? deducciones : new ArrayList<>();
+
+            List<RnGcNomSolicitudesLineasTbl> incapacidades = solicitudLineasFacade.obtenerIncapacidad(selected.getId());
+            listaIncapacidad = incapacidades != null ? incapacidades : new ArrayList<>();
+        } else {
+            listaPercepciones = new ArrayList<>();
+            listaDeducciones = new ArrayList<>();
+            listaIncapacidad = new ArrayList<>();
+        }
+    }
+
+// Agregar una nueva percepción vacía
+    public void agregarPercepcion() {
+        RnGcNomSolicitudesLineasTbl nueva = new RnGcNomSolicitudesLineasTbl();
+        nueva.setSolicitudTrabajadorId(selected.getId());
+        nueva.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
+        nueva.setUltimaFechaActualizacion(new Date());
+        nueva.setFechaCreacion(new Date());
+        listaPercepciones.add(nueva);
+    }
+
+// Agregar una nueva deducción vacía
+    public void agregarDeduccion() {
+        RnGcNomSolicitudesLineasTbl nueva = new RnGcNomSolicitudesLineasTbl();
+        nueva.setSolicitudTrabajadorId(selected.getId());
+        nueva.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
+        nueva.setUltimaFechaActualizacion(new Date());
+        nueva.setFechaCreacion(new Date());
+        listaDeducciones.add(nueva);
+    }
+
+    // Agregar una nueva incapacidad vacía
+    public void agregarIncapacidad() {
+        RnGcNomSolicitudesLineasTbl nueva = new RnGcNomSolicitudesLineasTbl();
+        nueva.setSolicitudTrabajadorId(selected.getId());
+        nueva.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
+        nueva.setUltimaFechaActualizacion(new Date());
+        nueva.setFechaCreacion(new Date());
+        listaIncapacidad.add(nueva);
+    }
+
+// Eliminar percepción
+    public void eliminarPercepcion(RnGcNomSolicitudesLineasTbl item) {
+        if (item.getId() != null) {
+            percepcionesEliminadas.add(item); // Se marca para eliminar después
+        }
+        listaPercepciones.remove(item);
+    }
+
+    public void eliminarDeduccion(RnGcNomSolicitudesLineasTbl item) {
+        if (item.getId() != null) {
+            deduccionesEliminadas.add(item);
+        }
+        listaDeducciones.remove(item);
+    }
+
+    public void eliminarIncapacidad(RnGcNomSolicitudesLineasTbl item) {
+        if (item.getId() != null) {
+            incapacidadEliminadas.add(item);
+        }
+        listaIncapacidad.remove(item);
+    }
+
+    private RnGcNomSolicitudesLineasTbl clonarLinea(RnGcNomSolicitudesLineasTbl original) {
+        RnGcNomSolicitudesLineasTbl copia = new RnGcNomSolicitudesLineasTbl();
+        copia.setId(original.getId()); // puedes omitir si vas a insertar como nuevo
+        copia.setSolicitudTrabajadorId(original.getSolicitudTrabajadorId());
+        copia.setTipoClave(original.getTipoClave());
+        copia.setTipoConcepto(original.getTipoConcepto());
+        copia.setTotalGravado(original.getTotalGravado());
+        copia.setTotalExento(original.getTotalExento());
+        // Agrega otros campos si hay más
+        return copia;
+    }
+
+    public void prepararEdicionPercepcionesDeducciones() {
+        System.out.println("Cargando deducciones...");
+        cargarLineas(); // ✅ Asegura que cargas los datos antes de clonar
+        System.out.println(".../Iniciando..");
+        // Clonar listas actuales
+        this.percepcionesOriginal = new ArrayList<>();
+        for (RnGcNomSolicitudesLineasTbl p : listaPercepciones) {
+            this.percepcionesOriginal.add(clonarLinea(p));
+        }
+
+        this.deduccionesOriginal = new ArrayList<>();
+        for (RnGcNomSolicitudesLineasTbl d : listaDeducciones) {
+            this.deduccionesOriginal.add(clonarLinea(d));
+        }
+
+        this.incapacidadOriginal = new ArrayList<>();
+        for (RnGcNomSolicitudesLineasTbl i : listaIncapacidad) {
+            this.incapacidadOriginal.add(clonarLinea(i));
+        }
+
+        // Limpiar posibles eliminaciones anteriores
+        percepcionesEliminadas.clear();
+        deduccionesEliminadas.clear();
+        incapacidadEliminadas.clear();
+    }
+
+    public void cancelarCambiosPercepcionesDeducciones() {
+        this.listaPercepciones = percepcionesOriginal != null ? new ArrayList<>(percepcionesOriginal) : new ArrayList<>();
+        this.listaDeducciones = deduccionesOriginal != null ? new ArrayList<>(deduccionesOriginal) : new ArrayList<>();
+        this.listaIncapacidad = listaIncapacidad != null ? new ArrayList<>(incapacidadOriginal) : new ArrayList<>();
+        percepcionesEliminadas.clear();
+        deduccionesEliminadas.clear();
+        incapacidadEliminadas.clear();
+    }
+
+    public void guardarLineas() {
+        for (RnGcNomSolicitudesLineasTbl p : listaPercepciones) {
+            System.out.println("Id: " + p.getId());
+            System.out.println("SolicitudTrabajadorId: " + p.getSolicitudTrabajadorId());
+            System.out.println("TipoClave: " + p.getTipoClave());
+            System.out.println("TipoConcepto: " + p.getTipoConcepto());
+            System.out.println("TotalGravado: " + p.getTotalGravado());
+            System.out.println("TotalExento: " + p.getTotalExento());
+            System.out.println("FechaCreacion: " + p.getFechaCreacion());
+            System.out.println("UltimaFechaActualizacion: " + p.getUltimaFechaActualizacion());
+            System.out.println("-------------------------");
+            solicitudLineasFacade.edit(p);
+        }
+
+        for (RnGcNomSolicitudesLineasTbl d : listaDeducciones) {
+            solicitudLineasFacade.edit(d);
+        }
+
+        for (RnGcNomSolicitudesLineasTbl i : listaIncapacidad) {
+            solicitudLineasFacade.edit(i);
+        }
+
+        for (RnGcNomSolicitudesLineasTbl p : percepcionesEliminadas) {
+            solicitudLineasFacade.remove(p);
+        }
+
+        for (RnGcNomSolicitudesLineasTbl d : deduccionesEliminadas) {
+            solicitudLineasFacade.remove(d);
+        }
+
+        for (RnGcNomSolicitudesLineasTbl i : incapacidadEliminadas) {
+            solicitudLineasFacade.remove(i);
+        }
+
+        // Limpiar las listas temporales
+        percepcionesOriginal = null;
+        deduccionesOriginal = null;
+        incapacidadOriginal = null;
+        percepcionesEliminadas.clear();
+        deduccionesEliminadas.clear();
+        incapacidadEliminadas.clear();
+
+        JsfUtil.addSuccessMessage("Percepciones y deducciones actualizadas.");
+    }
+
+// Guardar cambios
+    public void guardarLineasEditadas() {
+        for (RnGcNomSolicitudesLineasTbl p : listaPercepciones) {
+            solicitudLineasFacade.edit(p);
+        }
+        for (RnGcNomSolicitudesLineasTbl d : listaDeducciones) {
+            solicitudLineasFacade.edit(d);
+        }
+        for (RnGcNomSolicitudesLineasTbl i : listaIncapacidad) {
+            solicitudLineasFacade.edit(i);
+        }
+        JsfUtil.addSuccessMessage("Percepciones y deducciones actualizadas.");
+
+    }
+
+    ///
     public RnGcNomSolicitudTrabajadorTbl getSelected() {
         return selected;
     }
 
     public void setSelected(RnGcNomSolicitudTrabajadorTbl selected) {
         this.selected = selected;
+        cargarPercepcionesYDeducciones();
+    }
+
+    public void cargarPercepcionesYDeducciones() {
+        if (selected != null && selected.getId() != null) {
+            listaPercepciones = solicitudLineasFacade.obtenerPercepciones(selected.getId());
+            listaDeducciones = solicitudLineasFacade.obtenerDeducciones(selected.getId());
+            listaIncapacidad = solicitudLineasFacade.obtenerIncapacidad(selected.getId());
+        } else {
+            listaPercepciones = new ArrayList<>();
+            listaDeducciones = new ArrayList<>();
+            listaIncapacidad = new ArrayList<>();
+        }
     }
 
     public RnGcCfdisTbl getCfdisId() {
@@ -220,6 +574,22 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
 
     public void setDownLoadFile(StreamedContent downLoadFile) {
         this.downLoadFile = downLoadFile;
+    }
+
+    public StreamedContent getDownLoadFileNomina() {
+        return downLoadFileNomina;
+    }
+
+    public void setDownLoadFileNomina(StreamedContent downLoadFileNomina) {
+        this.downLoadFileNomina = downLoadFileNomina;
+    }
+
+    public File getArchivoXmlTimbrado() {
+        return archivoXmlTimbrado;
+    }
+
+    public void setArchivoXmlTimbrado(File archivoXmlTimbrado) {
+        this.archivoXmlTimbrado = archivoXmlTimbrado;
     }
 
     protected void setEmbeddableKeys() {
@@ -381,6 +751,9 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         cfdisId.setFormaPago("99");
         cfdisId.setMetodoPago("PUE");
         usuario = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+        System.out.println("=== DATOS DEL USUARIO ===");
+        System.out.println("ID: " + usuarioFirmado.obtenerIdUsuario());
+        System.out.println("RFC: " + usuario.getRfc());
         cfdisId.setNombreEmisor(usuario.getNombreCompleto());
         cfdisId.setRfcEmisor(usuario.getRfc());
         archivo.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
@@ -393,6 +766,22 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         trabajadorCfdi.setUltimaFechaActualizacion(new Date());
         timbre = timbresFacade.obtenerTimbre("Proveedor", usuario);
         seleccionados = new ArrayList<>();
+        System.out.println("Timbres obtenidos:");
+
+        if (timbre != null && !timbre.isEmpty()) {
+            for (RnGcTimbresTbl t : timbre) {
+                System.out.println("ID: " + t.getId());
+                System.out.println("Timbres Totales: " + t.getTimbresTotal());
+                System.out.println("Timbres Usados: " + t.getTimbresUsados());
+                System.out.println("Timbres Restantes: " + t.getTimbresRestantes());
+                System.out.println("Proveedor: " + t.getProveedor());
+                System.out.println("Usuario ID: " + t.getUsuarioId());
+                System.out.println("----------------------------------");
+            }
+        } else {
+            System.out.println("No se encontraron timbres.");
+        }
+
     }
 
     public void inicializarDatos() {
@@ -423,21 +812,63 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         seleccionados = new ArrayList<>();
     }
 
-    public void obtenerSeleccionados() throws ParseException {
-        if (timbre != null && !timbre.isEmpty()) {
+    public File crearZip(List<File> archivos, String nombreZip) throws IOException {
+        File zipFile = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/descargas/" + nombreZip));
+        try (FileOutputStream fos = new FileOutputStream(zipFile);
+                ZipOutputStream zos = new ZipOutputStream(fos)) {
+            for (File archivo : archivos) {
+                try (FileInputStream fis = new FileInputStream(archivo)) {
+                    ZipEntry zipEntry = new ZipEntry(archivo.getName());
+                    zos.putNextEntry(zipEntry);
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = fis.read(buffer)) > 0) {
+                        zos.write(buffer, 0, length);
+                    }
+                }
+            }
+        }
+        return zipFile;
+    }
+
+    public void obtenerSeleccionados() throws ParseException, IOException {
+        List<File> archivosGenerados = new ArrayList<>();
+        try {
+            //  if (timbre != null && !timbre.isEmpty()) {
             Integer folio1 = 0;
             for (RnGcNomSolicitudTrabajadorTbl soliTrabajador : seleccionados) {
-                if(cfdisId2.getSerie() != null)
+                if (cfdisId2.getSerie() != null) {
                     cfdisId.setSerie(cfdisId2.getSerie());
-                if(cfdisId2.getFolio() != null)
-                    cfdisId.setFolio(cfdisId2.getFolio()+folio1);
+                }
+                if (cfdisId2.getFolio() != null) {
+                    cfdisId.setFolio(cfdisId2.getFolio() + folio1);
+                }
                 folio1 = folio1 + 1;
                 cfdisId.setClaveRegimenFiscal(cfdisId2.getClaveRegimenFiscal());
                 cfdisId.setCertificados_Id(cfdisId2.getCertificados_Id());
                 cfdisId.setFechaExpedicion(cfdisId2.getFechaExpedicion());
                 cfdisId.setLugarExpedicion(cfdisId2.getLugarExpedicion());
                 cfdisId.setCondicionPago(cfdisId2.getCondicionPago());
+                //File archivoXml = crearXML(soliTrabajador);
                 if (crearXML(soliTrabajador)) {
+                    archivosGenerados.add(getArchivoXmlTimbrado());
+                        System.out.print("Ruta: " + getArchivoXmlTimbrado());
+                    // ✅ Convertir byte[] a archivo físico
+                    System.out.println("Nombre del uuid: " + getUuidTimbreArchivo());
+                    String rutaBase = "C:\\Users\\Joaquin\\Documents\\Development\\GestorContable\\RN_GC\\web\\resources\\Archivos\\" + getUuidTimbreArchivo() + ".pdf";
+                    File archivoPdfTemporal = new File(rutaBase);
+
+                    if (getArchivoPdfGlobal() == null) {
+                        System.err.println("Error: archivoPdfGlobal es null, no se puede escribir el archivo PDF");
+                    } else {
+                        try (FileOutputStream fosPdf = new FileOutputStream(archivoPdfTemporal)) {
+                            fosPdf.write(getArchivoPdfGlobal());
+                        }
+                        archivosGenerados.add(archivoPdfTemporal);
+                    }
+                }
+
+                /*if (crearXML(soliTrabajador)) {
                     timbre.get(0).setTimbresRestantes(timbre.get(0).getTimbresTotal());
                     timbre.get(0).setTimbresUsados(timbre.get(0).getTimbresUsados() + 1);
                     timbresFacade.edit(timbre.get(0));
@@ -469,12 +900,98 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                     timbresFacade.edit(timbre.get(0));
                     inicializarDatos();
                     JsfUtil.addErrorMessage("Ocurrio un eror durante el timbrado");
-                }
+                }*/
                 JsfUtil.addSuccessMessage("Facturado de forma correcta");
             }
-        } else {
-            inicializarDatos();
-            JsfUtil.addSuccessMessage("Los timbres asignados a este usuario se han terminado");
+            //} else {
+            //inicializarDatos();
+            // JsfUtil.addSuccessMessage("Los timbres asignados a este usuario se han terminado");
+            //}
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ZipOutputStream zout = new ZipOutputStream(bos);
+            if (archivosGenerados != null && !archivosGenerados.isEmpty()) {
+                for (int i = 0; i < archivosGenerados.size(); i++) {
+                    System.out.println("Iniciando iteración de archivo para el zip");
+
+                    File archivo = archivosGenerados.get(i);
+                    FileInputStream fis = new FileInputStream(archivo);
+
+                    ZipEntry entry = new ZipEntry("Nomina_" + UUID.randomUUID().toString() + "_"
+                            + new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss").format(new Date()) + ".xml");
+                    zout.putNextEntry(entry);
+
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = fis.read(buffer)) > 0) {
+                        zout.write(buffer, 0, length);
+                    }
+
+                    zout.closeEntry();
+                    fis.close();
+
+                    System.out.println("Archivo agregado: " + archivo.getName());
+                }
+            } else {
+                System.out.println("❌ La lista de archivos generados está vacía o es null");
+            }
+
+            zout.finish();
+            zout.flush();
+            zout.close();
+
+            ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+            InputStream streamPdf = bis;
+
+             setDownLoadFileNomina(new DefaultStreamedContent(streamPdf, "application/zip", "Nomina_" + new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss").format(new Date()) + ".zip"));
+
+            
+// 1. Guarda el archivo en tu máquina (ruta local del servidor)
+           /* String ruta = "C:\\Users\\Joaquin\\Documents\\Development\\GestorContable\\RN_GC\\web\\resources\\Archivos\\temp\\";
+            String nombreArchivo = "Nomina_" + new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(new Date()) + ".zip";
+            File archivoZip = new File(ruta + nombreArchivo);
+
+            try (FileOutputStream fos = new FileOutputStream(archivoZip)) {
+                fos.write(bos.toByteArray());
+                fos.flush();
+                System.out.println("Archivo guardado localmente en: " + archivoZip.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace(); // Manejo de errores
+            }
+
+// 2. Prepara el archivo para descarga por navegador (opcional)
+            StreamedContent zipFile = new DefaultStreamedContent(
+                    new ByteArrayInputStream(bos.toByteArray()),
+                    "application/zip",
+                    nombreArchivo
+            );
+
+            System.out.println("Preparando ZIP para descarga en navegador...");
+
+            setDownLoadFileNomina(zipFile);
+*/
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Eror " + e);
+        }
+    }
+
+    private void descargarArchivo(File archivo, String tipoMime) {
+        try {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            ExternalContext ec = fc.getExternalContext();
+
+            ec.responseReset();
+            ec.setResponseContentType(tipoMime);
+            ec.setResponseContentLength((int) archivo.length());
+            ec.setResponseHeader("Content-Disposition", "attachment; filename=\"" + archivo.getName() + "\"");
+
+            OutputStream output = ec.getResponseOutputStream();
+            Files.copy(archivo.toPath(), output);
+            fc.responseComplete();
+        } catch (IOException e) {
+            JsfUtil.addErrorMessage("Error al descargar archivo: " + e.getMessage());
         }
     }
 
@@ -524,6 +1041,11 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         return String.valueOf(totalRetenido.doubleValue());
     }
 
+// Utilidad para formato de fechas
+    private String formatFecha(Date fecha) {
+        return new SimpleDateFormat("yyyy-MM-dd").format(fecha);
+    }
+
     public boolean crearXML(RnGcNomSolicitudTrabajadorTbl solicitudTrabajador) {
         String cadOrig = "";
         boolean valor = false;
@@ -534,8 +1056,34 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             listaPercepciones = new ArrayList<>();
             listaDeducciones = new ArrayList<>();
             tipoContrato = tipoContratoFacade.obtenerXId(solicitudTrabajador.getTrabajadorId().getTipoContratoId());
-            estado = estadoFacade.obtenerXId(solicitudTrabajador.getTrabajadorId().getEstadoId());
+            if (tipoContrato != null) {
+                System.out.println("TipoContrato:");
+                System.out.println("ID: " + tipoContrato.getId());
+                System.out.println("Clave Tipo Contrato: " + tipoContrato.getCveTipoContrato());
+                System.out.println("Descripción: " + tipoContrato.getDescripcion());
+
+                // Agrega más campos según tenga la entidad
+            } else {
+                System.out.println("tipoContrato es null");
+            }
+
+            System.out.println("Id del trabajador: " + solicitudTrabajador.getTrabajadorId());
+            estado = estadoFacade.obtenerXId(solicitudTrabajador.getTrabajadorId().getEntidadFederativaId().getId());
+            System.out.println("Id de estado: " + solicitudTrabajador.getTrabajadorId().getEntidadFederativaId().getId());
             listaPercepciones = solicitudLineasFacade.obtenerPercepciones(solicitudTrabajador.getId());
+            System.out.println("---- Lista de Percepciones ----");
+            if (listaPercepciones != null && !listaPercepciones.isEmpty()) {
+                for (RnGcNomSolicitudesLineasTbl percepcion : listaPercepciones) {
+                    System.out.println("ID: " + percepcion.getId());
+                    System.out.println("TipoClave: " + percepcion.getTipoClave());
+                    System.out.println("Descripción: " + (percepcion.getPercepcionId() != null ? percepcion.getPercepcionId().getDescripcion() : "N/A"));
+                    System.out.println("Gravado: " + percepcion.getTotalGravado());
+                    System.out.println("Exento: " + percepcion.getTotalExento());
+                    System.out.println("------------------------------");
+                }
+            } else {
+                System.out.println("No hay percepciones.");
+            }
             listaDeducciones = solicitudLineasFacade.obtenerDeducciones(solicitudTrabajador.getId());
             cfdisId.setImporte(solicitudTrabajador.getImporteNeto().doubleValue());
             cfdisId.setSaldoPagado(solicitudTrabajador.getImporteNeto().doubleValue());
@@ -547,28 +1095,47 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             //Raiz
             Document doc = docBuilder.newDocument();
-            Element rootElement = doc.createElement("cfdi:Comprobante");
+            Element rootElement = doc.createElementNS("http://www.sat.gob.mx/cfd/4", "cfdi:Comprobante");
             doc.appendChild(rootElement);
+
+            // xmlns:nomina12="http://www.sat.gob.mx/nomina12"
+            Attr xmlnsNomina = doc.createAttribute("xmlns:nomina12");
+            xmlnsNomina.setValue("http://www.sat.gob.mx/nomina12");
+            rootElement.setAttributeNode(xmlnsNomina);
+
+// xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            Attr xmlnsXsi = doc.createAttribute("xmlns:xsi");
+            xmlnsXsi.setValue("http://www.w3.org/2001/XMLSchema-instance");
+            rootElement.setAttributeNode(xmlnsXsi);
+
+            Attr schemaLocation = doc.createAttribute("xsi:schemaLocation");
+            schemaLocation.setValue("http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xsd");
+            rootElement.setAttributeNode(schemaLocation);
+
+            Attr Serie = doc.createAttribute("Serie");
+            Serie.setValue("NOM");
+            rootElement.setAttributeNode(Serie);
             //Atributos Raiz
             Attr version = doc.createAttribute("Version");
-            version.setValue("3.3");
+            version.setValue("4.0");
             rootElement.setAttributeNode(version);
             if (cfdisId.getSerie() != null) {
                 Attr serie = doc.createAttribute("Serie");
                 serie.setValue(cfdisId.getSerie());
                 rootElement.setAttributeNode(serie);
             }
-            if (cfdisId.getFolio() != null) {
+            /* if (cfdisId.getFolio() != null) {
                 Attr folio1 = doc.createAttribute("Folio");
                 folio1.setValue(String.valueOf(cfdisId.getFolio()));
                 rootElement.setAttributeNode(folio1);
-            }//*/
+            }*/
             Attr fecha = doc.createAttribute("Fecha");
             fecha.setValue(new SimpleDateFormat("YYYY-MM-dd'T'hh:mm:ss").format(cfdisId.getFechaExpedicion()));
             rootElement.setAttributeNode(fecha);
             Attr sello = doc.createAttribute("Sello");
             sello.setValue("");
             rootElement.setAttributeNode(sello);
+
             Attr noCertificado = doc.createAttribute("NoCertificado");
             noCertificado.setValue(cfdisId.getCertificados_Id().getNumeroCertificado());
             rootElement.setAttributeNode(noCertificado);
@@ -581,11 +1148,13 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             Attr certificado1 = doc.createAttribute("Certificado");
             certificado1.setValue("");
             rootElement.setAttributeNode(certificado1);
+
             if (cfdisId.getCondicionPago() != null && !cfdisId.getCondicionPago().isEmpty()) {
                 Attr condicionPago = doc.createAttribute("CondicionesDePago");
                 condicionPago.setValue(cfdisId.getCondicionPago());
                 rootElement.setAttributeNode(condicionPago);
             }
+
             Attr subTotal = doc.createAttribute("SubTotal");
             subTotal.setValue(String.valueOf(solicitudTrabajador.getTotalPercepciones().doubleValue()));
             rootElement.setAttributeNode(subTotal);
@@ -605,18 +1174,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             Attr lugarExp = doc.createAttribute("LugarExpedicion");
             lugarExp.setValue(String.valueOf(cfdisId.getLugarExpedicion()));
             rootElement.setAttributeNode(lugarExp);
-            Attr cfdi = doc.createAttribute("xmlns:cfdi");
-            cfdi.setValue("http://www.sat.gob.mx/cfd/3");
-            rootElement.setAttributeNode(cfdi);
-            Attr impLocal = doc.createAttribute("xmlns:nomina12");
-            impLocal.setValue("http://www.sat.gob.mx/nomina12");
-            rootElement.setAttributeNode(impLocal);
-            Attr xsi = doc.createAttribute("xmlns:xsi");
-            xsi.setValue("http://www.w3.org/2001/XMLSchema-instance");
-            rootElement.setAttributeNode(xsi);
-            Attr esquema = doc.createAttribute("xsi:schemaLocation");
-            esquema.setValue("http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xsd");
-            rootElement.setAttributeNode(esquema);
+
             //Nodo emisor
             Element emisor = doc.createElement("cfdi:Emisor");
             rootElement.appendChild(emisor);
@@ -772,7 +1330,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             deducciones.setAttributeNode(totOtraDeduc);
             Double retenidos = null;
             retenidos = Double.parseDouble(totalRetenido(listaDeducciones));
-            if(retenidos != null && retenidos > 0.0){
+            if (retenidos != null && retenidos > 0.0) {
                 Attr totalRetenido = doc.createAttribute("TotalImpuestosRetenidos");
                 totalRetenido.setValue(retenidos.toString());
                 deducciones.setAttributeNode(totalRetenido);
@@ -796,7 +1354,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
 
             File xslt = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Archivos/cadenaoriginal_3_3.xslt"));
             tempFile = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Archivos/xmlTemp.xml"));//Inicio calcula cadena original
-            
+
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource domSource = new DOMSource(doc);
@@ -816,11 +1374,24 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             String cadenaOriginalCompl = bos.toString();
             String certificado = crearCertificado();
 
+            // Imprimir contenido del XML generado antes de modificarlo
+            System.out.println("=== XML ANTES DE APLICAR SELLO Y CERTIFICADO ===");
+            try (BufferedReader reader = new BufferedReader(new FileReader(tempFile))) {
+                String linea;
+                while ((linea = reader.readLine()) != null) {
+                    System.out.println(linea);
+                }
+            } catch (IOException e) {
+                System.err.println("Error al leer el XML temporal: " + e.getMessage());
+            }
+            System.out.println("=================================================");
+
             valor = modificarXml(selloCompl, certificado, cadenaOriginalCompl, tempFile, solicitudTrabajador);
+
         } catch (Exception ex) {
             System.err.println("Ocurrio un error en la creacion del XML: " + ex.getLocalizedMessage());
         }
-        System.out.println("valorCrearXML: " + valor);
+
         return valor;
     }
 
@@ -828,47 +1399,121 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = docFactory.newDocumentBuilder();
         Document doc = builder.parse(xmlAc);
-        boolean valorModifica = true;
+        boolean valorModifica = false;
+
         File tempFile = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Archivos/xmlTemp.xml"));
+
         NodeList items = doc.getElementsByTagName("cfdi:Comprobante");
         for (int i = 0; i < items.getLength(); i++) {
             Element element = (Element) items.item(i);
             element.setAttribute("Sello", sello);
             element.setAttribute("Certificado", certificado);
         }
+        System.out.println("Parte 3");
+
+        // Imprimir el XML modificado en consola
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes"); // Para que el XML se vea legible en consola
+        StringWriter writer = new StringWriter();
+        transformer.transform(new DOMSource(doc), new StreamResult(writer));
+        String xmlString = writer.toString();
+        System.out.println("Contenido XML modificado:\n" + xmlString);
+
+        // Guardar el XML modificado en archivo
         Result output = new StreamResult(tempFile);
         Source input = new DOMSource(doc);
         transformer.transform(input, output);
+
+        System.out.println("Iniciando de timbrar XML");
+        System.out.println("Ruta absoluta del archivo XML temporal: " + tempFile.getAbsolutePath());
+        // Si quieres activar la función timbra, descomenta y ajusta:
         if (timbra(tempFile.getPath(), cadenaOriginal, soliTrabajador)) {
             valorModifica = true;
         }
+
         return valorModifica;
     }
 
-    public boolean timbra(String nombre, String cadOriginal, RnGcNomSolicitudTrabajadorTbl soliTrabajador) {
+    public boolean timbra(String nombre, String cadOriginal, RnGcNomSolicitudTrabajadorTbl soliTrabajador) throws Exception {
+        System.out.println("Timbrando");
         boolean valorTimbra = false;
         try {
+            // Leer el XML original
             FileInputStream fis = new FileInputStream(new java.io.File(nombre));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             int cuantos = 0;
             byte[] bytes = new byte[10000];
             File xmltimbrado = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Archivos/xmlTimbrado.xml"));
+            System.out.println("parte 1 - Timbrado");
             while ((cuantos = fis.read(bytes, 0, bytes.length)) >= 0) {
                 baos.write(bytes, 0, cuantos);
             }
             bytes = baos.toByteArray();
             baos.close();
+            fis.close();
+
             String xml = new String(bytes, "UTF-8");
-            //Sefactura sf = new Sefactura(" http://www.jonima.com.mx:3014", "VICA840114RZ4", "VICA840114RZ4"); //Desarrollo
-            Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
+
+            Sefactura sf = new Sefactura(" http://www.jonima.com.mx:3014", "VICA840114RZ4", "VICA840114RZ4"); // Desarrollo
             RespuestaTimbrado rt = sf.timbrado(xml);
+
             System.out.println("xmlTimbrado: " + rt.getXml());
             System.out.println("resultado: " + rt.getResultado());
+
             if (rt.getResultado() != null && rt.getResultado().length() > 0) {
                 System.out.println("Error al generar timbrado: " + rt.getResultado());
                 cfdisId.setRespuestaTimbrado(rt.getResultado());
+                // En caso de error, retornamos el archivo original sin intentar timbrar
+
+                String selloSAT = " ";
+                String noCertSAT = " ";
+                String fechaTimbrado = " ";
+                String Uuid = " ";
+                String selloCFDI = " ";
+                String rfcProvCertif = " ";
+                byte[] codQR = new byte[0];
+
+                String UuidArchivoNombre = "";
+                if (Uuid == null || Uuid.trim().isEmpty()) {
+                    UuidArchivoNombre = java.util.UUID.randomUUID().toString(); // Generar UUID aleatorio
+                    System.out.println("UUID no encontrado en XML, se genera uno nuevo: " + UuidArchivoNombre);
+                }
+                System.out.println("Guadando nombre... " + UuidArchivoNombre);
+                setUuidTimbreArchivo(UuidArchivoNombre);
+                String nombreArchivo = UuidArchivoNombre + ".xml";
+
+                String rutaBase = "C:\\Users\\Joaquin\\Documents\\Development\\GestorContable\\RN_GC\\web\\resources\\Archivos\\";
+                String rutaArchivo = rutaBase + nombreArchivo;
+
+                // Crear carpeta si no existe
+                File carpeta = new File(rutaBase);
+                if (!carpeta.exists()) {
+                    carpeta.mkdirs();
+                }
+
+                File archivoXml = new File(rutaArchivo);
+                try (
+                        FileInputStream fisOrigen = new FileInputStream(nombre);
+                        FileOutputStream fosDestino = new FileOutputStream(archivoXml)) {
+                    byte[] buffer = new byte[1024];
+                    int bytesLeidos;
+                    while ((bytesLeidos = fisOrigen.read(buffer)) != -1) {
+                        fosDestino.write(buffer, 0, bytesLeidos);
+                    }
+                    System.out.println("Archivo copiado exitosamente a: " + rutaArchivo);
+                }
+
+                setArchivoXmlTimbrado(archivoXml);
+                System.out.print("Parte 3");
+                // Guarda bytes para uso posterior (por ejemplo, enviar en correo, etc)
+                //byte[] xmlTimbradoB = rt.getXml().getBytes("UTF-8");
+                //archivo.setArchivoXml(xmlTimbradoB);
+
+                // Guarda UUID global para usar en nombres PDF, ZIP, etc
+                crearPDF(selloSAT, noCertSAT, fechaTimbrado, Uuid, selloCFDI, codQR, cadOriginal, rfcProvCertif, soliTrabajador);
+                return true;
             } else {
+                // ✅ Datos del XML timbrado
                 String selloSAT = " ";
                 String noCertSAT = " ";
                 String fechaTimbrado = " ";
@@ -876,7 +1521,10 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                 String selloCFDI = " ";
                 String xmlTimbrado = rt.getXml();
                 String rfcProvCertif = " ";
+
+                // Guardamos XML timbrado en el objeto
                 cfdisId.setXmlTrama(xmlTimbrado);
+
                 FileOutputStream fos = new FileOutputStream(xmltimbrado);
                 fos.write(xmlTimbrado.getBytes("UTF-8"));
                 fos.close();
@@ -899,6 +1547,14 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                     selloCFDI = element.getAttribute("SelloCFD");
                     rfcProvCertif = element.getAttribute("RfcProvCertif");
                 }
+
+                String UuidArchivoNombre = "";
+                if (Uuid == null || Uuid.trim().isEmpty()) {
+                    UuidArchivoNombre = java.util.UUID.randomUUID().toString(); // Generar UUID aleatorio
+                    System.out.println("UUID no encontrado en XML, se genera uno nuevo: " + Uuid);
+                }
+                setUuidTimbreArchivo(UuidArchivoNombre);// Guardar el UUID (real o generado)
+
                 cfdisId.setUuid(Uuid);
                 archivo.setArchivoXml(xmlTimbradoB);
                 cfdisId.setRespuestaTimbrado("Timbrado de forma correcta");
@@ -907,9 +1563,21 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                 //crearArchivo(xmltimbrado);
                 valorTimbra = true;
                 System.out.println("Ya termine ");
+
+                // ✅ Generar archivo con nombre único y guardarlo en la variable global
+                String nombreArchivo = UuidArchivoNombre + ".xml";
+                archivoXmlTimbrado = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Archivos/" + nombreArchivo));
+
+                // Guardar el archivo timbrado con ese nombre
+                try (FileOutputStream fosFinal = new FileOutputStream(archivoXmlTimbrado)) {
+                    fosFinal.write(xmlTimbrado.getBytes("UTF-8"));
+                }
+
             }
+
         } catch (Exception ex) {
             System.err.println("Ocurrio un error en el timbrado: " + ex.getLocalizedMessage());
+
         }
         return valorTimbra;
     }
@@ -978,12 +1646,14 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
     }
 
     public void crearPDF(String selloSAT, String noCertSAT, String fechaTimbrado, String Uuid, String selloCFDI, byte[] codigoQR, String cadenaOrig, String rfcProvCertif, RnGcNomSolicitudTrabajadorTbl soliTrsbajador) throws JRException, IOException, ParseException {
+        System.out.println("Generando PDF");
         FileOutputStream fos = new FileOutputStream(new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/qr.png")));
         fos.write(codigoQR);
         fos.close();
         fos = new FileOutputStream(new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/responsivo.png")));
         fos.write(obtenerImagen());
         fos.close();
+        System.out.println("Generando PDF - Parte 1");
         String imagenLogo = FacesContext.getCurrentInstance()
                 .getExternalContext()
                 .getRealPath("/resources/images/responsivo.png");//*/
@@ -995,12 +1665,13 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         listaPercepciones = new ArrayList<>();
         listaDeducciones = new ArrayList<>();
         tipoContrato = tipoContratoFacade.obtenerXId(soliTrsbajador.getTrabajadorId().getTipoContratoId());
-        estado = estadoFacade.obtenerXId(soliTrsbajador.getTrabajadorId().getEstadoId());
+        estado = estadoFacade.obtenerXId(soliTrsbajador.getTrabajadorId().getEntidadFederativaId().getId());
         listaPercepciones = solicitudLineasFacade.obtenerPercepciones(soliTrsbajador.getId());
         listaDeducciones = solicitudLineasFacade.obtenerDeducciones(soliTrsbajador.getId());
         cfdisId.setImporte(soliTrsbajador.getImporteNeto().doubleValue());
         cfdisId.setSaldoPagado(soliTrsbajador.getImporteNeto().doubleValue());
         cfdisId.setSaldoInsoluto(soliTrsbajador.getImporteNeto().doubleValue());
+        System.out.println("Generando PDF - Parte 3");
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("Nombre_Emisor", cfdisId.getNombreEmisor());
         parametros.put("RFC_Emisor", cfdisId.getRfcEmisor());
@@ -1013,7 +1684,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         parametros.put("FechaHora_Emision", new SimpleDateFormat("YYYY-MM-dd'T'hh:mm:ss").format(cfdisId.getFechaExpedicion()));
         parametros.put("QR", imagenqr);
         parametros.put("Logo", imagenLogo);
-
+        System.out.println("Generando PDF - Parte 4");
         if (cfdisId.getClaveRegimenFiscal() != null) {
             switch (cfdisId.getClaveRegimenFiscal()) {
                 case "601":
@@ -1084,6 +1755,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                     break;
             }
         }
+        System.out.println("Generando PDF - Parte 5");
         parametros.put("EfectoComprobante", "N - Nomina");
         parametros.put("Uso_CFDI", "P01 - Por definir");
         parametros.put("FormaPago", "99 - Por definir");
@@ -1105,6 +1777,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         parametros.put("cuentaBancaria", soliTrsbajador.getTrabajadorId().getCuentaBancaria());
         parametros.put("salarioBase", Double.valueOf(soliTrsbajador.getTrabajadorId().getSalarioBase()));
         parametros.put("salarioDiario", Double.valueOf(soliTrsbajador.getTrabajadorId().getSdi()));
+        System.out.println("Generando PDF - Parte medio");
         parametros.put("claveFederativa", estado.getCveEstado());
         parametros.put("N_empleado", soliTrsbajador.getTrabajadorId().getNoTrabajador());
         parametros.put("importeLetra", importeLetra(soliTrsbajador.getImporteNeto()));
@@ -1126,15 +1799,54 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         parametros.put("sello_CFDI", selloCFDI);
         parametros.put("sello_SAT", selloSAT);
 
-        File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Reports/complemento_nomina.jasper"));
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametros, new JREmptyDataSource());
-        byte[] pdf = JasperExportManager.exportReportToPdf(jasperPrint);
-        archivo.setArchivoPdf(pdf);
+        //Guardar PDF físicamente en la ruta de timbrados con el nombre del UUID
+        try {
+            System.out.println("Generando PDF - Parte 6");
+            File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Reports/complemento_nomina.jasper"));
+
+            if (!jasper.exists()) {
+                System.err.println("El archivo .jasper no existe en: " + jasper.getAbsolutePath());
+                return;
+            }
+
+            // Intentar guardar QR
+            String imagenQRPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/qr.png");
+            try {
+                FileOutputStream fosQR = new FileOutputStream(imagenQRPath);
+                fosQR.write(codigoQR);
+                fosQR.close();
+                parametros.put("QR", null);
+            } catch (Exception exQR) {
+                System.err.println("Advertencia: No se pudo guardar o leer la imagen QR, se usará valor vacío.");
+                parametros.put("QR", null); // O usa "" si el .jasper lo permite
+            }
+
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametros, new JREmptyDataSource());
+            byte[] pdf = JasperExportManager.exportReportToPdf(jasperPrint);
+            archivo.setArchivoPdf(pdf);
+
+            // Guardar en variable global
+            setArchivoPdfGlobal(pdf);
+            System.out.println("Generando PDF - Parte 7");
+
+            /*String rutaTimbrados = "C:\\Users\\Joaquin\\Documents\\NetBeansProjects\\RN_GC\\web\\resources\\Archivos\\timbrados";
+            String nombreArchivoPDF = "CFDI_TIMBRADO_" + Uuid + ".pdf";
+            File archivoPDF = new File(rutaTimbrados, nombreArchivoPDF);
+            FileOutputStream fosPdf = new FileOutputStream(archivoPDF);
+            fosPdf.write(pdf);
+            fosPdf.close();*/
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error al generar el PDF: " + e.getMessage());
+        }
+        System.out.println("Generando PDF - Final");
     }
 
     public void descargarVistaPrevia() {
+        System.out.println("Inicando vista previa");
         try {
             if (seleccionados != null && !seleccionados.isEmpty() && seleccionados.size() > 0) {
+                System.out.println("Entro al if");
                 cfdisId.setClaveRegimenFiscal(cfdisId2.getClaveRegimenFiscal());
                 cfdisId.setLugarExpedicion(cfdisId2.getLugarExpedicion());
                 FileOutputStream fos = new FileOutputStream(new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/responsivo.png")));
@@ -1145,22 +1857,46 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                         .getRealPath("/resources/images/responsivo.png");//*/
                 String imagenqr = FacesContext.getCurrentInstance()
                         .getExternalContext()
-                        .getRealPath("/resources/images/qr.png");
+                        .getRealPath("/resources/images/qr_ejemplo.png");
+
+                System.out.println("Ruta de imagenes");
+                System.out.println("Ruta 1 " + imagenLogo);
+                System.out.println("Ruta 2 " + imagenqr);
                 List<byte[]> pdfs = new ArrayList<>();
+                System.out.println("Parte 2");
                 for (RnGcNomSolicitudTrabajadorTbl soliTrabajador : seleccionados) {
                     nomina = new RnGcNomNominasTbl();
                     tipoContrato = new RnGcNomTipocontratoTbl();
                     estado = new RnGcNomEstadosTbl();
+                    //tipoJornada = new RnGcNomTipojornadaTbl();
+                    //riesgoPuesto = new RnGcNomRiesgopuestoTbl();
+
                     listaPercepciones = new ArrayList<>();
                     listaDeducciones = new ArrayList<>();
+
                     nomina = nominaFacade.obtenerNominaPorIdUnico(soliTrabajador.getSolicitudId().getNominaId());
                     tipoContrato = tipoContratoFacade.obtenerXId(soliTrabajador.getTrabajadorId().getTipoContratoId());
-                    estado = estadoFacade.obtenerXId(soliTrabajador.getTrabajadorId().getEstadoId());
+                    estado = estadoFacade.obtenerXId(soliTrabajador.getTrabajadorId().getEntidadFederativaId().getId());
+                    System.out.println("Id de estado: " + soliTrabajador.getTrabajadorId().getEntidadFederativaId().getId());
+
                     listaPercepciones = solicitudLineasFacade.obtenerPercepciones(soliTrabajador.getId());
                     listaDeducciones = solicitudLineasFacade.obtenerDeducciones(soliTrabajador.getId());
+
                     cfdisId.setImporte(soliTrabajador.getImporteNeto().doubleValue());
                     cfdisId.setSaldoPagado(soliTrabajador.getImporteNeto().doubleValue());
                     cfdisId.setSaldoInsoluto(soliTrabajador.getImporteNeto().doubleValue());
+
+                    Date fechaInicio = soliTrabajador.getTrabajadorId().getFechaInicio();
+                    LocalDate inicio = fechaInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    LocalDate hoy = LocalDate.now();
+
+                    long semanas = ChronoUnit.WEEKS.between(inicio, hoy);
+
+                    // Formato para XML CFDI: "PnnnW"
+                    String antiguedadFormato = String.format("P%03dW", semanas);
+                    System.out.println("Antigüedad para el XML: " + antiguedadFormato);
+
+                    System.out.println("Parte Media");
                     Map<String, Object> parametros = new HashMap<String, Object>();
                     parametros.put("Nombre_Emisor", cfdisId.getNombreEmisor());
                     parametros.put("RFC_Emisor", cfdisId.getRfcEmisor());
@@ -1279,14 +2015,27 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                     parametros.put("totalDeducciones", String.valueOf(soliTrabajador.getTotalDeducciones().doubleValue()));
                     parametros.put("importeNeto", String.valueOf(soliTrabajador.getImporteNeto().doubleValue()));
 
+                    parametros.put("antiguedad", antiguedadFormato);
+                    parametros.put("tipoJornada", soliTrabajador.getTrabajadorId().getTipoJornadaTblId().getCveTipoJornada() + " - " + soliTrabajador.getTrabajadorId().getTipoJornadaTblId().getDescripcion());
+                    parametros.put("sindicalizado", soliTrabajador.getTrabajadorId().getSindicalizado());
+                    //parametros.put("diasPagados", soliTrabajador.getDiasPagados());
+
                     File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Reports/complemento_nomina.jasper"));
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametros, new JREmptyDataSource());
-                    pdfs.add(JasperExportManager.exportReportToPdf(jasperPrint));
+
+                    try {
+                        JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametros, new JREmptyDataSource());
+                        pdfs.add(JasperExportManager.exportReportToPdf(jasperPrint));
+                    } catch (Exception e) {
+                        System.out.println("Error al generar el PDF para " + soliTrabajador.getTrabajadorId().getNombreCompleto());
+                        e.printStackTrace();
+                    }
+                    System.out.println("Parte 3");
+                    System.out.println("Total de PDFs generados: " + pdfs.size());
                 }
 
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 ZipOutputStream zout = new ZipOutputStream(bos);
-
+                System.out.println("Parte 4");
                 for (int i = 0; i < pdfs.size(); i++) {
                     System.out.println("pdfs2: " + pdfs.get(i) + " | " + new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss").format(new Date()) + " | " + (i + 1));
                     ZipEntry entry = new ZipEntry("VistaPreviaNomina_" + seleccionados.get(i).getTrabajadorId().getNombre() + "_" + new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss").format(new Date()) + ".pdf");
@@ -1303,6 +2052,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                 downLoadFile = new DefaultStreamedContent(streamPdf, "application/zip", "Factura_Nomina_" + new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss").format(new Date()) + ".zip");
                 System.out.println("Descarga2");
             } else {
+                System.out.println("No entro al if");
                 JsfUtil.addSuccessMessage("No se seleccionaron trabajadores");
             }
         } catch (Exception ex) {

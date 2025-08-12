@@ -31,48 +31,72 @@ public class RnGcNomSolicitudesLineasTblFacade extends AbstractFacade<RnGcNomSol
     public RnGcNomSolicitudesLineasTblFacade() {
         super(RnGcNomSolicitudesLineasTbl.class);
     }
-    
-    public RnGcNomSolicitudesLineasTbl refreshFromDB(RnGcNomSolicitudesLineasTbl soliLineas){
+
+    public RnGcNomSolicitudesLineasTbl refreshFromDB(RnGcNomSolicitudesLineasTbl soliLineas) {
         RnGcNomSolicitudesLineasTbl soliLineasLocal = null;
         soliLineasLocal = em.merge(soliLineas);
         return soliLineasLocal;
     }
-    
-    public List<RnGcNomSolicitudesLineasTbl> obtenerPercepciones(Integer soliTrabajador){
+
+    public List<RnGcNomSolicitudesLineasTbl> obtenerPercepciones(Integer soliTrabajador) {
         List<RnGcNomSolicitudesLineasTbl> listaPercepciones = null;
-        try{
+        try {
             listaPercepciones = em.createNamedQuery("RnGcNomSolicitudesLineasTbl.obtenerPercepciones", RnGcNomSolicitudesLineasTbl.class)
                     .setParameter("solicitudTrabajadorId", soliTrabajador)
                     .getResultList();
-        }catch(NoResultException ex){
+        } catch (NoResultException ex) {
             System.out.println("No se encontraron percepciones");
         }
         return listaPercepciones;
     }
-    
-    public List<RnGcNomSolicitudesLineasTbl> obtenerDeducciones(Integer soliTrabajador){
+
+    public List<RnGcNomSolicitudesLineasTbl> obtenerDeducciones(Integer soliTrabajador) {
         List<RnGcNomSolicitudesLineasTbl> listaDeducciones = null;
-        try{
+        try {
             listaDeducciones = em.createNamedQuery("RnGcNomSolicitudesLineasTbl.obtenerDeducciones", RnGcNomSolicitudesLineasTbl.class)
                     .setParameter("solicitudTrabajadorId", soliTrabajador)
                     .getResultList();
-        }catch(NoResultException ex){
+        } catch (NoResultException ex) {
             System.out.println("No se encontraron deducciones");
         }
         return listaDeducciones;
     }
-    
-    public List<RnGcNomSolicitudesLineasTbl> obtenerXSoliTrabajador(Integer soliTrabajadorUno, Integer soliTrabajadorDos){
+
+    public List<RnGcNomSolicitudesLineasTbl> obtenerIncapacidad(Integer soliTrabajador) {
+        List<RnGcNomSolicitudesLineasTbl> listaIncapacidad = null;
+        try {
+            listaIncapacidad = em.createNamedQuery("RnGcNomSolicitudesLineasTbl.obtenerIncapacidad", RnGcNomSolicitudesLineasTbl.class)
+                    .setParameter("solicitudTrabajadorId", soliTrabajador)
+                    .getResultList();
+        } catch (NoResultException ex) {
+            System.out.println("No se encontraron deducciones");
+        }
+        return listaIncapacidad;
+    }
+
+    public List<RnGcNomSolicitudesLineasTbl> obtenerXSoliTrabajador(Integer soliTrabajadorUno, Integer soliTrabajadorDos) {
         List<RnGcNomSolicitudesLineasTbl> listaLineas = null;
-        try{
+        try {
             listaLineas = em.createNamedQuery("RnGcNomSolicitudesLineasTbl.findBySoliTrabajador", RnGcNomSolicitudesLineasTbl.class)
                     .setParameter("soliTrabajadorUno", soliTrabajadorUno)
                     .setParameter("soliTrabajadorDos", soliTrabajadorDos)
                     .getResultList();
-        }catch(NoResultException ex){
+        } catch (NoResultException ex) {
             System.err.println("No se encontraron lineas");
         }
         return listaLineas;
     }
-    
+
+    public List<RnGcNomSolicitudesLineasTbl> obtenerXTrabajadorId(Integer soliTrabajadorId) {
+        List<RnGcNomSolicitudesLineasTbl> listaLineas = new ArrayList<>();
+        try {
+            listaLineas = em.createNamedQuery("RnGcNomSolicitudesLineasTbl.findBySolicitudTrabajadorId", RnGcNomSolicitudesLineasTbl.class)
+                    .setParameter("solicitudTrabajadorId", soliTrabajadorId)
+                    .getResultList();
+        } catch (NoResultException ex) {
+            System.err.println("No se encontraron líneas para el trabajador con ID: " + soliTrabajadorId);
+        }
+        return listaLineas;
+    }
+
 }

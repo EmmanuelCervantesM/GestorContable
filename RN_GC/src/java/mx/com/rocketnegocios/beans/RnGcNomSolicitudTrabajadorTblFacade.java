@@ -10,6 +10,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import mx.com.rocketnegocios.entities.RnGcNomSolicitudTrabajadorTbl;
 import mx.com.rocketnegocios.entities.RnGcNomSolicitudesTbl;
 
@@ -32,11 +34,19 @@ public class RnGcNomSolicitudTrabajadorTblFacade extends AbstractFacade<RnGcNomS
         super(RnGcNomSolicitudTrabajadorTbl.class);
     }
     
-    public RnGcNomSolicitudTrabajadorTbl refreshFromDB(RnGcNomSolicitudTrabajadorTbl soliTrabajador){
-        RnGcNomSolicitudTrabajadorTbl soliTrabajadorLocal = null;
-        soliTrabajadorLocal = em.merge(soliTrabajador);
-        return soliTrabajadorLocal;
+    public RnGcNomSolicitudTrabajadorTbl refreshFromDB(RnGcNomSolicitudTrabajadorTbl entidad) {
+    try {
+        return em.merge(entidad);
+    } catch (ConstraintViolationException e) {
+        for (ConstraintViolation<?> v : e.getConstraintViolations()) {
+            System.out.println("❌ Violación de constraint: " +
+                v.getPropertyPath() + " - " + v.getMessage() +
+                " (Valor inválido: " + v.getInvalidValue() + ")");
+        }
+        throw e;
     }
+}
+
     
     public List<RnGcNomSolicitudTrabajadorTbl> obtenerXSolicitud(RnGcNomSolicitudesTbl solicitudId){
         List<RnGcNomSolicitudTrabajadorTbl> listaSoliTrabajador = null;

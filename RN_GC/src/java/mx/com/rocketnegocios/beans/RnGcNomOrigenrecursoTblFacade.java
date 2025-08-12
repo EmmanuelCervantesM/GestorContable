@@ -7,6 +7,7 @@ package mx.com.rocketnegocios.beans;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import mx.com.rocketnegocios.entities.RnGcNomOrigenrecursoTbl;
 
@@ -29,4 +30,15 @@ public class RnGcNomOrigenrecursoTblFacade extends AbstractFacade<RnGcNomOrigenr
         super(RnGcNomOrigenrecursoTbl.class);
     }
     
+    public RnGcNomOrigenrecursoTbl obtenerXDescripcion(String descripcion){
+        RnGcNomOrigenrecursoTbl periodicidadNomina = new RnGcNomOrigenrecursoTbl();
+        try{
+            periodicidadNomina = em.createNamedQuery("RnGcNomOrigenrecursoTbl.findByDescripcion", RnGcNomOrigenrecursoTbl.class)
+                    .setParameter("descripcion", descripcion)
+                    .getSingleResult();
+        }catch(NoResultException ex){
+            System.out.println("No encontro origen de pago");
+        }
+        return periodicidadNomina;
+    }
 }
