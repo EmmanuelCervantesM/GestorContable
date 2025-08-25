@@ -10,6 +10,18 @@ Este proyecto está diseñado para gestionar la **contabilidad** de una organiza
 
 ---
 
+## Usuarios desarrollo
+
+### Administrador
+
+- Usuario: Administrador
+- Contraseña: 8WJDu4FfFn6CWtJYSYXk/A==
+
+### Cuenta Facturación
+
+- Usuario: escuelaWilson
+- Contraseña: 9151adrApBD1ntSm0D93sA==
+
 ## 🚀 Cómo levantar el proyecto
 
 ### 1. Requisitos previos
@@ -80,13 +92,15 @@ Los archivos `.jasper` generados por iReport se integran en el sistema y son uti
 Una vez realizados estos pasos, ya puedes ejecutar el proyecto desde NetBeans.
 
 1. Levantar el servidor de GlassFish.
-   
+
    ![Levantar el servidor de GlassFish Server](imagenes/levantar_servidor.png)
+
 2. Ejecutar el proyecto.
-   
+
    ![Ejecutar el proyecto](imagenes/run_proyecto.png)
 
 ---
+
 ## 🧩 Flujo de trabajo con Git
 
 Este proyecto sigue una estructura de ramas para asegurar un desarrollo ordenado y controlado. Las dos ramas principales son:
@@ -105,14 +119,18 @@ Este proyecto sigue una estructura de ramas para asegurar un desarrollo ordenado
    git pull origin dev
    git checkout -b nombre-de-tu-rama
 
+   ```
+
 2. **Realiza tus cambios y súbelos a `origen` (nombre de tu rama)**
-   
+
    Una vez que termines tu trabajo:
-   
+
    ```bash
    git add .
    git commit -m "Descripción de los cambios realizados"
    git push origin nombre-de-tu-rama
+
+   ```
 
 3. **Sube los cambios a la rama `dev` (vía Merge Request / Pull Request)**
 
@@ -133,8 +151,11 @@ Este proyecto sigue una estructura de ramas para asegurar un desarrollo ordenado
    git pull origin main
    git merge dev
    git push origin main
-   
+
+   ```
+
 ---
+
 ## 📌 Notas adicionales
 
 - El proyecto utiliza tecnologías Java EE con el servidor GlassFish.
