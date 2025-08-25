@@ -31,8 +31,8 @@ public class RnGcTimbresTblFacade extends AbstractFacade<RnGcTimbresTbl> {
     public RnGcTimbresTblFacade() {
         super(RnGcTimbresTbl.class);
     }
-    
-    public RnGcTimbresTbl refreshFromDB(RnGcTimbresTbl timbre){
+
+    public RnGcTimbresTbl refreshFromDB(RnGcTimbresTbl timbre) {
         RnGcTimbresTbl timbreLocal = null;
         timbreLocal = em.merge(timbre);
         return timbreLocal;
@@ -63,7 +63,7 @@ public class RnGcTimbresTblFacade extends AbstractFacade<RnGcTimbresTbl> {
         }
         return itemsTimbre;
     }
-    
+
     public long obtenerTotalTimbresActivosXUsuario(String proveedor, RnGcUsuariosTbl usuario) {
         Long totaltimbres = 0L;
         try {
@@ -77,7 +77,7 @@ public class RnGcTimbresTblFacade extends AbstractFacade<RnGcTimbresTbl> {
         }
         return totaltimbres;
     }
-    
+
     public long obtenerTotalTimbresTotalesXUsuario(String proveedor, RnGcUsuariosTbl usuario) {
         Long totaltimbres = 0L;
         try {
@@ -91,7 +91,7 @@ public class RnGcTimbresTblFacade extends AbstractFacade<RnGcTimbresTbl> {
         }
         return totaltimbres;
     }
-    
+
     public List<RnGcTimbresTbl> listaTimbresUsuario(RnGcUsuariosTbl usuario) {
         List<RnGcTimbresTbl> listaTimbres = null;
         try {
@@ -103,6 +103,21 @@ public class RnGcTimbresTblFacade extends AbstractFacade<RnGcTimbresTbl> {
         }
         return listaTimbres;
     }
-    
+
+    public long obtenerTotalTimbresXUsuario(RnGcUsuariosTbl usuario) {
+        if (usuario == null) {
+            return 0L;
+        }
+
+        Long totaltimbres = 0L;
+        try {
+            totaltimbres = em.createNamedQuery("RnGcTimbresTbl.findTotalTimbresByUsuario", Long.class)
+                    .setParameter("usuarioId", usuario)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            System.out.println("Error en obtenerTotalTimbresXUsuario: " + ex.getMessage());
+        }
+        return totaltimbres != null ? totaltimbres : 0L;
+    }
 
 }

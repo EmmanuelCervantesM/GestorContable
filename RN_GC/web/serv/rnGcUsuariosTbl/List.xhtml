@@ -49,7 +49,7 @@
                         <p:column filterBy="#{item.rfc}" footerText="Contiene" width="100" filterMatchMode="contains" headerText="RFC">
                             <h:outputText value="#{item.rfc}"/>
                         </p:column>
-                        
+
                         <p:column width="250" filterBy="#{item.usuarioClave}" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListRnGcUsuariosTblTitle_usuarioClave}"/>
@@ -68,21 +68,21 @@
                             </f:facet>
                             <h:outputText value="#{item.usuarioId.nombreCompleto}"/>
                         </p:column>
-                    
-                       <p:column width="60">
+
+                        <p:column width="60">
                             <f:facet name="header">
                                 <h:outputText value="Número Usuarios"/>
                             </f:facet>
-                           <h:outputText value="#{item.noUsuarios}"/>
+                            <h:outputText value="#{item.noUsuarios}"/>
                         </p:column>
-                        
+
                         <p:column width="50" filterBy="#{item.tipoUsuario}">
                             <f:facet name="header">
                                 <h:outputText value="Tipo Usuario"/>
                             </f:facet>
                             <h:outputText value="#{item.tipoUsuario}"/>
                         </p:column>
-                            
+
                         <p:column width="350">
                             <f:facet name="header">
                                 <h:outputText value="Perfil"/>
@@ -90,10 +90,10 @@
                             <h:outputText value="#{rnGcUsuariosPerfilesTblController.obtenerUsuarioPerfil(item.id)}"/>
                         </p:column>
 
-                        <p:column headerText="Timbres restantes / Timbres Usados" width="125">
-                            <h:outputText value="#{rnGcTimbresTblController.obtenerTimbres(item.id)}"/>
+                        <p:column headerText="Timbres restantes" width="125">
+                            <h:outputText value="#{rnGcTimbresTblController.obtenerTotalTimbresXUsuario1(item.id)}"/>
                         </p:column>
-                        
+
                         <p:column width="75">
                             <f:facet name="header">
                                 <h:outputText value="Fecha Alta"/>
@@ -129,6 +129,19 @@
                             <p:commandButton id="UsuariosPerfilesButton" rendered="#{rnGcUsuariosTblController.obtenerTipoUsuario()}" icon="ui-icon-contact" value="Asignar Perfiles" actionListener="#{rnGcUsuariosPerfilesTblController.prepararItemUsuario(rnGcUsuariosTblController.selected)}" update=":RnGcUsuariosPerfilesTblListForm:datalist" oncomplete="PF('RnGcUsuarioPerfilesTblListDialog').show()" disabled="#{empty rnGcUsuariosTblController.selected}"/>
                             <p:commandButton id="direccionesButton" icon="ui-icon-person" value="Direcciones" actionListener="#{rnGcDireccionesUsuariosTblController.prepararItemUsuario(rnGcUsuariosTblController.selected)}" update=":RnGcDireccionesUsuariosTblListForm:datalist" oncomplete="PF('RnGcDireccionesUsuariosTblListDialog').show()" disabled="#{empty rnGcUsuariosTblController.selected}"/>
                             <p:commandButton id="timbresButton" icon="ui-icon-tag" value="Asignar Timbres" actionListener="#{rnGcTimbresTblController.prepareItemsUsuario(rnGcUsuariosTblController.selected)}" update="RnGcTimbresTblListForm:datalist" oncomplete="PF('RnGcTimbresTblListDialog').show()" disabled="#{empty rnGcUsuariosTblController.selected}"/>
+
+                            <h:panelGroup layout="inline" style="float:right; margin-right:20px;">
+                                <h:outputText value="#{rnGcTimbresTblController.totalTimbresAdministrador} timbres disponible" style="margin-right:10px;" />
+                                <p:commandButton id="agregarTimbresButton" 
+                                                 icon="ui-icon-plus" 
+                                                 value="Agregar Timbres" 
+                                                 actionListener="#{rnGcTimbresTblController.prepareItemsUsuario(rnGcUsuariosTblController.selected)}" 
+                                                 update="RnGcTimbresTblListForm:datalist" 
+                                                 oncomplete="PF('RnGcTimbresTblAdministrador').show()" 
+                                                 disabled="#{empty rnGcUsuariosTblController.selected}"
+                                                 rendered="#{sessionScope['nombreCompleto'] eq 'ADMINISTRADOR'}"/>
+                            </h:panelGroup>
+
                         </f:facet>
                     </p:dataTable>
                 </p:panel>
@@ -235,7 +248,7 @@
                             <p:calendar id="fechaInicial" pattern="dd/MM/yyyy" value="#{rnGcUsuariosPerfilesTblController.selected.fechaInicial}" title="#{bundle.EditRnGcUsuariosPerfilesTblTitle_fechaInicial}" required="true" requiredMessage="#{bundle.EditRnGcUsuariosPerfilesTblRequiredMessage_fechaInicial}" showOn="button"/>
                             <p:outputLabel value="#{bundle.EditRnGcUsuariosPerfilesTblLabel_fechaFinal}" for="fechaFinal" />
                             <p:calendar id="fechaFinal" pattern="dd/MM/yyyy" value="#{rnGcUsuariosPerfilesTblController.selected.fechaFinal}" title="#{bundle.EditRnGcUsuariosPerfilesTblTitle_fechaFinal}"  showOn="button"/>
-                            
+
                         </p:panelGrid>
                         <p:commandButton actionListener="#{rnGcUsuariosPerfilesTblController.update}" ajax="false" value="#{bundle.Save}" update="display, :RnGcUsuariosPerfilesTblEditForm, :RnGcUsuariosPerfilesTblListForm:datalist,:growl, :RnGcUsuariosTblListForm:datalist" oncomplete="handleSubmit(args, 'RnGcUsuariosPerfilesTblEditDialog');"/>
                         <p:commandButton value="#{bundle.Cancel}" onclick="RnGcUsuariosPerfilesTblEditDialog.hide()"/>
@@ -489,6 +502,41 @@
                     </h:panelGroup>
                 </h:form>
             </p:dialog>
+
+            <!-- Agregar timbre al administrador -->
+            <p:dialog id="RnGcTimbresTblAdministrador" 
+                      widgetVar="RnGcTimbresTblAdministrador" 
+                      modal="true" 
+                      resizable="false" 
+                      appendTo="@(body)" 
+                      header="Agragar timbres al administrador">
+
+                <h:form id="RnGcTimbresTblAdministradorForm">
+                    <!-- Aquí muestras el campo -->
+                    <!-- Aquí muestras el campo con etiqueta -->
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel value="Cantidad a agregar:" for="cantidad" />
+                        <p:inputText id="cantidad" value="#{rnGcTimbresTblController.agregarTimbresAdministrador}" />
+                    </h:panelGrid>
+
+                    <!-- Footer con los botones -->
+
+                    <p:commandButton id="agregarButton" 
+                                     icon="ui-icon-plus" 
+                                     value="Agregar" 
+                                     action="#{rnGcTimbresTblController.guardarTimbresTotalesAdministrador()}" 
+                                     update=":RnGcTimbresTblCreateForm" 
+                                     oncomplete="@this"/>
+
+                    <p:commandButton id="cancelarButton" 
+                                     icon="ui-icon-close" 
+                                     value="Cancelar" 
+                                     onclick="PF('RnGcTimbresTblAdministrador').hide(); return false;" 
+                                     process="@this" />
+
+                </h:form>
+            </p:dialog>
+
             <!-- Ver direccion usuario -->
             <!-- Lista timbres asignados-->
             <p:dialog id="RnGcTimbresTblListDlg" widgetVar="RnGcTimbresTblListDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateRnGcTimbresTblTitle}">
@@ -554,7 +602,13 @@
                                 <f:selectItem itemLabel="Inactivo" itemValue="Inactivo"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="Cuanto timbres quiere asignar?" for="timbresTotal" />
-                            <p:inputText id="timbresTotal" style="width: 175px" value="#{rnGcTimbresTblController.totalTimbres}" title="#{bundle.CreateRnGcTimbresTblTitle_timbresTotal}" required="true" requiredMessage="#{bundle.CreateRnGcTimbresTblRequiredMessage_timbresTotal}"/>
+
+                            <p:inputText id="timbresTotal" 
+                                         style="width: 175px" 
+                                         value="#{rnGcTimbresTblController.totalTimbres}" 
+                                         title="#{bundle.CreateRnGcTimbresTblTitle_timbresTotal}" 
+                                         required="true" 
+                                         />
                             <p:outputLabel value="#{bundle.CreateRnGcTimbresTblLabel_fechaInicio}" for="fechaInicio" />
                             <p:calendar id="fechaInicio" pattern="dd/MM/yyyy" value="#{rnGcTimbresTblController.selected.fechaInicio}" title="#{bundle.EditRnGcTimbresTblTitle_fechaInicio}" required="true" requiredMessage="#{bundle.EditRnGcTimbresTblRequiredMessage_fechaInicio}" showOn="button"/>
                             <p:outputLabel value="#{bundle.CreateRnGcTimbresTblLabel_fechaFin}" for="fechaFin" />
@@ -564,7 +618,11 @@
                                 <f:selectItem itemLabel="#{rnGcUsuariosTblController.selected.nombreCompleto}" itemValue="#{rnGcUsuariosTblController.selected}"/>
                             </p:selectOneMenu>
                         </p:panelGrid>
-                        <p:commandButton actionListener="#{rnGcTimbresTblController.create}" value="#{bundle.Save}" update="display,:RnGcTimbresTblListForm:datalist,growlTimbres, RnGcUsuariosTblListForm:datalist" oncomplete="handleSubmit(args,'RnGcTimbresTblCreateDialog');"/>
+                        <p:commandButton 
+                            actionListener="#{rnGcTimbresTblController.create}" 
+                            value="#{bundle.Save}" 
+                            update="display,:RnGcTimbresTblListForm:datalist,growlTimbres,RnGcUsuariosTblListForm:datalist"
+                            oncomplete="if(!args.validationFailed){RnGcTimbresTblCreateDialog.hide();}"/>
                         <p:commandButton value="#{bundle.Cancel}" onclick="RnGcTimbresTblCreateDialog.hide()"/>
                     </h:panelGroup>
                 </h:form>

@@ -56,11 +56,12 @@ public class RnGcTrabajadoresTblFacade extends AbstractFacade<RnGcTrabajadoresTb
     }
     /// Agregrando funcion para contar 
     
-    public Long contarTrabajador(String curp, String rfc, String nss){
+    public Long contarTrabajador(String curp, String rfc, String nss, Integer idUsuario){
         return em.createNamedQuery("RnGcTrabajadoresTbl.countTrabajador", Long.class)
                  .setParameter("curp", curp)
                  .setParameter("rfc", rfc)
                  .setParameter("nss", nss)
+                 .setParameter("idUsuario", idUsuario)
                  .getSingleResult();
     }
     

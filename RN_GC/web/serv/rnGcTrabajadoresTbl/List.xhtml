@@ -99,7 +99,7 @@
                             <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcTrabajadoresTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcTrabajadoresTblController.selected}"/>
                         </f:facet>
                         <f:facet name="header">
-                            <p:commandButton id="download" icon="ui-icon-arrowthickstop-1-s" value="Descargar Plantilla Trabajadores" actionListener="#{rnGcTrabajadoresTblController.deacargaPlantilla()}" ajax="false" update="RnGcTrabajadoresTblListForm">
+                            <p:commandButton id="download" icon="ui-icon-arrowthickstop-1-s" value="Descargar Plantilla Trabajadores" actionListener="#{rnGcTrabajadoresTblController.descargaPlantilla()}" ajax="false" update="RnGcTrabajadoresTblListForm">
                                 <p:fileDownload value="#{rnGcTrabajadoresTblController.downLoadFile}"/>
                             </p:commandButton>
                         </f:facet>

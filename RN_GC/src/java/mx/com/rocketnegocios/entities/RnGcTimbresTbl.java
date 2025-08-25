@@ -47,7 +47,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcTimbresTbl.findByProveedorUsuario", query = "SELECT r FROM RnGcTimbresTbl r WHERE r.proveedor = :proveedor AND r.usuarioId = :usuarioId AND r.estado = 'Activo' and r.timbresRestantes > 0")
     , @NamedQuery(name = "RnGcTimbresTbl.SUMTimbresActivos", query = "SELECT SUM(r.timbresRestantes) FROM RnGcTimbresTbl r WHERE r.proveedor = :proveedor AND r.usuarioId = :usuarioId AND r.estado = 'Activo'")
     , @NamedQuery(name = "RnGcTimbresTbl.SUMTimbresTotal", query = "SELECT SUM(r.timbresTotal) FROM RnGcTimbresTbl r WHERE r.proveedor = :proveedor AND r.usuarioId = :usuarioId AND r.estado = 'Activo'")
-    , @NamedQuery(name = "RnGcTimbresTbl.findByUsuarioEstado", query = "SELECT r FROM RnGcTimbresTbl r WHERE r.usuarioId = :usuarioId AND r.estado = 'Activo'") })
+    , @NamedQuery(name = "RnGcTimbresTbl.findByUsuarioEstado", query = "SELECT r FROM RnGcTimbresTbl r WHERE r.usuarioId = :usuarioId AND r.estado = 'Activo'")
+    , @NamedQuery(
+            name = "RnGcTimbresTbl.findTotalTimbresByUsuario",
+            query = "SELECT SUM(r.timbresTotal) - SUM(r.timbresUsados) "
+            + "FROM RnGcTimbresTbl r "
+            + "WHERE r.usuarioId = :usuarioId"
+    )})
 public class RnGcTimbresTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -171,7 +177,7 @@ public class RnGcTimbresTbl implements Serializable {
     }
 
     public Date getFechaInicio() {
-        if(fechaInicio == null) {
+        if (fechaInicio == null) {
             this.fechaInicio = new Date();
         }
         return fechaInicio;
@@ -250,5 +256,5 @@ public class RnGcTimbresTbl implements Serializable {
     public String toString() {
         return "mx.com.rocketnegocios.entities.RnGcTimbresTbl[ id=" + id + " ]";
     }
-    
+
 }

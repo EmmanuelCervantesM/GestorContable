@@ -50,7 +50,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcTrabajadoresTbl.findBySdi", query = "SELECT r FROM RnGcTrabajadoresTbl r WHERE r.sdi = :sdi")
     , @NamedQuery(name = "RnGcTrabajadoresTbl.findByTipoPersona", query = "SELECT r FROM RnGcTrabajadoresTbl r WHERE r.tipoPersona = :tipoPersona")
     , @NamedQuery(name = "RnGcTrabajadoresTbl.findByNominaId", query = "SELECT r FROM RnGcTrabajadoresTbl r WHERE r.nominaId = :nominaId")
-    , @NamedQuery(name = "RnGcTrabajadoresTbl.countTrabajador", query = "SELECT COUNT(r) FROM RnGcTrabajadoresTbl r WHERE r.curp = :curp or r.rfc = :rfc or r.nss = :nss")
+    , @NamedQuery(name = "RnGcTrabajadoresTbl.countTrabajador", query = "SELECT COUNT(r) FROM RnGcTrabajadoresTbl r WHERE r.creadoPor = :idUsuario  AND (r.curp = :curp or r.rfc = :rfc or r.nss = :nss)")
     , @NamedQuery(name = "RnGcTrabajadoresTbl.findTrabajador", query = "SELECT r FROM RnGcTrabajadoresTbl r WHERE r.curp = :curp OR r.rfc = :rfc OR r.nss = :nss")
     , @NamedQuery(name = "RnGcTrabajadoresTbl.findByNoTrabajador", query = "SELECT r FROM RnGcTrabajadoresTbl r WHERE r.noTrabajador = :noTrabajador AND r.creadoPor = :creadoPor"),})
 public class RnGcTrabajadoresTbl implements Serializable {
