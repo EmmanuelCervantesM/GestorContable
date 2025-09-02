@@ -67,6 +67,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import java.text.SimpleDateFormat;
 import mx.com.rocketnegocios.entities.RnGcNomTipoincapacidadTbl;
+import mx.com.rocketnegocios.entities.RnGcNomTipootropagoTbl;
 
 @Named("rnGcNomNominasTblController")
 @SessionScoped
@@ -381,19 +382,30 @@ public class RnGcNomNominasTblController implements Serializable {
 
     public void totalPercepcionDeduccion(List<RnGcNomSolicitudTrabajadorTbl> listaSolicitudes) {
         for (RnGcNomSolicitudTrabajadorTbl soliTrabajador : listaSolicitudes) {
-            List<RnGcNomSolicitudesLineasTbl> percepciones = solicitudesLineasFacade.obtenerPercepciones(soliTrabajador.getId());
-            List<RnGcNomSolicitudesLineasTbl> deducciones = solicitudesLineasFacade.obtenerDeducciones(soliTrabajador.getId());
+            List<RnGcNomSolicitudesLineasTbl> percepciones = solicitudesLineasFacade.obtenerPercepcionesConTipoRegistro(soliTrabajador.getId());
+            List<RnGcNomSolicitudesLineasTbl> deducciones = solicitudesLineasFacade.obtenerDeduccionesConTipoRegistro(soliTrabajador.getId());
+            List<RnGcNomSolicitudesLineasTbl> otrosPagos = solicitudesLineasFacade.obtenerOtrosPagosConTipoRegistro(soliTrabajador.getId());
+            List<RnGcNomSolicitudesLineasTbl> incapacidades = solicitudesLineasFacade.obtenerIncapacidadConTipoRegistro(soliTrabajador.getId());
             BigDecimal percepcion = BigDecimal.ZERO;
             BigDecimal deduccion = BigDecimal.ZERO;
+            BigDecimal otroPago = BigDecimal.ZERO;
+            BigDecimal incapacidad = BigDecimal.ZERO;
             for (RnGcNomSolicitudesLineasTbl percep : percepciones) {
                 percepcion = percepcion.add(percep.getTotalGravado()).add(percep.getTotalExento());
             }
             for (RnGcNomSolicitudesLineasTbl deduc : deducciones) {
                 deduccion = deduccion.add(deduc.getTotalGravado());
             }
-            soliTrabajador.setTotalPercepciones(percepcion);
+            for (RnGcNomSolicitudesLineasTbl otrPago : otrosPagos) {
+                otroPago = otroPago.add(otrPago.getTotalGravado());
+            }
+            for (RnGcNomSolicitudesLineasTbl incap : incapacidades) {
+                incapacidad = incapacidad.add(incap.getTotalGravado());
+            }
+            BigDecimal totalPercepciones = percepcion.add(otroPago).add(incapacidad);
+            soliTrabajador.setTotalPercepciones(totalPercepciones);
             soliTrabajador.setTotalDeducciones(deduccion);
-            soliTrabajador.setImporteNeto(percepcion.subtract(deduccion));
+            soliTrabajador.setImporteNeto(totalPercepciones.subtract(deduccion));
             soliTrabajadorFacade.edit(soliTrabajador);
         }
     }
@@ -523,81 +535,9 @@ public class RnGcNomNominasTblController implements Serializable {
                 return; // Detener ejecución si hay errores
             }
 
+            System.out.println("Validado exitosamente...");
+
             guardarPlantilla(event);
-            /*  
-            XSSFWorkbook excel = new XSSFWorkbook(event.getFile().getInputstream());
-            XSSFSheet sheet = excel.getSheetAt(0);
-            Iterator<Row> rowIterator = sheet.iterator();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Calendar fecha = Calendar.getInstance();
-            Row row;
-            List<String> nombres = new ArrayList<>();
-            Date fechaPago = null;
-            while (rowIterator.hasNext()) {
-                row = rowIterator.next();
-                Iterator<Cell> cellIterator = row.cellIterator();
-                Cell cell;
-                while (cellIterator.hasNext()) {
-                    cell = cellIterator.next();
-                    if (cell.getColumnIndex() == 2 && cell.getRowIndex() == 1)
-                        solicitud.setRegistroPatronal(cell.getStringCellValue());
-                    if (cell.getColumnIndex() == 2 && cell.getRowIndex() == 2) {
-                        selected.setNombreNomina(cell.getStringCellValue());
-                        periodoNomina.setNombrePeriodo(cell.getStringCellValue());
-                        solicitud.setNombreSolicitud(cell.getStringCellValue());
-                    }
-                    if (cell.getColumnIndex() == 2 && cell.getRowIndex() == 5)
-                        fechaPago = sdf.parse(cell.getStringCellValue());
-                    if (cell.getColumnIndex() == 2 && cell.getRowIndex() == 4) {
-                        tipoNomina = tipoNominaFacade.obtenerXClave(cell.getStringCellValue());
-                        selected.setTipoNominaId(tipoNomina);
-                    }
-                    if (cell.getColumnIndex() == 2 && cell.getRowIndex() == 6) 
-                        periodoNomina.setFechaInicio(sdf.parse(cell.getStringCellValue()));
-                    if (cell.getColumnIndex() == 2 && cell.getRowIndex() == 7) 
-                        periodoNomina.setFechaFin(sdf.parse(cell.getStringCellValue()));
-                    if (cell.getColumnIndex() == 2 && cell.getRowIndex() == 9) {
-                        periodicidadPago = periodicidadPagoFacade.obtenerXDescr(cell.getStringCellValue());
-                        selected.setPeriodicidadPagoId(periodicidadPago);//
-                    }
-                    if (cell.getColumnIndex() == 1 && cell.getRowIndex() >= 14 && !cell.getStringCellValue().isEmpty()){
-                        nombres.add(cell.getStringCellValue());
-                    }
-                }
-            }
-            listaSoliTrabajadores = new ArrayList<>();
-            selected.setEsConfidencial("S");
-            selected.setPatronId(usuarioFirmado.obtenerIdUsuario());
-            selected = getFacade().refreshFromDB(selected);
-            periodoNomina.setAnioPeriodo(String.valueOf(fecha.get(Calendar.YEAR)));
-            periodoNomina.setNumMesPeriodo(fecha.get(Calendar.MONTH) + 1);
-            periodoNomina.setEstatus("A");
-            periodoNomina.setNominaId(selected);
-            periodoNomina = periodoNominaFacade.refreshFromDB(periodoNomina);
-            solicitud.setNominaId(selected.getId());
-            solicitud.setPeriodoNominaId(periodoNomina);
-            solicitud.setPatronId(usuarioFirmado.obtenerIdUsuario());
-            solicitud.setEstatus("A");
-            solicitud = solicitudFacade.refreshFromDB(solicitud);
-            nombres = nombres.stream().distinct().collect(Collectors.toList());
-            Long diasPagados = ((periodoNomina.getFechaFin().getTime()-periodoNomina.getFechaInicio().getTime())/(60*60*24*1000))+1;            
-            for(String nombre : nombres){
-                inicializarSolTrabajador();
-                trabajador = trabajadorFacade.obtenerCreadoPorYNombre(nombre, usuarioFirmado.obtenerIdUsuario());
-                soliTrabajador.setTrabajadorId(trabajador);
-                soliTrabajador.setSolicitudId(solicitud);
-                soliTrabajador.setDiasPagados(diasPagados.intValue());
-                soliTrabajador.setFechaPago(fechaPago);
-                soliTrabajador.setSdi(new BigDecimal(trabajador.getSdi()));
-                soliTrabajador.setEstatus("A");
-                soliTrabajador = soliTrabajadorFacade.refreshFromDB(soliTrabajador);
-                listaSoliTrabajadores.add(soliTrabajador);
-            }
-            System.out.println("listaSoliTrabajadores: " + listaSoliTrabajadores);
-            PercepDeduc(event, listaSoliTrabajadores);
-            System.out.println("Nomina: " + selected.getId() + " | Periodo: " + periodoNomina.getId() + " | Solicitud:" + solicitud.getId());
-       
-             */
         } catch (Exception ex) {
             ex.getMessage();
         }
@@ -609,7 +549,7 @@ public class RnGcNomNominasTblController implements Serializable {
             XSSFWorkbook excel = new XSSFWorkbook(event.getFile().getInputstream());
             XSSFSheet sheet = excel.getSheetAt(0);
 
-            // Procesar percepciones y deducciones de columnas A-M (índice 0-12)
+            // Procesar percepciones y deducciones
             for (int fila = 16; fila <= sheet.getLastRowNum(); fila++) {
                 Row row = sheet.getRow(fila);
                 if (row == null || esCeldaVacia(row.getCell(0))) {
@@ -629,7 +569,11 @@ public class RnGcNomNominasTblController implements Serializable {
                 }
 
                 // === PERCEPCIÓN ===
-                String clavePercepcionRaw = getValorCelda(row.getCell(5)).trim();
+                String claveExtraida = getValorCelda(row.getCell(5)).trim();
+                // Extraer el primer número antes del " - "
+                String[] partes = claveExtraida.split(" - ");
+                String clavePercepcionRaw = partes[0].trim(); // "1"
+
                 String clavePercepcion;
 
                 if (clavePercepcionRaw.matches("\\d+(\\.0+)?")) {
@@ -663,6 +607,7 @@ public class RnGcNomNominasTblController implements Serializable {
                         percepcionLinea.setFechaCreacion(new Date());
                         percepcionLinea.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
                         percepcionLinea.setUltimaFechaActualizacion(new Date());
+                        percepcionLinea.setTipoRegistro("PERCEPCION");
 
                         solicitudesLineasFacade.refreshFromDB(percepcionLinea);
                         System.out.println("✅ Percepción guardada para No. de trabajador" + noEmpleado);
@@ -670,14 +615,52 @@ public class RnGcNomNominasTblController implements Serializable {
                         System.out.println("⚠️ Error al guardar percepción fila " + (fila + 1) + ": " + e.getMessage());
                     }
                 }
+            }
+
+            for (int fila = 16; fila <= sheet.getLastRowNum(); fila++) {
+                System.out.print("Paso deducciones");
+                Row row = sheet.getRow(fila);
+                if (row == null || esCeldaVacia(row.getCell(10))) {
+                    continue; // Saltar filas vacías
+                }
+
+                // Obtenemos el valor de la celda como texto
+                String noEmpleadoRaw = getValorCelda(row.getCell(10));
+
+// Convertimos a entero si es numérico con .0
+                String noEmpleado;
+                try {
+                    double valor = Double.parseDouble(noEmpleadoRaw);
+                    noEmpleado = String.valueOf((int) valor);
+                } catch (NumberFormatException e) {
+                    noEmpleado = noEmpleadoRaw.trim(); // Si no es número, lo usamos tal cual
+                }
+
+// Hacemos final para usar en el lambda
+                final String noEmpleadoFinal = noEmpleado;
+
+                System.out.println("No de trabajador en la fila " + (fila + 1) + ": " + noEmpleadoFinal);
+
+                RnGcNomSolicitudTrabajadorTbl trabajadorSol = listaSolicitudes.stream()
+                        .filter(t -> t.getTrabajadorId().getNoTrabajador().equalsIgnoreCase(noEmpleadoFinal))
+                        .findFirst()
+                        .orElse(null);
+
+                if (trabajadorSol == null) {
+                    System.out.println("❌ No se encontró trabajador para fila " + (fila + 1) + ": " + noEmpleado);
+                    continue;
+                }
 
                 // === DEDUCCIÓN NORMAL ===
-                String claveDeduccionRaw = getValorCelda(row.getCell(10)).trim();
+                String claveExtraida = getValorCelda(row.getCell(11)).trim();
+                // Extraer el primer número antes del " - "
+                String[] partes = claveExtraida.split(" - ");
+                String claveDeduccionRaw = partes[0].trim(); // "1"
                 String claveDeduccion;
 
                 if (claveDeduccionRaw.matches("\\d+(\\.0+)?")) {
                     // Si es un número como 3 o 3.0 o 003.00
-                    Double valor = Double.parseDouble(clavePercepcionRaw);
+                    Double valor = Double.parseDouble(claveDeduccionRaw);
                     claveDeduccion = String.format("%03d", valor.intValue());
                 } else {
                     // Si es un código alfanumérico u otra cosa
@@ -692,13 +675,13 @@ public class RnGcNomNominasTblController implements Serializable {
 
                         deduccionLinea.setSolicitudTrabajadorId(trabajadorSol.getId());
                         deduccionLinea.setDeduccionId(deduccionAux);
-                        deduccionLinea.setTotalGravado(new BigDecimal(getValorCelda(row.getCell(12))));
-                        deduccionLinea.setTipoClave(claveDeduccion);
-                        deduccionLinea.setTipoConcepto(getValorCelda(row.getCell(11)));
+                        deduccionLinea.setTotalGravado(new BigDecimal(getValorCelda(row.getCell(13))));
+                        deduccionLinea.setTipoConcepto(getValorCelda(row.getCell(12)));
                         deduccionLinea.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
                         deduccionLinea.setFechaCreacion(new Date());
                         deduccionLinea.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
                         deduccionLinea.setUltimaFechaActualizacion(new Date());
+                        deduccionLinea.setTipoRegistro("DEDUCCION");
 
                         solicitudesLineasFacade.refreshFromDB(deduccionLinea);
                         System.out.println("✅ Deducción guardada para No. de trabajador" + noEmpleado);
@@ -706,51 +689,97 @@ public class RnGcNomNominasTblController implements Serializable {
                         System.out.println("⚠️ Error al guardar deducción fila " + (fila + 1) + ": " + e.getMessage());
                     }
                 }
+            }
 
-                // === DEDUCCIÓN ADICIONAL (O-R / columnas 14-18) ===
-                if (!esCeldaVacia(row.getCell(14))) {
+            // Procesar otros pagos
+            for (int fila = 16; fila <= sheet.getLastRowNum(); fila++) {
+                Row row = sheet.getRow(fila);
+                if (row == null || esCeldaVacia(row.getCell(15))) {
+                    continue; // Saltar filas vacías
+                }
+
+                String noEmpleado = getValorCelda(row.getCell(15));
+                System.out.println("No de trabajador en la " + (fila + 1) + ": " + noEmpleado);
+                RnGcNomSolicitudTrabajadorTbl trabajadorSol = listaSolicitudes.stream()
+                        .filter(t -> t.getTrabajadorId().getNoTrabajador().equalsIgnoreCase(noEmpleado))
+                        .findFirst()
+                        .orElse(null);
+
+                if (trabajadorSol == null) {
+                    System.out.println("❌ No se encontró trabajador para fila " + (fila + 1) + ": " + noEmpleado);
+                    continue;
+                }
+
+                // === OTROS PAGOS (P-S / columnas 15-18) ===
+                if (!esCeldaVacia(row.getCell(15))) {
                     try {
 
-                        String claveDeduccionAdicionalRaw = getValorCelda(row.getCell(16)).trim();
-                        String claveDeduccionAdicional;
+                        String claveExtraida = getValorCelda(row.getCell(16)).trim();
+                        // Extraer el primer número antes del " - "
+                        String[] partes = claveExtraida.split(" - ");
+                        String claveOtroPagoRaw = partes[0].trim(); // "1"
+                        String claveOtroPago;
 
-                        if (claveDeduccionAdicionalRaw.matches("\\d+(\\.0+)?")) {
+                        if (claveOtroPagoRaw.matches("\\d+(\\.0+)?")) {
                             // Si es un número como 3 o 3.0 o 003.00
-                            Double valor = Double.parseDouble(claveDeduccionAdicionalRaw);
-                            claveDeduccionAdicional = String.format("%03d", valor.intValue());
+                            Double valor = Double.parseDouble(claveOtroPagoRaw);
+                            claveOtroPago = String.format("%03d", valor.intValue());
                         } else {
                             // Si es un código alfanumérico u otra cosa
-                            claveDeduccionAdicional = claveDeduccionAdicionalRaw;
+                            claveOtroPago = claveOtroPagoRaw;
                         }
 
-                        System.out.println("✅ Deducción clave : " + claveDeduccionAdicional);
-                        if (!claveDeduccionAdicional.isEmpty()) {
-                            RnGcNomDeduccionesTbl deduccionExtra = deduccionFacade.obtenerXClave(claveDeduccionAdicional);
+                        System.out.println("✅ Otros Pagos clave : " + claveOtroPago);
+                        if (!claveOtroPago.isEmpty()) {
+                            //RnGcNomDeduccionesTbl otrosPagos = deduccionFacade.obtenerXClave(claveDeduccionAdicional);
+                            RnGcNomTipootropagoTbl otrosPagos = otroPagoFacade.obtenerXClave(claveOtroPago);
                             RnGcNomSolicitudesLineasTbl deduccionLineaExtra = new RnGcNomSolicitudesLineasTbl();
 
                             deduccionLineaExtra.setSolicitudTrabajadorId(trabajadorSol.getId());
-                            deduccionLineaExtra.setDeduccionId(deduccionExtra);
+                            deduccionLineaExtra.setTipoOtroPagoId(otrosPagos);
                             deduccionLineaExtra.setTotalGravado(new BigDecimal(getValorCelda(row.getCell(18))));
-                            deduccionLineaExtra.setTipoClave("ADICIONAL");
                             deduccionLineaExtra.setTipoConcepto(getValorCelda(row.getCell(17)));
                             deduccionLineaExtra.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
                             deduccionLineaExtra.setFechaCreacion(new Date());
                             deduccionLineaExtra.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
                             deduccionLineaExtra.setUltimaFechaActualizacion(new Date());
+                            deduccionLineaExtra.setTipoRegistro("OTROS PAGOS");
 
                             solicitudesLineasFacade.refreshFromDB(deduccionLineaExtra);
-                            System.out.println("✅ Deducción adicional guardada para No. de trabajador" + noEmpleado);
+                            System.out.println("✅ Otro Pago guardada para No. de trabajador" + noEmpleado);
                         }
                     } catch (Exception e) {
-                        System.out.println("⚠️ Error al guardar deducción adicional fila " + (fila + 1) + ": " + e.getMessage());
+                        System.out.println("⚠️ Error al guardar otro pago adicional fila " + (fila + 1) + ": " + e.getMessage());
                     }
                 }
+            }
 
-                // === TIPO DE INCAPACIDAD (U-X / columnas 14-18) ===
+            // Procesar incapacidad
+            for (int fila = 16; fila <= sheet.getLastRowNum(); fila++) {
+                Row row = sheet.getRow(fila);
+                if (row == null || esCeldaVacia(row.getCell(20))) {
+                    continue; // Saltar filas vacías
+                }
+
+                String noEmpleado = getValorCelda(row.getCell(20));
+                System.out.println("No de trabajador en la " + (fila + 1) + ": " + noEmpleado);
+                RnGcNomSolicitudTrabajadorTbl trabajadorSol = listaSolicitudes.stream()
+                        .filter(t -> t.getTrabajadorId().getNoTrabajador().equalsIgnoreCase(noEmpleado))
+                        .findFirst()
+                        .orElse(null);
+
+                if (trabajadorSol == null) {
+                    System.out.println("❌ No se encontró trabajador para fila " + (fila + 1) + ": " + noEmpleado);
+                    continue;
+                }
+                // === TIPO DE INCAPACIDAD (U-X / columnas 20-23) ===
                 if (!esCeldaVacia(row.getCell(20))) {
                     try {
 
-                        String claveTipoIncapacidadRaw = getValorCelda(row.getCell(20)).trim();
+                        String claveExtraida = getValorCelda(row.getCell(22)).trim();
+                        // Extraer el primer número antes del " - "
+                        String[] partes = claveExtraida.split(" - ");
+                        String claveTipoIncapacidadRaw = partes[0].trim(); // "1"
                         String claveTipoIncapacidad;
 
                         if (claveTipoIncapacidadRaw.matches("\\d+(\\.0+)?")) {
@@ -770,11 +799,13 @@ public class RnGcNomNominasTblController implements Serializable {
                             tipoIncapacidadExtra.setSolicitudTrabajadorId(trabajadorSol.getId());
                             tipoIncapacidadExtra.setTipoIncapacidadId(tipoIncapacidad);
                             tipoIncapacidadExtra.setTotalGravado(new BigDecimal(getValorCelda(row.getCell(23))));
-                            tipoIncapacidadExtra.setTipoClave("INCAPACIDAD");
                             String valorCelda = getValorCelda(row.getCell(21));
                             if (valorCelda != null && !valorCelda.trim().isEmpty()) {
                                 try {
-                                    tipoIncapacidadExtra.setDiasIncapacidad(Integer.parseInt(valorCelda.trim()));
+                                    // Convertimos a double primero
+                                    double valorDouble = Double.parseDouble(valorCelda.trim());
+                                    // Luego a entero
+                                    tipoIncapacidadExtra.setDiasIncapacidad((int) valorDouble);
                                 } catch (NumberFormatException e) {
                                     System.out.println("❌ Error al convertir a entero: " + valorCelda);
                                     tipoIncapacidadExtra.setDiasIncapacidad(0); // o maneja como prefieras
@@ -784,12 +815,13 @@ public class RnGcNomNominasTblController implements Serializable {
                             tipoIncapacidadExtra.setFechaCreacion(new Date());
                             tipoIncapacidadExtra.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
                             tipoIncapacidadExtra.setUltimaFechaActualizacion(new Date());
+                            tipoIncapacidadExtra.setTipoRegistro("INCAPACIDAD");
 
                             solicitudesLineasFacade.refreshFromDB(tipoIncapacidadExtra);
-                            System.out.println("✅ Deducción adicional guardada para No. de trabajador" + noEmpleado);
+                            System.out.println("✅ Incapacidad guardada para No. de trabajador" + noEmpleado);
                         }
                     } catch (Exception e) {
-                        System.out.println("⚠️ Error al guardar deducción adicional fila " + (fila + 1) + ": " + e.getMessage());
+                        System.out.println("⚠️ Error en la incapacidad fila " + (fila + 1) + ": " + e.getMessage());
                     }
                 }
             }
@@ -883,7 +915,7 @@ public class RnGcNomNominasTblController implements Serializable {
             selected.setPatronId(usuarioFirmado.obtenerIdUsuario());
             selected = getFacade().refreshFromDB(selected);
 
-// Verificar si fue persistido correctamente
+            // Verificar si fue persistido correctamente
             if (selected != null && selected.getId() != null) {
                 System.out.println("✅ Nómina guardada correctamente. ID: " + selected.getId());
             } else {
@@ -1089,15 +1121,17 @@ public class RnGcNomNominasTblController implements Serializable {
                 validarCeldaNoVacia(row, 6, filaActual, "Concepto percepción", errores);
                 validarCeldaNoVacia(row, 7, filaActual, "Importe gravado", errores);
                 validarCeldaNoVacia(row, 8, filaActual, "Importe exento", errores);
+
+                /* Se separa las deducciones
                 validarCeldaNoVacia(row, 10, filaActual, "Clave deduccion", errores);
                 validarCeldaNoVacia(row, 11, filaActual, "Concepto deducción", errores);
                 validarCeldaNoVacia(row, 12, filaActual, "Importe deducción", errores);
-
+                 */
                 // Validar tipo numérico en columnas A, H, I, L
                 validarEsNumero(row, 7, filaActual, "Importe gravado", errores);
                 validarEsNumero(row, 8, filaActual, "Importe exento", errores);
 
-                // Valisar que No. Trabajador exista
+                // Validar que No. Trabajador exista
                 validarNoEmpleadoExistente(row, 0, filaActual, usuarioId, errores);
 
                 // VALIDAR que la clave de percepción exista
@@ -1111,11 +1145,19 @@ public class RnGcNomNominasTblController implements Serializable {
                             clave = String.format("%03d", claveNum); // convierte 1 → "001", 53 → "053"
                             System.out.println("Consultando en catálogo: clave de percepción (num) = " + clave);
                         } else {
-                            clave = celdaClavePercepcion.getStringCellValue().trim();
-                            if (clave.matches("\\d+")) {
-                                clave = String.format("%03d", Integer.parseInt(clave)); // también aplica si es texto como "4"
+                            String valorCelda = celdaClavePercepcion.getStringCellValue().trim();
+
+                            // Extraer el primer número antes del " - "
+                            String[] partes = valorCelda.split(" - ");
+                            String claveExtraida = partes[0].trim(); // "1"
+
+                            // Asegurarnos de que es numérica
+                            if (claveExtraida.matches("\\d+")) {
+                                clave = String.format("%03d", Integer.parseInt(claveExtraida)); // "001"
+                                System.out.println("Consultando en catálogo: clave de percepción (str) = " + clave);
+                            } else {
+                                throw new IllegalArgumentException("La celda no contiene una clave numérica válida: " + valorCelda);
                             }
-                            System.out.println("Consultando en catálogo: clave de percepción (str) = " + clave);
                         }
 
                         if (percepcionFacade.obtenerXClave(clave) == null) {
@@ -1128,26 +1170,57 @@ public class RnGcNomNominasTblController implements Serializable {
                     }
                 }
 
-// VALIDAR que la clave de decuccion exista
-                Cell celdaClaveDeduccion = row.getCell(10); // Columna F (índice 5)
-                if (!esCeldaVacia(celdaClaveDeduccion)) {
+                filaActual++;
+            }
+
+            // 3. VALIDAR DEDUCCIONES si columna K (índice 10) tiene datos
+            filaActual = 16;
+            while (true) {
+                Row row = sheet.getRow(filaActual);
+                if (row == null || esCeldaVacia(row.getCell(10))) {
+                    break;
+                }
+
+                validarCeldaNoVacia(row, 10, filaActual, "No de Empleado", errores);
+                validarCeldaNoVacia(row, 11, filaActual, "Clave SAT deducción", errores);
+                validarCeldaNoVacia(row, 12, filaActual, "Concepto SAT deducción", errores);
+                validarCeldaNoVacia(row, 13, filaActual, "Importe de deducción", errores);
+
+                // Validar tipo numérico en columnas K, N
+                validarEsNumero(row, 10, filaActual, "No de Empleado", errores);
+                validarEsNumero(row, 13, filaActual, "Importe de deducción", errores);
+
+                // Valisar que No. Trabajador exista
+                validarNoEmpleadoExistente(row, 10, filaActual, usuarioId, errores);
+
+                // VALIDAR que la clave de otro pago
+                Cell celdaDeduccion = row.getCell(11); // Columna L (índice 11)
+                if (!esCeldaVacia(celdaDeduccion)) {
                     try {
                         String clave = "";
 
-                        if (celdaClaveDeduccion.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                            int claveNum = (int) celdaClaveDeduccion.getNumericCellValue();
+                        if (celdaDeduccion.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                            int claveNum = (int) celdaDeduccion.getNumericCellValue();
                             clave = String.format("%03d", claveNum); // convierte 1 → "001", 53 → "053"
-                            System.out.println("Consultando en catálogo: clave de percepción (num) = " + clave);
+                            System.out.println("Consultando en catálogo: clave de duducciones (num) = " + clave);
                         } else {
-                            clave = celdaClaveDeduccion.getStringCellValue().trim();
-                            if (clave.matches("\\d+")) {
-                                clave = String.format("%03d", Integer.parseInt(clave)); // también aplica si es texto como "4"
+                            String valorCelda = celdaDeduccion.getStringCellValue().trim();
+
+                            // Extraer el primer número antes del " - "
+                            String[] partes = valorCelda.split(" - ");
+                            String claveExtraida = partes[0].trim(); // "1"
+
+                            // Asegurarnos de que es numérica
+                            if (claveExtraida.matches("\\d+")) {
+                                clave = String.format("%03d", Integer.parseInt(claveExtraida)); // "001"
+                                System.out.println("Consultando en catálogo: clave de deducciones (str) = " + clave);
+                            } else {
+                                throw new IllegalArgumentException("La celda no contiene una clave numérica válida: " + valorCelda);
                             }
-                            System.out.println("Consultando en catálogo: clave de deduccion (str) = " + clave);
                         }
 
                         if (deduccionFacade.obtenerXClave(clave) == null) {
-                            errores.add("Fila " + (filaActual + 1) + ": La clave de deducción '" + clave + "' no existe en el catálogo.");
+                            errores.add("Fila " + (filaActual + 1) + ": La clave de la deducción '" + clave + "' no existe en el catálogo.");
                             return errores;
                         }
                     } catch (Exception e) {
@@ -1159,29 +1232,28 @@ public class RnGcNomNominasTblController implements Serializable {
                 filaActual++;
             }
 
-            // 3. VALIDAR DEDUCCIONES si columna O (índice 14) tiene datos
+            // 3. Validar OTROS PAGOS si columna P (índice 16) tiene datos -- LISTO
             filaActual = 16;
             while (true) {
                 Row row = sheet.getRow(filaActual);
-                if (row == null || esCeldaVacia(row.getCell(14))) {
+                if (row == null || esCeldaVacia(row.getCell(15))) {
                     break;
                 }
 
-                validarCeldaNoVacia(row, 14, filaActual, "No de Empleado", errores);
-                validarCeldaNoVacia(row, 16, filaActual, "Clave SAT deducción", errores);
-                validarCeldaNoVacia(row, 17, filaActual, "Concepto SAT deducción", errores);
-                validarCeldaNoVacia(row, 18, filaActual, "Importe de deducción", errores);
+                validarCeldaNoVacia(row, 15, filaActual, "No de Empleado", errores);
+                validarCeldaNoVacia(row, 16, filaActual, "Clave SAT Otros Ingresos", errores);
+                validarCeldaNoVacia(row, 17, filaActual, "Concepto de otros ingresos", errores);
+                validarCeldaNoVacia(row, 18, filaActual, "Importe de otros ingresos", errores);
 
-                // Validar tipo numérico en columnas O, S
-                validarEsNumero(row, 14, filaActual, "No de Empleado", errores);
-                validarEsNumero(row, 16, filaActual, "Clave SAT deducción", errores);
+                // Validar tipo numérico en columnas P, S
+                validarEsNumero(row, 15, filaActual, "No de Empleado", errores);
                 validarEsNumero(row, 18, filaActual, "Importe de deducción", errores);
 
-                // Valisar que No. Trabajador exista
-                validarNoEmpleadoExistente(row, 14, filaActual, usuarioId, errores);
+                // Validar que No. Trabajador exista
+                validarNoEmpleadoExistente(row, 15, filaActual, usuarioId, errores);
 
-                // VALIDAR que la clave de otro pago
-                Cell celdaClaveOtroPago = row.getCell(10); // Columna F (índice 5)
+                // VALIDAR que la clave de otro pago 
+                Cell celdaClaveOtroPago = row.getCell(16); // Columna Q (índice 16)
                 if (!esCeldaVacia(celdaClaveOtroPago)) {
                     try {
                         String clave = "";
@@ -1191,11 +1263,19 @@ public class RnGcNomNominasTblController implements Serializable {
                             clave = String.format("%03d", claveNum); // convierte 1 → "001", 53 → "053"
                             System.out.println("Consultando en catálogo: clave de otro pago (num) = " + clave);
                         } else {
-                            clave = celdaClaveOtroPago.getStringCellValue().trim();
-                            if (clave.matches("\\d+")) {
-                                clave = String.format("%03d", Integer.parseInt(clave)); // también aplica si es texto como "4"
+                            String valorCelda = celdaClaveOtroPago.getStringCellValue().trim();
+
+                            // Extraer el primer número antes del " - "
+                            String[] partes = valorCelda.split(" - ");
+                            String claveExtraida = partes[0].trim(); // "1"
+
+                            // Asegurarnos de que es numérica
+                            if (claveExtraida.matches("\\d+")) {
+                                clave = String.format("%03d", Integer.parseInt(claveExtraida)); // "001"
+                                System.out.println("Consultando en catálogo: clave de otos pago (str) = " + clave);
+                            } else {
+                                throw new IllegalArgumentException("La celda no contiene una clave numérica válida: " + valorCelda);
                             }
-                            System.out.println("Consultando en catálogo: clave de otro pago (str) = " + clave);
                         }
 
                         if (otroPagoFacade.obtenerXClave(clave) == null) {
@@ -1229,11 +1309,11 @@ public class RnGcNomNominasTblController implements Serializable {
                 validarEsNumero(row, 21, filaActual, "No de días", errores);
                 validarEsNumero(row, 23, filaActual, "Importe", errores);
 
-                // Valisar que No. Trabajador exista
+                // Validar que No. Trabajador exista
                 validarNoEmpleadoExistente(row, 20, filaActual, usuarioId, errores);
 
                 // VALIDAR que la clave de incapacidad
-                Cell celdaClaveIncapacidad = row.getCell(10); // Columna F (índice 5)
+                Cell celdaClaveIncapacidad = row.getCell(22); // Columna W (índice 22)
                 if (!esCeldaVacia(celdaClaveIncapacidad)) {
                     try {
                         String clave = "";
@@ -1243,11 +1323,19 @@ public class RnGcNomNominasTblController implements Serializable {
                             clave = String.format("%02d", claveNum); // convierte 1 → "001", 53 → "053"
                             System.out.println("Consultando en catálogo: clave de incapacidad (num) = " + clave);
                         } else {
-                            clave = celdaClaveIncapacidad.getStringCellValue().trim();
-                            if (clave.matches("\\d+")) {
-                                clave = String.format("%02d", Integer.parseInt(clave)); // también aplica si es texto como "4"
+                            String valorCelda = celdaClaveIncapacidad.getStringCellValue().trim();
+
+                            // Extraer el primer número antes del " - "
+                            String[] partes = valorCelda.split(" - ");
+                            String claveExtraida = partes[0].trim(); // "1"
+
+                            // Asegurarnos de que es numérica
+                            if (claveExtraida.matches("\\d+")) {
+                                clave = String.format("%02d", Integer.parseInt(claveExtraida)); // "01"
+                                System.out.println("Consultando en catálogo: clave de incapacidad (str) = " + clave);
+                            } else {
+                                throw new IllegalArgumentException("La celda no contiene una clave numérica válida: " + valorCelda);
                             }
-                            System.out.println("Consultando en catálogo: clave de incapacidad (str) = " + clave);
                         }
 
                         if (incapacidadFacade.obtenerXClave(clave) == null) {
@@ -1550,9 +1638,9 @@ public class RnGcNomNominasTblController implements Serializable {
                 nuevosTrabajadores.add(nuevoTrabajador);
 
                 // 🔁 Duplicar líneas asociadas al trabajador original
-               List<RnGcNomSolicitudesLineasTbl> lineasOriginales = solicitudesLineasFacade.obtenerXTrabajadorId(original.getId());
-                
-               for (RnGcNomSolicitudesLineasTbl lineaOriginal : lineasOriginales) {
+                List<RnGcNomSolicitudesLineasTbl> lineasOriginales = solicitudesLineasFacade.obtenerXTrabajadorId(original.getId());
+
+                for (RnGcNomSolicitudesLineasTbl lineaOriginal : lineasOriginales) {
                     RnGcNomSolicitudesLineasTbl nuevaLinea = new RnGcNomSolicitudesLineasTbl();
 
                     // Asignar el nuevo trabajador duplicado

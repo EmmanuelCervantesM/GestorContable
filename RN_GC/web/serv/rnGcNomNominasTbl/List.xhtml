@@ -353,7 +353,7 @@
                                  style="margin-top:10px">
 
                         <p:column headerText="Tipo Clave">
-                            <p:selectOneMenu id="tipoDeduccion" style="width: 150px" value="#{d.deduccionId}"  required="true" >
+                            <p:selectOneMenu id="tipoDeduccion" style="width: 200px" value="#{d.deduccionId}"  required="true" >
                                 <f:selectItem itemLabel="Selecciona Tipo de deduccion"/>
                                 <f:selectItems value="#{rnGcNomDeduccionesTblController.items}" var="deduccion"
                                                itemLabel="#{deduccion.cveTipoDeduccion} - #{deduccion.descripcion}"
@@ -366,10 +366,6 @@
                             <p:inputNumber id="gravadoDeduccion" value="#{d.totalGravado}" required="true" decimalSeparator="." decimalPlaces="2" thousandSeparator=""/>
                         </p:column>
 
-                        <p:column headerText="Exento">
-                            <p:inputNumber id="exentoDeduccion" value="#{d.totalExento}" required="true" decimalSeparator="." decimalPlaces="2" thousandSeparator=""/>
-                        </p:column>
-
                         <p:column style="width:40px">
                             <p:commandButton icon="ui-icon-close" title="Eliminar"
                                              actionListener="#{rnGcNomSolicitudTrabajadorTblController.eliminarDeduccion(d)}"
@@ -378,7 +374,40 @@
 
                     </p:dataTable>
 
-                    <!-- Sección de Deducciones -->
+                    <!-- Sección de Otros Pagos -->
+                    <h3 style="margin-top:20px">Otros Pagos</h3>
+
+                    <p:separator/>
+
+                    <p:commandButton icon="ui-icon-plus" title="Agregar Otro Pago"
+                                     actionListener="#{rnGcNomSolicitudTrabajadorTblController.agregarOtroPago}" update="@form" />
+
+                    <p:dataTable value="#{rnGcNomSolicitudTrabajadorTblController.listaOtrosPagos}" var="o" editable="true"
+                                 style="margin-top:10px">
+
+                        <p:column headerText="Tipo Clave">
+                            <p:selectOneMenu id="tipoClaveOtroPago"  style="width: 200px" value="#{o.tipoOtroPagoId}"  required="true" >
+                                <f:selectItem itemLabel="Selecciona Tipo de Otro Pago"/>
+                                <f:selectItems value="#{rnGcNomTipootropagoTblController.items}" var="otroPago"
+                                               itemLabel="#{otroPago.cveTipoOtroPago} - #{otroPago.descripcion}"
+                                               itemValue="#{otroPago}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column headerText="Importe">
+                            <p:inputNumber id="importeIncapacidad" value="#{o.totalGravado}" required="true" decimalSeparator="." decimalPlaces="2" thousandSeparator="" />
+
+                        </p:column>
+
+                        <p:column style="width:40px">
+                            <p:commandButton icon="ui-icon-close" title="Eliminar"
+                                                 actionListener="#{rnGcNomSolicitudTrabajadorTblController.eliminarOtroPago(o)}"
+                                             update="@form" />
+                        </p:column>
+
+                    </p:dataTable>
+                    
+                    <!-- Sección de Incapacidad -->
                     <h3 style="margin-top:20px">Incapacidad</h3>
 
                     <p:separator/>
@@ -410,7 +439,7 @@
 
                         <p:column style="width:40px">
                             <p:commandButton icon="ui-icon-close" title="Eliminar"
-
+                                             actionListener="#{rnGcNomSolicitudTrabajadorTblController.eliminarIncapacidad(i)}"
                                              update="@form" />
                         </p:column>
 

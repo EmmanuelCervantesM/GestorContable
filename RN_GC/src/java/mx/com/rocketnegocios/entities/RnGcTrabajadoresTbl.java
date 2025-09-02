@@ -10,7 +10,6 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -156,6 +155,9 @@ public class RnGcTrabajadoresTbl implements Serializable {
     @JoinColumn(name = "entidadFederativaId", referencedColumnName = "id")
     private RnGcNomEstadosTbl entidadFederativaId;
     
+    @ManyToOne
+    @JoinColumn(name = "regimenFiscalId", referencedColumnName = "id")
+    private RnGcRegimenfiscalTbl regimenFicalId;
 
     
     public RnGcTrabajadoresTbl() {
@@ -177,6 +179,15 @@ public class RnGcTrabajadoresTbl implements Serializable {
         return regimenContratacionId;
     }
 
+    public void setRegimenFicalId(RnGcRegimenfiscalTbl regimenFicalId) {
+        this.regimenFicalId = regimenFicalId;
+    }
+    
+    public RnGcRegimenfiscalTbl getRegimenFicalId() {
+        return regimenFicalId;
+    }
+    
+    
     public void setEntidadFederativaId(RnGcNomEstadosTbl entidadFederativaId) {
         this.entidadFederativaId = entidadFederativaId;
     }
