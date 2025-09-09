@@ -157,7 +157,7 @@ public class RnGcTrabajadoresTbl implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "regimenFiscalId", referencedColumnName = "id")
-    private RnGcRegimenfiscalTbl regimenFicalId;
+    private RnGcNomTiporegimenTbl  regimenFicalId;
 
     
     public RnGcTrabajadoresTbl() {
@@ -179,11 +179,11 @@ public class RnGcTrabajadoresTbl implements Serializable {
         return regimenContratacionId;
     }
 
-    public void setRegimenFicalId(RnGcRegimenfiscalTbl regimenFicalId) {
+    public void setRegimenFicalId(RnGcNomTiporegimenTbl  regimenFicalId) {
         this.regimenFicalId = regimenFicalId;
     }
     
-    public RnGcRegimenfiscalTbl getRegimenFicalId() {
+    public RnGcNomTiporegimenTbl  getRegimenFicalId() {
         return regimenFicalId;
     }
     

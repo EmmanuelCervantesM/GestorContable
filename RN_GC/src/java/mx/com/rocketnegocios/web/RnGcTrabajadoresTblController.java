@@ -469,6 +469,7 @@ public class RnGcTrabajadoresTblController implements Serializable {
                     nuevoTrabajador.setCurp(curp.toUpperCase());
                     nuevoTrabajador.setRfc(rfc.toUpperCase());
                     nuevoTrabajador.setTipoPersona(regimenFiscalTbl.getCveTipoRegimen());
+                    nuevoTrabajador.setRegimenFicalId(regimenFiscalTbl);
                     nuevoTrabajador.setNss(nss.toUpperCase());
                     nuevoTrabajador.setFechaInicio(fechaInicioLaboralDate);
                     nuevoTrabajador.setSalarioBase(salarioBase);
@@ -592,6 +593,7 @@ public class RnGcTrabajadoresTblController implements Serializable {
                     nuevoTrabajador.setCurp(curp.toUpperCase());
                     nuevoTrabajador.setRfc(rfc.toUpperCase());
                     nuevoTrabajador.setTipoPersona(regimenFiscalTbl.getCveTipoRegimen());
+                    nuevoTrabajador.setRegimenFicalId(regimenFiscalTbl);
                     nuevoTrabajador.setNss(nss != null ? nss.toUpperCase() : null);
                     nuevoTrabajador.setFechaInicio(fechaInicioLaboralDate);
                     nuevoTrabajador.setSalarioBase(salarioBase);
