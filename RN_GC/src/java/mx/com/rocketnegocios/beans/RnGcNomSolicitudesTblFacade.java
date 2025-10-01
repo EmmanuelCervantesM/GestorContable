@@ -29,23 +29,28 @@ public class RnGcNomSolicitudesTblFacade extends AbstractFacade<RnGcNomSolicitud
     public RnGcNomSolicitudesTblFacade() {
         super(RnGcNomSolicitudesTbl.class);
     }
-    
-    public RnGcNomSolicitudesTbl refreshFromDB(RnGcNomSolicitudesTbl solicitud){
-        RnGcNomSolicitudesTbl solicitudLocal = null;
-        solicitudLocal = em.merge(solicitud);
-        return solicitudLocal;
+
+    public RnGcNomSolicitudesTbl refreshFromDB(RnGcNomSolicitudesTbl solicitud) {
+        try {
+            return em.merge(solicitud);
+        } catch (javax.validation.ConstraintViolationException e) {
+            e.getConstraintViolations().forEach(cv -> {
+                System.out.println("Campo: " + cv.getPropertyPath() + " - Problema: " + cv.getMessage());
+            });
+            throw e; // opcional: volver a lanzar la excepción
+        }
     }
-    
-    public RnGcNomSolicitudesTbl obtenerXNomina(Integer nominaId){
+
+    public RnGcNomSolicitudesTbl obtenerXNomina(Integer nominaId) {
         RnGcNomSolicitudesTbl solicitud = null;
-        try{
+        try {
             solicitud = em.createNamedQuery("RnGcNomSolicitudesTbl.findByNominaId", RnGcNomSolicitudesTbl.class)
                     .setParameter("nominaId", nominaId)
                     .getSingleResult();
-        }catch(NoResultException ex){
+        } catch (NoResultException ex) {
             System.out.println("No se encontro la soliciutd");
         }
         return solicitud;
     }
-    
+
 }

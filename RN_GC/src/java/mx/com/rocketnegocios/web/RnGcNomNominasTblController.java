@@ -852,6 +852,7 @@ public class RnGcNomNominasTblController implements Serializable {
                             case 1: // D2
                                 // // El RFC patronal podría estar aquí, pero no lo estás usando
                                 //solicitud.setRegistroPatronal(cell.getStringCellValue());
+                                solicitud.setRfc(cell.getStringCellValue());
                                 break;
                             case 2: // D3
                                 solicitud.setRegistroPatronal(cell.getStringCellValue());

@@ -77,9 +77,12 @@ public class RnGcNomSolicitudesTbl implements Serializable {
     private Integer nominaId;
     @Column(name = "patronId")
     private Integer patronId;
-    @Size(max = 45)
+    @Size(max = 70)
     @Column(name = "registroPatronal")
     private String registroPatronal;
+    @Size(max = 14)
+    @Column(name = "rfc")
+    private String rfc;
     @Size(max = 45)
     @Column(name = "nombreSolicitud")
     private String nombreSolicitud;
@@ -172,6 +175,14 @@ public class RnGcNomSolicitudesTbl implements Serializable {
 
     public void setRegistroPatronal(String registroPatronal) {
         this.registroPatronal = registroPatronal;
+    }
+    
+     public String getRfc() {
+        return rfc;
+    }
+
+    public void setRfc(String rfc) {
+        this.rfc = rfc;
     }
 
     public String getNombreSolicitud() {
