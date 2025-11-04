@@ -801,7 +801,39 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         this.listaSolicitudesTrabajador = listaSolicitudesTrabajador;
     }
 
+    public boolean validarCurpUsuario() {
+        try {
+            RnGcUsuariosTbl usuario = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+            System.out.print("Obtener usuario");
+            if (usuario != null && usuario.getRfc() != null && usuario.getRfc().length() == 13) {
+                // Es persona física, se requiere CURP
+                if (usuario.getCurp() == null || usuario.getCurp().trim().isEmpty()) {
+                    FacesContext.getCurrentInstance().addMessage(null,
+                            new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                    "Validación requerida",
+                                    "El usuario con RFC de persona física necesita tener registrado el CURP."));
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Error en validación", e.getMessage()));
+            return false;
+        }
+        return true;
+    }
+
+    public void validarYObtenerSolicitudesTrabajador(RnGcNomNominasTbl selected) {
+        if (validarCurpUsuario()) {
+            obtenerSolicitudesTrabajador(selected);
+        } else {
+            FacesContext.getCurrentInstance().validationFailed();
+        }
+    }
+
     public void obtenerSolicitudesTrabajador(RnGcNomNominasTbl nominaId) {
+
         solicitud = new RnGcNomSolicitudesTbl();
         trabajadorCfdi = new RnGcNomTrabajadorCfdisTbl();
         cfdisId = new RnGcCfdisTbl();
@@ -921,7 +953,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                 cfdisId.setLugarExpedicion(cfdisId2.getLugarExpedicion());
                 cfdisId.setCondicionPago(cfdisId2.getCondicionPago());
                 //File archivoXml = crearXML(soliTrabajador);
-             
+
                 if (crearXML(soliTrabajador)) {
                     System.out.println("Timbrado Correctamente");
                     timbre.get(0).setTimbresRestantes(timbre.get(0).getTimbresTotal());
@@ -1370,9 +1402,9 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             Attr registroPatronal = doc.createAttribute("RegistroPatronal");
             registroPatronal.setValue(solicitudTrabajador.getSolicitudId().getRfc());
             //registroPatronal.setValue(usuario.getNumeroRegistroPatronal());
-           System.out.println("Numero de registroPatronal: " + usuario.getNumeroRegistroPatronal());
-           System.out.println("RFC: " + usuario.getRfc());
-           System.out.println("Otros: " + solicitudTrabajador.getSolicitudId().getRfc());
+            System.out.println("Numero de registroPatronal: " + usuario.getNumeroRegistroPatronal());
+            System.out.println("RFC: " + usuario.getRfc());
+            System.out.println("Otros: " + solicitudTrabajador.getSolicitudId().getRfc());
             emisorNom.setAttributeNode(registroPatronal);
 
             Element receptorNom = doc.createElement("nomina12:Receptor");
@@ -1405,13 +1437,13 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             Attr tipoRegi = doc.createAttribute("TipoRegimen");
             tipoRegi.setValue(solicitudTrabajador.getTrabajadorId().getTipoPersona());
             receptorNom.setAttributeNode(tipoRegi);
-            
-            if(solicitudTrabajador.getTrabajadorId().getTipoJornadaTblId() != null){
+
+            if (solicitudTrabajador.getTrabajadorId().getTipoJornadaTblId() != null) {
                 Attr tipoJornada = doc.createAttribute("TipoJornada");
-            tipoJornada.setValue(solicitudTrabajador.getTrabajadorId().getTipoJornadaTblId().getCveTipoJornada());
-            receptorNom.setAttributeNode(tipoJornada);
+                tipoJornada.setValue(solicitudTrabajador.getTrabajadorId().getTipoJornadaTblId().getCveTipoJornada());
+                receptorNom.setAttributeNode(tipoJornada);
             }
-            
+
             // 
             Attr numSeguridadSocial = doc.createAttribute("NumSeguridadSocial");
             numSeguridadSocial.setValue(String.valueOf(solicitudTrabajador.getTrabajadorId().getNss()));
@@ -1628,7 +1660,6 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
-
             transformer.transform(source, sourceXML);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();   //CadenaOrignal
@@ -1745,8 +1776,8 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             bytes = baos.toByteArray();
             baos.close();
             String xml = new String(bytes, "UTF-8");
-            Sefactura sf = new Sefactura("http://pruebas.sefactura.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo
-            //Sefactura sf = new Sefactura("http://www.jonima.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo Emmanuel
+            //Sefactura sf = new Sefactura("http://pruebas.sefactura.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo
+            Sefactura sf = new Sefactura("http://www.jonima.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo Emmanuel
             //Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
             System.out.println("resultadoEmma: " + sf.toString());
             RespuestaTimbrado rt = sf.timbrado(xml);
@@ -1800,7 +1831,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                 System.out.println(noCertSAT + " | " + fechaTimbrado + " | " + Uuid + " | " + selloCFDI + " | " + selloSAT + " | " + rfcProvCertif);
                 if (cfdisId.getTipoComprobante().equals("E") || cfdisId.getTipoComprobante().equals("I")) {
                     crearPDF(selloSAT, noCertSAT, fechaTimbrado, Uuid, selloCFDI, codQR, cadOriginal, rfcProvCertif, solicitudTrabajador);
-               
+
                     System.out.println("Paso if");
                 } else {
                     //crearPDFPago(selloSAT, noCertSAT, fechaTimbrado, Uuid, selloCFDI, codQR, cadOriginal, rfcProvCertif);

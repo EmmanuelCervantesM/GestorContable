@@ -66,6 +66,7 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import java.text.SimpleDateFormat;
+import javax.faces.application.FacesMessage;
 import mx.com.rocketnegocios.entities.RnGcNomTipoincapacidadTbl;
 import mx.com.rocketnegocios.entities.RnGcNomTipootropagoTbl;
 
@@ -336,6 +337,29 @@ public class RnGcNomNominasTblController implements Serializable {
         } else {
             JsfUtil.addErrorMessage("No hay nómina seleccionada.");
         }
+    }
+
+    public boolean validarCurpUsuario() {
+        try {
+            RnGcUsuariosTbl usuario = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+            System.out.print("Obtener usuario");
+            if (usuario != null && usuario.getRfc() != null && usuario.getRfc().length() == 13) {
+                // Es persona física, se requiere CURP
+                if (usuario.getCurp() == null || usuario.getCurp().trim().isEmpty()) {
+                    FacesContext.getCurrentInstance().addMessage(null,
+                            new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                    "Validación requerida",
+                                    "El usuario con RFC de persona física necesita tener registrado el CURP."));
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Error en validación", e.getMessage()));
+            return false;
+        }
+        return true;
     }
 
     public void inicializar() {

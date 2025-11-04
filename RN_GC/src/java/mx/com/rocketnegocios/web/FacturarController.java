@@ -2367,8 +2367,8 @@ public class FacturarController implements Serializable {
             bytes = baos.toByteArray();
             baos.close();
             String xml = new String(bytes, "UTF-8");
-           Sefactura sf = new Sefactura("http://pruebas.sefactura.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo
-           //Sefactura sf = new Sefactura("http://www.jonima.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo Emmanuel
+           //Sefactura sf = new Sefactura("http://pruebas.sefactura.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo
+           Sefactura sf = new Sefactura("http://www.jonima.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo Emmanuel
            //Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
            System.out.println("resultadoEmma: " + sf.toString()); 
             RespuestaTimbrado rt = sf.timbrado(xml);
@@ -6155,8 +6155,8 @@ System.out.println("remolques");
             bytes = baos.toByteArray();
             baos.close();
             String xml = new String(bytes, "UTF-8");
-            Sefactura sf = new Sefactura("http://pruebas.sefactura.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Pruebas
-            //Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
+            //Sefactura sf = new Sefactura("http://pruebas.sefactura.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Pruebas
+            Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
             RespuestaTimbrado rt = sf.timbrado(xml);
             System.out.println("xmltimbrado: " + rt.getXml());
             System.out.println("resultado: " + rt.getResultado());

@@ -44,8 +44,10 @@ public class RnGcTimbresTblController implements Serializable {
     private List<RnGcTimbresTbl> items = null;
     private RnGcTimbresTbl selected;
     private RnGcTimbresTotalTbl selectTimbreTotal;
+    private RnGcTimbresTotalTbl selectAdministrador;
     private UsuarioFirmado usuarioFirmado = new UsuarioFirmado();
     private List<RnGcTimbresTbl> itemsUsuarios = null;
+    private List<RnGcTimbresTotalTbl> itemsAdministrador = null;
     private RnGcUsuariosTbl usuarioId = null;
     private List<RnGcTimbresTbl> timbresList;
     private List<RnGcTimbresTbl> varTimbre;
@@ -70,32 +72,26 @@ public class RnGcTimbresTblController implements Serializable {
     }
 
     public void guardarTimbresTotalesAdministrador() {
-        int cantidadTimbres = getAgregarTimbresAdministrador() + totalTimbresAdministrador;
+        int cantidadTimbres = getAgregarTimbresAdministrador();
+        System.out.print("Guardando estos timbres: " + cantidadTimbres);
+        System.out.print("Guardando estos timbres: " + cantidadTimbres);
         Date fechaActual = new Date();
 
-        selectTimbreTotal = ejbFacadeTimbresTotales.obtenerTimbreAdministradorAll(usuarioFirmado.obtenerIdUsuario());
-        if (selectTimbreTotal == null || selectTimbreTotal.getId() == null) {
-            // No existe → crear nuevo
-            selectTimbreTotal = new RnGcTimbresTotalTbl();
+        //selectTimbreTotal = ejbFacadeTimbresTotales.obtenerTimbreAdministradorAll(usuarioFirmado.obtenerIdUsuario());
+        // No existe → crear nuevo
+        selectTimbreTotal = new RnGcTimbresTotalTbl();
 
-            usuarioVar = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-            selectTimbreTotal.setUsuarioId(usuarioVar);
+        usuarioVar = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+        selectTimbreTotal.setUsuarioId(usuarioVar);
 
-            selectTimbreTotal.setTimbresTotal(cantidadTimbres);
-            selectTimbreTotal.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
-            selectTimbreTotal.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
-            selectTimbreTotal.setUltimaFechaActualizacion(fechaActual);
+        selectTimbreTotal.setTimbresTotal(cantidadTimbres);
+        selectTimbreTotal.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
+        selectTimbreTotal.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
+        selectTimbreTotal.setUltimaFechaActualizacion(fechaActual);
+        selectTimbreTotal.setTipoUsuario("AG");
 
-            selectTimbreTotal = ejbFacadeTimbresTotales.createAndReturn(selectTimbreTotal);
+        selectTimbreTotal = ejbFacadeTimbresTotales.createAndReturn(selectTimbreTotal);
 
-        } else {
-            // Ya existe → actualizar
-            selectTimbreTotal.setTimbresTotal(cantidadTimbres);
-            selectTimbreTotal.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
-            selectTimbreTotal.setUltimaFechaActualizacion(fechaActual);
-
-            selectTimbreTotal = ejbFacadeTimbresTotales.refreshFromDB(selectTimbreTotal);
-        }
     }
 
     public void setTotalTimbresAdministrador(int nuevoValor) {
@@ -117,6 +113,14 @@ public class RnGcTimbresTblController implements Serializable {
 
     public void setSelected(RnGcTimbresTbl selected) {
         this.selected = selected;
+    }
+
+    public RnGcTimbresTotalTbl getSelectAdministrador() {
+        return selectAdministrador;
+    }
+
+    public void setSelectAdministrador(RnGcTimbresTotalTbl selectAdministrador) {
+        this.selectAdministrador = selectAdministrador;
     }
 
     public int getTotalTimbres() {
@@ -164,8 +168,10 @@ public class RnGcTimbresTblController implements Serializable {
     }
 
     public void create() {
+
         try {
             int totalAdministrador = ejbFacadeTimbresTotales.obtenerTimbreAdministrador(usuarioFirmado.obtenerIdUsuario());
+            System.out.print("Total de timbres del administrador: " + totalAdministrador);
             if (totalTimbres > totalAdministrador) {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_WARN,
@@ -175,13 +181,20 @@ public class RnGcTimbresTblController implements Serializable {
                 return;
             }
 
+            System.out.print("Guardando timbres asignados");
+            Date fechaActual = new Date();
+            selectTimbreTotal = new RnGcTimbresTotalTbl();
+            usuarioVar = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+            selectTimbreTotal.setUsuarioId(usuarioVar);
+            selectTimbreTotal.setTimbresTotal(totalTimbres);
+            selectTimbreTotal.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
+            selectTimbreTotal.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
+            selectTimbreTotal.setUltimaFechaActualizacion(fechaActual);
+            selectTimbreTotal.setTipoUsuario("CO");
+
+            selectTimbreTotal = ejbFacadeTimbresTotales.createAndReturn(selectTimbreTotal);
+            System.out.print("Guardando exitoso");
             persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RnGcTimbresTblCreated"));
-
-            int timbresActualizados = totalAdministrador - totalTimbres;
-            selectTimbreTotal = ejbFacadeTimbresTotales.obtenerTimbreAdministradorAll(usuarioFirmado.obtenerIdUsuario());
-            selectTimbreTotal.setTimbresTotal(timbresActualizados);
-            selectTimbreTotal = ejbFacadeTimbresTotales.refreshFromDB(selectTimbreTotal);
-
             if (!JsfUtil.isValidationFailed()) {
                 items = null;
                 PrimeFaces.current().ajax().addCallbackParam("validationFailed", false);
@@ -327,6 +340,18 @@ public class RnGcTimbresTblController implements Serializable {
     public List<RnGcTimbresTbl> getItemsUsuarios() {
         this.itemsUsuarios = getFacade().obtenerPorUsuario(usuarioId);
         return itemsUsuarios;
+    }
+
+    public List<RnGcTimbresTotalTbl> getItemsAdministrador() {
+        System.out.println("Usuario : " + usuarioFirmado.obtenerIdUsuario());
+        usuarioVar = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+        this.itemsAdministrador = ejbFacadeTimbresTotales.obtenerPorUsuario(usuarioVar);
+        System.out.println("Cargando valores: " + itemsAdministrador.size());
+        return itemsAdministrador;
+    }
+
+    public void setItemsAdministrador(List<RnGcTimbresTotalTbl> itemsAdministrador) {
+        this.itemsAdministrador = itemsAdministrador;
     }
 
     public void prepareItemsUsuario(RnGcUsuariosTbl usuarioId) {
