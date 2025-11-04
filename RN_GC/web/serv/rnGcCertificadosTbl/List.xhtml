@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
     <ui:composition template="/templateRN.xhtml">
 
@@ -15,11 +16,17 @@
 
         <ui:define name="body">
             <h:form id="RnGcCertificadosTblListForm">
-  <p:panel header="Datos del Usuario" rendered="#{rnGcUsuariosTblController.user != null}">
+                <p:panel header="Datos del Usuario"  rendered="#{rnGcUsuariosTblController.user != null}">
                     <p:growl life="10000" showDetail="true"/>
                     <p:commandButton actionListener="#{rnGcUsuariosTblController.valores()}" value="Editar datos" update=" :RnGcCertificadosTblListForm"/>
-                    <p:panelGrid id="displays"  columns="6" rendered="#{rnGcUsuariosTblController.usuarioCert != null}">
-                       
+                    <p:commandButton 
+                        value="Cancelar" 
+                        actionListener="#{rnGcUsuariosTblController.cancelarEdicion()}" 
+                        update=":growl, :RnGcCertificadosTblListForm"
+                        rendered="#{rnGcUsuariosTblController.editar}"
+                        />
+                    <p:panelGrid id="displays"  columns="6" rendered="#{rnGcUsuariosTblController.usuarioCert != null and rnGcUsuariosTblController.editar}">
+
                         <p:outputLabel value="Regimen Fiscal" for="regimen"/>
                         <p:selectOneMenu id="regimen" style="width: 400px" value="#{rnGcUsuariosTblController.usuarioCert.regimenId}"
                                          filter="true" filterMatchMode="contains" disabled="#{rnGcUsuariosTblController.editar == false}">
@@ -28,7 +35,7 @@
                                            var="regimenIt"
                                            itemLabel="#{regimenIt.claveRegimenFiscal} - #{regimenIt.descripcion}"
                                            itemValue="#{regimenIt}"/>
-                       
+
                         </p:selectOneMenu>
                         <p:outputLabel value="Código Postal" for="codigo"/>
                         <p:inputText id="codigo" value="#{rnGcUsuariosTblController.usuarioCert.codigoPostal}" style="width: 150px" disabled="#{rnGcUsuariosTblController.editar == false}"/>
@@ -42,26 +49,39 @@
                         </p:inputText>          
                     </p:panelGrid>
                     <h3 style="#{rnGcUsuariosTblController.editar ? '' : 'display:none;'}">Datos del patrón</h3>
-                    <p:panelGrid id="displayPatron"  columns="6" rendered="#{rnGcUsuariosTblController.usuarioCert != null}">
-                         <p:outputLabel value="CURP" for="curpPatron"/>
-                         <p:inputText id="curpPatron" value="#{rnGcUsuariosTblController.usuarioCert.curp}" style="width: 150px" disabled="#{rnGcUsuariosTblController.editar == false}"/>
-                                 
-                          <p:outputLabel value="Clave de  riesgo" for="riesgoClavePatronal" />
+                    <p:panelGrid id="displayPatron"  columns="6" rendered="#{rnGcUsuariosTblController.usuarioCert != null and rnGcUsuariosTblController.editar}">
+
+                        <p:outputLabel 
+                            value="CURP" 
+                            for="curpPatron"
+                            rendered="#{fn:length(rnGcUsuariosTblController.usuarioCert.rfc) == 13}" />
+
+                        <p:inputText 
+                            id="curpPatron" 
+                            value="#{rnGcUsuariosTblController.usuarioCert.curp}" 
+                            style="width: 150px" 
+                            required="#{fn:length(rnGcUsuariosTblController.usuarioCert.rfc) == 13}"
+                            requiredMessage="El campo CURP es obligatorio para personas físicas"
+                            disabled="#{rnGcUsuariosTblController.editar == false}"
+                            rendered="#{fn:length(rnGcUsuariosTblController.usuarioCert.rfc) == 13}" />
+
+
+                        <p:outputLabel value="Clave de  riesgo" for="riesgoClavePatronal" />
                         <p:selectOneMenu id="riesgoClavePatronal" style="width: 150px" value="#{rnGcUsuariosTblController.usuarioCert.riesgoClavePatronal}"  title="#{bundle.CreateRnGcTrabajadoresTblTitle_tipoPersona}" disabled="#{rnGcUsuariosTblController.editar == false}" >
                             <f:selectItem itemLabel="Selecciona clave del riesgo"  itemValue="#{null}"/>
                             <f:selectItems value="#{rnGcNomRiesgopuestoTblController.items}" var="riesgoPuesto"
                                            itemLabel="#{riesgoPuesto.cveRiesgoPuesto} - #{riesgoPuesto.descripcion}"
                                            itemValue="#{riesgoPuesto.cveRiesgoPuesto}"/>
                         </p:selectOneMenu>
-                          
-                         <p:outputLabel value="Número de registro patronal" for="numeroRegistroPatronal"/>
+
+                        <p:outputLabel value="Número de registro patronal" for="numeroRegistroPatronal"/>
                         <p:inputText id="numeroRegistroPatronal"
-                         value="#{rnGcUsuariosTblController.usuarioCert.numeroRegistroPatronal}"
-                         style="width: 100px;"
-                         disabled="#{rnGcUsuariosTblController.editar == false}" />
+                                     value="#{rnGcUsuariosTblController.usuarioCert.numeroRegistroPatronal}"
+                                     style="width: 100px;"
+                                     disabled="#{rnGcUsuariosTblController.editar == false}" />
                     </p:panelGrid>
-                    <p:outputPanel>
-                        <p:commandButton actionListener="#{rnGcUsuariosTblController.actualizarUsuario()}" value="Guardar edición de datos" update=":growl, :RnGcCertificadosTblListForm"/>
+                    <p:outputPanel rendered="#{rnGcUsuariosTblController.usuarioCert != null and rnGcUsuariosTblController.editar}">
+                        <p:commandButton actionListener="#{rnGcUsuariosTblController.actualizarUsuario()}" value="Guardar edición de datos" update="@form, :growl, :RnGcCertificadosTblListForm" process="@form"/>
                         <p:commandButton id="direcciones" icon="ui-icon-person" value="Direcciones" actionListener="#{rnGcDireccionesUsuariosTblController.prepararItemUsuario(rnGcUsuariosTblController.usuarioCert)}" update=":RnGcDireccionesUsuariosTblListForm:datalist" oncomplete="PF('RnGcDireccionesUsuariosTblListDialog').show()"/>
                     </p:outputPanel>
                 </p:panel>
@@ -268,7 +288,7 @@
                 </h:form>
             </p:dialog>
             <!-- Ver folio/serie -->
-            
+
             <!-- Lista direcciones de usuarios-->
             <p:dialog id="RnGcDireccionesUsuariosTblListDlg" widgetVar="RnGcDireccionesUsuariosTblListDialog" modal="true" resizable="false" appendTo="@(body)" header="Agregar dirección para el usuario">
                 <h:form id="RnGcDireccionesUsuariosTblListForm">

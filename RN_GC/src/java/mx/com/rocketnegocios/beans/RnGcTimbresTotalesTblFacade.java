@@ -5,6 +5,7 @@
  */
 package mx.com.rocketnegocios.beans;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -57,9 +58,11 @@ public class RnGcTimbresTotalesTblFacade extends AbstractFacade<RnGcTimbresTotal
     public List<RnGcTimbresTotalTbl> obtenerPorUsuario(RnGcUsuariosTbl usuarioId) {
         List<RnGcTimbresTotalTbl> totalTimbres = null;
         try {
+            System.out.print("Se esta ejecuntado la funcion en la base de dato");
             totalTimbres = em.createNamedQuery("RnGcTimbresTotalTbl.findByUsuarioId", RnGcTimbresTotalTbl.class)
                     .setParameter("usuarioId", usuarioId)
                     .getResultList();
+            System.out.print("Se encontro: " + totalTimbres.size());
         } catch (NoResultException ex) {
             System.out.println("Error: " + ex.getMessage());
         }
@@ -73,8 +76,8 @@ public class RnGcTimbresTotalesTblFacade extends AbstractFacade<RnGcTimbresTotal
             RnGcUsuariosTbl usuario = em.find(RnGcUsuariosTbl.class, usuarioId);
 
             if (usuario != null) {
-                Long result = (Long) em.createNamedQuery("RnGcTimbresTotalTbl.sumTimbresTotales")
-                        .setParameter("usuarioId", usuario) // ahora sí pasamos la entidad
+                BigDecimal  result = (BigDecimal ) em.createNamedQuery("RnGcTimbresTotalTbl.sumTimbresTotales")
+                        //.setParameter("usuarioId", usuario) // ahora sí pasamos la entidad
                         .getSingleResult();
                 if (result != null) {
                     totalTimbre = result.intValue();

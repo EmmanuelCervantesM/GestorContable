@@ -47,7 +47,15 @@
                         </p:column>
                         <f:facet name="footer"> 
                             <p:commandButton id="archivop" icon="ui-icon-plus"   value="Usar plantilla" actionListener="#{rnGcNomNominasTblController.prepareCreate}" update="RnGcNominaTblDocForm" oncomplete="PF('RnGcNominaTblDocDialog').show()"/>
-                            <p:commandButton id="verDatos"   icon="ui-icon-folder-open" value="Facturar Nómina" actionListener="#{rnGcNomSolicitudTrabajadorTblController.obtenerSolicitudesTrabajador(rnGcNomNominasTblController.selected)}" update=":RnGcSolicitudTrabajadorTblListForm" oncomplete="PF('RnGcSolicitudTrabajadorTblDocDialog').show()" disabled="#{empty rnGcNomNominasTblController.selected}"/>
+                            <p:commandButton 
+                                id="verDatos"   
+                                icon="ui-icon-folder-open" 
+                                value="Facturar Nómina" 
+                                actionListener="#{rnGcNomSolicitudTrabajadorTblController.validarYObtenerSolicitudesTrabajador(rnGcNomNominasTblController.selected)}" 
+                                update=":growl, :RnGcSolicitudTrabajadorTblListForm" 
+                                oncomplete="PF('RnGcSolicitudTrabajadorTblDocDialog').show()" 
+                                disabled="#{empty rnGcNomNominasTblController.selected}"/>
+
                             <p:commandButton id="duplicarNominaButton"
                                              icon="ui-icon-copy"
                                              value="Duplicar Nómina"
@@ -289,7 +297,7 @@
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton id="facturar" action="#{rnGcNomSolicitudTrabajadorTblController.obtenerSeleccionados()}" ajax="false"  value="Facturar">
-                                   
+
                                 </p:commandButton>
 
                                 <p:commandButton value="Vista Previa" ajax="false" actionListener="#{rnGcNomSolicitudTrabajadorTblController.descargarVistaPrevia()}">
@@ -401,12 +409,12 @@
 
                         <p:column style="width:40px">
                             <p:commandButton icon="ui-icon-close" title="Eliminar"
-                                                 actionListener="#{rnGcNomSolicitudTrabajadorTblController.eliminarOtroPago(o)}"
+                                             actionListener="#{rnGcNomSolicitudTrabajadorTblController.eliminarOtroPago(o)}"
                                              update="@form" />
                         </p:column>
 
                     </p:dataTable>
-                    
+
                     <!-- Sección de Incapacidad -->
                     <h3 style="margin-top:20px">Incapacidad</h3>
 

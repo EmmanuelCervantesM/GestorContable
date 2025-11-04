@@ -33,10 +33,16 @@ import javax.validation.constraints.NotNull;
     ,
     @NamedQuery(name = "RnGcTimbresTotalTbl.findById", query = "SELECT r FROM RnGcTimbresTotalTbl r WHERE r.id = :id")
     ,
-    @NamedQuery(name = "RnGcTimbresTotalTbl.findByUsuarioId", query = "SELECT r FROM RnGcTimbresTotalTbl r WHERE r.usuarioId = :usuarioId")
+    @NamedQuery(name = "RnGcTimbresTotalTbl.findByUsuarioId", query = "SELECT r FROM RnGcTimbresTotalTbl r WHERE r.usuarioId = :usuarioId ORDER BY r.fechaCreacion DESC")
     ,
-    @NamedQuery(name = "RnGcTimbresTotalTbl.sumTimbresTotales",
-            query = "SELECT SUM(r.timbresTotal) FROM RnGcTimbresTotalTbl r WHERE r.usuarioId = :usuarioId")
+    @NamedQuery(
+            name = "RnGcTimbresTotalTbl.sumTimbresTotales",
+            query = "SELECT (SUM(CASE WHEN r.tipoUsuario = 'AG' THEN r.timbresTotal ELSE 0 END) - "
+            + "SUM(CASE WHEN r.tipoUsuario = 'CO' THEN r.timbresTotal ELSE 0 END)) "
+            + "FROM RnGcTimbresTotalTbl r"
+    )
+    ,@NamedQuery(name = "RnGcTimbresTotalTbl.sumTimbresTotalesAdministrador",
+            query = "SELECT SUM(r.timbresTotal) FROM RnGcTimbresTotalTbl r WHERE r.usuarioId = :usuarioId AND r.tipoUsuario = 'AG'")
 })
 public class RnGcTimbresTotalTbl implements Serializable {
 
@@ -49,7 +55,7 @@ public class RnGcTimbresTotalTbl implements Serializable {
     private Integer id;
 
     @NotNull
-    @Column(name = "timbres_total")
+    @Column(name = "timbresTotal")
     private int timbresTotal;
 
     // Auditoría
@@ -76,22 +82,26 @@ public class RnGcTimbresTotalTbl implements Serializable {
     private Date ultimaFechaActualizacion;
 
     @NotNull
-    @JoinColumn(name = "usuarios_Id", referencedColumnName = "Id")
+    @JoinColumn(name = "usuarioId", referencedColumnName = "Id")
     @ManyToOne
     private RnGcUsuariosTbl usuarioId;
+
+    @Column(name = "tipoUsuario")
+    private String tipoUsuario;
 
     // Constructores
     public RnGcTimbresTotalTbl() {
     }
 
     public RnGcTimbresTotalTbl(Integer id, int timbresTotal, int timbresUsados, int timbresRestantes,
-            int creadoPor, Date fechaCreacion, int ultimaActualizacionPor, Date ultimaFechaActualizacion) {
+            int creadoPor, Date fechaCreacion, int ultimaActualizacionPor, Date ultimaFechaActualizacion, String tipoUsuario) {
         this.id = id;
         this.timbresTotal = timbresTotal;
         this.creadoPor = creadoPor;
         this.fechaCreacion = fechaCreacion;
         this.ultimaActualizacionPor = ultimaActualizacionPor;
         this.ultimaFechaActualizacion = ultimaFechaActualizacion;
+        this.tipoUsuario = tipoUsuario;
     }
 
     // Getters y Setters
@@ -118,7 +128,6 @@ public class RnGcTimbresTotalTbl implements Serializable {
     public void setTimbresTotal(int timbresTotal) {
         this.timbresTotal = timbresTotal;
     }
-
 
     public int getCreadoPor() {
         return creadoPor;
@@ -152,4 +161,11 @@ public class RnGcTimbresTotalTbl implements Serializable {
         this.ultimaFechaActualizacion = ultimaFechaActualizacion;
     }
 
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
 }
