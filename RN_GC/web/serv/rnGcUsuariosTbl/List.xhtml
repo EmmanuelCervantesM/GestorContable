@@ -131,7 +131,9 @@
                             <p:commandButton id="timbresButton" icon="ui-icon-tag" value="Asignar Timbres" actionListener="#{rnGcTimbresTblController.prepareItemsUsuario(rnGcUsuariosTblController.selected)}" update="RnGcTimbresTblListForm:datalist" oncomplete="PF('RnGcTimbresTblListDialog').show()" disabled="#{empty rnGcUsuariosTblController.selected}"/>
 
                             <h:panelGroup layout="inline" style="float:right; margin-right:20px;">
-                                <h:outputText value="#{rnGcTimbresTblController.totalTimbresAdministrador} timbres disponible" style="margin-right:10px;" />
+                                <h:outputText value="#{rnGcTimbresTblController.totalTimbresAdministrador} timbres disponible" 
+                                              rendered="#{sessionScope['nombreCompleto'] eq 'ADMINISTRADOR'}"
+                                              style="margin-right:10px;" />
                                 <p:commandButton id="agregarTimbresButton" 
                                                  icon="ui-icon-plus" 
                                                  value="Agregar Timbres"  

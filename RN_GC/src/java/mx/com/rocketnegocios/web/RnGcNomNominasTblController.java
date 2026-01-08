@@ -1010,23 +1010,46 @@ public class RnGcNomNominasTblController implements Serializable {
                         inicializarSolTrabajador();
                         trabajador = trabajadorFacade.obtenerPorNoTrabajador(noTrabajador, usuarioFirmado.obtenerIdUsuario());
                         if (trabajador != null) {
-                            System.out.println("✅ Trabajador encontrado:");
+                            System.out.println("✅ Trabajador encontrado");
                             System.out.println(" - ID: " + trabajador.getId());
                             System.out.println(" - Nombre: " + trabajador.getNombre());
                             System.out.println(" - Apellido paterno: " + trabajador.getApPaterno());
                             System.out.println(" - Apellido materno: " + trabajador.getApMaterno());
                             System.out.println(" - No. Trabajador: " + trabajador.getNoTrabajador());
+                            System.out.println(" - Tipo de trabajador: " + trabajador.getTipoPersona());
                         } else {
                             System.out.println("❌ -- No se encontró el trabajador con número: " + noTrabajador);
                         }
-                        soliTrabajador.setTrabajadorId(trabajador);
-                        soliTrabajador.setSolicitudId(solicitud);
-                        soliTrabajador.setDiasPagados(diasPagados.intValue());
-                        soliTrabajador.setFechaPago(fechaPago);
-                        soliTrabajador.setSdi(new BigDecimal(trabajador.getSdi()));
-                        soliTrabajador.setEstatus("A");
-                        soliTrabajador = soliTrabajadorFacade.refreshFromDB(soliTrabajador);
 
+                        if ("02".equals(trabajador.getTipoPersona())) {
+                            soliTrabajador.setTrabajadorId(trabajador);
+                            soliTrabajador.setSolicitudId(solicitud);
+                            soliTrabajador.setDiasPagados(diasPagados.intValue());
+                            soliTrabajador.setFechaPago(fechaPago);
+                            soliTrabajador.setSdi(new BigDecimal(trabajador.getSdi()));
+                            soliTrabajador.setEstatus("A");
+                        }
+
+                        if ("09".equals(trabajador.getTipoPersona())) {
+                            soliTrabajador.setTrabajadorId(trabajador);
+                            soliTrabajador.setSolicitudId(solicitud);
+                            soliTrabajador.setDiasPagados(diasPagados.intValue());
+                            soliTrabajador.setFechaPago(fechaPago);
+                            soliTrabajador.setSdi(null);
+                            soliTrabajador.setEstatus("A");
+                        }
+
+                        System.out.println("Guardon en la base de datos");
+                        System.out.println("==== DEBUG SOLI_TRABAJADOR ====");
+                        System.out.println("Trabajador ID: " + soliTrabajador.getTrabajadorId());
+                        System.out.println("Solicitud ID: " + soliTrabajador.getSolicitudId());
+                        System.out.println("Días pagados: " + soliTrabajador.getDiasPagados());
+                        System.out.println("Fecha pago: " + soliTrabajador.getFechaPago());
+                        System.out.println("SDI: " + soliTrabajador.getSdi());
+                        System.out.println("Estatus: " + soliTrabajador.getEstatus());
+                        System.out.println("================================");
+                        soliTrabajador = soliTrabajadorFacade.refreshFromDB(soliTrabajador);
+                        System.out.println("Guardon en la lista");
                         listaSoliTrabajadores.add(soliTrabajador);
                     }
                 } catch (Exception e) {

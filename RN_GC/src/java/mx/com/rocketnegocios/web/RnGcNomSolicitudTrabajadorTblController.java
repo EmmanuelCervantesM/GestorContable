@@ -1777,8 +1777,8 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             baos.close();
             String xml = new String(bytes, "UTF-8");
             //Sefactura sf = new Sefactura("http://pruebas.sefactura.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo
-            Sefactura sf = new Sefactura("http://www.jonima.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo Emmanuel
-            //Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
+            //Sefactura sf = new Sefactura("http://www.jonima.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo Emmanuel
+            Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
             System.out.println("resultadoEmma: " + sf.toString());
             RespuestaTimbrado rt = sf.timbrado(xml);
             System.out.println("xmlTimbrado: " + rt.getXml());
@@ -2195,19 +2195,40 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
 
                     listaPercepciones = solicitudLineasFacade.obtenerPercepciones(soliTrabajador.getId());
                     listaDeducciones = solicitudLineasFacade.obtenerDeducciones(soliTrabajador.getId());
-
+                    System.out.println("Prueba fase 1");
                     cfdisId.setImporte(soliTrabajador.getImporteNeto().doubleValue());
                     cfdisId.setSaldoPagado(soliTrabajador.getImporteNeto().doubleValue());
                     cfdisId.setSaldoInsoluto(soliTrabajador.getImporteNeto().doubleValue());
+                    System.out.println("Prueba fase 2");
 
-                    Date fechaInicio = soliTrabajador.getTrabajadorId().getFechaInicio();
-                    LocalDate inicio = fechaInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    LocalDate hoy = LocalDate.now();
+                    //Date fechaInicio = soliTrabajador.getTrabajadorId().getFechaInicio();
+                    String tipoPersona = soliTrabajador.getTrabajadorId().getTipoPersona();
+                    String antiguedadFormato = null;
 
-                    long semanas = ChronoUnit.WEEKS.between(inicio, hoy);
+                    if ("02".equals(tipoPersona)) { // Nómina normal
+                        Date fechaInicio = soliTrabajador.getTrabajadorId().getFechaInicio();
 
-                    // Formato para XML CFDI: "PnnnW"
-                    String antiguedadFormato = String.format("P%03dW", semanas);
+                        if (fechaInicio == null) {
+                            throw new IllegalStateException("Fecha inicio nula para trabajador 02");
+                        }
+
+                        LocalDate inicio = fechaInicio.toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate();
+
+                        LocalDate hoy = LocalDate.now();
+
+                        long semanas = ChronoUnit.WEEKS.between(inicio, hoy);
+                        // Formato para XML CFDI: "PnnnW"
+                        antiguedadFormato = String.format("P%03dW", semanas);
+
+                    } else if ("09".equals(tipoPersona)) { // Asimilado
+                        // SAT: NO aplica antigüedad
+                        antiguedadFormato = null;
+                    }
+
+                    System.out.println("Prueba fase 3");
+
                     System.out.println("Antigüedad para el XML: " + antiguedadFormato);
 
                     System.out.println("Parte Media");
@@ -2217,13 +2238,14 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                     parametros.put("Nombre_Receptor", soliTrabajador.getTrabajadorId().getNombreCompleto());
                     parametros.put("RFC_Receptor", soliTrabajador.getTrabajadorId().getRfc());
                     parametros.put("RegimenFiscal", cfdisId.getClaveRegimenFiscal());
+                    System.out.println("Parte Media 0");
                     parametros.put("NoSerie_CSD", cfdisId.getSerie());
                     parametros.put("Folio_Fiscal", cfdisId.getFolio());
                     parametros.put("CodigoPostal", cfdisId.getLugarExpedicion());
                     parametros.put("FechaHora_Emision", new SimpleDateFormat("YYYY-MM-dd'T'hh:mm:ss").format(cfdisId.getFechaExpedicion()));
                     parametros.put("QR", imagenqr);
                     parametros.put("Logo", imagenLogo);
-
+                    System.out.println("Parte Media 1");
                     if (cfdisId.getClaveRegimenFiscal() != null) {
                         switch (cfdisId.getClaveRegimenFiscal()) {
                             case "601":
@@ -2299,8 +2321,10 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                     parametros.put("FormaPago", "99 - Por definir");
                     parametros.put("MetodoPago", "PUE - Pago en una sola exhibicion");
                     parametros.put("moneda", "MXN - Peso Mexicano");
+                    System.out.println("Parte Media 109");
                     parametros.put("listaPercepciones", listaPercepciones);
                     parametros.put("listaDeducciones", listaDeducciones);
+                    System.out.println("Parte Media 11");
                     parametros.put("valorUnitario", soliTrabajador.getTotalPercepciones());
                     parametros.put("importe", soliTrabajador.getTotalPercepciones());
                     parametros.put("descuento", soliTrabajador.getTotalDeducciones());
@@ -2311,29 +2335,49 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                     parametros.put("RiesgoPuesto", soliTrabajador.getTrabajadorId().getFechaInicio());
                     parametros.put("tipoContrato", tipoContrato.getCveTipoContrato() + " - " + tipoContrato.getDescripcion());
                     parametros.put("tipoRegimen", soliTrabajador.getTrabajadorId().getTipoPersona());
+                    System.out.println("Parte Media 133");
                     parametros.put("banco", soliTrabajador.getTrabajadorId().getBanco());
+                    System.out.println("Parte Media 133-1");
                     parametros.put("cuentaBancaria", soliTrabajador.getTrabajadorId().getCuentaBancaria());
-                    parametros.put("salarioBase", Double.valueOf(soliTrabajador.getTrabajadorId().getSalarioBase()));
-                    parametros.put("salarioDiario", Double.valueOf(soliTrabajador.getTrabajadorId().getSdi()));
+                    System.out.println("Parte Media 133-2");
+
+                    //String tipoPersona = soliTrabajador.getTrabajadorId().getTipoPersona();
+                    if ("02".equals(tipoPersona)) { // Nómina normal
+
+                        parametros.put("salarioBase", Double.valueOf(soliTrabajador.getTrabajadorId().getSalarioBase()));
+                        System.out.println("Parte Media 133-3");
+                        parametros.put("salarioDiario", Double.valueOf(soliTrabajador.getTrabajadorId().getSdi()));
+                        parametros.put("tipoJornada", soliTrabajador.getTrabajadorId().getTipoJornadaTblId().getCveTipoJornada() + " - " + soliTrabajador.getTrabajadorId().getTipoJornadaTblId().getDescripcion());
+                    } else if ("09".equals(tipoPersona)) {
+                        // Asimilado → NO se envía salario base
+                        // NO poner 0, NO mandar null al XML
+                    }
+
+                    System.out.println("Parte Media 133-4");
                     parametros.put("claveFederativa", estado.getCveEstado());
+                    System.out.println("Parte Media 1334");
                     parametros.put("N_empleado", soliTrabajador.getTrabajadorId().getNoTrabajador());
                     parametros.put("importeLetra", importeLetra(soliTrabajador.getImporteNeto()));
                     parametros.put("tipoNomina", nomina.getTipoNominaId().getCveTipoNomina() + " - " + nomina.getTipoNominaId().getDescripcion());
+                    System.out.println("Parte Media 1335");
                     parametros.put("fechaInicialPago", solicitud.getPeriodoNominaId().getFechaInicio());
                     parametros.put("diasPagados", soliTrabajador.getDiasPagados());
                     parametros.put("fechaPago", soliTrabajador.getFechaPago());
                     parametros.put("fechaFinalPago", solicitud.getPeriodoNominaId().getFechaFin());
                     parametros.put("registroPatronal", solicitud.getRegistroPatronal());
                     parametros.put("fechaInicioLaboral", soliTrabajador.getTrabajadorId().getFechaInicio());
+                    System.out.println("Parte Media 1337");
                     parametros.put("totalPercepciones", String.valueOf(soliTrabajador.getTotalPercepciones().doubleValue()));
                     parametros.put("totalDeducciones", String.valueOf(soliTrabajador.getTotalDeducciones().doubleValue()));
                     parametros.put("importeNeto", String.valueOf(soliTrabajador.getImporteNeto().doubleValue()));
-
+                    System.out.println("Parte Media 189");
                     parametros.put("antiguedad", antiguedadFormato);
-                    parametros.put("tipoJornada", soliTrabajador.getTrabajadorId().getTipoJornadaTblId().getCveTipoJornada() + " - " + soliTrabajador.getTrabajadorId().getTipoJornadaTblId().getDescripcion());
+                    System.out.println("Parte Media 189-1");
+                    
+                    System.out.println("Parte Media 189-2");
                     parametros.put("sindicalizado", soliTrabajador.getTrabajadorId().getSindicalizado());
                     //parametros.put("diasPagados", soliTrabajador.getDiasPagados());
-
+                    System.out.println("Parte Media final");
                     File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Reports/complemento_nomina.jasper"));
 
                     try {
