@@ -406,6 +406,7 @@ public class RnGcNomNominasTblController implements Serializable {
 
     public void totalPercepcionDeduccion(List<RnGcNomSolicitudTrabajadorTbl> listaSolicitudes) {
         for (RnGcNomSolicitudTrabajadorTbl soliTrabajador : listaSolicitudes) {
+            System.out.print("Paso 1");
             List<RnGcNomSolicitudesLineasTbl> percepciones = solicitudesLineasFacade.obtenerPercepcionesConTipoRegistro(soliTrabajador.getId());
             List<RnGcNomSolicitudesLineasTbl> deducciones = solicitudesLineasFacade.obtenerDeduccionesConTipoRegistro(soliTrabajador.getId());
             List<RnGcNomSolicitudesLineasTbl> otrosPagos = solicitudesLineasFacade.obtenerOtrosPagosConTipoRegistro(soliTrabajador.getId());
@@ -770,7 +771,7 @@ public class RnGcNomNominasTblController implements Serializable {
                             deduccionLineaExtra.setTipoRegistro("OTROS PAGOS");
 
                             solicitudesLineasFacade.refreshFromDB(deduccionLineaExtra);
-                            System.out.println("✅ Otro Pago guardada para No. de trabajador" + noEmpleado);
+                            System.out.println("✅ Otro Pago guardada para No. de trabajador: " + noEmpleado);
                         }
                     } catch (Exception e) {
                         System.out.println("⚠️ Error al guardar otro pago adicional fila " + (fila + 1) + ": " + e.getMessage());
