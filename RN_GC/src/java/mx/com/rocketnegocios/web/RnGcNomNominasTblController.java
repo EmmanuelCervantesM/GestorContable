@@ -1023,6 +1023,7 @@ public class RnGcNomNominasTblController implements Serializable {
                         }
 
                         if ("02".equals(trabajador.getTipoPersona())) {
+                            System.out.println("Entro tipo de trabajado 2");
                             soliTrabajador.setTrabajadorId(trabajador);
                             soliTrabajador.setSolicitudId(solicitud);
                             soliTrabajador.setDiasPagados(diasPagados.intValue());
@@ -1032,6 +1033,7 @@ public class RnGcNomNominasTblController implements Serializable {
                         }
 
                         if ("09".equals(trabajador.getTipoPersona())) {
+                            System.out.println("Entro tipo de trabajado 9");
                             soliTrabajador.setTrabajadorId(trabajador);
                             soliTrabajador.setSolicitudId(solicitud);
                             soliTrabajador.setDiasPagados(diasPagados.intValue());

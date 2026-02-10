@@ -1765,6 +1765,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         leerCfdi(new File(nombre));
         boolean valorTimbra = false;
         try {
+            System.out.println("PARTE 1");
             FileInputStream fis = new FileInputStream(new java.io.File(nombre));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             int cuantos = 0;
@@ -1776,12 +1777,16 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             bytes = baos.toByteArray();
             baos.close();
             String xml = new String(bytes, "UTF-8");
+            System.out.println("PARTE 2");
             //Sefactura sf = new Sefactura("http://pruebas.sefactura.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo
             //Sefactura sf = new Sefactura("http://www.jonima.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo Emmanuel
+            // Este el de producción
             Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
+            System.out.println("PARTE 222");
             System.out.println("resultadoEmma: " + sf.toString());
             RespuestaTimbrado rt = sf.timbrado(xml);
             System.out.println("xmlTimbrado: " + rt.getXml());
+            System.out.println("PARTE 22");
             System.out.println("resultadoEmma2: " + rt.getResultado() + " || " + rt.getResultado().length());
             System.out.println("resultado: " + rt.getResultado());
             if (rt.getResultado() != null && rt.getResultado().length() > 0) {
@@ -1828,6 +1833,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                 archivo.setArchivoXml(xmlTimbradoB);
                 cfdisId.setEstatus("Timbrado");
                 cfdisId.setRespuestaTimbrado("Timbrado de forma correcta");
+                System.out.println("PARTE 3");
                 System.out.println(noCertSAT + " | " + fechaTimbrado + " | " + Uuid + " | " + selloCFDI + " | " + selloSAT + " | " + rfcProvCertif);
                 if (cfdisId.getTipoComprobante().equals("E") || cfdisId.getTipoComprobante().equals("I")) {
                     crearPDF(selloSAT, noCertSAT, fechaTimbrado, Uuid, selloCFDI, codQR, cadOriginal, rfcProvCertif, solicitudTrabajador);
@@ -1846,6 +1852,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             System.out.println("ERROR: " + e.getLocalizedMessage());
             e.printStackTrace();
         }
+        System.out.println("PARTE 4");
         return valorTimbra;
     }
 
@@ -2219,8 +2226,13 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                         LocalDate hoy = LocalDate.now();
 
                         long semanas = ChronoUnit.WEEKS.between(inicio, hoy);
+                        
+                        // Evitar semanas negativas (por seguridad)
+                        if (semanas < 0) {
+                            semanas = 0;
+                        }
                         // Formato para XML CFDI: "PnnnW"
-                        antiguedadFormato = String.format("P%03dW", semanas);
+                        antiguedadFormato = "P" + semanas + "W";
 
                     } else if ("09".equals(tipoPersona)) { // Asimilado
                         // SAT: NO aplica antigüedad
