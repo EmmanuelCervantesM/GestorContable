@@ -38,7 +38,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcArchivosTbl.findByFechaCreacion", query = "SELECT r FROM RnGcArchivosTbl r WHERE r.fechaCreacion = :fechaCreacion")
     , @NamedQuery(name = "RnGcArchivosTbl.findByUltimaActualizacionPor", query = "SELECT r FROM RnGcArchivosTbl r WHERE r.ultimaActualizacionPor = :ultimaActualizacionPor")
     , @NamedQuery(name = "RnGcArchivosTbl.findByUltimaFechaActualizacion", query = "SELECT r FROM RnGcArchivosTbl r WHERE r.ultimaFechaActualizacion = :ultimaFechaActualizacion")
-    , @NamedQuery(name = "RnGcArchivosTbl.findByrngccfdistblId", query = "SELECT r FROM RnGcArchivosTbl r WHERE r.cfdiId = :cfdiId")})
+    , @NamedQuery(name = "RnGcArchivosTbl.findByrngccfdistblId", query = "SELECT r FROM RnGcArchivosTbl r WHERE r.cfdiId = :cfdiId")
+    ,@NamedQuery(
+            name = "RnGcArchivosTbl.findByCfdiIdValue",
+            query = "SELECT r FROM RnGcArchivosTbl r WHERE r.cfdiId.id = :cfdiId")})
 public class RnGcArchivosTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -186,5 +189,5 @@ public class RnGcArchivosTbl implements Serializable {
     public String toString() {
         return "mx.com.rocketnegocios.entities.RnGcArchivosTbl[ id=" + id + " ]";
     }
-    
+
 }
