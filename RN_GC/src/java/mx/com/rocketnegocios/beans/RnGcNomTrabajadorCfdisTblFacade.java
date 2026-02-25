@@ -30,23 +30,42 @@ public class RnGcNomTrabajadorCfdisTblFacade extends AbstractFacade<RnGcNomTraba
     public RnGcNomTrabajadorCfdisTblFacade() {
         super(RnGcNomTrabajadorCfdisTbl.class);
     }
-    
-    public RnGcNomTrabajadorCfdisTbl refreshFromDB(RnGcNomTrabajadorCfdisTbl trabajadorCfdi){
+
+    public RnGcNomTrabajadorCfdisTbl refreshFromDB(RnGcNomTrabajadorCfdisTbl trabajadorCfdi) {
         RnGcNomTrabajadorCfdisTbl trabajadorCfdiLocal = null;
         trabajadorCfdiLocal = em.merge(trabajadorCfdi);
         return trabajadorCfdiLocal;
     }
-    
-    public RnGcNomTrabajadorCfdisTbl obtenerXSoliTrabajdor(RnGcNomSolicitudTrabajadorTbl soliTrabajador){
+
+    public RnGcNomTrabajadorCfdisTbl obtenerXSoliTrabajdor(RnGcNomSolicitudTrabajadorTbl soliTrabajador) {
         RnGcNomTrabajadorCfdisTbl trabajadorCfdi = new RnGcNomTrabajadorCfdisTbl();
-        try{
+        try {
             trabajadorCfdi = em.createNamedQuery("RnGcNomTrabajadorCfdisTbl.findBysolicitudTrabajdorId", RnGcNomTrabajadorCfdisTbl.class)
                     .setParameter("solicitudTrabajdorId", soliTrabajador)
                     .getSingleResult();
-        }catch(NoResultException ex){
+        } catch (NoResultException ex) {
             System.out.println("No se encontraron cfdi del trabajador");
         }
         return trabajadorCfdi;
     }
-    
+
+    public RnGcNomTrabajadorCfdisTbl obtenerXSoliTrabajdorId(int soliTrabajadorID) {
+
+        try {
+            return em.createNamedQuery(
+                    "RnGcNomTrabajadorCfdisTbl.findBysolicitudTrabajdorId",
+                    RnGcNomTrabajadorCfdisTbl.class)
+                    .setParameter("solicitudTrabajdorId", soliTrabajadorID)
+                    .getSingleResult();
+
+        } catch (NoResultException ex) {
+            System.out.println("No se encontraron CFDI para la solicitud: " + soliTrabajadorID);
+            return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

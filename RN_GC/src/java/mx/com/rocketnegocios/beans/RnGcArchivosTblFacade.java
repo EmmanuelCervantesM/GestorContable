@@ -37,7 +37,7 @@ public class RnGcArchivosTblFacade extends AbstractFacade<RnGcArchivosTbl> {
         archivolocal = em.merge(archivoId);
         return archivolocal;
     }
-    
+
     public List<RnGcArchivosTbl> obtenerArchivos(RnGcCfdisTbl cfdisId) {
         List<RnGcArchivosTbl> listaArchivos = null;
         System.out.println("cfdisId: " + cfdisId);
@@ -51,7 +51,7 @@ public class RnGcArchivosTblFacade extends AbstractFacade<RnGcArchivosTbl> {
         }
         return listaArchivos;
     }
-    
+
     public RnGcArchivosTbl obtenerArchivo(RnGcCfdisTbl cfdisId) {
         RnGcArchivosTbl listaArchivos = null;
         System.out.println("cfdisId: " + cfdisId);
@@ -66,4 +66,20 @@ public class RnGcArchivosTblFacade extends AbstractFacade<RnGcArchivosTbl> {
         return listaArchivos;
     }
 
+    public RnGcArchivosTbl obtenerArchivoPorCfdiId(int cfdiId) {
+
+        try {
+            List<RnGcArchivosTbl> lista = em.createNamedQuery(
+                    "RnGcArchivosTbl.findByCfdiIdValue",
+                    RnGcArchivosTbl.class)
+                    .setParameter("cfdiId", cfdiId)
+                    .getResultList();
+
+            return lista.isEmpty() ? null : lista.get(0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
