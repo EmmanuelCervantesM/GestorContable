@@ -70,6 +70,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.persistence.Lob;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
@@ -210,12 +211,41 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
     private RnGcNomTrabajadorCfdisTbl trabajadorCfdi;
     private List<RnGcTimbresTbl> timbre;
     private StreamedContent downLoadFile;
+    private StreamedContent downLoadFileXml;
     private StreamedContent downLoadFileNomina;
     private List<RnGcFolioserieTbl> folioSerie;
 
     private File archivoXmlTimbrado; // Archivo XML timbrado actual
     private String uuidTimbreArchivo; // Archivo XML timbrado actual
     private byte[] archivoPdfGlobal; // Archivo PDF timbrado actual
+    private List<ArchivoZipDTO> archivosZipGlobal = new ArrayList<>();
+
+    @Lob
+    private byte[] archivoXml;
+
+    @Lob
+    private byte[] archivoPdf;
+
+    private boolean modoPrueba = false; // cambiar a false cuando quieras timbrado real
+
+    public class ArchivoZipDTO {
+
+        private String nombre;
+        private byte[] contenido;
+
+        public ArchivoZipDTO(String nombre, byte[] contenido) {
+            this.nombre = nombre;
+            this.contenido = contenido;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public byte[] getContenido() {
+            return contenido;
+        }
+    }
 
     public RnGcNomSolicitudTrabajadorTblController() {
     }
@@ -647,6 +677,14 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         this.downLoadFile = downLoadFile;
     }
 
+    public StreamedContent getDownLoadFileXml() {
+        return downLoadFileXml;
+    }
+
+    public void setDownLoadFileXml(StreamedContent downLoadFileXml) {
+        this.downLoadFileXml = downLoadFileXml;
+    }
+
     public StreamedContent getDownLoadFileNomina() {
         return downLoadFileNomina;
     }
@@ -934,7 +972,131 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         return zipFile;
     }
 
+    private File cargarXmlPrueba() throws Exception {
+
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><cfdi:Comprobante xmlns:cfdi=\"http://www.sat.gob.mx/cfd/4\" xmlns:nomina12=\"http://www.sat.gob.mx/nomina12\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" Certificado=\"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\" Descuento=\"403.26\" Exportacion=\"01\" Fecha=\"2026-02-19T10:40:46\" LugarExpedicion=\"74030\" MetodoPago=\"PUE\" Moneda=\"MXN\" NoCertificado=\"00001000000720404915\" Sello=\"hyYStwFzr3+oz1FwxFVbt4SxqiBFEVeIbSYX11vRl5h+APtrOeyq18ErkFKlUYcPs+tsWmOkCnRcwVeNW1BC2rCQQPDfAqVZanndvJ7Qxdy5/7ciU89JdthYo7eU9oK2vTcVfx8cHyR5eOuzaKZ2/OvH20fo6BrYSvoWa9uKodPfN1I1JYdnt+yWMztfGm6c19GpHQ1qiGgCrxIyc3/ydzP6UvHWbzJvSargbjd/NkyuQmyFublVVVOIGdgV912iOmli4E6QZJ4iaTsPnOK1aMkuOvBmMomsltcYedE1zU8WbDovJhix/Rihns8Fl8Uyd/ibL+4OkK4LmMcKDpEdsg==\" Serie=\"-\" SubTotal=\"4422.50\" TipoDeComprobante=\"N\" Total=\"4019.24\" Version=\"4.0\" xsi:schemaLocation=\"http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xsd\"><cfdi:Emisor Nombre=\"ASESORES FISCALES Y CONTABLES HEES\" RegimenFiscal=\"601\" Rfc=\"AFC060520V16\"/><cfdi:Receptor DomicilioFiscalReceptor=\"90110\" Nombre=\"EVELYN ALEXANDRA LIMA XOCHIHUA\" RegimenFiscalReceptor=\"605\" Rfc=\"LIXE9603116K4\" UsoCFDI=\"CN01\"/><cfdi:Conceptos><cfdi:Concepto Cantidad=\"1\" ClaveProdServ=\"84111505\" ClaveUnidad=\"ACT\" Descripcion=\"Pago de nÃ³mina\" Descuento=\"403.26\" Importe=\"4422.50\" ObjetoImp=\"01\" ValorUnitario=\"4422.50\"/></cfdi:Conceptos><cfdi:Complemento><nomina12:Nomina FechaFinalPago=\"2026-02-15\" FechaInicialPago=\"2026-02-01\" FechaPago=\"2026-02-16\" NumDiasPagados=\"15\" TipoNomina=\"O\" TotalDeducciones=\"403.26\" TotalOtrosPagos=\"237.50\" TotalPercepciones=\"4185.00\" Version=\"1.2\"><nomina12:Emisor RegistroPatronal=\"F1114501100\"/><nomina12:Receptor AntigÃ¼edad=\"P19W\" ClaveEntFed=\"TLA\" Curp=\"LIXE960311MTLMCV00\" FechaInicioRelLaboral=\"2025-10-01\" NumEmpleado=\"1\" NumSeguridadSocial=\"01199666049\" PeriodicidadPago=\"04\" RiesgoPuesto=\"1\" SalarioBaseCotApor=\"292.75\" SalarioDiarioIntegrado=\"292.75\" Sindicalizado=\"No\" TipoContrato=\"04\" TipoJornada=\"01\" TipoRegimen=\"02\"/><nomina12:Percepciones TotalExento=\"0.00\" TotalGravado=\"4185.00\" TotalSueldos=\"4185.00\"><nomina12:Percepcion Clave=\"Sueldo\" Concepto=\"Sueldo\" ImporteExento=\"0.00\" ImporteGravado=\"4185.0\" TipoPercepcion=\"001\"/></nomina12:Percepciones><nomina12:Deducciones TotalImpuestosRetenidos=\"298.85\" TotalOtrasDeducciones=\"104.41\"><nomina12:Deduccion Clave=\"ISR_Sueldos\" Concepto=\"ISR Sueldos y salarios\" Importe=\"298.85\" TipoDeduccion=\"002\"/><nomina12:Deduccion Clave=\"IMSS\" Concepto=\"IMSS\" Importe=\"54.89\" TipoDeduccion=\"001\"/><nomina12:Deduccion Clave=\"Retencion_RCV\" Concepto=\"Retencion RCV\" Importe=\"49.52\" TipoDeduccion=\"003\"/></nomina12:Deducciones><nomina12:OtrosPagos><nomina12:OtroPago Clave=\"Subsidio\" Concepto=\"Subsidio al empleo\" Importe=\"237.5\" TipoOtroPago=\"002\"><nomina12:SubsidioAlEmpleo SubsidioCausado=\"237.5\"/></nomina12:OtroPago></nomina12:OtrosPagos></nomina12:Nomina><tfd:TimbreFiscalDigital FechaTimbrado=\"2026-02-19T10:41:03\" NoCertificadoSAT=\"00001000000705928441\" RfcProvCertif=\"PPD101129EA3\" SelloCFD=\"hyYStwFzr3+oz1FwxFVbt4SxqiBFEVeIbSYX11vRl5h+APtrOeyq18ErkFKlUYcPs+tsWmOkCnRcwVeNW1BC2rCQQPDfAqVZanndvJ7Qxdy5/7ciU89JdthYo7eU9oK2vTcVfx8cHyR5eOuzaKZ2/OvH20fo6BrYSvoWa9uKodPfN1I1JYdnt+yWMztfGm6c19GpHQ1qiGgCrxIyc3/ydzP6UvHWbzJvSargbjd/NkyuQmyFublVVVOIGdgV912iOmli4E6QZJ4iaTsPnOK1aMkuOvBmMomsltcYedE1zU8WbDovJhix/Rihns8Fl8Uyd/ibL+4OkK4LmMcKDpEdsg==\" SelloSAT=\"Ou4XtMqmbHe1LhcbEN5JRxDF90jLGzOfA1KU7RmdjITGUwjlZQO7Hg2GSc4/HCPfSVQcA41xYhApKT8kWmsHNNUTK1b9uDnj88DcYnRSk2ZBgQ4SCmof1XZCOhFazEjNWL2fujSECE9nFfL1VBcspsmDahegsqIAyOatD5zg/hGlP/uO/JH2wxjwlLKgnrlaW4gfxR/pFJMpQlwbbRXvK+4WjGA+ORTmHGmyfyJd5FouSoFuQknPW/6arMn7moAbq8eul8ufEX7HFHJ7/kORn5wpuwzh5idKojoyIkZQC3JmgLFUp8eR4gzemGfGwwyCh/mezjErFo7/wQk5rzSvyQ==\" UUID=\"491E523A-A0C4-4354-864A-7D5ABB47B196\" Version=\"1.1\" xsi:schemaLocation=\"http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd\" xmlns:tfd=\"http://www.sat.gob.mx/TimbreFiscalDigital\"/></cfdi:Complemento></cfdi:Comprobante>";
+
+        File file = File.createTempFile("cfdi_prueba_", ".xml");
+
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(xml.getBytes("UTF-8"));
+        }
+
+        return file;
+    }
+
+    public void descargarTimbradosSeleccionados() throws IOException {
+
+        if (seleccionados == null || seleccionados.isEmpty()) {
+            JsfUtil.addErrorMessage("No hay registros seleccionados");
+            return;
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ZipOutputStream zos = new ZipOutputStream(baos);
+
+        int totalArchivos = 0; // 🔹 contador real
+
+        try {
+
+            for (RnGcNomSolicitudTrabajadorTbl soliTrabajador : seleccionados) {
+
+                if ("T".equals(soliTrabajador.getEstatus())) {
+                    continue;
+                }
+
+                //String estatusTimbrado = estatusCfdi(soliTrabajador);
+                /*System.out.println("Estatus timbrado: " + estatusTimbrado);
+                if (!"Timbrado de forma correcta".equals(estatusTimbrado)) {
+                    continue; // pasa al siguiente elemento del for
+                }*/
+                RnGcNomTrabajadorCfdisTbl trabajadorCfdi
+                        = trabajadorCfdiFacade.obtenerXSoliTrabajdorId(soliTrabajador.getId());
+
+                if (trabajadorCfdi == null || trabajadorCfdi.getCfdiId() == null) {
+                    continue;
+                }
+
+                RnGcArchivosTbl archivo
+                        = archivoFacade.obtenerArchivoPorCfdiId(
+                                trabajadorCfdi.getCfdiId().getId()
+                        );
+
+                if (archivo == null) {
+                    continue;
+                }
+                //System.out.println("Se encontro archivos timbrado: " + estatusTimbrado);
+                RnGcTrabajadoresTbl trabajador
+                        = trabajadoresFacade.obtenerPorId(
+                                soliTrabajador.getTrabajadorId().getId()
+                        );
+
+                if (trabajador == null) {
+                    continue;
+                }
+
+                String nombreCompleto = trabajador.getNombre() + "_"
+                        + trabajador.getApPaterno() + "_"
+                        + trabajador.getApMaterno();
+
+                nombreCompleto = nombreCompleto.replaceAll("[^a-zA-Z0-9]", "_");
+
+                String fechaFormateada
+                        = new SimpleDateFormat("yyyy_MM_dd").format(new Date());
+
+                String nombreBase = nombreCompleto + "_" + fechaFormateada;
+                System.out.println("Nombre_archivo: " + nombreBase);
+                // XML
+                if (archivo.getArchivoXml() != null) {
+                    ZipEntry xmlEntry = new ZipEntry(nombreBase + ".xml");
+                    zos.putNextEntry(xmlEntry);
+                    zos.write(archivo.getArchivoXml());
+                    zos.closeEntry();
+                    totalArchivos++;
+                }
+
+                // PDF
+                if (archivo.getArchivoPdf() != null) {
+                    ZipEntry pdfEntry = new ZipEntry(nombreBase + ".pdf");
+                    zos.putNextEntry(pdfEntry);
+                    zos.write(archivo.getArchivoPdf());
+                    zos.closeEntry();
+                    totalArchivos++;
+                }
+            }
+
+            zos.finish();
+            zos.close();
+
+            // 🔥 VALIDACIÓN CLAVE
+            if (totalArchivos == 0) {
+                JsfUtil.addErrorMessage("El ZIP está vacío. No se encontró ningún archivo de los elementos seleccionados.");
+                return;
+            }
+
+            // 🔹 Solo aquí enviamos al navegador
+            FacesContext fc = FacesContext.getCurrentInstance();
+            HttpServletResponse response
+                    = (HttpServletResponse) fc.getExternalContext().getResponse();
+
+            response.reset();
+            response.setContentType("application/zip");
+            response.setHeader("Content-Disposition", "attachment; filename=Timbrados.zip");
+            response.setContentLength(baos.size());
+
+            response.getOutputStream().write(baos.toByteArray());
+            response.getOutputStream().flush();
+
+            fc.responseComplete();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JsfUtil.addErrorMessage("Error al generar el ZIP: " + e.getMessage());
+        }
+    }
+
     public void obtenerSeleccionados() throws ParseException, IOException {
+        archivosZipGlobal.clear();
         List<File> archivosGenerados = new ArrayList<>();
         try {
             //  if (timbre != null && !timbre.isEmpty()) {
@@ -953,7 +1115,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                 cfdisId.setLugarExpedicion(cfdisId2.getLugarExpedicion());
                 cfdisId.setCondicionPago(cfdisId2.getCondicionPago());
                 //File archivoXml = crearXML(soliTrabajador);
-
+                System.out.println("=== CONDICION CFDI ====");
                 if (crearXML(soliTrabajador)) {
                     System.out.println("Timbrado Correctamente");
                     timbre.get(0).setTimbresRestantes(timbre.get(0).getTimbresTotal());
@@ -974,9 +1136,13 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                         trabajadorCfdi.setSolicitudTrabajdorId(soliTrabajador);
                         trabajadorCfdi.setCfdiId(cfdisId);
                         trabajadorCfdi = trabajadorCfdiFacade.refreshFromDB(trabajadorCfdi);
+                        System.out.println("=== CONDICION CFDI ====");
                         if (archivo.getArchivoPdf() != null && archivo.getArchivoXml() != null && archivo.getArchivoQR() != null) {
                             archivo.setCfdiId(cfdisId);
+                            System.out.println("=== Guardndo ====");
+                            System.out.println("=== ID Cfdis: " + cfdisId.getId());
                             archivo = archivoFacade.refreshFromDB(archivo);
+                            System.out.println("=== Guardado en la base de datos ====");
                             enviarCorreo2(soliTrabajador, archivo);
                         }
                         inicializarDatos();
@@ -989,15 +1155,26 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                     JsfUtil.addErrorMessage("Ocurrio un eror durante el timbrado");
                 }
                 JsfUtil.addSuccessMessage("Facturado de forma correcta");
+
+                soliTrabajador.setEstatus("T");
+                soliTrabajador = ejbFacade.refreshFromDB(soliTrabajador);
             }
-            //} else {
-            //inicializarDatos();
-            // JsfUtil.addSuccessMessage("Los timbres asignados a este usuario se han terminado");
-            //}
+            /*if (!archivosZipGlobal.isEmpty()) {
+                descargarZip();
+            }*/
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Eror " + e);
+            JsfUtil.addErrorMessage("Error general durante el proceso: " + e.getMessage());
+        } finally {
+            // 🔹 Se ejecuta siempre, haya error o no
+            if (archivosZipGlobal != null && !archivosZipGlobal.isEmpty()) {
+                try {
+                    descargarZip();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }
 
@@ -1016,6 +1193,42 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             fc.responseComplete();
         } catch (IOException e) {
             JsfUtil.addErrorMessage("Error al descargar archivo: " + e.getMessage());
+        }
+    }
+
+    public void descargarZip() {
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ZipOutputStream zos = new ZipOutputStream(baos);
+
+            for (ArchivoZipDTO archivo : archivosZipGlobal) {
+                ZipEntry entry = new ZipEntry(archivo.getNombre());
+                zos.putNextEntry(entry);
+                zos.write(archivo.getContenido());
+                zos.closeEntry();
+            }
+
+            zos.close();
+
+            byte[] zipBytes = baos.toByteArray();
+
+            HttpServletResponse response
+                    = (HttpServletResponse) context.getExternalContext().getResponse();
+
+            response.reset();
+            response.setContentType("application/zip");
+            response.setHeader("Content-Disposition", "attachment; filename=CFDIs.zip");
+            response.setContentLength(zipBytes.length);
+
+            response.getOutputStream().write(zipBytes);
+            response.getOutputStream().flush();
+
+            context.responseComplete();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -1473,16 +1686,17 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             Date fechaInicio = solicitudTrabajador.getTrabajadorId().getFechaInicio();
             LocalDate inicio = fechaInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-// Obtener fecha final de pago desde la entidad
+            // Obtener fecha final de pago desde la entidad
             Date fechaFinPago = solicitudTrabajador.getSolicitudId().getPeriodoNominaId().getFechaFin();
             LocalDate fechaFinalPagoCalculado = fechaFinPago.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-// Calcular antigüedad
+            // Calcular antigüedad
             long dias = ChronoUnit.DAYS.between(inicio, fechaFinalPagoCalculado) + 1;
             long semanas = dias / 7;
 
-// Formato requerido "PnnnW"
-            String antiguedadFormato = String.format("P%03dW", semanas);
+            // CORRECCIÓN: Usamos %d para evitar ceros a la izquierda (P19W en lugar de P019W)
+            String antiguedadFormato = String.format("P%dW", semanas);
+            // Si semanas es 0, el SAT permite "P0W", así que esta lógica funciona para todos los casos
             System.out.println("Antigüedad para el XML: " + antiguedadFormato);
 
             Attr antiguedad = doc.createAttribute("Antigüedad");
@@ -1763,6 +1977,10 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
     public boolean timbra(String nombre, String cadOriginal, RnGcNomSolicitudTrabajadorTbl solicitudTrabajador) {
         System.out.println("nombre: " + nombre + " | cadOriginal: " + cadOriginal);
         leerCfdi(new File(nombre));
+        if (modoPrueba) {
+            System.out.println("Entrando a modo prueba de pdf");
+            return timbraSimulado(cadOriginal, solicitudTrabajador);
+        }
         boolean valorTimbra = false;
         try {
             System.out.println("PARTE 1");
@@ -1778,10 +1996,13 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             baos.close();
             String xml = new String(bytes, "UTF-8");
             System.out.println("PARTE 2");
+
+            Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
+
             //Sefactura sf = new Sefactura("http://pruebas.sefactura.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo
             //Sefactura sf = new Sefactura("http://www.jonima.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo Emmanuel
             // Este el de producción
-            Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
+            //Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
             System.out.println("PARTE 222");
             System.out.println("resultadoEmma: " + sf.toString());
             RespuestaTimbrado rt = sf.timbrado(xml);
@@ -1831,17 +2052,20 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                 }
                 cfdisId.setUuid(Uuid);
                 archivo.setArchivoXml(xmlTimbradoB);
+                //String nombreXml = cfdisId.getSerie() + "_" + cfdisId.getFolio() + ".xml";
+                String nombreXml = Uuid + ".xml";
+                archivosZipGlobal.add(new ArchivoZipDTO(nombreXml, xmlTimbradoB));
                 cfdisId.setEstatus("Timbrado");
                 cfdisId.setRespuestaTimbrado("Timbrado de forma correcta");
                 System.out.println("PARTE 3");
                 System.out.println(noCertSAT + " | " + fechaTimbrado + " | " + Uuid + " | " + selloCFDI + " | " + selloSAT + " | " + rfcProvCertif);
-                if (cfdisId.getTipoComprobante().equals("E") || cfdisId.getTipoComprobante().equals("I")) {
+                if (cfdisId.getTipoComprobante().equals("N")) {
                     crearPDF(selloSAT, noCertSAT, fechaTimbrado, Uuid, selloCFDI, codQR, cadOriginal, rfcProvCertif, solicitudTrabajador);
 
                     System.out.println("Paso if");
                 } else {
                     //crearPDFPago(selloSAT, noCertSAT, fechaTimbrado, Uuid, selloCFDI, codQR, cadOriginal, rfcProvCertif);
-                    System.out.println("Paso else");
+                    System.out.println("El CFDI no es tipo de comprobante para Nomina");
                 }
                 System.out.println("ProbandoT6");
                 //crearArchivo(xmltimbrado);
@@ -1854,6 +2078,79 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         }
         System.out.println("PARTE 4");
         return valorTimbra;
+    }
+
+    private boolean timbraSimulado(String cadOriginal, RnGcNomSolicitudTrabajadorTbl solicitudTrabajador) {
+        System.out.println("timbraSimulado 4");
+        try {
+
+            // === PEGA AQUÍ TU XML REAL TIMBRADO ===
+            String xmlTimbrado = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><cfdi:Comprobante xmlns:cfdi=\"http://www.sat.gob.mx/cfd/4\" xmlns:nomina12=\"http://www.sat.gob.mx/nomina12\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" Certificado=\"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\" Descuento=\"403.26\" Exportacion=\"01\" Fecha=\"2026-02-19T10:40:46\" LugarExpedicion=\"74030\" MetodoPago=\"PUE\" Moneda=\"MXN\" NoCertificado=\"00001000000720404915\" Sello=\"hyYStwFzr3+oz1FwxFVbt4SxqiBFEVeIbSYX11vRl5h+APtrOeyq18ErkFKlUYcPs+tsWmOkCnRcwVeNW1BC2rCQQPDfAqVZanndvJ7Qxdy5/7ciU89JdthYo7eU9oK2vTcVfx8cHyR5eOuzaKZ2/OvH20fo6BrYSvoWa9uKodPfN1I1JYdnt+yWMztfGm6c19GpHQ1qiGgCrxIyc3/ydzP6UvHWbzJvSargbjd/NkyuQmyFublVVVOIGdgV912iOmli4E6QZJ4iaTsPnOK1aMkuOvBmMomsltcYedE1zU8WbDovJhix/Rihns8Fl8Uyd/ibL+4OkK4LmMcKDpEdsg==\" Serie=\"-\" SubTotal=\"4422.50\" TipoDeComprobante=\"N\" Total=\"4019.24\" Version=\"4.0\" xsi:schemaLocation=\"http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xsd\"><cfdi:Emisor Nombre=\"ASESORES FISCALES Y CONTABLES HEES\" RegimenFiscal=\"601\" Rfc=\"AFC060520V16\"/><cfdi:Receptor DomicilioFiscalReceptor=\"90110\" Nombre=\"EVELYN ALEXANDRA LIMA XOCHIHUA\" RegimenFiscalReceptor=\"605\" Rfc=\"LIXE9603116K4\" UsoCFDI=\"CN01\"/><cfdi:Conceptos><cfdi:Concepto Cantidad=\"1\" ClaveProdServ=\"84111505\" ClaveUnidad=\"ACT\" Descripcion=\"Pago de nómina\" Descuento=\"403.26\" Importe=\"4422.50\" ObjetoImp=\"01\" ValorUnitario=\"4422.50\"/></cfdi:Conceptos><cfdi:Complemento><nomina12:Nomina FechaFinalPago=\"2026-02-15\" FechaInicialPago=\"2026-02-01\" FechaPago=\"2026-02-16\" NumDiasPagados=\"15\" TipoNomina=\"O\" TotalDeducciones=\"403.26\" TotalOtrosPagos=\"237.50\" TotalPercepciones=\"4185.00\" Version=\"1.2\"><nomina12:Emisor RegistroPatronal=\"F1114501100\"/><nomina12:Receptor Antigüedad=\"P19W\" ClaveEntFed=\"TLA\" Curp=\"LIXE960311MTLMCV00\" FechaInicioRelLaboral=\"2025-10-01\" NumEmpleado=\"1\" NumSeguridadSocial=\"01199666049\" PeriodicidadPago=\"04\" RiesgoPuesto=\"1\" SalarioBaseCotApor=\"292.75\" SalarioDiarioIntegrado=\"292.75\" Sindicalizado=\"No\" TipoContrato=\"04\" TipoJornada=\"01\" TipoRegimen=\"02\"/><nomina12:Percepciones TotalExento=\"0.00\" TotalGravado=\"4185.00\" TotalSueldos=\"4185.00\"><nomina12:Percepcion Clave=\"Sueldo\" Concepto=\"Sueldo\" ImporteExento=\"0.00\" ImporteGravado=\"4185.0\" TipoPercepcion=\"001\"/></nomina12:Percepciones><nomina12:Deducciones TotalImpuestosRetenidos=\"298.85\" TotalOtrasDeducciones=\"104.41\"><nomina12:Deduccion Clave=\"ISR_Sueldos\" Concepto=\"ISR Sueldos y salarios\" Importe=\"298.85\" TipoDeduccion=\"002\"/><nomina12:Deduccion Clave=\"IMSS\" Concepto=\"IMSS\" Importe=\"54.89\" TipoDeduccion=\"001\"/><nomina12:Deduccion Clave=\"Retencion_RCV\" Concepto=\"Retencion RCV\" Importe=\"49.52\" TipoDeduccion=\"003\"/></nomina12:Deducciones><nomina12:OtrosPagos><nomina12:OtroPago Clave=\"Subsidio\" Concepto=\"Subsidio al empleo\" Importe=\"237.5\" TipoOtroPago=\"002\"><nomina12:SubsidioAlEmpleo SubsidioCausado=\"237.5\"/></nomina12:OtroPago></nomina12:OtrosPagos></nomina12:Nomina><tfd:TimbreFiscalDigital FechaTimbrado=\"2026-02-19T10:41:03\" NoCertificadoSAT=\"00001000000705928441\" RfcProvCertif=\"PPD101129EA3\" SelloCFD=\"hyYStwFzr3+oz1FwxFVbt4SxqiBFEVeIbSYX11vRl5h+APtrOeyq18ErkFKlUYcPs+tsWmOkCnRcwVeNW1BC2rCQQPDfAqVZanndvJ7Qxdy5/7ciU89JdthYo7eU9oK2vTcVfx8cHyR5eOuzaKZ2/OvH20fo6BrYSvoWa9uKodPfN1I1JYdnt+yWMztfGm6c19GpHQ1qiGgCrxIyc3/ydzP6UvHWbzJvSargbjd/NkyuQmyFublVVVOIGdgV912iOmli4E6QZJ4iaTsPnOK1aMkuOvBmMomsltcYedE1zU8WbDovJhix/Rihns8Fl8Uyd/ibL+4OkK4LmMcKDpEdsg==\" SelloSAT=\"Ou4XtMqmbHe1LhcbEN5JRxDF90jLGzOfA1KU7RmdjITGUwjlZQO7Hg2GSc4/HCPfSVQcA41xYhApKT8kWmsHNNUTK1b9uDnj88DcYnRSk2ZBgQ4SCmof1XZCOhFazEjNWL2fujSECE9nFfL1VBcspsmDahegsqIAyOatD5zg/hGlP/uO/JH2wxjwlLKgnrlaW4gfxR/pFJMpQlwbbRXvK+4WjGA+ORTmHGmyfyJd5FouSoFuQknPW/6arMn7moAbq8eul8ufEX7HFHJ7/kORn5wpuwzh5idKojoyIkZQC3JmgLFUp8eR4gzemGfGwwyCh/mezjErFo7/wQk5rzSvyQ==\" UUID=\"491E523A-A0C4-4354-864A-7D5ABB47B196\" Version=\"1.1\" xsi:schemaLocation=\"http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd\" xmlns:tfd=\"http://www.sat.gob.mx/TimbreFiscalDigital\"/></cfdi:Complemento></cfdi:Comprobante>";
+            // Guardarlo en archivo temporal
+            File xmltimbrado = File.createTempFile("xmlTimbrado_", ".xml");
+
+            try (FileOutputStream fos = new FileOutputStream(xmltimbrado)) {
+                fos.write(xmlTimbrado.getBytes(StandardCharsets.UTF_8));
+            }
+
+            // Simular QR (puede ser vacío si no lo necesitas)
+            byte[] codQR = new byte[0];
+
+            // Leer XML para extraer datos (igual que tu código original)
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = docFactory.newDocumentBuilder();
+            Document doc = builder.parse(xmltimbrado);
+
+            NodeList items = doc.getElementsByTagName("tfd:TimbreFiscalDigital");
+
+            String selloSAT = "";
+            String noCertSAT = "";
+            String fechaTimbrado = "";
+            String Uuid = "";
+            String selloCFDI = "";
+            String rfcProvCertif = "";
+
+            if (items.getLength() > 0) {
+                Element element = (Element) items.item(0);
+
+                selloSAT = element.getAttribute("SelloSAT");
+                noCertSAT = element.getAttribute("NoCertificadoSAT");
+                fechaTimbrado = element.getAttribute("FechaTimbrado");
+                Uuid = element.getAttribute("UUID");
+                selloCFDI = element.getAttribute("SelloCFD");
+                rfcProvCertif = element.getAttribute("RfcProvCertif");
+            }
+            //String nombreXml = cfdisId.getSerie() + "_" + cfdisId.getFolio() + ".xml";
+            String nombreXml = Uuid + ".xml";
+            byte[] xmlBytes = xmlTimbrado.getBytes(StandardCharsets.UTF_8);
+            archivosZipGlobal.add(new ArchivoZipDTO(nombreXml, xmlBytes));
+            cfdisId.setUuid(Uuid);
+            cfdisId.setEstatus("Timbrado");
+            cfdisId.setRespuestaTimbrado("Timbrado de forma correcta (PRUEBA)");
+            cfdisId.setXmlTrama(xmlTimbrado);
+            System.out.println("Generando pdf3 4");
+            if (cfdisId.getTipoComprobante().equals("N")) {
+                System.out.println("Generando pdf 4");
+                crearPDF(
+                        selloSAT,
+                        noCertSAT,
+                        fechaTimbrado,
+                        Uuid,
+                        selloCFDI,
+                        codQR,
+                        cadOriginal,
+                        rfcProvCertif,
+                        solicitudTrabajador
+                );
+
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public static String hashMD5(String input) throws Exception {
@@ -1981,6 +2278,19 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         String imagenqr = FacesContext.getCurrentInstance()
                 .getExternalContext()
                 .getRealPath("/resources/images/qr.png");
+
+        System.out.println("==== INICIO crearPDF ====");
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        String basePath = context.getExternalContext().getRealPath("/resources/images/");
+
+        System.out.println("Ruta base images: " + basePath);
+
+        if (basePath == null) {
+            System.out.println("ERROR: basePath es NULL. El servidor no puede resolver la ruta.");
+            return;
+        }
+
         tipoContrato = new RnGcNomTipocontratoTbl();
         estado = new RnGcNomEstadosTbl();
         listaPercepciones = new ArrayList<>();
@@ -2136,7 +2446,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                 FileOutputStream fosQR = new FileOutputStream(imagenQRPath);
                 fosQR.write(codigoQR);
                 fosQR.close();
-                parametros.put("QR", null);
+                parametros.put("QR", imagenqr);
             } catch (Exception exQR) {
                 System.err.println("Advertencia: No se pudo guardar o leer la imagen QR, se usará valor vacío.");
                 parametros.put("QR", null); // O usa "" si el .jasper lo permite
@@ -2147,7 +2457,10 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             archivo.setArchivoPdf(pdf);
 
             // Guardar en variable global
-            setArchivoPdfGlobal(pdf);
+            //setArchivoPdfGlobal(pdf);
+            //String nombrePdf = cfdisId.getSerie() + "_" + cfdisId.getFolio() + ".pdf";
+            String nombrePdf = Uuid + ".pdf";
+            archivosZipGlobal.add(new ArchivoZipDTO(nombrePdf, pdf));
             System.out.println("Generando PDF - Parte 7");
 
             /*String rutaTimbrados = "C:\\Users\\Joaquin\\Documents\\NetBeansProjects\\RN_GC\\web\\resources\\Archivos\\timbrados";
@@ -2226,7 +2539,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                         LocalDate hoy = LocalDate.now();
 
                         long semanas = ChronoUnit.WEEKS.between(inicio, hoy);
-                        
+
                         // Evitar semanas negativas (por seguridad)
                         if (semanas < 0) {
                             semanas = 0;
@@ -2385,7 +2698,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                     System.out.println("Parte Media 189");
                     parametros.put("antiguedad", antiguedadFormato);
                     System.out.println("Parte Media 189-1");
-                    
+
                     System.out.println("Parte Media 189-2");
                     parametros.put("sindicalizado", soliTrabajador.getTrabajadorId().getSindicalizado());
                     //parametros.put("diasPagados", soliTrabajador.getDiasPagados());
@@ -2545,11 +2858,45 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             RnGcArchivosTbl archivos = new RnGcArchivosTbl();
             archivos = archivoFacade.obtenerArchivo(trabajadorCFDILocal.getCfdiId());
             System.out.println("DescargarPDF2: " + archivos);
+            /* =========================
+               DESCARGA PDF
+               ========================= */
             if (archivos != null && archivos.getArchivoPdf() != null) {
                 InputStream streamPlantilla = new ByteArrayInputStream(archivos.getArchivoPdf());
                 downLoadFile = new DefaultStreamedContent(streamPlantilla, "document/pdf",
                         "Nomina" + solicitudTrabajador.getTrabajadorId().getNombre() + "_" + trabajadorCFDILocal.getCfdiId().getUuid()
                         + "_" + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()).concat(".pdf"));
+            }
+            /* =========================
+               DESCARGA XML
+               ========================= */
+            if (archivos.getArchivoXml() != null) {
+                InputStream xmlStream
+                        = new ByteArrayInputStream(archivos.getArchivoXml());
+                downLoadFileXml = new DefaultStreamedContent(xmlStream, "application/xml",
+                        "Nomina" + solicitudTrabajador.getTrabajadorId().getNombre() + "_" + trabajadorCFDILocal.getCfdiId().getUuid()
+                        + "_" + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()).concat(".xml"));
+            }
+        }
+    }
+
+    public void descargarXml(RnGcNomSolicitudTrabajadorTbl solicitudTrabajador) {
+        RnGcNomTrabajadorCfdisTbl trabajadorCFDILocal = new RnGcNomTrabajadorCfdisTbl();
+        trabajadorCFDILocal = trabajadorCfdiFacade.obtenerXSoliTrabajdor(solicitudTrabajador);
+        System.out.println("DescargarPDF1: " + solicitudTrabajador + " | " + trabajadorCFDILocal);
+        if (trabajadorCFDILocal.getCfdiId() != null) {
+            RnGcArchivosTbl archivos = new RnGcArchivosTbl();
+            archivos = archivoFacade.obtenerArchivo(trabajadorCFDILocal.getCfdiId());
+            System.out.println("DescargarXml2: " + archivos);
+            /* =========================
+               DESCARGA XML
+               ========================= */
+            if (archivos.getArchivoXml() != null) {
+                InputStream xmlStream
+                        = new ByteArrayInputStream(archivos.getArchivoXml());
+                downLoadFileXml = new DefaultStreamedContent(xmlStream, "application/xml",
+                        "Nomina" + solicitudTrabajador.getTrabajadorId().getNombre() + "_" + trabajadorCFDILocal.getCfdiId().getUuid()
+                        + "_" + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()).concat(".xml"));
             }
         }
     }
