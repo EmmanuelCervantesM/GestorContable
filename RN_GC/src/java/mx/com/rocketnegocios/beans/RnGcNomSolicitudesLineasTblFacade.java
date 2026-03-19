@@ -151,14 +151,14 @@ public class RnGcNomSolicitudesLineasTblFacade extends AbstractFacade<RnGcNomSol
         return listaLineas;
     }
 
-    public List<RnGcNomSolicitudesLineasTbl> obtenerXTrabajadorId(Integer soliTrabajadorId) {
+    public List<RnGcNomSolicitudesLineasTbl> obtenerXTrabajadorId(Integer solicitudTrabajadorId) {
         List<RnGcNomSolicitudesLineasTbl> listaLineas = new ArrayList<>();
         try {
             listaLineas = em.createNamedQuery("RnGcNomSolicitudesLineasTbl.findBySolicitudTrabajadorId", RnGcNomSolicitudesLineasTbl.class)
-                    .setParameter("solicitudTrabajadorId", soliTrabajadorId)
+                    .setParameter("solicitudTrabajadorId", solicitudTrabajadorId)
                     .getResultList();
         } catch (NoResultException ex) {
-            System.err.println("No se encontraron líneas para el trabajador con ID: " + soliTrabajadorId);
+            System.err.println("No se encontraron líneas para el trabajador con ID: " + solicitudTrabajadorId);
         }
         return listaLineas;
     }

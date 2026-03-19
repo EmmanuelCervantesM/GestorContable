@@ -2,6 +2,10 @@ package mx.com.rocketnegocios.web;
 
 import com.sefactura.pac.client.RespuestaTimbrado;
 import com.sefactura.pac.client.Sefactura;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+
+import com.itextpdf.text.pdf.PdfStamper;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import mx.com.rocketnegocios.entities.RnGcNomSolicitudTrabajadorTbl;
 import mx.com.rocketnegocios.web.util.JsfUtil;
@@ -1878,14 +1883,22 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();   //CadenaOrignal
             StreamResult cadenaOriginal = new StreamResult(baos);
+
             StreamSource sourceXml2 = new StreamSource(tempFile);
             TransformerFactory tFactory = TransformerFactory.newInstance();
             Transformer trasnformer2 = tFactory.newTransformer(sourceXSL);
             //trasnformer2.transform(sourceXml2, cadenaOriginal);
             trasnformer2.transform(sourceXml2, cadenaOriginal);
 
-            // Imprimir contenido del XML generado antes de modificarlo
+            cadOrig = new String(baos.toByteArray(), StandardCharsets.UTF_8); // FIX//CadenaOriginal
+            //crearSello(cadOrig);
+            //crearCertificado();
             System.out.println("=== XML ANTES DE APLICAR SELLO Y CERTIFICADO ===");
+            System.out.println("============= Datos =============");
+            System.out.println("Encoding JVM: " + System.getProperty("file.encoding"));
+            System.out.println("Cadena Origen: " + cadOrig);
+
+            // Imprimir contenido del XML generado antes de modificarlo
             try (BufferedReader reader = new BufferedReader(new FileReader(tempFile))) {
                 String linea;
                 while ((linea = reader.readLine()) != null) {
@@ -1896,7 +1909,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             }
             System.out.println("=================================================");
 
-            cadOrig = baos.toString("UTF-8");                                            //CadenaOriginal
+            //cadOrig = baos.toString("UTF-8");                                            //CadenaOriginal
             //crearSello(cadOrig);
             //crearCertificado();
             leerCfdi(tempFile);
@@ -1916,6 +1929,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
 
     public boolean modificarXml(String xml, File xmlAc, RnGcNomSolicitudTrabajadorTbl solicitudTrabajador) throws Exception {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        docFactory.setNamespaceAware(true); // 🔥 IMPORTANTE
         DocumentBuilder builder = docFactory.newDocumentBuilder();
         Document doc = builder.parse(xmlAc);
         leerCfdi(xmlAc);
@@ -1961,6 +1975,12 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
 
         // Guardamos de nuevo el archivo ya modificado
         transformer = TransformerFactory.newInstance().newTransformer();
+        // Forzar UTF-8 (Muy importante)
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty(OutputKeys.INDENT, "no");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+
         output = new StreamResult(tempFile);
         input = new DOMSource(doc);
         transformer.transform(input, output);
@@ -2227,11 +2247,12 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         String linea = " ";
         String contenido = null;
         try {
-            fr = new FileReader(archivo1);
-            br = new BufferedReader(fr);
+            //fr = new FileReader(archivo1);
+            //br = new BufferedReader(fr);
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(archivo1), StandardCharsets.UTF_8));
 
             while ((linea = br.readLine()) != null) {
-                System.out.println("linea: " + linea);
+                System.out.println("Lineas del archivo XML Nomina: " + linea);
                 contenido = linea;
                 cfdisId.setXmlTrama(linea);
             }
@@ -2850,55 +2871,147 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         return estado;
     }
 
-    public void descargarPDF(RnGcNomSolicitudTrabajadorTbl solicitudTrabajador) {
-        RnGcNomTrabajadorCfdisTbl trabajadorCFDILocal = new RnGcNomTrabajadorCfdisTbl();
-        trabajadorCFDILocal = trabajadorCfdiFacade.obtenerXSoliTrabajdor(solicitudTrabajador);
-        System.out.println("DescargarPDF1: " + solicitudTrabajador + " | " + trabajadorCFDILocal);
-        if (trabajadorCFDILocal.getCfdiId() != null) {
-            RnGcArchivosTbl archivos = new RnGcArchivosTbl();
-            archivos = archivoFacade.obtenerArchivo(trabajadorCFDILocal.getCfdiId());
-            System.out.println("DescargarPDF2: " + archivos);
-            /* =========================
-               DESCARGA PDF
-               ========================= */
-            if (archivos != null && archivos.getArchivoPdf() != null) {
-                InputStream streamPlantilla = new ByteArrayInputStream(archivos.getArchivoPdf());
-                downLoadFile = new DefaultStreamedContent(streamPlantilla, "document/pdf",
-                        "Nomina" + solicitudTrabajador.getTrabajadorId().getNombre() + "_" + trabajadorCFDILocal.getCfdiId().getUuid()
-                        + "_" + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()).concat(".pdf"));
+    public byte[] agregarMarcaAgua(byte[] pdfOriginal, String texto) {
+        try {
+            PdfReader reader = new PdfReader(new ByteArrayInputStream(pdfOriginal));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            PdfStamper stamper = new PdfStamper(reader, baos);
+
+            int totalPaginas = reader.getNumberOfPages();
+
+            // Fuente
+            BaseFont baseFont = BaseFont.createFont(
+                    BaseFont.HELVETICA,
+                    BaseFont.WINANSI,
+                    BaseFont.EMBEDDED
+            );
+
+            for (int i = 1; i <= totalPaginas; i++) {
+                PdfContentByte canvas = stamper.getOverContent(i);
+
+                // Transparencia
+                PdfGState gs = new PdfGState();
+                gs.setFillOpacity(0.3f);
+                canvas.setGState(gs);
+
+                canvas.beginText();
+                canvas.setFontAndSize(baseFont, 60);
+                canvas.setColorFill(BaseColor.RED);
+
+                // Posición centrada y rotada
+                canvas.showTextAligned(
+                        com.itextpdf.text.Element.ALIGN_CENTER,
+                        texto,
+                        300, // X
+                        400, // Y
+                        45 // Rotación
+                );
+
+                canvas.endText();
             }
-            /* =========================
-               DESCARGA XML
-               ========================= */
-            if (archivos.getArchivoXml() != null) {
-                InputStream xmlStream
-                        = new ByteArrayInputStream(archivos.getArchivoXml());
-                downLoadFileXml = new DefaultStreamedContent(xmlStream, "application/xml",
-                        "Nomina" + solicitudTrabajador.getTrabajadorId().getNombre() + "_" + trabajadorCFDILocal.getCfdiId().getUuid()
-                        + "_" + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()).concat(".xml"));
-            }
+
+            stamper.close();
+            reader.close();
+
+            return baos.toByteArray();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return pdfOriginal;
         }
     }
 
-    public void descargarXml(RnGcNomSolicitudTrabajadorTbl solicitudTrabajador) {
-        RnGcNomTrabajadorCfdisTbl trabajadorCFDILocal = new RnGcNomTrabajadorCfdisTbl();
-        trabajadorCFDILocal = trabajadorCfdiFacade.obtenerXSoliTrabajdor(solicitudTrabajador);
+    public void descargarPDF(RnGcNomSolicitudTrabajadorTbl solicitudTrabajador) {
+
+        RnGcNomTrabajadorCfdisTbl trabajadorCFDILocal
+                = trabajadorCfdiFacade.obtenerXSoliTrabajdor(solicitudTrabajador);
+
         System.out.println("DescargarPDF1: " + solicitudTrabajador + " | " + trabajadorCFDILocal);
-        if (trabajadorCFDILocal.getCfdiId() != null) {
-            RnGcArchivosTbl archivos = new RnGcArchivosTbl();
-            archivos = archivoFacade.obtenerArchivo(trabajadorCFDILocal.getCfdiId());
-            System.out.println("DescargarXml2: " + archivos);
-            /* =========================
-               DESCARGA XML
-               ========================= */
-            if (archivos.getArchivoXml() != null) {
-                InputStream xmlStream
-                        = new ByteArrayInputStream(archivos.getArchivoXml());
-                downLoadFileXml = new DefaultStreamedContent(xmlStream, "application/xml",
-                        "Nomina" + solicitudTrabajador.getTrabajadorId().getNombre() + "_" + trabajadorCFDILocal.getCfdiId().getUuid()
-                        + "_" + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()).concat(".xml"));
-            }
+
+        if (trabajadorCFDILocal == null || trabajadorCFDILocal.getCfdiId() == null) {
+            JsfUtil.addErrorMessage("No se encontró el PDF en el sistema");
+            return;
         }
+
+        RnGcArchivosTbl archivos
+                = archivoFacade.obtenerArchivo(trabajadorCFDILocal.getCfdiId());
+
+        System.out.println("DescargarPDF2: " + archivos);
+
+        if (archivos == null || archivos.getArchivoPdf() == null) {
+            JsfUtil.addErrorMessage("No se encontró el PDF en el sistema");
+            return;
+        }
+
+        InputStream streamPlantilla;
+
+        // 🔥 OBTENER ESTATUS
+        String estatus = estatusCfdi(solicitudTrabajador);
+        // 🔥 PDF ORIGINAL
+        byte[] pdfFinal = archivos.getArchivoPdf();
+        String nombre_pdf = "Nomina"
+                + solicitudTrabajador.getTrabajadorId().getNombre()
+                + "_" + trabajadorCFDILocal.getCfdiId().getUuid()
+                + "_" + new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(new Date())
+                + ".pdf";
+        // 🔥 SI ESTÁ CANCELADO → agregar marca de agua
+        if ("UUID CANCELADO CORRECTAMENTE".equals(estatus)) {
+            JsfUtil.addWarningMessage("⚠ Este CFDI está CANCELADO");
+
+            pdfFinal = agregarMarcaAgua(pdfFinal, "CANCELADO");
+            nombre_pdf = "CANCELADO_Nomina"
+                    + solicitudTrabajador.getTrabajadorId().getNombre()
+                    + "_" + trabajadorCFDILocal.getCfdiId().getUuid()
+                    + "_" + new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(new Date())
+                    + ".pdf";
+            streamPlantilla
+                    = new ByteArrayInputStream(pdfFinal);
+        } else {
+            streamPlantilla
+                    = new ByteArrayInputStream(archivos.getArchivoPdf());
+        }
+
+        downLoadFile = new DefaultStreamedContent(
+                streamPlantilla,
+                "application/pdf", // ✅ corregido
+                nombre_pdf
+        );
+    }
+
+    public void descargarXml(RnGcNomSolicitudTrabajadorTbl solicitudTrabajador) {
+
+        RnGcNomTrabajadorCfdisTbl trabajadorCFDILocal
+                = trabajadorCfdiFacade.obtenerXSoliTrabajdor(solicitudTrabajador);
+
+        System.out.println("DescargarPDF1: " + solicitudTrabajador + " | " + trabajadorCFDILocal);
+
+        if (trabajadorCFDILocal == null || trabajadorCFDILocal.getCfdiId() == null) {
+            JsfUtil.addErrorMessage("No se encontró el XML en el sistema");
+            return;
+        }
+
+        RnGcArchivosTbl archivos
+                = archivoFacade.obtenerArchivo(trabajadorCFDILocal.getCfdiId());
+
+        System.out.println("DescargarXml2: " + archivos);
+
+        if (archivos == null || archivos.getArchivoXml() == null) {
+            JsfUtil.addErrorMessage("No se encontró el XML en el sistema");
+            return;
+        }
+
+        InputStream xmlStream = new ByteArrayInputStream(archivos.getArchivoXml());
+
+        downLoadFileXml = new DefaultStreamedContent(
+                xmlStream,
+                "application/xml",
+                "Nomina"
+                + solicitudTrabajador.getTrabajadorId().getNombre()
+                + "_" + trabajadorCFDILocal.getCfdiId().getUuid()
+                + "_" + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date())
+                + ".xml"
+        );
     }
 
     public void enviarCorreo(RnGcNomSolicitudTrabajadorTbl solicitudTrabajador) {

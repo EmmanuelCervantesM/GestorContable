@@ -67,6 +67,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import java.text.SimpleDateFormat;
 import javax.faces.application.FacesMessage;
+import javax.inject.Inject;
 import mx.com.rocketnegocios.entities.RnGcNomTipoincapacidadTbl;
 import mx.com.rocketnegocios.entities.RnGcNomTipootropagoTbl;
 
@@ -119,6 +120,9 @@ public class RnGcNomNominasTblController implements Serializable {
     @EJB
     private RnGcUsuariosTblFacade usuarioFacade;
 
+    @Inject
+    private RnGcNomSolicitudTrabajadorTblController rnGcNomSolicitudTrabajadorTblController;
+
     private List<RnGcNomNominasTbl> items = null;
     private RnGcNomNominasTbl selected;
     private UsuarioFirmado usuarioFirmado = new UsuarioFirmado();
@@ -141,6 +145,10 @@ public class RnGcNomNominasTblController implements Serializable {
     private Date fechaInicioDuplicado;
     private Date fechaFinDuplicado;
     //
+    private Date fechaInicioPago;
+    private Date fechaFinPago;
+
+    private List<RnGcNomSolicitudTrabajadorTbl> listaSolicitudesTrabajador;
 
     // Getters y Setters
     public String getNombreDuplicado() {
@@ -149,6 +157,22 @@ public class RnGcNomNominasTblController implements Serializable {
 
     public void setNombreDuplicado(String nombreDuplicado) {
         this.nombreDuplicado = nombreDuplicado;
+    }
+
+    public Date getFechaFinPago() {
+        return fechaFinPago;
+    }
+
+    public void setFechaFinPago(Date fechaFinPago) {
+        this.fechaFinPago = fechaFinPago;
+    }
+
+    public Date getFechaInicioPago() {
+        return fechaInicioPago;
+    }
+
+    public void setFechaInicioPago(Date fechaInicioPago) {
+        this.fechaInicioPago = fechaInicioPago;
     }
 
     public Date getFechaInicioDuplicado() {
@@ -176,6 +200,11 @@ public class RnGcNomNominasTblController implements Serializable {
     }
 
     public void setSelected(RnGcNomNominasTbl selected) {
+        periodoNomina = null;
+        periodoNomina = periodoNominaFacade.obtenerXNomina(selected);
+
+        setFechaInicioPago(periodoNomina.getFechaInicio());
+        setFechaFinPago(periodoNomina.getFechaFin());
         this.selected = selected;
     }
 
@@ -336,6 +365,60 @@ public class RnGcNomNominasTblController implements Serializable {
             }
         } else {
             JsfUtil.addErrorMessage("No hay nómina seleccionada.");
+        }
+    }
+
+    public void guardarFechasPagos() {
+        if (selected != null) {
+            try {
+                // --- VALIDACIÓN DE FECHAS ---
+                if (this.fechaInicioPago != null && this.fechaFinPago != null) {
+                    if (this.fechaFinPago.before(this.fechaInicioPago)) {
+                        JsfUtil.addErrorMessage("La Fecha Fin no puede ser menor que la Fecha Inicio.");
+                        return; // Detenemos la ejecución aquí
+                    }
+                } else {
+                    JsfUtil.addErrorMessage("Ambas fechas son obligatorias.");
+                    return;
+                }
+                // ----------------------------
+
+                periodoNomina = periodoNominaFacade.obtenerXNomina(selected);
+
+                if (periodoNomina != null) {
+                    periodoNomina.setFechaInicio(this.fechaInicioPago);
+                    periodoNomina.setFechaFin(this.fechaFinPago);
+
+                    if (this.fechaInicioPago != null) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(this.fechaInicioPago);
+
+                        int anio = cal.get(Calendar.YEAR);
+                        int mes = cal.get(Calendar.MONTH) + 1;
+
+                        periodoNomina.setAnioPeriodo(String.valueOf(anio));
+                        periodoNomina.setNumMesPeriodo(mes);
+                    }
+
+                    periodoNomina.setUltimaFechaActualizacion(new Date());
+
+                    periodoNominaFacade.edit(periodoNomina);
+
+                    // 🔥 OBTENER LA SOLICITUD (esto depende de tu modelo)
+                    RnGcNomSolicitudesTbl solicitud = solicitudFacade.obtenerXNomina(selected.getId());
+                    rnGcNomSolicitudTrabajadorTblController.setListaSolicitudesTrabajador(
+                            soliTrabajadorFacade.obtenerXSolicitud(solicitud)
+                    );
+
+                    JsfUtil.addSuccessMessage("Fechas de pago actualizadas con éxito.");
+                } else {
+                    JsfUtil.addErrorMessage("No se encontró el registro de periodo para esta nómina.");
+                }
+            } catch (Exception e) {
+                JsfUtil.addErrorMessage("Error al procesar la actualización: " + e.getMessage());
+            }
+        } else {
+            JsfUtil.addErrorMessage("Debes seleccionar una nómina primero.");
         }
     }
 
@@ -1585,6 +1668,7 @@ public class RnGcNomNominasTblController implements Serializable {
             }
 
             System.out.println("✅ Nómina original encontrada: " + nominaOriginal.getNombreNomina());
+            System.out.println("✅ ID Nomina original encontrada: " + nominaOriginal.getId());
 
             // Duplicar nómina
             RnGcNomNominasTbl nuevaNomina = new RnGcNomNominasTbl();
@@ -1610,6 +1694,7 @@ public class RnGcNomNominasTblController implements Serializable {
 
             // Duplicar periodo
             RnGcNomPeriodonominaTbl periodoOriginal = periodoNominaFacade.obtenerXNomina(nominaId);
+            System.out.println("✅ ID Periodo NOMINA original encontrada: " + periodoOriginal.getId());
             RnGcNomPeriodonominaTbl nuevoPeriodo = new RnGcNomPeriodonominaTbl();
 
             nuevoPeriodo.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
@@ -1639,7 +1724,9 @@ public class RnGcNomNominasTblController implements Serializable {
             System.out.println("📆 Periodo duplicado: " + nombrePeriodo + " | ID: " + nuevoPeriodo.getId());
 
             // Duplicar solicitud
+            System.out.println("Duplicando solicitud");
             RnGcNomSolicitudesTbl solicitudOriginal = solicitudFacade.obtenerXNomina(nominaId.getId());
+            System.out.println("✅ ID Solicitud NOMINA original encontrada: " + solicitudOriginal.getId());
             RnGcNomSolicitudesTbl nuevaSolicitud = new RnGcNomSolicitudesTbl();
             nuevaSolicitud.setRegistroPatronal(solicitudOriginal.getRegistroPatronal());
             nuevaSolicitud.setNombreSolicitud(solicitudOriginal.getNombreSolicitud() + " - Copia");
@@ -1659,7 +1746,10 @@ public class RnGcNomNominasTblController implements Serializable {
             System.out.println("📄 Solicitud duplicada: " + nuevaSolicitud.getNombreSolicitud() + " | ID: " + nuevaSolicitud.getId());
 
             // Duplicar trabajadores
+            System.out.println("Duplicando lista de trabajadores");
             List<RnGcNomSolicitudTrabajadorTbl> trabajadoresOriginales = soliTrabajadorFacade.obtenerXSolicitud(solicitudOriginal);
+            
+            System.out.println("Total registros: " + trabajadoresOriginales.size());
             List<RnGcNomSolicitudTrabajadorTbl> nuevosTrabajadores = new ArrayList<>();
             Long diasPagados = ((nuevoPeriodo.getFechaFin().getTime() - nuevoPeriodo.getFechaInicio().getTime()) / (60 * 60 * 24 * 1000)) + 1;
 
@@ -1686,12 +1776,15 @@ public class RnGcNomNominasTblController implements Serializable {
 
                 //nuevoTrabajador = soliTrabajadorFacade.refreshFromDB(nuevoTrabajador);
                 soliTrabajadorFacade.create(nuevoTrabajador);
+                System.out.println("ID generado: " + nuevoTrabajador.getId());
                 nuevosTrabajadores.add(nuevoTrabajador);
 
                 // 🔁 Duplicar líneas asociadas al trabajador original
                 List<RnGcNomSolicitudesLineasTbl> lineasOriginales = solicitudesLineasFacade.obtenerXTrabajadorId(original.getId());
-
+                System.out.println("Duplicando las solicitudes de linea + ID_SOLICITUD_ORIGIENAL_LINEA: " + original.getId());
+                System.out.println("Total registros de solicitudes de linea: " + lineasOriginales.size());
                 for (RnGcNomSolicitudesLineasTbl lineaOriginal : lineasOriginales) {
+                    System.out.println("Entro al bucle para cralos los bojectos de las solicitudes de linea");
                     RnGcNomSolicitudesLineasTbl nuevaLinea = new RnGcNomSolicitudesLineasTbl();
 
                     // Asignar el nuevo trabajador duplicado

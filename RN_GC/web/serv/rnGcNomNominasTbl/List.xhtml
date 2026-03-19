@@ -196,6 +196,28 @@
                             <h:outputText value="" />
                             <h:outputText value="" />
 
+
+                            <h:panelGroup layout="block" style="display: flex; align-items: center; gap: 8px;">
+
+                                <p:outputLabel style="font-weight: 900" value="Fecha Inicio de Pago: " for="fecha_inicio_pago"/>
+
+                                <p:calendar id="fecha_inicio_pago" style="width: 200px" pattern="dd/MM/yyyy" value="#{rnGcNomNominasTblController.fechaInicioPago}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_fechaExpedicion}" showOn="button"/>
+
+                                <p:outputLabel style="font-weight: 900" value="Fecha Fin de Pago " for="fecha_fin_pago"/>
+                                <p:calendar id="fecha_fin_pago" style="width: 200px" pattern="dd/MM/yyyy" value="#{rnGcNomNominasTblController.fechaFinPago}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_fechaExpedicion}" showOn="button"/>
+
+                                <p:commandButton icon="ui-icon-pencil"
+                                                 title="Guardar fechas de pagos"
+                                                 value="Guardar Fechas"
+                                                 actionListener="#{rnGcNomNominasTblController.guardarFechasPagos}"
+
+                                                 
+                                                 update="@form"
+                                                 process="@this fecha_inicio_pago fecha_fin_pago" 
+                                                 oncomplete="PF('RnGcSolicitudTrabajadorTblDocDialog').show()"
+                                                 />
+                            </h:panelGroup>
+
                         </h:panelGrid>
 
                         <p:dataTable id="datalist" value="#{rnGcNomSolicitudTrabajadorTblController.listaSolicitudesTrabajador}" var="item"
@@ -231,11 +253,16 @@
                                 <f:facet name="header">
                                     <h:outputText value="Estado"/>
                                 </f:facet>
+
                                 <h:outputText 
                                     value="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item)}"
-                                    style="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) eq 'Timbrado de forma correcta' 
-                                             ? 'color:green; font-weight:bold;' 
-                                             : ''}" />
+                                    style="#{
+                                    rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) eq 'Timbrado de forma correcta' 
+                                        ? 'color:green; font-weight:bold;' 
+                                        : rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) eq 'UUID CANCELADO CORRECTAMENTE'
+                                        ? 'color:red; font-weight:bold;'
+                                        : ''
+    }" />
                             </p:column>
                             <p:column filterBy="#{item.trabajadorId.nombreCompleto}" filterMatchMode="contains">
                                 <f:facet name="header">
@@ -280,12 +307,12 @@
                                 </h:outputText>
                             </p:column>
                             <p:column style="width:26px;text-align:center">
-                                <p:commandButton icon="ui-icon-arrowstop-1-s" title="Descargar PDF" disabled="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) == 'No Timbrado'}" actionListener="#{rnGcNomSolicitudTrabajadorTblController.descargarPDF(item)}" ajax="false">
+                                <p:commandButton icon="ui-icon-arrowstop-1-s" title="Descargar PDF" disabled="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) == 'No Timbrado'}" actionListener="#{rnGcNomSolicitudTrabajadorTblController.descargarPDF(item)}" ajax="false" process="@this" immediate="true">
                                     <p:fileDownload value="#{rnGcNomSolicitudTrabajadorTblController.downLoadFile}"/>
                                 </p:commandButton>
                             </p:column>
                             <p:column style="width:26px;text-align:center">
-                                <p:commandButton icon="ui-icon-arrowstop-1-s" title="Descargar XML" disabled="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) == 'No Timbrado'}" actionListener="#{rnGcNomSolicitudTrabajadorTblController.descargarXml(item)}" ajax="false">
+                                <p:commandButton icon="ui-icon-arrowstop-1-s" title="Descargar XML" disabled="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) == 'No Timbrado'}" actionListener="#{rnGcNomSolicitudTrabajadorTblController.descargarXml(item)}" ajax="false" process="@this" immediate="true">
                                     <p:fileDownload value="#{rnGcNomSolicitudTrabajadorTblController.downLoadFileXml}"/>
                                 </p:commandButton>
                             </p:column>
