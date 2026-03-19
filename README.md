@@ -34,7 +34,7 @@ Antes de comenzar, necesitas tener instalados los siguientes componentes:
 
 Puedes descargar todo el paquete necesario desde el siguiente enlace:
 
-📥 [Descargar instaladores y librerías](https://drive.google.com/file/d/1WDedZkH4ToI9tgNrBQubzvgTnEp_RYBj/view?usp=drive_link)
+📥 [Descargar instaladores y librerías](https://businessdev-my.sharepoint.com/:f:/g/personal/joaquin_candia_amin-tech_com/IgBpcDFt1WogQLA0nQJs28ONAc6UMcZPK_sisUzi_DPAUqY?e=r0Gd2F)
 
 ## ![Instaladores](imagenes/instaladores.png)
 
@@ -83,7 +83,7 @@ Los archivos `.jasper` generados por iReport se integran en el sistema y son uti
 - Recibos de nómina
 - Reportes contables
 
-📥 [Descargar iReport 5.6.0](https://drive.google.com/file/d/1zmsjEoQgFwUvjutma-NPUCsq3Nu15Gwd/view?usp=sharing)
+📥 [Descargar iReport 5.6.0](https://businessdev-my.sharepoint.com/:f:/g/personal/joaquin_candia_amin-tech_com/IgBpcDFt1WogQLA0nQJs28ONAc6UMcZPK_sisUzi_DPAUqY?e=r0Gd2F)
 
 ---
 
