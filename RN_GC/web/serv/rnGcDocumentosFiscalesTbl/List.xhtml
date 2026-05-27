@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Servicios SAT"/>
+        </ui:define>
+
+        <ui:define name="body">
+
+            <h:form>
+
+                <!-- BOTONES SUPERIORES -->
+                <div style="
+                     display:flex;
+                     gap:15px;
+                     margin-bottom:25px;
+                     justify-content:center;
+                     ">
+
+                    <p:button
+                        value="Descargar e.firma"
+                        icon="pi pi-download"
+                        href="https://www.sat.gob.mx/aplicacion/16660/descarga-tu-certificado-de-e.firma"
+                        target="_blank"
+                        styleClass="ui-button-success"/>
+
+                    <p:button
+                        value="Recuperar contraseña"
+                        icon="pi pi-key"
+                        href="https://satid.sat.gob.mx/"
+                        target="_blank"
+                        styleClass="ui-button-warning"/>
+
+                    <p:commandButton
+                        value="Recuperar contraseña Backup"
+                        icon="pi pi-key"
+                        action="#{RnGcDocumentosFiscalesTblController.recuperarContrasena}"
+                        styleClass="ui-button-warning"/>
+
+                </div>
+
+
+                <!-- CARDS -->
+                <div class="ui-g">
+
+                    <!-- CONSTANCIA -->
+                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+
+                        <p:panel style="
+                                 border-radius:12px;
+                                 text-align:center;
+                                 padding:20px;
+                                 box-shadow:0 4px 12px rgba(0,0,0,.10);
+                                 min-height:260px;
+                                 ">
+
+                            <div style="
+                                 font-size:60px;
+                                 margin-bottom:15px;">
+                                🧾
+                            </div>
+
+                            <h2 style="margin-top:0">
+                                Constancia de Situación Fiscal
+                            </h2>
+
+                            <p style="
+                               color:#666;
+                               margin-bottom:20px;
+                               line-height:1.6;">
+                                Consulta y descarga tu constancia
+                                directamente desde el portal del SAT.
+                            </p>
+
+                            <p:button
+                                value="Abrir Portal"
+                                icon="pi pi-external-link"
+                                href="https://portalcfdi.facturaelectronica.sat.gob.mx/"
+                                target="_blank"
+                                styleClass="ui-button-info"/>
+
+                        </p:panel>
+
+                    </div>
+
+                </div>
+
+            </h:form>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>
