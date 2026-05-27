@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.Signature;
@@ -84,6 +85,7 @@ import org.apache.commons.ssl.PKCS8Key;
 import org.w3c.dom.NodeList;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.TransformerException;
 import mx.com.rocketnegocios.beans.RnGcDocumentosRelacionadosTblFacade;
 import mx.com.rocketnegocios.beans.RnGcFirmasTblFacade;
@@ -1334,7 +1336,7 @@ public class FacturarNominaController implements Serializable {
         PrivateKey privateKey = privateKeyFact.generatePrivate(pkcs8Encoded);
         Signature signature = Signature.getInstance("SHA256withRSA");
         signature.initSign(privateKey);
-        byte[] cadenaOriginalArray = xml.getBytes();
+        byte[] cadenaOriginalArray = xml.getBytes(StandardCharsets.UTF_8);
         signature.update(cadenaOriginalArray);
         String firma = new String(Base64.getEncoder().encode(signature.sign()));
         System.out.println("firma: " + firma);
@@ -1364,6 +1366,13 @@ public class FacturarNominaController implements Serializable {
         leerCfdi(xmlAc);
         leerCfdi(tempFile);
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        
+        // Forzar UTF-8 (Muy importante)
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty(OutputKeys.INDENT, "no");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+        
         Result output = new StreamResult(tempFile);
         Source input = new DOMSource(doc);
         transformer.transform(input, output);
@@ -2725,7 +2734,7 @@ public class FacturarNominaController implements Serializable {
             TransformerFactory tFactory = TransformerFactory.newInstance();
             Transformer trasnformer2 = tFactory.newTransformer(sourceXSL);
             trasnformer2.transform(sourceXml2, cadenaOriginal);
-            cadOrig = baos.toString();                                            //CadenaOriginal
+            cadOrig = baos.toString("UTF-8");                                            //CadenaOriginal
             crearSello(cadOrig);
             crearCertificado();
             leerCfdi(tempFile);

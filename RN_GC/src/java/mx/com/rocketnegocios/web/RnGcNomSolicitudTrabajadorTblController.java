@@ -2225,7 +2225,7 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         PrivateKey privateKey = privateKeyFact.generatePrivate(pkcs8Encoded);
         Signature signature = Signature.getInstance("SHA256withRSA");
         signature.initSign(privateKey);
-        byte[] cadenaOriginalArray = xml1.getBytes();
+        byte[] cadenaOriginalArray = xml1.getBytes(StandardCharsets.UTF_8);
         signature.update(cadenaOriginalArray);
         String firma = new String(Base64.getEncoder().encode(signature.sign()));
         System.out.println("firma: " + firma);
