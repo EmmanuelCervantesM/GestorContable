@@ -64,11 +64,11 @@ public class RnGcUsuariosTbl implements Serializable {
     @NotNull
     @Size(min = 1, max = 20)
     private String passwordEmail;
-    
+
     @JoinColumn(name = "regimenId", referencedColumnName = "Id")
     @ManyToOne
     private RnGcRegimenfiscalTbl regimenId;
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -86,16 +86,16 @@ public class RnGcUsuariosTbl implements Serializable {
     @NotNull
     @Size(min = 1, max = 120)
     private String nombreCompleto;
-    
+
     @Size(min = 18, max = 18, message = "La CURP debe tener exactamente 18 caracteres")
     private String curp;
-       
+
     @Size(max = 30)
     private String riesgoClavePatronal;
-    
+
     @Size(max = 30)
     private String numeroRegistroPatronal;
-    
+
     @Size(max = 30)
     private String telefono;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
@@ -142,6 +142,8 @@ public class RnGcUsuariosTbl implements Serializable {
     private byte[] llavePrivada;
     @Size(max = 45)
     private String contraseniaLlave;
+    @Size(max = 15)
+    private String contrasenaPortalSat;
     @Basic(optional = false)
     @NotNull
     private int creadoPor;
@@ -176,7 +178,7 @@ public class RnGcUsuariosTbl implements Serializable {
         this.id = id;
     }
 
-    public RnGcUsuariosTbl(Integer id, String usuarioClave, String tipoUsuario, int noUsuarios, String rfc, String nombreCompleto, String curp, String riesgoClavePatronal, String numeroRegistroPatronal, int codigoPostal, Date fechaAlta, String estado, String contrasenia, Date fechaContrasenia, int noIntentos, int creadoPor, Date fechaCreacion, int ultimaActualizacionPor, Date ultimaFechaActualizacion) {
+    public RnGcUsuariosTbl(Integer id, String usuarioClave, String tipoUsuario, int noUsuarios, String rfc, String nombreCompleto, String curp, String riesgoClavePatronal, String numeroRegistroPatronal, int codigoPostal, Date fechaAlta, String estado, String contrasenia, Date fechaContrasenia, int noIntentos, int creadoPor, Date fechaCreacion, int ultimaActualizacionPor, Date ultimaFechaActualizacion, String contrasenaPortalSat) {
         this.id = id;
         this.usuarioClave = usuarioClave;
         this.tipoUsuario = tipoUsuario;
@@ -196,6 +198,7 @@ public class RnGcUsuariosTbl implements Serializable {
         this.fechaCreacion = fechaCreacion;
         this.ultimaActualizacionPor = ultimaActualizacionPor;
         this.ultimaFechaActualizacion = ultimaFechaActualizacion;
+        this.contrasenaPortalSat = contrasenaPortalSat;
     }
 
     public int getNoUsuarios() {
@@ -238,6 +241,14 @@ public class RnGcUsuariosTbl implements Serializable {
         this.rfc = rfc;
     }
 
+    public String getContrasenaPortalSat() {
+        return contrasenaPortalSat;
+    }
+
+    public void setContrasenaPortalSat(String contrasenaPortalSat) {
+        this.contrasenaPortalSat = contrasenaPortalSat;
+    }
+
     public String getNombreCompleto() {
         return nombreCompleto;
     }
@@ -245,7 +256,7 @@ public class RnGcUsuariosTbl implements Serializable {
     public void setNombreCompleto(String nombreCompleto) {
         this.nombreCompleto = nombreCompleto;
     }
-    
+
     public String getCurp() {
         return curp;
     }
@@ -426,12 +437,10 @@ public class RnGcUsuariosTbl implements Serializable {
         return passwordEmail;
     }
 
-
-
     public void setRiesgoClavePatronal(String riesgoClavePatronal) {
         this.riesgoClavePatronal = riesgoClavePatronal;
     }
-    
+
     public String getRiesgoClavePatronal() {
         return riesgoClavePatronal;
     }
@@ -439,7 +448,7 @@ public class RnGcUsuariosTbl implements Serializable {
     public void setNumeroRegistroPatronal(String numeroRegistroPatronal) {
         this.numeroRegistroPatronal = numeroRegistroPatronal;
     }
-    
+
     public String getNumeroRegistroPatronal() {
         return numeroRegistroPatronal;
     }

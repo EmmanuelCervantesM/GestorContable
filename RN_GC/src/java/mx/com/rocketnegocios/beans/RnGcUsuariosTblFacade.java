@@ -170,7 +170,7 @@ public class RnGcUsuariosTblFacade extends AbstractFacade<RnGcUsuariosTbl> {
         }
         return numUsuarios;
     }
-    
+
     public List<RnGcUsuariosTbl> buscarTodo() {
         List<RnGcUsuariosTbl> usuario = null;
         try {
