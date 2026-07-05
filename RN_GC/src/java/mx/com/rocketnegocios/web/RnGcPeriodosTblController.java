@@ -101,8 +101,8 @@ public class RnGcPeriodosTblController implements Serializable {
             selected.setPeriodoId(1);
         }
         String fech = new SimpleDateFormat("yyyy").format(año.getTime());
-        selected.setAño(Integer.parseInt(fech));
-        selected.setUsuariosId(user);
+        //selected.setAño(Integer.parseInt(fech));
+        //selected.setUsuariosId(user);
         selected.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
         selected.setFechaCreacion(new Date());
         selected.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());

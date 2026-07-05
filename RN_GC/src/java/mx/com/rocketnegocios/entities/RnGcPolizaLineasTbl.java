@@ -48,7 +48,7 @@ public class RnGcPolizaLineasTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
@@ -92,6 +92,8 @@ public class RnGcPolizaLineasTbl implements Serializable {
     @JoinColumn(name = "polizaHeaderId", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private RnGcPolizaHeaderTbl polizaHeaderId;
+    @Column(name = "id_periodo")
+    private Integer id_periodo;
 
     public RnGcPolizaLineasTbl() {
     }

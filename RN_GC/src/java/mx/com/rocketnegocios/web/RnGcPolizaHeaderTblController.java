@@ -9,6 +9,7 @@ import mx.com.rocketnegocios.web.util.JsfUtil.PersistAction;
 import mx.com.rocketnegocios.beans.RnGcPolizaHeaderTblFacade;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -22,6 +23,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
@@ -39,8 +41,11 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import mx.com.rocketnegocios.beans.RnGcCatalogoCuentasTblFacade;
+import mx.com.rocketnegocios.beans.RnGcPeriodosTblFacade;
+import mx.com.rocketnegocios.beans.RnGcUsuariosTblFacade;
 import mx.com.rocketnegocios.entities.RnGcCatalogoCuentasTbl;
 import mx.com.rocketnegocios.entities.RnGcMonedasTbl;
+import mx.com.rocketnegocios.entities.RnGcPeriodosTbl;
 import mx.com.rocketnegocios.entities.RnGcPolizaLineasTbl;
 import mx.com.rocketnegocios.entities.RnGcTipoPoliza;
 import mx.com.rocketnegocios.entities.RnGcUsuariosTbl;
@@ -56,54 +61,185 @@ import org.primefaces.event.RowEditEvent;
 public class RnGcPolizaHeaderTblController implements Serializable {
 
     @EJB
-    private mx.com.rocketnegocios.beans.RnGcPolizaHeaderTblFacade ejbFacade;
-    private List<RnGcPolizaHeaderTbl> items = null;
-    private RnGcPolizaHeaderTbl selected;
-    private UsuarioFirmado usuarioFirmado = new UsuarioFirmado();
-
-    private Date fechaActual;
-    private Date primerDia;
-    private Date ultimoDia;
+    private RnGcPolizaHeaderTblFacade ejbFacade;
 
     @EJB
     private mx.com.rocketnegocios.beans.RnGcUsuariosTblFacade usuarioFacade;
-    private RnGcUsuariosTbl usuarioId = null;
 
     @EJB
     private mx.com.rocketnegocios.beans.RnGcTipoPolizaFacade tipoPolizaFacade;
 
     @EJB
     private mx.com.rocketnegocios.beans.RnGcMonedasTblFacade monedasFacade;
-    
+
     @EJB
     private mx.com.rocketnegocios.beans.RnGcPolizaLineasTblFacade polizaLineasFacade;
-    
+
     @EJB
     private RnGcCatalogoCuentasTblFacade catalogoCuentasFacade;
 
-    private RnGcCatalogoCuentasTbl catalogodeCuentas = new RnGcCatalogoCuentasTbl(1);
-    RnGcPolizaHeaderTbl polizaHeaderId = null;
-    private List<RnGcPolizaLineasTbl> itemsPolizaLineas = null;
+    @EJB
+    private RnGcPeriodosTblFacade periodosFacade;
+
+    @EJB
+    private RnGcUsuariosTblFacade usuariosFacade;
+
+    // ===================================
+    // CAMPOS DE ESTADO
+    // ===================================
+
+    private List<RnGcPolizaHeaderTbl> items = null;
+    private RnGcPolizaHeaderTbl selected;
+
+    // Usuario firmado (siempre lo has usado así)
+    private UsuarioFirmado usuarioFirmado = new UsuarioFirmado();
+
+    // Fechas para cálculo de secuencias, etc.
+    private Date fechaActual;
+    private Date primerDia;
+    private Date ultimoDia;
+    
+    private RnGcPolizaHeaderTbl polizaDetalle;
+    
+    private Integer tipoPolizaIdSeleccionado;
+
+    public Integer getTipoPolizaIdSeleccionado() {
+        return tipoPolizaIdSeleccionado;
+    }
+
+    public void setTipoPolizaIdSeleccionado(Integer tipoPolizaIdSeleccionado) {
+        System.out.println("SET tipoPolizaIdSeleccionado = " + tipoPolizaIdSeleccionado);
+        this.tipoPolizaIdSeleccionado = tipoPolizaIdSeleccionado;
+    }
+
+    public void prepararDetalle(RnGcPolizaHeaderTbl item) {
+        this.polizaDetalle = item;
+        this.selected = item;
+
+        System.out.println("=== prepararDetalle() ===");
+        if (item != null) {
+            System.out.println("ID: " + item.getId());
+            System.out.println("NumeroPoliza: " + item.getNumeroPoliza());
+        }
+    }
+
+    public RnGcPolizaHeaderTbl getPolizaDetalle() {
+        return polizaDetalle;
+    }
+
+    public void setPolizaDetalle(RnGcPolizaHeaderTbl polizaDetalle) {
+        this.polizaDetalle = polizaDetalle;
+    }
+
+    private RnGcUsuariosTbl usuarioId = null;
+
+    // Líneas de póliza
+    private List<RnGcPolizaLineasTbl> itemsPolizaLineas;
     private RnGcPolizaLineasTbl lineaSelected;
+
+    // Línea que se usa en el modal “Nuevo Asiento”
+    private RnGcPolizaLineasTbl nuevaLinea;
+
+    // Cuenta por defecto para onAddNew (sigue existiendo)
+    private RnGcCatalogoCuentasTbl catalogodeCuentas = new RnGcCatalogoCuentasTbl(1);
+
+    // Totales
     private Double cargos = 0.0, cargo = 0.0;
     private Double abonos = 0.0, abono = 0.0;
     private Double diferencia = 0.0;
+
     private String concepto = "";
+
     private List<RnGcPolizaHeaderTbl> listaPolizasPorUsuario = null;
-    
+
     public RnGcPolizaHeaderTblController() {
     }
 
-    public List<RnGcPolizaHeaderTbl> getListaPolizasPorUsuario() {
-        if(listaPolizasPorUsuario == null){
-            usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-            listaPolizasPorUsuario = ejbFacade.obtenerListaPolizas(usuarioId);
-        }
-        return listaPolizasPorUsuario;
+    @PostConstruct
+    public void init() {
+        nuevaLinea = new RnGcPolizaLineasTbl();
     }
 
-    public void setListaPolizasPorUsuario(List<RnGcPolizaHeaderTbl> listaPolizasPorUsuario) {
-        this.listaPolizasPorUsuario = listaPolizasPorUsuario;
+    // ===================================
+    // GETTERS / SETTERS BÁSICOS
+    // ===================================
+    
+    public RnGcPolizaLineasTbl getNuevaLinea() {
+        if (nuevaLinea == null) {
+            nuevaLinea = new RnGcPolizaLineasTbl();
+        }
+        return nuevaLinea;
+    }
+
+    public void setNuevaLinea(RnGcPolizaLineasTbl nuevaLinea) {
+        this.nuevaLinea = nuevaLinea;
+    }
+
+    /** Se llama al dar clic en "Agregar nuevo asiento" */
+    public void prepararNuevaLinea() {
+        nuevaLinea = new RnGcPolizaLineasTbl();
+        nuevaLinea.setAbono(0.0);
+        nuevaLinea.setCargo(0.0);
+
+        if (selected != null) {
+            nuevaLinea.setConcepto(selected.getConcepto());
+            nuevaLinea.setPolizaHeaderId(selected);
+        }
+    }
+
+    /** Se llama al dar clic en "Aceptar" del modal */
+    public void agregarNuevaLinea() {
+        if (nuevaLinea == null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                 "Error", "No hay información de la nueva línea"));
+            return;
+        }
+
+        nuevaLinea.setPolizaHeaderId(selected);
+
+        if (itemsPolizaLineas == null) {
+            itemsPolizaLineas = new ArrayList<>();
+        }
+
+        itemsPolizaLineas.add(nuevaLinea);
+
+        // Recalcular totales al agregar
+        calcularSuma();
+
+        // Dejar lista una nueva línea para el siguiente asiento
+        nuevaLinea = new RnGcPolizaLineasTbl();
+    }
+    
+    // getItemsPolizaLineas debe asegurar que nunca sea null:
+    public List<RnGcPolizaLineasTbl> getItemsPolizaLineas() {
+        if (itemsPolizaLineas == null) {
+            itemsPolizaLineas = new ArrayList<>();
+        }
+        return itemsPolizaLineas;
+    }
+
+    public void setItemsPolizaLineas(List<RnGcPolizaLineasTbl> itemsPolizaLineas) {
+        this.itemsPolizaLineas = itemsPolizaLineas;
+    }
+
+    public RnGcPolizaHeaderTbl getSelected() {
+        return selected;
+    }
+
+    public void setSelected(RnGcPolizaHeaderTbl selected) {
+        this.selected = selected;
+    }
+
+    public List<RnGcPolizaHeaderTbl> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private RnGcPolizaHeaderTblFacade getFacade() {
+        return ejbFacade;
     }
 
     public RnGcPolizaLineasTbl getLineaSelected() {
@@ -114,47 +250,16 @@ public class RnGcPolizaHeaderTblController implements Serializable {
         this.lineaSelected = lineaSelected;
     }
 
-    public RnGcCatalogoCuentasTbl getCatalogodeCuentas() {
-        return catalogodeCuentas;
-    }
-
-    public void setCatalogodeCuentas(RnGcCatalogoCuentasTbl catalogodeCuentas) {
-        this.catalogodeCuentas = catalogodeCuentas;
-    }
-
-    public List<RnGcPolizaLineasTbl> getItemsPolizaLineas() {
-        if(itemsPolizaLineas == null){
-            itemsPolizaLineas = new ArrayList<>();
-        }
-        return itemsPolizaLineas;
-    }
-
-    public void setItemsPolizaLineas(List<RnGcPolizaLineasTbl> itemsPolizaLineas) {
-        this.itemsPolizaLineas = itemsPolizaLineas;
-    }
-
     public Double getCargos() {
         return cargos;
-    }
-
-    public void setCargos(Double cargos) {
-        this.cargos = cargos;
     }
 
     public Double getAbonos() {
         return abonos;
     }
 
-    public void setAbonos(Double abonos) {
-        this.abonos = abonos;
-    }
-
     public Double getDiferencia() {
         return diferencia;
-    }
-
-    public void setDiferencia(Double diferencia) {
-        this.diferencia = diferencia;
     }
 
     public Double getCargo() {
@@ -181,13 +286,29 @@ public class RnGcPolizaHeaderTblController implements Serializable {
         this.concepto = concepto;
     }
 
-    public RnGcPolizaHeaderTbl getSelected() {
-        return selected;
+    public RnGcCatalogoCuentasTbl getCatalogodeCuentas() {
+        return catalogodeCuentas;
     }
 
-    public void setSelected(RnGcPolizaHeaderTbl selected) {
-        this.selected = selected;
+    public void setCatalogodeCuentas(RnGcCatalogoCuentasTbl catalogodeCuentas) {
+        this.catalogodeCuentas = catalogodeCuentas;
     }
+
+    public List<RnGcPolizaHeaderTbl> getListaPolizasPorUsuario() {
+        if (listaPolizasPorUsuario == null) {
+            usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+            listaPolizasPorUsuario = ejbFacade.obtenerListaPolizas(usuarioId);
+        }
+        return listaPolizasPorUsuario;
+    }
+
+    public void setListaPolizasPorUsuario(List<RnGcPolizaHeaderTbl> listaPolizasPorUsuario) {
+        this.listaPolizasPorUsuario = listaPolizasPorUsuario;
+    }
+
+    // ===================================
+    // EMBEDDABLE KEYS (HEADER)
+    // ===================================
 
     protected void setEmbeddableKeys() {
         selected.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
@@ -200,52 +321,73 @@ public class RnGcPolizaHeaderTblController implements Serializable {
         obtenerMoneda();
     }
     
-    private RnGcPolizaHeaderTblFacade getFacade() {
-        return ejbFacade;
-    }
+    // ===================================
+    // PREPARE CREATE (HEADER + PERÍODO)
+    // ===================================
 
     public RnGcPolizaHeaderTbl prepareCreate() {
         selected = new RnGcPolizaHeaderTbl();
         lineaSelected = new RnGcPolizaLineasTbl();
-        itemsPolizaLineas = new ArrayList<>();
+        tipoPolizaIdSeleccionado = null;
         initializeEmbeddableKey();
+
+        // 1. Obtener el id del usuario firmado
+        Integer uid = (usuarioFirmado != null) ? usuarioFirmado.obtenerIdUsuario() : null;
+
+        // 2. Obtener el usuario desde la BD
+        RnGcUsuariosTbl user = (uid != null) ? usuariosFacade.obtenerUsuarioPorId(uid) : null;
+
+        // 3. Obtener el periodo activo para ese usuario
+        RnGcPeriodosTbl p = (user != null) ? periodosFacade.findActivo(user) : null;
+
+        // 4. Si existe un periodo activo, setearlo en la póliza y fijar la fecha
+        if (p != null) {
+            selected.setPeriodoId(p);
+
+            int mes = Integer.parseInt(p.getMes());
+            int anio = p.getAnio();
+
+            Calendar cal = Calendar.getInstance();
+            cal.clear();
+            cal.set(anio, mes - 1, 1); // primer día del mes
+
+            selected.setFecha(cal.getTime());
+        }
+
         return selected;
     }
 
+    // ===================================
+    // CRUD HEADER
+    // ===================================
+
     public void create() {
         if (actualizarNumeroPoliza()) {
-            persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RnGcPolizaHeaderTblCreated"));
+            persist(PersistAction.CREATE,
+                    ResourceBundle.getBundle("/Bundle").getString("RnGcPolizaHeaderTblCreated"));
             if (!JsfUtil.isValidationFailed()) {
-                items = null;    // Invalidate list of items to trigger re-query.
+                items = null;
             }
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RnGcPolizaHeaderTblUpdated"));
+        persist(PersistAction.UPDATE,
+                ResourceBundle.getBundle("/Bundle").getString("RnGcPolizaHeaderTblUpdated"));
         if (!JsfUtil.isValidationFailed()) {
             //Actualiza Conceptos de poliza Linea
-            List<RnGcPolizaLineasTbl> polizaLineasList = new ArrayList<>();
-            polizaLineasList = polizaLineasFacade.obtenerPolizaLineas(selected);
-            if (!polizaLineasList.isEmpty()) {
-                System.out.println("Entro a revisar poliza lineas");
-                String concepto = polizaLineasList.get(0).getConcepto();
-                String concepto2 = selected.getConcepto();
-                System.out.println("conceptos: "+concepto + " || "+concepto2);
-                if (  concepto == null  || !concepto.equals(concepto2)) {
-                    System.out.println("Los conceptos no son iguales");
-                    for (int i = 0; i < polizaLineasList.size(); i++) {
+            List<RnGcPolizaLineasTbl> polizaLineasList = polizaLineasFacade.obtenerPolizaLineas(selected);
+            if (polizaLineasList != null && !polizaLineasList.isEmpty()) {
+                String conceptoLinea = polizaLineasList.get(0).getConcepto();
+                String conceptoHeader = selected.getConcepto();
+                if (conceptoLinea == null || !conceptoLinea.equals(conceptoHeader)) {
+                    for (RnGcPolizaLineasTbl pl : polizaLineasList) {
                         try {
-                            RnGcPolizaLineasTbl polizaLinea = new RnGcPolizaLineasTbl();
-                            polizaLinea = polizaLineasList.get(i);
-                            polizaLinea.setConcepto(selected.getConcepto());
-                            polizaLineasFacade.edit(polizaLinea);
-                            System.out.println("Se actualizo el concepto correctamente");
-
+                            pl.setConcepto(conceptoHeader);
+                            polizaLineasFacade.edit(pl);
                         } catch (Exception e) {
-                            System.out.println("Error al actualizar el concepto");
+                            System.out.println("Error al actualizar el concepto en línea de póliza");
                         }
-
                     }
                 }
             }
@@ -253,18 +395,12 @@ public class RnGcPolizaHeaderTblController implements Serializable {
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("RnGcPolizaHeaderTblDeleted"));
+        persist(PersistAction.DELETE,
+                ResourceBundle.getBundle("/Bundle").getString("RnGcPolizaHeaderTblDeleted"));
         if (!JsfUtil.isValidationFailed()) {
-            selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
+            selected = null;
+            items = null;
         }
-    }
-
-    public List<RnGcPolizaHeaderTbl> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
-        return items;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
@@ -286,91 +422,31 @@ public class RnGcPolizaHeaderTblController implements Serializable {
                 if (msg.length() > 0) {
                     JsfUtil.addErrorMessage(msg);
                 } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+                    JsfUtil.addErrorMessage(ex,
+                            ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
                 }
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+                JsfUtil.addErrorMessage(ex,
+                        ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             }
         }
     }
 
-    public RnGcPolizaHeaderTbl getRnGcPolizaHeaderTbl(java.lang.Integer id) {
-        return getFacade().find(id);
-    }
+    // ===================================
+    // LÍNEAS EXISTENTES (EDIT / DELETE)
+    // ===================================
 
-    public List<RnGcPolizaHeaderTbl> getItemsAvailableSelectMany() {
-        return getFacade().findAll();
-    }
-
-    public List<RnGcPolizaHeaderTbl> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
-    }
-
-    @FacesConverter(forClass = RnGcPolizaHeaderTbl.class)
-    public static class RnGcPolizaHeaderTblControllerConverter implements Converter {
-
-        @Override
-        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
-            if (value == null || value.length() == 0) {
-                return null;
-            }
-            RnGcPolizaHeaderTblController controller = (RnGcPolizaHeaderTblController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "rnGcPolizaHeaderTblController");
-            return controller.getRnGcPolizaHeaderTbl(getKey(value));
-        }
-
-        java.lang.Integer getKey(String value) {
-            java.lang.Integer key;
-            key = Integer.valueOf(value);
-            return key;
-        }
-
-        String getStringKey(java.lang.Integer value) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(value);
-            return sb.toString();
-        }
-
-        @Override
-        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
-            if (object == null) {
-                return null;
-            }
-            if (object instanceof RnGcPolizaHeaderTbl) {
-                RnGcPolizaHeaderTbl o = (RnGcPolizaHeaderTbl) object;
-                return getStringKey(o.getId());
-            } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), RnGcPolizaHeaderTbl.class.getName()});
-                return null;
-            }
-        }
-
-    }
-    
-    public void prepareEdit() {
-        if(selected != null)
-            itemsPolizaLineas = polizaLineasFacade.obtenerPolizaLineas(selected);
-    }
-    
     protected void initializeEmbeddableKeyLinea() {
         lineaSelected.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
         lineaSelected.setFechaCreacion(new Date());
     }
-    
+
     protected void setEmbeddableKeysLinea() {
         lineaSelected.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
         lineaSelected.setUltimaFechaActualizacion(new Date());
-     }
-    
-    public void updateLinea() {
-        persistLinea(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RnGcPolizaLineasTblUpdated"));
     }
-    
-    public void eliminarLinea() {
-        persistLinea(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("RnGcPolizaLineasTblDeleted"));
-    }
-    
+
     private void persistLinea(PersistAction persistAction, String successMessage) {
         if (lineaSelected != null) {
             try {
@@ -378,7 +454,6 @@ public class RnGcPolizaHeaderTblController implements Serializable {
                 setEmbeddableKeysLinea();
                 if (persistAction != PersistAction.DELETE) {
                     polizaLineasFacade.edit(lineaSelected);
-                    
                     lineaSelected = new RnGcPolizaLineasTbl();
                 } else {
                     itemsPolizaLineas.remove(lineaSelected);
@@ -394,44 +469,70 @@ public class RnGcPolizaHeaderTblController implements Serializable {
                 if (msg.length() > 0) {
                     JsfUtil.addErrorMessage(msg);
                 } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+                    JsfUtil.addErrorMessage(ex,
+                            ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
                 }
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+                JsfUtil.addErrorMessage(ex,
+                        ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             }
         }
     }
-    
-    public void editar(){
+
+    public void updateLinea() {
+        persistLinea(PersistAction.UPDATE,
+                ResourceBundle.getBundle("/Bundle").getString("RnGcPolizaLineasTblUpdated"));
+    }
+
+    public void eliminarLinea() {
+        persistLinea(PersistAction.DELETE,
+                ResourceBundle.getBundle("/Bundle").getString("RnGcPolizaLineasTblDeleted"));
+    }
+
+    public void prepareEdit() {
+        if (selected != null) {
+            itemsPolizaLineas = polizaLineasFacade.obtenerPolizaLineas(selected);
+            calcularSuma();
+        }
+    }
+
+    // ===================================
+    // CREAR / EDITAR POLIZA COMPLETA
+    // ===================================
+
+    public void editar() {
         System.out.println("selected: " + selected + " receptor: " + selected.getReceptor());
-        try{
+        try {
             if (actualizarNumeroPoliza()) {
-                System.out.println("Dentro de If --------");
                 setEmbeddableKeys();
                 getFacade().edit(selected);
-                System.out.println("Edito encabezado de poliza: " + selected.getId());
-                if(!itemsPolizaLineas.isEmpty() && itemsPolizaLineas != null){
-                    for(RnGcPolizaLineasTbl linea : itemsPolizaLineas){
-                        System.out.println("linea: "+linea.getId() + " poliza: " + selected);
+                if (itemsPolizaLineas != null && !itemsPolizaLineas.isEmpty()) {
+                    for (RnGcPolizaLineasTbl linea : itemsPolizaLineas) {
                         linea.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
                         linea.setUltimaFechaActualizacion(new Date());
                         polizaLineasFacade.edit(linea);
-                        System.out.println("Creo nuevo aciento");
                     }
                 }
                 obtenerpolizasPorUsuario();
             }
             itemsPolizaLineas = new ArrayList<>();
             selected = new RnGcPolizaHeaderTbl();
-        }catch(Exception e){
-            System.out.print("ErrorEditarPoliza: "+ e.getLocalizedMessage());
+        } catch (Exception e) {
+            System.out.print("ErrorEditarPoliza: " + e.getLocalizedMessage());
         }
     }
-    
+
     public void crear(){
         System.out.println("selected: " + selected + " receptor: " + selected.getReceptor());
         try{
+            // 1) Primero validamos que cuadre la póliza
+            if (!validarPolizaCuadrada()) {
+                // Si no cuadra, NO guardamos nada
+                return;
+            }
+
+            // 2) Ya cuadra, ahora sí seguimos con la lógica que ya tenías
             if (actualizarNumeroPoliza()) {
                 System.out.println("Dentro de If --------");
                 setEmbeddableKeys();
@@ -444,17 +545,14 @@ public class RnGcPolizaHeaderTblController implements Serializable {
             }
             itemsPolizaLineas = new ArrayList<>();
             selected = new RnGcPolizaHeaderTbl();
-        }catch(Exception e){
+        } catch(Exception e){
             System.out.print("ErrorCrearPoliza: "+ e.getLocalizedMessage());
         }
     }
-    
-    public void guardarAciento(){
-        System.out.println("Metodo guardar asiento");
-        System.out.println("Lista con asientos "+itemsPolizaLineas);
-        if(!itemsPolizaLineas.isEmpty() && itemsPolizaLineas != null){
-            for(RnGcPolizaLineasTbl linea : itemsPolizaLineas){
-                System.out.println("linea: "+linea.getId() + " poliza: " + selected);
+
+    public void guardarAciento() {
+        if (itemsPolizaLineas != null && !itemsPolizaLineas.isEmpty()) {
+            for (RnGcPolizaLineasTbl linea : itemsPolizaLineas) {
                 linea.setSucursal("-");
                 linea.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
                 linea.setFechaCreacion(new Date());
@@ -462,47 +560,28 @@ public class RnGcPolizaHeaderTblController implements Serializable {
                 linea.setUltimaFechaActualizacion(new Date());
                 linea.setPolizaHeaderId(selected);
                 linea = polizaLineasFacade.refreshFromDB(linea);
-                System.out.println("linea: "+linea.getId());
-                System.out.println("Creo nuevo aciento");
             }
         }
     }
-    
-    public void onAddNew() {
-        // Add one new car to the table:
-        System.out.println("Preparando Para agregar asiento");
-        try{
-            RnGcPolizaLineasTbl polizaLinea = new RnGcPolizaLineasTbl();
-            obtenerCatalogoCuenta();
-            polizaLinea.setAbono(0.0);
-            polizaLinea.setCargo(0.0);
-            polizaLinea.setCatalogoCuentasId(catalogodeCuentas);
-            polizaLinea.setConcepto(selected.getConcepto());
-            polizaLinea.setId((int) (Math.random() * 999999999));
-            itemsPolizaLineas.add(polizaLinea);
-            System.out.println("Lista lineas "+itemsPolizaLineas);
-            FacesMessage msg = new FacesMessage("Nuevo asiento agregado correctamente");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }catch(Exception e){
-            System.out.println("Error en añadir asiento: " + e.getLocalizedMessage() + " | " + e.toString());
-        }
-    }
-    
-    public void obtenerCatalogoCuenta(){
-        catalogodeCuentas = catalogoCuentasFacade.obtenerCuentasCreadoPor(usuarioFirmado.obtenerIdUsuario()).get(0);
-    }
-    
+
+    // ===================================
+    // UTILIDADES: SUMAS, EVENTOS TABLA
+    // ===================================
+
     public void calcularSuma() {
         cargos = 0.0;
         abonos = 0.0;
         diferencia = 0.0;
-        for (int i = 0; i < itemsPolizaLineas.size(); i++) {
-            RnGcPolizaLineasTbl item = itemsPolizaLineas.get(i);
+
+        if (itemsPolizaLineas == null) {
+            return;
+        }
+
+        for (RnGcPolizaLineasTbl item : itemsPolizaLineas) {
             cargos = cargos + item.getCargo();
             abonos = abonos + item.getAbono();
         }
         diferencia = cargos - abonos;
-        System.out.println("Cargos: " + cargos + " || Abonos:" + abonos);
     }
 
     public void onRowCancel(RowEditEvent event) {
@@ -513,140 +592,368 @@ public class RnGcPolizaHeaderTblController implements Serializable {
     public void onRowEdit(RowEditEvent event) {
         FacesMessage msg = new FacesMessage("Editado Correctamente");
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        //updateLinea();
         calcularSuma();
     }
-    
-    //Nuevo Reporte de reporte de Recargos
-    public void generarPolizaPdf(ActionEvent actionEvent) throws JRException, IOException, SQLException, NamingException {
-        System.out.println("Entro a generar la polia en pdf");
-        Connection con = null;
-        try {
-            Context ctx = new InitialContext();
-            DataSource ds = (DataSource) ctx.lookup("java:app/GC_Produccion");
-            con = ds.getConnection();
-        } catch (SQLException | NamingException ex) {
-            Logger.getLogger(RnGcPolizaHeaderTbl.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
-        //Crea el Map para setear los valores de la ficha
-        Map<String, Object> parametros = new HashMap<String, Object>();
+    // ===================================
+    // PERÍODO ACTIVO (LABEL Y CALENDARIO)
+    // ===================================
 
-        parametros.put("polizaHeaderId", selected.getId());
-        File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Reports/Poliza.jasper"));
-        //Llena el reporte
-        //JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametros, new JREmptyDataSource());
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametros, con);
-        System.out.println("Llena el reporte:" + jasper.getPath() + "|" + jasperPrint.toString());
+    public String getPeriodoActivoDescripcion() {
+        Integer uid = (usuarioFirmado != null) ? usuarioFirmado.obtenerIdUsuario() : null;
+        RnGcUsuariosTbl user = (uid != null) ? usuariosFacade.obtenerUsuarioPorId(uid) : null;
+        RnGcPeriodosTbl p = (user != null) ? periodosFacade.findActivo(user) : null;
 
-        //Imprime la poliza
-        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-        response.addHeader("Content-disposition", "attachment; fileName=Poliza_" + ".pdf");
-
-        ServletOutputStream stream = response.getOutputStream();
-
-        JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-        System.out.println("Realizo exportManager");
-
-        stream.flush();
-        stream.close();
-        try {
-            if (!con.isClosed()) {
-                con.close();
+        if (p != null) {
+            String mesStr = p.getMes();
+            int anioStr = p.getAnio();
+            int mesNum;
+            try {
+                mesNum = Integer.parseInt(mesStr);
+            } catch (NumberFormatException e) {
+                return mesStr + " " + anioStr;
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(RnGcPolizaHeaderTbl.class.getName()).log(Level.SEVERE, null, ex);
+            return nombreMesEnEsp(mesNum) + " " + anioStr;
         }
+        return "Sin periodo activo";
+    }
 
-        FacesContext.getCurrentInstance().responseComplete();
-        System.out.println("responseComplete");
+    private String nombreMesEnEsp(int mes) {
+        switch (mes) {
+            case 1:  return "ENERO";
+            case 2:  return "FEBRERO";
+            case 3:  return "MARZO";
+            case 4:  return "ABRIL";
+            case 5:  return "MAYO";
+            case 6:  return "JUNIO";
+            case 7:  return "JULIO";
+            case 8:  return "AGOSTO";
+            case 9:  return "SEPTIEMBRE";
+            case 10: return "OCTUBRE";
+            case 11: return "NOVIEMBRE";
+            case 12: return "DICIEMBRE";
+            default: return "";
+        }
+    }
+
+    public Date getMinFechaPeriodo() {
+        if (selected == null || selected.getPeriodoId() == null) {
+            return null;
+        }
+        RnGcPeriodosTbl p = selected.getPeriodoId();
+        int mes = Integer.parseInt(p.getMes());
+        int anio = p.getAnio();
+
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(anio, mes - 1, 1);
+        return cal.getTime();
+    }
+
+    public Date getMaxFechaPeriodo() {
+        if (selected == null || selected.getPeriodoId() == null) {
+            return null;
+        }
+        RnGcPeriodosTbl p = selected.getPeriodoId();
+        int mes = Integer.parseInt(p.getMes());
+        int anio = p.getAnio();
+
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(anio, mes - 1, 1);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return cal.getTime();
+    }
+
+    // ===================================
+    // OTRAS UTILIDADES (MONEDA, SECUENCIA)
+    // ===================================
+
+    public void obtenerMoneda() {
+        RnGcMonedasTbl tipoMoneda = monedasFacade.obtenerMoneda();
+        selected.setTipoMoneda(tipoMoneda);
+        selected.setTipoCambio(1.0);
     }
 
     public List<RnGcPolizaHeaderTbl> obtenerpolizasPorUsuario() {
         usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-        System.out.println("Entró a obtenerPolizasPorUsuario con el usuario: " + usuarioId.getNombreCompleto());
         listaPolizasPorUsuario = ejbFacade.obtenerListaPolizas(usuarioId);
-        System.out.println("El tamaño de la listaTipoPolizaPorUsuario es: " + listaPolizasPorUsuario.size());
         return listaPolizasPorUsuario;
-
     }
 
     public void obtenerNumeroPoliza() throws ParseException {
-        System.out.println("Entró a obtener el numero de la poliza con el id: " + selected.getTipoPolizaId().getId());
         RnGcTipoPoliza tipopoliza = null;
         obtenerFechas();
         if (selected.getTipoPolizaId() != null) {
             tipopoliza = tipoPolizaFacade.tipoPoliza(selected.getTipoPolizaId());
             if (tipopoliza.getFechaFinSecuencia().before(fechaActual)) {
-                System.out.println("Entro a actualizar la secuencia porque la fecha de vigencia ya finalizo");
                 tipopoliza.setNumeroSecuencia(0);
                 tipopoliza.setFechaFinSecuencia(ultimoDia);
-                try {
-                    tipoPolizaFacade.edit(tipopoliza);
-                    tipopoliza = tipoPolizaFacade.tipoPoliza(selected.getTipoPolizaId());
-                    System.out.println("Se actualizo la secuencia correctamente");
-                } catch (Exception e) {
-                    System.out.println("error al actualizar la secuencia");
-                }
-
+                tipoPolizaFacade.edit(tipopoliza);
+                tipopoliza = tipoPolizaFacade.tipoPoliza(selected.getTipoPolizaId());
             }
             selected.setNumeroPoliza(tipopoliza.getNumeroSecuencia() + 1);
-            System.out.println("El numero de poliza asignando es: " + selected.getNumeroPoliza());
-        } else if (selected.getTipoPolizaId().equals("")) {
+        } else if ("".equals(selected.getTipoPolizaId())) {
             selected.setNumeroPoliza(0);
         }
-
     }
 
     public boolean actualizarNumeroPoliza() {
-        System.out.println("Entro a Actualizar el numero de la poliza de tipo: " + selected.getTipoPolizaId().getDescripcion());
         try {
-            RnGcTipoPoliza tipoPoliza = new RnGcTipoPoliza();
-            tipoPoliza = selected.getTipoPolizaId();
-            int secuencia = tipoPoliza.getNumeroSecuencia() + 1;
-            System.out.println("El numero de secuencia a Actualizar es: " + secuencia);
-            tipoPoliza.setNumeroSecuencia(secuencia);
-            tipoPoliza.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
-            tipoPoliza.setUltimaFechaActualizacion(new Date());
-            tipoPoliza.setId(selected.getTipoPolizaId().getId());
-            tipoPolizaFacade.edit(tipoPoliza);
-            System.out.println("La secuencia se actualizo correctamente");
+            Integer idUsuario = usuarioFirmado.obtenerIdUsuario();
+
+            System.out.println("=== actualizarNumeroPoliza() INICIO ===");
+            System.out.println("Usuario logueado: " + idUsuario);
+
+            int consecutivo = ejbFacade.obtenerConsecutivoPorUsuario(idUsuario);
+
+            System.out.println("Consecutivo calculado: " + consecutivo);
+
+            selected.setNumeroPoliza(consecutivo);
+
+            System.out.println("selected.numeroPoliza asignado: " + selected.getNumeroPoliza());
+            System.out.println("=== actualizarNumeroPoliza() FIN OK ===");
 
             return true;
+
         } catch (Exception e) {
-            JsfUtil.addErrorMessage("No se pudo actualizar la secuencia para el tipo de poliza seleccionado");
+            System.out.println("Error en actualizarNumeroPoliza(): " + e.getMessage());
+            e.printStackTrace();
+            JsfUtil.addErrorMessage("No se pudo calcular el consecutivo de la póliza");
             return false;
+        }
+    }
+    
+    public Integer obtenerNumeroConsecutivoPoliza() {
+        try {
+            Integer idUsuario = usuarioFirmado.obtenerIdUsuario();
+
+            System.out.println("=== obtenerNumeroConsecutivoPoliza() INICIO ===");
+            System.out.println("Usuario logueado: " + idUsuario);
+
+            int consecutivo = ejbFacade.obtenerConsecutivoPorUsuario(idUsuario);
+
+            System.out.println("Consecutivo obtenido desde facade: " + consecutivo);
+            System.out.println("=== obtenerNumeroConsecutivoPoliza() FIN OK ===");
+
+            return consecutivo;
+
+        } catch (Exception e) {
+            System.out.println("Error en obtenerNumeroConsecutivoPoliza(): " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
     }
 
     public void obtenerFechas() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//Fecha actual
         Calendar calendar = Calendar.getInstance();
+
         String hoy = sdf.format(calendar.getTime());
         fechaActual = sdf.parse(hoy);
-        System.out.println("Fecha Actual:" + fechaActual);
 
-//A la fecha actual le pongo el día 1
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         String diaUno = sdf.format(calendar.getTime());
         primerDia = sdf.parse(diaUno);
-        System.out.println("Primer día del mes actual:" + primerDia);
 
-        //Se le agrega 1 mes 
         calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
-        System.out.println("1-Último día del mes" + calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         String ultimo = sdf.format(calendar.getTime());
         ultimoDia = sdf.parse(ultimo);
-        System.out.println("ultimo día del mes" + ultimoDia);
     }
 
-    public void obtenerMoneda() {
-        RnGcMonedasTbl tipoMoneda = new RnGcMonedasTbl();
-        tipoMoneda = monedasFacade.obtenerMoneda();
-        selected.setTipoMoneda(tipoMoneda);
-        selected.setTipoCambio(1.0);
+    public void obtenerCatalogoCuenta() {
+        catalogodeCuentas =
+                catalogoCuentasFacade.obtenerCuentasCreadoPor(usuarioFirmado.obtenerIdUsuario()).get(0);
     }
 
+    /**
+     * Método antiguo que agrega una línea “rápida” sin modal. Lo puedes seguir
+     * usando o eliminar si ya no se usa.
+     */
+    public void onAddNew() {
+        System.out.println("Preparando para agregar asiento (onAddNew)");
+        try {
+            RnGcPolizaLineasTbl polizaLinea = new RnGcPolizaLineasTbl();
+            obtenerCatalogoCuenta();
+            polizaLinea.setAbono(0.0);
+            polizaLinea.setCargo(0.0);
+            polizaLinea.setCatalogoCuentasId(catalogodeCuentas);
+            polizaLinea.setConcepto(selected.getConcepto());
+            polizaLinea.setId((int) (Math.random() * 999999999));
+            getItemsPolizaLineas().add(polizaLinea);
+            FacesMessage msg = new FacesMessage("Nuevo asiento agregado correctamente");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } catch (Exception e) {
+            System.out.println("Error en añadir asiento: " + e.getLocalizedMessage());
+        }
+    }
+
+    // Converter se queda igual que ya lo tenías...
+    @FacesConverter(forClass = RnGcPolizaHeaderTbl.class)
+    public static class RnGcPolizaHeaderTblControllerConverter implements Converter {
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            RnGcPolizaHeaderTblController controller =
+                    (RnGcPolizaHeaderTblController) facesContext.getApplication().getELResolver()
+                            .getValue(facesContext.getELContext(), null, "rnGcPolizaHeaderTblController");
+            return controller.getRnGcPolizaHeaderTbl(Integer.valueOf(value));
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof RnGcPolizaHeaderTbl) {
+                RnGcPolizaHeaderTbl o = (RnGcPolizaHeaderTbl) object;
+                return String.valueOf(o.getId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,
+                        "object {0} is of type {1}; expected type: {2}",
+                        new Object[]{object, object.getClass().getName(), RnGcPolizaHeaderTbl.class.getName()});
+                return null;
+            }
+        }
+    }
+
+    public RnGcPolizaHeaderTbl getRnGcPolizaHeaderTbl(Integer id) {
+        return getFacade().find(id);
+    }
+
+    public List<RnGcPolizaHeaderTbl> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<RnGcPolizaHeaderTbl> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+
+    
+    private boolean validarPolizaCuadrada() {
+        // Aseguramos que los totales estén actualizados
+        calcularSuma();
+
+        // Validar que haya al menos un asiento
+        if (itemsPolizaLineas == null || itemsPolizaLineas.isEmpty()) {
+            FacesMessage msg = new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    "Sin asientos",
+                    "Debes capturar al menos un asiento en la póliza."
+            );
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return false;
+        }
+
+        // Diferencia entre cargos y abonos
+        diferencia = cargos - abonos;
+
+        // Tolerancia por si después usas decimales
+        double tolerancia = 0.000001;
+        if (Math.abs(diferencia) > tolerancia) {
+            String detalle = String.format("Cargos: %.2f | Abonos: %.2f | Diferencia: %.2f",
+                                           cargos, abonos, diferencia);
+            FacesMessage msg = new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    "Póliza descuadrada",
+                    "El total de cargos debe ser igual al total de abonos. " + detalle
+            );
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return false;
+        }
+
+        return true;
+    }
+
+    
+    public void guardarPoliza() {
+        System.out.println("=== guardarPoliza() INICIO ===");
+
+        try {
+            calcularSuma();
+
+            if (cargos == null) cargos = 0.0;
+            if (abonos == null) abonos = 0.0;
+
+            if (Math.abs(cargos - abonos) > 0.0001) {
+                JsfUtil.addErrorMessage("Los cargos ($" + cargos +
+                        ") y abonos ($" + abonos +
+                        ") no cuadran. Verifique los montos antes de guardar.");
+                return;
+            }
+
+            if (selected == null) {
+                JsfUtil.addErrorMessage("No existe una póliza seleccionada.");
+                return;
+            }
+
+            if (tipoPolizaIdSeleccionado != null) {
+                RnGcTipoPoliza tipoPoliza = tipoPolizaFacade.find(tipoPolizaIdSeleccionado);
+                selected.setTipoPolizaId(tipoPoliza);
+                selected.setTipoPoliza(tipoPoliza.getTipoPoliza());
+
+                System.out.println("tipoPolizaIdSeleccionado: " + tipoPolizaIdSeleccionado);
+                System.out.println("tipoPoliza seleccionado: " + tipoPoliza.getTipoPoliza());
+            } else {
+                System.out.println("ERROR: tipoPolizaIdSeleccionado viene NULL");
+                JsfUtil.addErrorMessage("Debe seleccionar un tipo de póliza");
+                return;
+            }
+
+            RnGcTipoPoliza tipoPoliza = tipoPolizaFacade.find(tipoPolizaIdSeleccionado);
+            selected.setTipoPolizaId(tipoPoliza);
+            selected.setTipoPoliza(tipoPoliza.getTipoPoliza());
+
+            setEmbeddableKeys();
+            selected.setFechaCreacion(new Date());
+            selected.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
+
+            Integer numConsecutivo = obtenerNumeroConsecutivoPoliza();
+            selected.setNumeroPoliza(numConsecutivo);
+
+            System.out.println("tipoPolizaIdSeleccionado: " + tipoPolizaIdSeleccionado);
+            System.out.println("tipoPoliza seleccionado: " + tipoPoliza.getTipoPoliza());
+            System.out.println("selected.getTipoPolizaId(): " + selected.getTipoPolizaId());
+            System.out.println("Numero consecutivo: " + numConsecutivo);
+            
+            crear();
+
+            System.out.println("=== guardarPoliza() FIN OK ===");
+            
+        } catch (Exception e) {
+            System.out.println("=== ERROR EN guardarPoliza() ===");
+            e.printStackTrace();
+            System.out.println("Mensaje: " + e.getMessage());
+        }
+    }
+   
+    private void actualizarSaldoCatalogo(RnGcPolizaLineasTbl linea) {
+        if (linea == null || linea.getCatalogoCuentasId() == null) {
+            return;
+        }
+
+        Integer idCuenta = linea.getCatalogoCuentasId().getId();
+
+        BigDecimal cargo = BigDecimal.ZERO;
+        BigDecimal abono = BigDecimal.ZERO;
+
+        if (linea.getCargo() != null) {
+            cargo = BigDecimal.valueOf(linea.getCargo());   // si cargo es Double
+        }
+        if (linea.getAbono() != null) {
+            abono = BigDecimal.valueOf(linea.getAbono());   // si abono es Double
+        }
+
+        System.out.println("[ASIENTO] Cuenta=" + linea.getCatalogoCuentasId().getNumeroCuenta()
+                + " saldoActual (antes) se actualizará con cargo=" + cargo + ", abono=" + abono);
+
+        catalogoCuentasFacade.aplicarMovimientoCuenta(idCuenta, cargo, abono);
+    }
+    
+   
+   
 }
+

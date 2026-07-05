@@ -74,6 +74,10 @@ public class JsfUtil {
         return converter.getAsObject(FacesContext.getCurrentInstance(), component, theId);
     }
 
+    public static void addWarnMessage(String no_puedes_eliminar_un_periodo_abierto_Cié) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public static enum PersistAction {
         CREATE,
         DELETE,

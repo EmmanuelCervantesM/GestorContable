@@ -104,7 +104,7 @@ public abstract class AbstractFacade<T> {
     }
     
        public void crea(T entity) {
-        System.out.println("AQUI ESTOY");
+        System.out.println("---------INIIA PROCESO GUARDANDO CATALOGO DE CUENTAS ----------");
         //getEntityManager().merge(entity);
         try {
             getEntityManager().merge(entity);

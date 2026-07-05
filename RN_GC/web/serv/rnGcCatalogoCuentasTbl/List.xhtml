@@ -77,11 +77,11 @@
                                 </p:selectOneMenu>
                             </h:panelGrid>    
                         </p:column>
-                        <p:column filterBy="#{item.monedaId.CMoneda}" width="75" headerText="Moneda" footerText="contiene" filterMatchMode="contains" sortBy="#{item.monedaId.CMoneda}">
+                        <p:column filterBy="#{item.moneda}" width="75" headerText="Moneda" footerText="contiene" filterMatchMode="contains" sortBy="#{item.moneda}">
                             <f:facet name="header">
                                 <h:outputText value="Moneda"/>
                             </f:facet>
-                            <h:outputText value="#{item.monedaId.CMoneda}"/>
+                            <h:outputText value="#{item.moneda}"/>
                         </p:column>
                         <p:column width="75">
                             <f:facet name="header">
@@ -97,11 +97,28 @@
                             <h:outputText value="#{item.rfc}"/>
                         </p:column>     
                         <f:facet name="footer">
-                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcCatalogoCuentasTblController.prepareCreate}" update=":RnGcCatalogoCuentasTblCreateForm" oncomplete="PF('RnGcCatalogoCuentasTblCreateDialog').show()"/>
+                            <p:commandButton id="createButton" icon="ui-icon-plus"
+                                                value="#{bundle.Create}"
+                                                actionListener="#{rnGcCatalogoCuentasTblController.prepareCreate}"
+                                                update=":RnGcCatalogoCuentasTblCreateForm"
+                                                oncomplete="if (args &amp;&amp; args.periodoActivo) {
+                                                                PF('RnGcCatalogoCuentasTblCreateDialog').show();
+                                                            } else {
+                                                                PF('PeriodoNoActivoDialogo').show();
+                                                            }"/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcCatalogoCuentasTblViewForm" oncomplete="PF('RnGcCatalogoCuentasTblViewDialog').show()" disabled="#{empty rnGcCatalogoCuentasTblController.selected}"/>
                             <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcCatalogoCuentasTblEditForm" oncomplete="PF('RnGcCatalogoCuentasTblEditDialog').show()" disabled="#{empty rnGcCatalogoCuentasTblController.selected}"/>
                             <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcCatalogoCuentasTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcCatalogoCuentasTblController.selected}"/>
-                            <p:commandButton id="cargaMasivaButton"   icon="ui-icon-folder-open" value="Cargar Cuentas" update=":CargaMasivaFormGeneral:CargaMasivaForm" oncomplete="PF('CargaMasivaDialog').show()"/>
+                            <p:commandButton id="cargaMasivaButton"
+                                                value="Carga masiva"
+                                                icon="ui-icon-arrowthick-1-n"
+                                                actionListener="#{rnGcCatalogoCuentasTblController.prepararCargaMasiva}"
+                                                update=":RnGcCatalogoCuentasTblListForm"
+                                                oncomplete="if (args &amp;&amp; args.periodoActivo) {
+                                                                PF('CargaMasivaDialog').show();
+                                                            } else {
+                                                                PF('PeriodoNoActivoDialogo').show();
+                                                            }"/>
                             <p:commandButton value="Exportar en excel" ajax="false" actionListener="#{rnGcCatalogoCuentasTblController.exportarExcel(ActionEvent)}"/>
                             <p:commandButton value="Exportar en pdf" ajax="false" actionListener="#{rnGcCatalogoCuentasTblController.exportarPdf()}">
                                 <p:fileDownload value="#{rnGcCatalogoCuentasTblController.downLoadFile}" />
@@ -130,6 +147,26 @@
                     </p:panel>
                 </h:form>
             </p:dialog>
+            
+            <p:dialog id="PeriodoNoActivoDlg"
+                        widgetVar="PeriodoNoActivoDialogo"
+                        header="Aviso"
+                        modal="true"
+                        resizable="false"
+                        closable="true"
+                        appendTo="@(body)"
+                        position="center"
+                        style="width:350px">
+
+                  <h:panelGrid columns="2" cellpadding="10">
+                      <!-- Icono de advertencia -->
+                      <i class="fa fa-exclamation-triangle fa-2x" style="color:#f39c12;"></i>
+
+                      <!-- Mensaje -->
+                      <h:outputText value="Se debe activar un periodo" style="font-weight:bold;" />
+                  </h:panelGrid>
+
+              </p:dialog>
         </ui:define>
     </ui:composition>
 

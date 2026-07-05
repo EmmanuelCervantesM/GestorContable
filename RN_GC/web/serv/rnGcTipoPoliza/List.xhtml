@@ -1,97 +1,303 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <ui:composition template="/templateRN.xhtml">
+<ui:composition template="/templateRN.xhtml">
 
+  <ui:define name="title">
+    <h:outputText value="Reportes" />
+  </ui:define>
 
-        <ui:define name="title">
-            <h:outputText value="#{bundle.ListRnGcTipoPolizaTitle}"></h:outputText>
-        </ui:define>
+  <ui:define name="body">
 
-        <ui:define name="body">
-            <h:form id="RnGcTipoPolizaListForm">
-                <p:panel header="#{bundle.ListRnGcTipoPolizaTitle}">
-                    <p:dataTable id="datalist" value="#{rnGcTipoPolizaController.obtenerTipoPolizaPorUsuario()}" var="item"
-                                 selectionMode="single" selection="#{rnGcTipoPolizaController.selected}"
-                                 paginator="true"
-                                 rowKey="#{item.id}"
-                                 rows="10"
-                                 widgetVar="tipoPolizasTable"
-                                 rowsPerPageTemplate="10,20,30,40,50"
-                                 >
+    <h:outputStylesheet>
+      .fmtWrap{
+        display:flex;
+        flex-direction:column;
+        gap:16px;
+        margin-top:16px;
+      }
+      .fmtCard{
+        display:flex;
+        align-items:center;
+        gap:14px;
+        padding:18px 20px;
+        border:1px solid #d7d7d7;
+        border-radius:14px;
+        text-decoration:none;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .fmtCard:hover{
+        background:#f7f7f7;
+        border-color:#c7c7c7;
+      }
+      .fmtIcon{
+        width:52px;
+        height:52px;
+        flex: 0 0 auto;
+      }
+      .fmtText{
+        display:flex;
+        flex-direction:column;
+        gap:2px;
+        text-align:left;
+      }
+      .fmtTitle{
+        font-size:18px;
+        font-weight:700;
+        color:#2c2c2c;
+        line-height:1.2;
+      }
+      .fmtSub{
+        font-size:12px;
+        color:#6f6f6f;
+      }
+    .calGroup.ui-calendar{
+      display: inline-flex !important;
+      align-items: stretch !important;
+      width: 240px;              /* ajusta si quieres */
+      white-space: nowrap;
+    }
 
-                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
-                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
-                        <f:facet name="header">
-                            <p:outputPanel>
-                                <h:outputText value="Buscar en todos los campos:" />
-                                <p:inputText id="globalFilter" onkeyup="PF('tipoPolizasTable').filter()" style="width:150px" placeholder="Ingresa el texto"/>
-                            </p:outputPanel>
-                        </f:facet>
-                        <p:column filterBy="#{item.tipoPoliza}" headerText="Tipo de Poliza" filterMatchMode="contains" sortBy="#{item.tipoPoliza}">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcTipoPolizaTitle_tipoPoliza}"/>
-                            </f:facet>
-                            <h:panelGrid columns="2" style="margin-bottom:5px" cellpadding="2">
-                                <p:selectOneMenu id="tipoPoliza" value="#{item.tipoPoliza}" disabled="true">
-                                    <f:selectItem itemLabel="Ingreso" itemValue="I" />
-                                    <f:selectItem itemLabel="Egreso" itemValue="E" />
-                                    <f:selectItem itemLabel="Díario" itemValue="DA" />
-                                </p:selectOneMenu>
-                            </h:panelGrid> 
-                        </p:column>
-                        <p:column filterBy="#{item.descripcion}" headerText="Descripción" filterMatchMode="contains" sortBy="#{item.descripcion}">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcTipoPolizaTitle_descripcion}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.descripcion}"/>
-                        </p:column>
-                        <p:column filterBy="#{item.numeroSecuencia}" headerText="Número de Secuencía" filterMatchMode="contains" sortBy="#{item.numeroSecuencia}">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcTipoPolizaTitle_numeroSecuencia}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.numeroSecuencia}"/>
-                        </p:column>
-                        <p:column filterBy="#{item.fechaFinSecuencia}" headerText="Fecha Fin Secuencía" filterMatchMode="contains" sortBy="#{item.fechaFinSecuencia}">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcTipoPolizaTitle_fechaFinSecuencia}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.fechaFinSecuencia}">
-                                <f:convertDateTime pattern="MM/dd/yyyy" />
-                            </h:outputText>
-                        </p:column>
-                        <p:column filterBy="#{item.estatus}" headerText="Estatus" filterMatchMode="contains" sortBy="#{item.estatus}">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcTipoPolizaTitle_estatus}"/>
-                            </f:facet>
-                            <h:panelGrid columns="2" style="margin-bottom:5px" cellpadding="2">
-                                <p:selectOneMenu id="estado" value="#{item.estatus}" disabled="true">
-                                    <f:selectItem itemLabel="Activo" itemValue="A" />
-                                    <f:selectItem itemLabel="Inactivo" itemValue="I" />
-                                </p:selectOneMenu>
-                            </h:panelGrid>                                
-                        </p:column>
+    /* Input ocupa el espacio */
+    .calGroup.ui-calendar .ui-inputfield{
+      flex: 1 1 auto !important;
+      width: 100% !important;
+      margin: 0 !important;
 
+      /* Bordes como input-group */
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+    }
 
-                        <f:facet name="footer">
-                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcTipoPolizaController.prepareCreate}" update=":RnGcTipoPolizaCreateForm" oncomplete="PF('RnGcTipoPolizaCreateDialog').show()"/>
-                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcTipoPolizaViewForm" oncomplete="PF('RnGcTipoPolizaViewDialog').show()" disabled="#{empty rnGcTipoPolizaController.selected}"/>
-                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcTipoPolizaEditForm" oncomplete="PF('RnGcTipoPolizaEditDialog').show()" disabled="#{empty rnGcTipoPolizaController.selected}"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcTipoPolizaController.destroy}" update=":growl,datalist" disabled="#{empty rnGcTipoPolizaController.selected}"/>
-                        </f:facet>
-                    </p:dataTable>
-                </p:panel>
-            </h:form>
+    /* Botón del calendario pegado */
+    .calGroup.ui-calendar button{
+      flex: 0 0 42px !important; /* ancho del botón */
+      margin: 0 !important;
 
-            <ui:include src="Create.xhtml"/>
-            <ui:include src="Edit.xhtml"/>
-            <ui:include src="View.xhtml"/>
-        </ui:define>
-    </ui:composition>
+      /* Bordes como input-group */
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+    }
 
+    /* Quita separación que a veces mete PF */
+    .calGroup.ui-calendar .ui-button{
+      box-shadow: none !important;
+    }
+    </h:outputStylesheet>
+
+    <!-- ========================================================= -->
+    <!-- FORM PRINCIPAL: SOLO BOTONES -->
+    <!-- ========================================================= -->
+    <h:form id="mainForm">
+
+      <p:panel header="Reportes">
+
+        <p:toolbar style="margin-bottom:10px;">
+          <p:toolbarGroup>
+
+            <p:commandButton id="btnER"
+                             value="Estado de Resultados"
+                             icon="ui-icon-document"
+                             process="@this"
+                             update=":filtroDlg"
+                             oncomplete="PF('filtroDlgWV').show()">
+              <f:setPropertyActionListener target="#{rnGcTipoPolizaController.reporteSeleccionado}" value="ER" />
+              <f:setPropertyActionListener target="#{rnGcTipoPolizaController.tituloReporte}" value="Estado de Resultados" />
+            </p:commandButton>
+
+            <p:commandButton id="btnBG"
+                             value="Balance General"
+                             icon="ui-icon-calculator"
+                             process="@this"
+                             update=":filtroDlg"
+                             oncomplete="PF('filtroDlgWV').show()">
+              <f:setPropertyActionListener target="#{rnGcTipoPolizaController.reporteSeleccionado}" value="BG" />
+              <f:setPropertyActionListener target="#{rnGcTipoPolizaController.tituloReporte}" value="Balance General" />
+            </p:commandButton>
+              
+            <p:commandButton id="btnAC"
+                             value="Auxiliar de Cuentas"
+                             icon="ui-icon-note"
+                             process="@this"
+                             update=":filtroDlg"
+                             oncomplete="PF('filtroDlgWV').show()">
+              <f:setPropertyActionListener target="#{rnGcTipoPolizaController.reporteSeleccionado}" value="AC" />
+              <f:setPropertyActionListener target="#{rnGcTipoPolizaController.tituloReporte}" value="Auxiliar de Cuentas" />
+            </p:commandButton>  
+              
+            <p:commandButton id="btnLM"
+                             value="Libro Mayor"
+                             icon="ui-icon-calculator"
+                             process="@this"
+                             update=":filtroDlg"
+                             oncomplete="PF('filtroDlgWV').show()">
+              <f:setPropertyActionListener target="#{rnGcTipoPolizaController.reporteSeleccionado}" value="LM" />
+              <f:setPropertyActionListener target="#{rnGcTipoPolizaController.tituloReporte}" value="Libro Mayor" />
+            </p:commandButton>
+              
+            <p:commandButton id="btnLD"
+                             value="Libro Diario"
+                             icon="ui-icon-calculator"
+                             process="@this"
+                             update=":filtroDlg"
+                             oncomplete="PF('filtroDlgWV').show()">
+              <f:setPropertyActionListener target="#{rnGcTipoPolizaController.reporteSeleccionado}" value="LD" />
+              <f:setPropertyActionListener target="#{rnGcTipoPolizaController.tituloReporte}" value="Libro Diario" />
+            </p:commandButton>
+            
+
+          </p:toolbarGroup>
+        </p:toolbar>
+
+        <h:outputText value="Selecciona un reporte para descargar en PDF o Excel." />
+
+      </p:panel>
+
+    </h:form>
+
+    <!-- ========================================================= -->
+    <!-- DIALOGO 1: FILTROS (FUERA DEL MAINFORM) -->
+    <!-- ========================================================= -->
+    <p:dialog id="filtroDlg"
+              widgetVar="filtroDlgWV"
+              modal="true"
+              resizable="false"
+              closable="true"
+              width="640"
+              header="FILTROS DEL REPORTE"
+              appendTo="@(body)">
+
+      <!-- FORM INTERNO del diálogo -->
+      <h:form id="filtroForm">
+
+        <h:panelGroup id="filtroContent" layout="block">
+
+          <p:messages id="msgFiltros" showDetail="true" closable="true" />
+
+          <h:panelGrid columns="2"
+                       columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-8"
+                       styleClass="ui-fluid"
+                       cellpadding="6">
+
+            <h:outputText value="Reporte:" />
+            <h:outputText value="#{rnGcTipoPolizaController.tituloReporte}" style="font-weight:700;" />
+
+            <h:outputText value="Periodo desde:" />
+            <p:calendar id="calDesde"
+                        value="#{rnGcTipoPolizaController.fechaDesde}"
+                        pattern="dd/MM/yyyy"
+                        showOn="button"
+                        navigator="true"
+                        mask="true"
+                        styleClass="calGroup"
+                        required="true"
+                        requiredMessage="Selecciona la fecha 'Desde'." />
+
+            <h:outputText value="Periodo hasta:" />
+            <p:calendar id="calHasta"
+                value="#{rnGcTipoPolizaController.fechaHasta}"
+                pattern="dd/MM/yyyy"
+                showOn="button"
+                navigator="true"
+                mask="true"
+                styleClass="calGroup"
+                required="true"
+                requiredMessage="Selecciona la fecha 'Hasta'." />
+
+            <h:outputText value="Tipo de cuenta:" />
+            <p:selectOneRadio id="rbTipoCuenta"
+                              value="#{rnGcTipoPolizaController.tipoCuenta}"
+                              layout="lineDirection">
+                <f:selectItem itemLabel="Cuentas acumuladas" itemValue="ACUMULADAS" />
+                <f:selectItem itemLabel="Cuentas a detalle"  itemValue="DETALLE" />
+            </p:selectOneRadio>
+
+            <h:outputText value="Cuenta con movimientos:" />
+            <p:selectOneRadio id="rbCuentaMov"
+                              value="#{rnGcTipoPolizaController.cuentaConMovimientos}"
+                              layout="lineDirection">
+                <f:selectItem itemLabel="Sí" itemValue="true" />
+                <f:selectItem itemLabel="No" itemValue="false" />
+            </p:selectOneRadio>
+
+          </h:panelGrid>
+
+          <p:separator/>
+
+          <p:commandButton value="Continuar"
+                           icon="ui-icon-check"
+                           process="@form"
+                           update="msgFiltros :formatoDlg"
+                           actionListener="#{rnGcTipoPolizaController.validarFiltrosYPreparar}"
+                           oncomplete="if(!args.validationFailed){PF('filtroDlgWV').hide();PF('formatoDlgWV').show();}">
+          </p:commandButton>
+
+        </h:panelGroup>
+
+      </h:form>
+    </p:dialog>
+
+    <!-- ========================================================= -->
+    <!-- DIALOGO 2: FORMATO (FUERA DEL MAINFORM) -->
+    <!-- ========================================================= -->
+    <p:dialog id="formatoDlg"
+              widgetVar="formatoDlgWV"
+              modal="true"
+              resizable="false"
+              closable="true"
+              width="560"
+              header="FORMATO DE DESCARGA"
+              appendTo="@(body)">
+
+      <!-- FORM INTERNO del diálogo -->
+      <h:form id="formatoForm">
+
+        <h:panelGroup id="formatoDlgContent" layout="block">
+
+          <h:outputText value="Selecciona el formato a generar/descargar:" />
+          <p:spacer height="10" />
+
+          <h:panelGroup layout="block" styleClass="fmtWrap">
+
+            <!-- PDF -->
+            <p:commandLink ajax="false"
+                           styleClass="fmtCard"
+                           actionListener="#{rnGcTipoPolizaController.generarPdf}">
+              <h:graphicImage library="images" name="pdf.png" styleClass="fmtIcon" />
+              <h:panelGroup styleClass="fmtText">
+                <h:outputText value="PDF" styleClass="fmtTitle" />
+                <h:outputText value="Descargar reporte en PDF" styleClass="fmtSub" />
+              </h:panelGroup>
+              <p:fileDownload value="#{rnGcTipoPolizaController.reportePdf}" />
+            </p:commandLink>
+
+            <!-- EXCEL -->
+            <p:commandLink ajax="false"
+                           styleClass="fmtCard"
+                           actionListener="#{rnGcTipoPolizaController.generarExcel}">
+              <h:graphicImage library="images" name="excel.png" styleClass="fmtIcon" />
+              <h:panelGroup styleClass="fmtText">
+                <h:outputText value="Excel" styleClass="fmtTitle" />
+                <h:outputText value="Descargar reporte en Excel" styleClass="fmtSub" />
+              </h:panelGroup>
+              <p:fileDownload value="#{rnGcTipoPolizaController.reporteExcel}" />
+            </p:commandLink>
+
+          </h:panelGroup>
+
+        </h:panelGroup>
+
+      </h:form>
+    </p:dialog>
+
+  </ui:define>
+</ui:composition>
 </html>

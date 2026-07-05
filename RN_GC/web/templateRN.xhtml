@@ -67,7 +67,7 @@
                     <table style="width: 100%; border-collapse: collapse;">
                         <tbody>
                             <tr>
-                                <td style="width: 33.3333%;">
+                                <td style="width: 20%;">
                                     <h:panelGrid columns="2" cellpadding="10">
                                         <h:form>
                                             <p:outputLabel style="font-weight: 900" value="Timbres Restantes:" for="proveedor" />
@@ -85,8 +85,36 @@
                                         </h:form>
                                     </h:panelGrid>
                                 </td>
-                                <td style="width: 33.3333%; text-align: center;"><h2>Administración Contable. 2023</h2></td>
-                                <td style="width: 33.3333%; text-align: right;">
+                                <td style="width: 20%;">
+                                        <h:form id="footerForm">
+                                        <p:outputLabel value="Periodo Activo:" for="periodoActivoSel"
+                                                       style="font-weight:900; margin-left:10px" />
+
+                                        <!-- Usar el id original: periodoActivoSel -->
+                                        <p:inputText id="periodoActivoSel"
+                                                     value="#{facturarContoller.periodoActivoLabel}"
+                                                     style="width:220px"
+                                                     readonly="true" />
+
+                                        <p:remoteCommand name="rcPeriodoActivo"
+                                                         process="@this"
+                                                         update="@none"
+                                                         actionListener="#{facturarContoller.actualizar}"
+                                                         oncomplete="actualizaPeriodo(xhr, status, args)" />
+                                      </h:form>
+
+                                      <h:outputScript>
+                                      //<![CDATA[
+                                        function actualizaPeriodo(xhr, status, args){
+                                          if (args && args.periodo) {
+                                            document.getElementById('footerForm:periodoActivoSel').value = args.periodo;
+                                          }
+                                        }
+                                      //]]>
+                                      </h:outputScript>
+                                </td>
+                                <td style="width: 30%; text-align: center;"><h2>Administración Contable. 2023</h2></td>
+                                <td style="width: 20%; text-align: right;">
                                     <h:form>
                                         <h2><p:clock pattern="dd/MM/yyyy hh:mm:ss aa" /></h2>
                                     </h:form>

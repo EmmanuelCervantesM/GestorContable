@@ -12,21 +12,31 @@ import mx.com.rocketnegocios.beans.RnGcCatalogoCuentasTblFacade;
 
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
@@ -37,9 +47,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
+import javax.faces.view.ViewScoped;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
@@ -53,9 +66,14 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import mx.com.rocketnegocios.beans.RnGcCodigoAgrupadorSatTblFacade;
+import mx.com.rocketnegocios.beans.RnGcMonedasTblFacade;
+import mx.com.rocketnegocios.beans.RnGcPeriodosTblFacade;
+import mx.com.rocketnegocios.beans.RnGcUsuariosTblFacade;
 import mx.com.rocketnegocios.entities.ListaCuentas;
 import mx.com.rocketnegocios.entities.RnGcCodigoAgrupadorSatTbl;
 import mx.com.rocketnegocios.entities.RnGcMonedasTbl;
+import mx.com.rocketnegocios.entities.RnGcPeriodosTbl;
 import mx.com.rocketnegocios.entities.RnGcPolizaLineasTbl;
 import mx.com.rocketnegocios.entities.RnGcUsuariosTbl;
 import mx.com.rocketnegocios.util.UsuarioFirmado;
@@ -74,6 +92,7 @@ import net.sf.jasperreports.export.SimpleXlsxExporterConfiguration;
 import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -94,12 +113,33 @@ import org.w3c.dom.Text;
 @Named("rnGcCatalogoCuentasTblController")
 @SessionScoped
 public class RnGcCatalogoCuentasTblController implements Serializable {
-
-    @EJB
-    private mx.com.rocketnegocios.beans.RnGcMonedasTblFacade monedaFacade;
+    
+    private static final long serialVersionUID = 1L;
+    
+    @PersistenceContext
+    private EntityManager em;
     
     @EJB
-    private mx.com.rocketnegocios.beans.RnGcCatalogoCuentasTblFacade ejbFacade;
+    private RnGcMonedasTblFacade monedaFacade;
+    
+    @EJB
+    private RnGcCatalogoCuentasTblFacade ejbFacade;
+    
+    @EJB
+    private RnGcMonedasTblFacade ejbMonedas;
+    
+    @EJB
+    private RnGcCodigoAgrupadorSatTblFacade ejbCodigoAgrupadorSat;
+    
+    @EJB 
+    private RnGcPeriodosTblFacade periodosFacade;
+    
+    @EJB 
+    private RnGcUsuariosTblFacade usuariosFacade;
+    
+    @EJB
+    private RnGcCatalogoCuentasTblFacade catalogoCuentasFacade;
+
     private List<RnGcCatalogoCuentasTbl> items = null;
     private RnGcCatalogoCuentasTbl selected;
     private UsuarioFirmado usuarioFirmado = new UsuarioFirmado();
@@ -112,6 +152,225 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
     private boolean valid = true;
     private String motivo = "", nCuenta="",dCuenta="",nivel="",codigo="",natur="",tipo="",subtipo="",rfc="";
     private String motivoVal = "", ndCuentas="",rfcs="";
+    private Date periodoActivoInicio;   
+    private Date periodoActivoFin;      
+    private String periodoActivoLabel; 
+    private List<RnGcCatalogoCuentasTbl> prevalidas;
+    private List<RnGcCatalogoCuentasTbl> rechazadas;
+    private List<Object> rechazadasDetalladas; 
+    private int totalLeidas, totPrevalidas, totRechazadas;
+    public List<RnGcCatalogoCuentasTbl> getPrevalidas() { return prevalidas; }
+    public List<RnGcCatalogoCuentasTbl> getRechazadas() { return rechazadas; }
+    public int getTotalLeidas() { return totalLeidas; }
+    public int getTotPrevalidas() { return totPrevalidas; }
+    public int getTotRechazadas() { return totRechazadas; }
+    private Set<String> codigosMonedaValidos = new HashSet<>();
+    private static final String REQ_CUENTA      = "cuenta";
+    private static final String REQ_DESCRIPCION = "descripción";
+    private static final String REQ_TIPO        = "tipo";
+    private static final String REQ_SUBTIPO     = "subtipo";
+    private static final String REQ_AGRUPADOR   = "agrupador";
+    private static final String REQ_MONEDA      = "moneda";
+    private static final String REQ_DIOT        = "diot";
+    private static final String REQ_RFC         = "rfc";
+    private static final String REQ_INICIAL         = "saldo";
+    private Map<String, Integer> mapaMonedas = new HashMap<>();
+    private Map<String, Integer> idMonedaPorCodigo;
+    private Map<String, Integer> idAgrupadorPorCodigo = new HashMap<>();
+    private Set<String> codigosAgrupadorValidos = new HashSet<>();
+    private boolean agrupadoresCargados = false;
+    private RnGcPeriodosTbl periodoActivo;
+    private Integer idPeriodoActivo;
+    private static final Set<String> CONCEPTOS_DEUDORA = new HashSet<>(Arrays.asList(
+        "ACTIVO", "COSTO", "GASTO"
+    ));
+    private static final Set<String> CONCEPTOS_ACREEDORA = new HashSet<>(Arrays.asList(
+        "PASIVO", "CAPITAL", "INGRESO"
+    ));
+    private String normaliza(String s) {
+        return (s == null) ? null : s.trim().toUpperCase(Locale.ROOT);
+    }
+    
+    @EJB
+    private RnGcPeriodosTblFacade rnGcPeriodosTblFacade;
+
+    public RnGcPeriodosTbl getPeriodoActivo() {
+        if (periodoActivo == null) {
+            Integer idUsuario = null;
+            try {
+                idUsuario = usuarioFirmado != null ? usuarioFirmado.obtenerIdUsuario() : null;
+            } catch (Exception e) {
+            }
+            if (idUsuario != null) {
+                periodoActivo = rnGcPeriodosTblFacade.obtenerPeriodoActivo(idUsuario);
+            }
+        }
+        return periodoActivo;
+    }
+
+    public String getPeriodoActivoDescripcion() {
+        RnGcPeriodosTbl p = getPeriodoActivo();
+        if (p == null) {
+            return "Sin periodo activo";
+        }
+
+        String mesStr = p.getMes();
+        int mesNum = Integer.parseInt(mesStr);
+        String nombreMes = nombreMesEnEsp(mesNum);
+
+        return nombreMes + " " + p.getAnio();
+    }
+
+    private String nombreMesEnEsp(int mes) {
+        switch (mes) {
+            case 1:  return "ENERO";
+            case 2:  return "FEBRERO";
+            case 3:  return "MARZO";
+            case 4:  return "ABRIL";
+            case 5:  return "MAYO";
+            case 6:  return "JUNIO";
+            case 7:  return "JULIO";
+            case 8:  return "AGOSTO";
+            case 9:  return "SEPTIEMBRE";
+            case 10: return "OCTUBRE";
+            case 11: return "NOVIEMBRE";
+            case 12: return "DICIEMBRE";
+            default: return "";
+        }
+    }
+
+    public Date getMinFechaPeriodo() {
+        RnGcPeriodosTbl p = getPeriodoActivo();
+        if (p == null) {
+            return null;
+        }
+
+        int mes = Integer.parseInt(p.getMes());
+        int anio = p.getAnio();
+
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(anio, mes - 1, 1);
+        return cal.getTime();
+    }
+
+    public Date getMaxFechaPeriodo() {
+        RnGcPeriodosTbl p = getPeriodoActivo();
+        if (p == null) {
+            return null;
+        }
+
+        int mes = Integer.parseInt(p.getMes());
+        int anio = p.getAnio();
+
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(anio, mes - 1, 1);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return cal.getTime();
+    }
+
+    
+    @PostConstruct
+    public void init() {
+        cargarPeriodoActivo();  
+        idMonedaPorCodigo = new HashMap<String, Integer>();
+        codigosMonedaValidos = new HashSet<String>();
+
+        try {
+            cargarMonedasValidas();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(">>> Error cargando monedas válidas en init(): " + e.getMessage());
+        }
+    }
+    
+    public void prepararCargaMasiva() {
+        RequestContext rc = RequestContext.getCurrentInstance();
+
+        try {
+            Integer uid = (usuarioFirmado != null) ? usuarioFirmado.obtenerIdUsuario() : null;
+            RnGcUsuariosTbl user = (uid != null) ? usuariosFacade.obtenerUsuarioPorId(uid) : null;
+            RnGcPeriodosTbl p   = (user != null) ? periodosFacade.findActivo(user) : null;
+
+            if (p == null) {
+                
+                JsfUtil.addErrorMessage("Se debe activar un periodo");
+                rc.addCallbackParam("periodoActivo", false);
+                return;
+            }
+
+            rc.addCallbackParam("periodoActivo", true);
+
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage("Ocurrió un error al validar el periodo activo.");
+            rc.addCallbackParam("periodoActivo", false);
+        }
+    }
+
+    public void cargarPeriodoActivo() {
+        try {
+            Integer uid = (usuarioFirmado != null) ? usuarioFirmado.obtenerIdUsuario() : null;
+            RnGcUsuariosTbl user = (uid != null) ? usuariosFacade.obtenerUsuarioPorId(uid) : null;
+
+            RnGcPeriodosTbl p = (user != null) ? periodosFacade.findActivo(user) : null;
+            if (p != null) {
+                this.periodoActivo = p;
+                this.idPeriodoActivo = p.getId();
+
+                this.periodoActivoInicio = primerDiaMes(p.getFechaInicioPeriodo());
+                this.periodoActivoFin    = ultimoDiaMes(p.getFechaInicioPeriodo());
+
+                java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MMMM yyyy", new java.util.Locale("es","MX"));
+                this.periodoActivoLabel = df.format(p.getFechaInicioPeriodo()).toUpperCase(new java.util.Locale("es","MX"));
+            } else {
+                 this.periodoActivo = null;
+                this.idPeriodoActivo = null;
+                this.periodoActivoInicio = null;
+                this.periodoActivoFin    = null;
+                this.periodoActivoLabel  = "Se debe activar un periodo";
+            }
+        } catch (Exception e) {
+            this.periodoActivoInicio = null;
+            this.periodoActivoFin    = null;
+            this.periodoActivoLabel  = "Se debe activar un periodo";
+        }
+    }
+
+    private Date primerDiaMes(Date d) {
+        if (d == null) return null;
+        java.util.Calendar c = java.util.Calendar.getInstance();
+        c.setTime(d);
+        c.set(java.util.Calendar.DAY_OF_MONTH, 1);
+        resetHora(c);
+        return c.getTime();
+    }
+    private Date ultimoDiaMes(Date d) {
+        if (d == null) return null;
+        java.util.Calendar c = java.util.Calendar.getInstance();
+        c.setTime(d);
+        c.set(java.util.Calendar.DAY_OF_MONTH, c.getActualMaximum(java.util.Calendar.DAY_OF_MONTH));
+        // último día a 23:59:59.999 para permitir seleccionarlo
+        c.set(java.util.Calendar.HOUR_OF_DAY, 23);
+        c.set(java.util.Calendar.MINUTE, 59);
+        c.set(java.util.Calendar.SECOND, 59);
+        c.set(java.util.Calendar.MILLISECOND, 999);
+        return c.getTime();
+    }
+    private void resetHora(java.util.Calendar c) {
+        c.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        c.set(java.util.Calendar.MINUTE, 0);
+        c.set(java.util.Calendar.SECOND, 0);
+        c.set(java.util.Calendar.MILLISECOND, 0);
+    }
+
+    public Date getPeriodoActivoInicio() { return periodoActivoInicio; }
+    public Date getPeriodoActivoFin()    { return periodoActivoFin; }
+    public String getPeriodoActivoLabel(){ return periodoActivoLabel; }
+
+    public void refrescarPeriodoActivo() {
+        cargarPeriodoActivo();
+    }
 
     public String getMotivoVal() {
         return motivoVal;
@@ -203,11 +462,38 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
         return ejbFacade;
     }
 
-    public RnGcCatalogoCuentasTbl prepareCreate() {
-        //System.out.println("**** Entro a preparar para crear ***");
-        selected = new RnGcCatalogoCuentasTbl();
-        initializeEmbeddableKey();
-        return selected;
+    public void prepareCreate() {
+        RequestContext rc = RequestContext.getCurrentInstance();
+
+        try {
+            Integer uid = (usuarioFirmado != null) ? usuarioFirmado.obtenerIdUsuario() : null;
+            RnGcUsuariosTbl user = (uid != null) ? usuariosFacade.obtenerUsuarioPorId(uid) : null;
+            RnGcPeriodosTbl p   = (user != null) ? periodosFacade.findActivo(user) : null;
+
+            if (p == null) {
+                // NO hay periodo activo
+                JsfUtil.addErrorMessage("Se debe activar un periodo");
+                rc.addCallbackParam("periodoActivo", false);
+                return;
+            }
+
+            // SÍ hay periodo activo: preparas el selected
+            selected = new RnGcCatalogoCuentasTbl();
+            initializeEmbeddableKey();
+
+            // Usas el periodoActivoInicio si ya lo traes calculado en @PostConstruct
+            if (periodoActivoInicio != null) {
+                selected.setInicioVigencia(periodoActivoInicio);
+            } else if (p.getFechaInicioPeriodo() != null) {
+                selected.setInicioVigencia(p.getFechaInicioPeriodo());
+            }
+
+            rc.addCallbackParam("periodoActivo", true);
+
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage("Ocurrió un error al validar el periodo activo.");
+            rc.addCallbackParam("periodoActivo", false);
+        }
     }
     
     public int contarCaracteres(String cadena) {
@@ -307,6 +593,44 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
     public List<RnGcCatalogoCuentasTbl> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
+    
+    public void moverRechazadasAValidas() {
+        try {
+            // aquí metes la lógica para mover de listaRechazadas a listaValidas
+            // por ejemplo:
+            // catalogoService.moverRechazadasAValidas(usuarioFirmado, periodoActual);
+
+            JsfUtil.addSuccessMessage("Las cuentas rechazadas fueron movidas a válidas correctamente.");
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage("Ocurrió un error al mover las cuentas rechazadas a válidas.");
+            // log.error("error...", e);
+        }
+    }
+
+    public void revalidarRechazadas() {
+        try {
+            // lógica para revalidar las rechazadas
+            // catalogoService.revalidarRechazadas(usuarioFirmado, periodoActual);
+
+            JsfUtil.addSuccessMessage("Las cuentas rechazadas fueron revalidadas correctamente.");
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage("Ocurrió un error al revalidar las cuentas rechazadas.");
+            // log.error("error...", e);
+        }
+    }
+
+        // Normaliza mínimamente (quita espacios extremos)
+     private static String safeTrim(String s) {
+         return s == null ? "" : s.trim();
+     }
+
+     private static String canonicalCodeKey(String raw) {
+         if (raw == null) return null;
+         raw = raw.trim();
+         String digits = raw.replaceAll("\\D", "");
+         return digits.isEmpty() ? raw : digits;
+     }
+
 
     @FacesConverter(forClass = RnGcCatalogoCuentasTbl.class)
     public static class RnGcCatalogoCuentasTblControllerConverter implements Converter {
@@ -391,20 +715,7 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
             }
         }
     }
-    
-    public void validarRFC(){
-        if (selected.getRfc() != null) {
-            System.out.println("El RFC de Cuenta ingresado es: " + selected.getRfc());
-            List<RnGcCatalogoCuentasTbl> cuenta = new ArrayList<>();
-            usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-            cuenta = ejbFacade.obtenerListadeCuentasRFC(selected.getRfc(), usuarioId, true);
-            if(!cuenta.isEmpty() && selected.getAdicional1()){
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "RFC existente"));
-                System.out.println("RFC existente");
-                selected.setRfc("");
-            }
-        }
-    }
+   
     
     public void ingresarTipos(){
         String codigo = selected.getCodigoAgrupadorSatId().getCodigoAgrupador();
@@ -499,206 +810,7 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
     }
 
     public void exportarExcel(ActionEvent actionEvent) throws JRException, IOException, NamingException, SQLException {
-        System.out.println("Entro a exportar el catalogo de cuentas en excel");
-        List<RnGcCatalogoCuentasTbl> listaCuentas = new ArrayList<>();
-        List<ListaCuentas> lista = new ArrayList<>();
-        String diot;
-        listaCuentas = obtenerCuentasPorUsuario();
-        for(RnGcCatalogoCuentasTbl cuenta : listaCuentas){
-            ListaCuentas cuent = new ListaCuentas();
-            cuent.setCodigo(cuenta.getCodigoAgrupadorSatId().getCodigoAgrupador());
-            cuent.setnCuenta(cuenta.getNumeroCuenta());
-            cuent.setdCuenta(cuenta.getDescripcionCuenta());
-            cuent.setNivel(cuenta.getAdicional2());
-            if(cuenta.getTipo().equals("1")){
-                cuent.setTipo("Activo");    
-                if(cuenta.getSubtipo().equals("1"))
-                    cuent.setSubtipo("Activo a corto plazo");
-                if(cuenta.getSubtipo().equals("2"))
-                    cuent.setSubtipo("Activo a largo plazo");
-            }
-            if(cuenta.getTipo().equals("2")){
-                cuent.setTipo("Pasivo");
-                if(cuenta.getSubtipo().equals("1"))
-                    cuent.setSubtipo("Pasivo a corto plazo");
-                if(cuenta.getSubtipo().equals("2"))
-                    cuent.setSubtipo("Pasivo a largo plazo");
-            }
-            if(cuenta.getTipo().equals("3")){
-                cuent.setTipo("Capital");
-                cuent.setSubtipo("Resultados");
-            }
-            if(cuenta.getTipo().equals("4")){
-                cuent.setTipo("Ingresos");
-                cuent.setSubtipo("Resultados");
-            }
-            if(cuenta.getTipo().equals("5")){
-                cuent.setTipo("Costos");
-                cuent.setSubtipo("Resultados");
-            }
-            if(cuenta.getTipo().equals("6")){
-                cuent.setTipo("Gastos");
-                cuent.setSubtipo("Resultados");
-            }
-            if(cuenta.getTipo().equals("7")){
-                cuent.setTipo("Resultado integral de financiamiento");
-                cuent.setSubtipo("Resultados");
-            }
-            if(cuenta.getTipo().equals("8")){
-                cuent.setTipo("Cuentas de orden");
-                cuent.setSubtipo("Resultados");
-            }
-            if(cuenta.getNaturaleza().equals("A"))
-                cuent.setNaturaleza("Acreedora");
-            if(cuenta.getNaturaleza().equals("D"))
-                cuent.setNaturaleza("Deudora");
-            if(cuenta.getMonedaId() != null)
-                cuent.setMoneda(cuenta.getMonedaId().getCMoneda());
-            else
-                cuent.setMoneda("");
-            if(cuenta.getAdicional1())
-                diot = "DIOT";
-            else
-                diot = "";
-            cuent.setDiot(diot);
-            if(cuenta.getRfc() != null)
-                cuent.setRfc(cuenta.getRfc());
-            else
-                cuent.setRfc("");
-            cuent.setVigencia(cuenta.getInicioVigencia());
-            lista.add(cuent);
-        }
-        usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-        Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("listaCuentas", lista);
-        parametros.put("nombre", usuarioId.getNombreCompleto());
-        parametros.put("rfc", usuarioId.getRfc());
-        parametros.put("fecha", new Date());
-        File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Reports/Catálogo de Cuentas 1.jasper"));
-        //Llena el reporte
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametros, new JREmptyDataSource());
-        System.out.println("Llena el reporte");
-        //Imprime Reporte de Promedios Semestrales
-        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-        response.addHeader("Content-disposition", "attachment; fileName=Catalogo de Cuentas.xls");
-        ServletOutputStream stream = response.getOutputStream();
-
-        JRXlsExporter xlsExporter = new JRXlsExporter();
-
-        xlsExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-        xlsExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(stream));
-        SimpleXlsReportConfiguration xlsReportConfiguration = new SimpleXlsReportConfiguration();
-        SimpleXlsExporterConfiguration xlsExporterConfiguration = new SimpleXlsExporterConfiguration();
-        xlsReportConfiguration.setOnePagePerSheet(false);
-        xlsReportConfiguration.setRemoveEmptySpaceBetweenRows(true);
-        xlsReportConfiguration.setDetectCellType(true);
-        xlsReportConfiguration.setWhitePageBackground(false);
-        xlsExporter.setConfiguration(xlsReportConfiguration);
-        xlsExporter.exportReport();
-
-        System.out.println("Realizo exportManager");
-        stream.flush();
-        stream.close();
-
-        FacesContext.getCurrentInstance().responseComplete();
-        System.out.println("responseComplete");
-    }
-
-    public void exportarPdf(){
-        System.out.println("Entro a exportar el catálogo de cuentas en pdf");
-        try {
-        byte[] archExpor = null;
-        List<RnGcCatalogoCuentasTbl> listaCuentas = new ArrayList<>();
-        List<ListaCuentas> lista = new ArrayList<>();
-        listaCuentas = obtenerCuentasPorUsuario();
-        for(RnGcCatalogoCuentasTbl cuenta : listaCuentas){
-            ListaCuentas cuent = new ListaCuentas();
-            cuent.setnCuenta(cuenta.getNumeroCuenta());
-            cuent.setdCuenta(cuenta.getDescripcionCuenta());
-            cuent.setNivel(cuenta.getAdicional2());
-            if(cuenta.getTipo().equals("1")){
-                cuent.setTipo("Activo");    
-                if(cuenta.getSubtipo().equals("1"))
-                    cuent.setSubtipo("Activo a corto plazo");
-                if(cuenta.getSubtipo().equals("2"))
-                    cuent.setSubtipo("Activo a largo plazo");
-            }
-            if(cuenta.getTipo().equals("2")){
-                cuent.setTipo("Pasivo");
-                if(cuenta.getSubtipo().equals("1"))
-                    cuent.setSubtipo("Pasivo a corto plazo");
-                if(cuenta.getSubtipo().equals("2"))
-                    cuent.setSubtipo("Pasivo a largo plazo");
-            }
-            if(cuenta.getTipo().equals("3")){
-                cuent.setTipo("Capital");
-                cuent.setSubtipo("Resultados");
-            }
-            if(cuenta.getTipo().equals("4")){
-                cuent.setTipo("Ingresos");
-                cuent.setSubtipo("Resultados");
-            }
-            if(cuenta.getTipo().equals("5")){
-                cuent.setTipo("Costos");
-                cuent.setSubtipo("Resultados");
-            }
-            if(cuenta.getTipo().equals("6")){
-                cuent.setTipo("Gastos");
-                cuent.setSubtipo("Resultados");
-            }
-            if(cuenta.getTipo().equals("7")){
-                cuent.setTipo("Resultado integral de financiamiento");
-                cuent.setSubtipo("Resultados");
-            }
-            if(cuenta.getTipo().equals("8")){
-                cuent.setTipo("Cuentas de orden");
-                cuent.setSubtipo("Resultados");
-            }
-            if(cuenta.getNaturaleza().equals("A"))
-                cuent.setNaturaleza("Acreedora");
-            if(cuenta.getNaturaleza().equals("D"))
-                cuent.setNaturaleza("Deudora");
-            if(cuenta.getMonedaId() != null)
-                cuent.setMoneda(cuenta.getMonedaId().getCMoneda());
-            else
-                cuent.setMoneda("");
-            lista.add(cuent);
-        }
-        usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-        Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("listaCuentas", lista);
-        parametros.put("nombre", usuarioId.getNombreCompleto());
-        parametros.put("rfc", usuarioId.getRfc());
-        System.out.println("parametros: " + parametros.toString());
-        File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Reports/Catálogo de Cuentas.jasper"));
-        //Llena el reporte
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametros, new JREmptyDataSource());
-        System.out.println("Llena el reporte");
-        archExpor = JasperExportManager.exportReportToPdf(jasperPrint);
-        InputStream streamPdf = new ByteArrayInputStream(archExpor);
-        downLoadFile = new DefaultStreamedContent(streamPdf, "document/pdf", "Catálogo de Cuentas.pdf" );
-        /*HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-        response.addHeader("Content-disposition", "attachment; fileName=Catálogo de Cuentas.pdf");
-        ServletOutputStream stream = response.getOutputStream();
-        JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-        System.out.println("Realizo exportManager");
-        stream.flush();
-        stream.close();
-        try {
-            if (!con.isClosed()) {
-                con.close();
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(RnGcCatalogoCuentasTblController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        FacesContext.getCurrentInstance().responseComplete();
-        System.out.println("responseComplete");*/
-        }catch (Exception ex) {
-            System.out.println("Error descargarFormato: " + ex.getLocalizedMessage());
-            JsfUtil.addErrorMessage("Ocurrio un error dutante la descarga del formato.");
-            ex.printStackTrace();
-        }
+        
     }
     
     
@@ -791,7 +903,6 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
                 cuenta.setAttribute("Desc", String.valueOf(lista.get(i).getDescripcionCuenta()));
                 cuenta.setAttribute("NumCta", String.valueOf(lista.get(i).getNumeroCuenta()));
                 cuenta.setAttribute("CodAgrup", String.valueOf(lista.get(i).getCodigoAgrupadorSatId().getCodigoAgrupador()));
-                cuenta.setAttribute("SubCtaDe", String.valueOf(lista.get(i).getSubCuenta()));
             }
             
             //doc.getDocumentElement().appendChild(raiz);
@@ -957,11 +1068,6 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
         System.out.println("responseComplete");
     }
 
-    public void addMessage() {
-        String summary = selected.getAdicional1() ? "DIOT Seleccionado" : "DIOT Deseleccionado";
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
-    }
-
     public void leerPlantilla(FileUploadEvent event) throws FileNotFoundException, IOException {
         System.out.println("Entro a leer plantilla");
         if (file != null) {
@@ -1014,6 +1120,115 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
         }//*/
     }
 
+    
+    // ====== NORMALIZACIÓN ======
+    private static String norm(String s) {
+        if (s == null) return "";
+        s = s.trim()
+             .replace('á','a').replace('Á','A')
+             .replace('é','e').replace('É','E')
+             .replace('í','i').replace('Í','I')
+             .replace('ó','o').replace('Ó','O')
+             .replace('ú','u').replace('Ú','U')
+             .replace('ü','u').replace('Ü','U')
+             .replace('ñ','n').replace('Ñ','N');
+        s = s.replaceAll("\\s+", " "); // colapsa espacios (incluye NBSP)
+        return s.toLowerCase();
+    }
+
+
+    // ====== REGLAS DE NATURALEZA (ajústalas) ======
+    private static class NaturaRules {
+        final Map<String,String> exact = new HashMap<>();
+        final List<Map.Entry<String,String>> prefixes = new ArrayList<>();
+    }
+    private static NaturaRules buildNaturalezaRules() {
+        NaturaRules rules = new NaturaRules();
+        // Exactos ejemplo:
+        // rules.exact.put("101", "D");
+
+        // Prefijos (ajusta a tu operación / SAT)
+        rules.prefixes.add(new AbstractMap.SimpleEntry<>("1", "D"));
+        rules.prefixes.add(new AbstractMap.SimpleEntry<>("2", "A"));
+        rules.prefixes.add(new AbstractMap.SimpleEntry<>("3", "A"));
+        rules.prefixes.add(new AbstractMap.SimpleEntry<>("4", "A"));
+        rules.prefixes.add(new AbstractMap.SimpleEntry<>("5", "D"));
+        rules.prefixes.add(new AbstractMap.SimpleEntry<>("6", "D"));
+        rules.prefixes.add(new AbstractMap.SimpleEntry<>("7", "D"));
+        rules.prefixes.add(new AbstractMap.SimpleEntry<>("8", "D"));
+        rules.prefixes.add(new AbstractMap.SimpleEntry<>("9", "D"));
+        // prefijo más largo gana
+        java.util.Collections.sort(rules.prefixes, new Comparator<Map.Entry<String,String>>() {
+            public int compare(Map.Entry<String,String> a, Map.Entry<String,String> b) {
+                return Integer.compare(b.getKey().length(), a.getKey().length());
+            }
+        });
+        return rules;
+    }
+    private static String resolveNaturaleza(String codeKey, NaturaRules rules) {
+        if (codeKey == null || codeKey.isEmpty() || rules == null) return null;
+        String ex = rules.exact.get(codeKey);
+        if (ex != null) return ex;
+        for (Map.Entry<String,String> e : rules.prefixes) {
+            if (codeKey.startsWith(e.getKey())) return e.getValue();
+        }
+        return null;
+    }
+
+
+    // Lee 1 vez el catálogo desde Excel y llena el mapa
+    private Map<String,Integer> loadCatalogNivelFromExcel(java.io.InputStream in) throws IOException {
+        Map<String,Integer> map = new HashMap<>();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook wb = null;
+        try {
+            wb = new org.apache.poi.xssf.usermodel.XSSFWorkbook(in);
+            XSSFSheet sh = wb.getSheetAt(0);
+            DataFormatter fmt = new DataFormatter();
+
+            // Detectar cabeceras del catálogo
+            List<String> dups = new ArrayList<>();
+            AbstractMap.SimpleEntry<Integer, Map<Integer,String>> hi = findHeaderRow(sh, fmt, dups);
+            if (hi == null) throw new IOException("Catálogo: no se encontró fila de cabeceras.");
+            Map<Integer,String> header = hi.getValue();
+
+            // Columnas candidatas del catálogo:
+            Integer colCodigo = null, colNivel = null;
+            // "Código agrupador" suele venir con NBSP, por eso usamos norma general
+            for (Map.Entry<Integer,String> e : header.entrySet()) {
+                String h = norm(e.getValue());
+                if (colCodigo == null && (h.contains("codigo") && h.contains("agrupador"))) colCodigo = e.getKey();
+                if (colNivel == null && (h.equals("nivel") || h.contains("nivel"))) colNivel = e.getKey();
+            }
+            if (colCodigo == null || colNivel == null)
+                throw new IOException("Catálogo: faltan columnas 'Código agrupador' y/o 'Nivel'.");
+
+            // Recorrer filas de datos del catálogo
+            for (int r = hi.getKey() + 1; r <= sh.getLastRowNum(); r++) {
+                Row row = sh.getRow(r);
+                if (row == null) continue;
+                String codigoRaw = fmt.formatCellValue(row.getCell(colCodigo)).trim();
+                String nivelRaw  = fmt.formatCellValue(row.getCell(colNivel)).trim();
+                if (codigoRaw.isEmpty() || nivelRaw.isEmpty()) continue;
+
+                String key = canonicalCodeKey(codigoRaw); // “101.0” -> “101”
+                // parse nivel (acepta "3", "3.0")
+                Integer nivel;
+                try {
+                    if (nivelRaw.matches("\\d+")) nivel = Integer.valueOf(nivelRaw);
+                    else nivel = Integer.valueOf((int) Double.parseDouble(nivelRaw.replace(",", ".")));
+                } catch (Exception ex) {
+                    continue;
+                }
+                if (!key.isEmpty() && !map.containsKey(key)) {
+                    map.put(key, nivel);
+                }
+            }
+        } finally {
+            if (in != null) try { in.close(); } catch (Exception ignore) {}
+        }
+        return map;
+    }
+ 
     public String validarCuenta() {
         String validacion = "";
         if (selected.getNumeroCuenta() == null || selected.getDescripcionCuenta() == null || selected.getAdicional2() == null 
@@ -1036,212 +1251,8 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
         }
         return validacion;
     }
-
-    public void leerxls(FileUploadEvent event) throws FileNotFoundException, IOException {
-        System.out.println("**************************** Entro a leer plantilla ********************************");
-        listaCuentasSinRegistrar= new ArrayList<>();
-        try {
-            SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-            XSSFWorkbook excel = new XSSFWorkbook(event.getFile().getInputstream());
-            XSSFSheet sheet = excel.getSheetAt(0);
-            Iterator<Row> rowIterator = sheet.iterator();
-            Row row;
-            while (rowIterator.hasNext()) {
-                row = rowIterator.next();
-                Iterator<Cell> cellIterator = row.cellIterator();
-                Cell cell;
-                String linea1 = "";
-                //System.out.println("La fila es: " + row.getRowNum());
-                if (row.getRowNum() > 15) {
-                    prepareCreate();
-                    while (cellIterator.hasNext()) {
-                        cell = cellIterator.next();
-                        if (cell.getColumnIndex() == 1) {
-                            //System.out.println("Columna 1 valor: " + cell.toString());
-                            if(cell.getCellType() != Cell.CELL_TYPE_BLANK){
-                                if(cell.toString().contains(".")){
-                                    String[] parts = cell.toString().split("\\.");
-                                    //System.out.println("parts: " + parts.length);
-                                    if(Integer.parseInt(parts[1]) == 0){
-                                        //System.out.println("cuenta " + parts[0]);
-                                        selected.setNumeroCuenta(parts[0]);
-                                    }else{
-                                        //System.out.println("cuenta 1" + cell.toString());
-                                        selected.setNumeroCuenta(cell.toString());
-                                    }
-                                }else{
-                                    selected.setNumeroCuenta(cell.toString());
-                                }
-                                
-                            }else{
-                                selected.setNumeroCuenta(null);
-                                nCuenta=" número de cuenta,";
-                            }
-                        }
-
-                        if (cell.getColumnIndex() == 2) {
-                            //System.out.println("Columna 2 valor: " + cell.toString());
-                            if(cell.getCellType() != Cell.CELL_TYPE_BLANK){
-                                selected.setDescripcionCuenta(cell.toString());
-                            }else{
-                                selected.setDescripcionCuenta(null);
-                                dCuenta=" descripción de cuenta,";
-                            }
-                        }
-
-                        if (cell.getColumnIndex() == 3) {
-                            //System.out.println("Columna 3 valor: " + cell.toString());
-                            if(cell.getCellType() != Cell.CELL_TYPE_BLANK){
-                                int val = (int) cell.getNumericCellValue();
-                                selected.setAdicional2(String.valueOf(val));
-                            }else{
-                                selected.setAdicional2(null);
-                                nivel = " nivel,";
-                            }
-                        }
-                        
-                        if (cell.getColumnIndex() == 4) {
-                            //System.out.println("Columna 4 valor: " + cell.toString());
-                            if(cell.getCellType() != Cell.CELL_TYPE_BLANK){
-                                //System.out.println("colum " + cell.toString());
-                                String[] parts = cell.toString().split("\\.");
-                                //System.out.println("parts " + parts[0]);
-                                if(Integer.parseInt(parts[1]) == 0){
-                                    //System.out.println("codigo " + parts[0]);
-                                    obtenerCodigoAgrupador(parts[0]);
-                                }else{
-                                    //System.out.println("codigo 1" + cell.toString());
-                                    obtenerCodigoAgrupador(cell.toString());
-                                }
-                            }else{
-                                selected.setCodigoAgrupadorSatId(null);
-                                codigo=" codigo agrupador,";
-                                //System.out.println("Colum: " + selected.getCodigoAgrupadorSatId());
-                            }
-                        }
-
-                        if (cell.getColumnIndex() == 5) {
-                            //System.out.println("Columna 5 valor: " + cell.toString());
-                            if(cell.getCellType() != Cell.CELL_TYPE_BLANK){
-                                //System.out.println("Columna: " + cell.toString());
-                                int val = (int) cell.getNumericCellValue();
-                                selected.setTipo(String.valueOf(val));
-                            }else{
-                                selected.setTipo(null);
-                                tipo=" tipo,";
-                                //System.out.println("Colum: " + selected.getTipo());
-                            }
-                        }
-                        
-                        if (cell.getColumnIndex() == 6) {
-                            //System.out.println("Columna 6 valor: " + cell.toString());
-                            if(cell.getCellType() != Cell.CELL_TYPE_BLANK){
-                                //System.out.println("Columna: " + cell.toString());
-                                int val = (int) cell.getNumericCellValue();
-                                selected.setSubtipo(String.valueOf(val));
-                            }else{
-                                selected.setSubtipo(null);
-                                subtipo=" subtipo,";
-                                //System.out.println("Colum: " + selected.getSubtipo());
-                            }
-                        }
-                        
-                        if (cell.getColumnIndex() == 7) {
-                            //System.out.println("Columna 7 valor: " + cell.toString());
-                            if(cell.getCellType() != Cell.CELL_TYPE_BLANK){
-                                if ("A".equals(cell.toString()) || "D".equals(cell.toString())) {
-                                    selected.setNaturaleza(cell.toString());
-                                    //System.out.println("naturaleza: " + selected.getNaturaleza());
-                                }else if ("Acreedora".equals(cell.toString())) {
-                                    selected.setNaturaleza("A");
-                                    //System.out.println("naturaleza: " + selected.getNaturaleza());
-                                }else if ("Deudora".equals(cell.toString())) {
-                                    selected.setNaturaleza("D");
-                                    //System.out.println("naturaleza: " + selected.getNaturaleza());
-                                }else{
-                                    selected.setNaturaleza("");
-                                    //System.out.println("naturaleza: " + selected.getNaturaleza());
-                                }
-                            }else{
-                                selected.setNaturaleza(null);
-                                natur = " naturaleza,";
-                                //System.out.println("Colum: " + selected.getNaturaleza());
-                            }
-                        }
-                        
-                        if (cell.getColumnIndex() == 8) {
-                            //System.out.println("Columna 8 valor: " + cell.toString());
-                            obtenerMoneda(cell.toString());
-                        }
-                        
-                        if (cell.getColumnIndex() == 9) {
-                            //System.out.println("Columna 9 valor: " + cell.toString());
-                            if ("DIOT".equals(cell.toString().toUpperCase())) {
-                                selected.setAdicional1(Boolean.parseBoolean("TRUE"));
-                            } else {
-                                selected.setAdicional1(Boolean.parseBoolean("FALSE"));
-                            }
-                        }
-                        
-                        if (cell.getColumnIndex() == 10) {
-                            //System.out.println("Columna 10 valor: " + cell.toString());
-                            selected.setRfc(cell.toString());
-                        }
-                        
-                        if (cell.getColumnIndex() == 11) {
-                            //System.out.println("Columna 11 valor: " + cell.toString());
-                            //  String fecha= cell.toString();
-                            //  Date fechafinal = formatoFecha.parse(fecha);
-                            //System.out.println("FechaFinal: " + cell.getDateCellValue());
-                            selected.setInicioVigencia(cell.getDateCellValue());
-                            if (selected.getInicioVigencia() == null) {
-                                selected.setInicioVigencia(new Date());
-                            }
-                        }
-
-                    }
-
-                    /*System.out.println("Objeto: " + selected.getNumeroCuenta() + "||" + selected.getDescripcionCuenta()
-                            + "||" + selected.getNaturaleza() + "||" + selected.getInicioVigencia()
-                            + "||" + selected.getCodigoAgrupadorSatId() + "||" + selected.getAdicional1());*/
-                    try {
-
-                        selected.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
-                        selected.setUltimaFechaActualizacion(new Date());
-                        if (!validarRegistroParaInsertar()) {
-                            ejbFacade.crea(selected);
-                            //System.out.println("Creo registro");
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Registro(s) cargado(s)"));
-                        }
-
-                    } catch (Exception e) {
-                        System.out.println("Error al crear el registro");
-                    }
-
-                    selected = null;
-                }
-
-            }
-            //System.out.println("Tamaño de la lista de cuentas que no se registraron: " + listaCuentasSinRegistrar.size());
-            obtenerCuentasPorUsuario();
-            if(!listaCuentasSinRegistrar.isEmpty()){
-                motivo = nCuenta+dCuenta+nivel+codigo+natur+tipo+subtipo+rfc;
-                motivoVal = ndCuentas+rfcs;
-                obtenerCuentasNoRegistradas();
-                RequestContext.getCurrentInstance().execute("PF('CuentasDialog').show();"); 
-                JsfUtil.addSuccessMessage("Archivo Cargado Correctamente");
-                System.out.println("Archivo cargado correctamente");
-                nCuenta="";dCuenta="";nivel="";codigo="";natur="";tipo="";subtipo="";rfc="";
-                ndCuentas="";rfcs="";
-            }
-            
-        } catch (Exception e) {
-            System.out.println("error al crear cuenta: " + e.getMessage());
-            JsfUtil.addErrorMessage("Ocurrio un error al cargar las cuentas.");
-            e.printStackTrace();
-        }//*/
-    }
     
+   
     public List<RnGcCatalogoCuentasTbl> obtenerCuentasNoRegistradas(){
         List<RnGcCatalogoCuentasTbl> lista = listaCuentasSinRegistrar;
         if(lista != null){
@@ -1273,7 +1284,7 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
         RnGcMonedasTbl monedaId = new RnGcMonedasTbl();
         if (moneda != null) {
             monedaId = monedaFacade.obtenerMonedas(moneda);
-            selected.setMonedaId(monedaId);
+            //selected.setMonedaId(monedaId);
             System.out.println("La moneda es " + monedaId.getCMoneda());
         }
     }
@@ -1288,94 +1299,831 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
         return listaCuentasPorUsuario;
 
     }
+    
+    // === NUEVO: selección múltiple de la tabla de válidas ===
+    private List<RnGcCatalogoCuentasTbl> selectedPrevalidas = new ArrayList<>();
 
-    public boolean validarRegistroParaInsertar() {
-        //System.out.println("Entro a validar el registro que se va a insertar en el catalogo de cuentas");
-        usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-        boolean var = false;
-        if(selected.getNumeroCuenta() == null && selected.getDescripcionCuenta() == null && selected.getAdicional2() == null 
-                && selected.getCodigoAgrupadorSatId() == null && selected.getTipo() == null && selected.getSubtipo() == null
-                && selected.getNaturaleza() == null){
-            //System.out.println("No hay registro");
-            nCuenta="";dCuenta="";nivel="";codigo="";natur="";tipo="";subtipo="";rfc="";
-            var = true;
-        }else{
-          if (selected.getNumeroCuenta() != null) {
-            if (selected.getDescripcionCuenta() != null) {
-                if (selected.getAdicional2() != null) {
-                    if (selected.getCodigoAgrupadorSatId() != null) {
-                        if (selected.getTipo() != null) {
-                            if (selected.getSubtipo() != null) {
-                                if (selected.getNaturaleza() != null) {
-                                    List<RnGcCatalogoCuentasTbl> listaCuentas = new ArrayList<>();
-                                    List<RnGcCatalogoCuentasTbl> cuenta = new ArrayList<>();
-                                    List<RnGcCatalogoCuentasTbl> cuenta1 = new ArrayList<>();
-                                    cuenta1 = ejbFacade.obtenerListadeCuentasDescripcion(selected.getDescripcionCuenta(), usuarioId);
-                                    listaCuentas = ejbFacade.obtenerListadeNumerosCuentas(selected.getNumeroCuenta(), usuarioId );
-                                    if (listaCuentas.isEmpty() && cuenta1.isEmpty()) {
-                                        if(selected.getRfc() == null && !selected.getAdicional1()){
-                                            selected.setRfc("");
-                                            var = false;
-                                        }else if(selected.getRfc() != null && !selected.getAdicional1()){
-                                            var = false;
-                                        }else if(selected.getRfc() != null && selected.getAdicional1()){
-                                            cuenta = ejbFacade.obtenerListadeCuentasRFC(selected.getRfc(), usuarioId, true);
-                                            if(!cuenta.isEmpty()){
-                                                var = true;
-                                                //System.out.println("El RFC ya existe");
-                                                listaCuentasSinRegistrar.add(selected);
-                                                rfcs=" rfc,";
-                                            }else
-                                                var = false;
-                                        }else if(selected.getRfc() == null && selected.getAdicional1()){
-                                            System.out.println("El RFC es obligatorio porque llenaron el campo DIOT");
-                                            listaCuentasSinRegistrar.add(selected);
-                                            rfc=" rfc,";
-                                            var = true;
-                                        }
-                                    }else{
-                                        //System.out.println("Ya hay un registro con ese numero de cuenta o con esa descripcion de cuenta");
-                                        listaCuentasSinRegistrar.add(selected);
-                                        ndCuentas = " número o descripción de cuenta,";
-                                        var = true;
-                                    }
-                                }else{
-                                    System.out.println("El campo naturaleza es obligatorio");
-                                    listaCuentasSinRegistrar.add(selected);
-                                    var = true;
-                                }
-                            }else{
-                                System.out.println("El campo subtipo es obligatorio");
-                                listaCuentasSinRegistrar.add(selected);
-                                var = true;
-                            }
-                        }else{
-                            System.out.println("El campo tipo es obligatorio");
-                            listaCuentasSinRegistrar.add(selected);
-                            var = true;
-                        }
-                    }else{
-                        System.out.println("El campo codigo agrupador es obligatorio");
-                        listaCuentasSinRegistrar.add(selected);
-                        var = true;
-                    }
-                }else{
-                    System.out.println("El campo nivel es obligatorio");
-                    listaCuentasSinRegistrar.add(selected);
-                    var = true;
+    public List<RnGcCatalogoCuentasTbl> getSelectedPrevalidas() {
+        return selectedPrevalidas;
+    }
+    public void setSelectedPrevalidas(List<RnGcCatalogoCuentasTbl> selectedPrevalidas) {
+        this.selectedPrevalidas = selectedPrevalidas;
+    }
+
+    private boolean editarRechazadas; 
+    private List<RnGcCatalogoCuentasTbl> selectedRechazadas;       // seleccionadas en tabla rechazadas
+    public void toggleEditarRechazadas() { this.editarRechazadas = !this.editarRechazadas; }
+
+    // === (Opcional) habilitar/deshabilitar edición por celda ===
+    private boolean editar = false;
+    public boolean isEditar() { return editar; }
+    public void setEditar(boolean editar) { this.editar = editar; }
+    public void toggleEditar() { this.editar = !this.editar; }
+
+    // Eliminar seleccionadas en válidas (solo memoria)
+    public void eliminarSeleccionPrevalidas() {
+        if (selectedPrevalidas != null && !selectedPrevalidas.isEmpty()) {
+            prevalidas.removeAll(new ArrayList<>(selectedPrevalidas));
+            selectedPrevalidas.clear();
+            totPrevalidas = prevalidas.size();
+            JsfUtil.addSuccessMessage("Registros válidos eliminados de la lista temporal.");
+        }
+    }
+
+    // Eliminar seleccionadas en rechazadas (solo memoria)
+    public void eliminarSeleccionRechazadas() {
+        if (selectedRechazadas != null && !selectedRechazadas.isEmpty()) {
+            rechazadas.removeAll(new ArrayList<>(selectedRechazadas));
+            selectedRechazadas.clear();
+            totRechazadas = rechazadas.size();
+            JsfUtil.addSuccessMessage("Registros rechazados eliminados de la lista temporal.");
+        }
+    }
+
+    // Confirmar (guardar en BD) lo válido (puedes guardar todos o sólo seleccionados)
+    public void guardarCorrecto() {
+        List<RnGcCatalogoCuentasTbl> aGuardar =
+            (selectedPrevalidas != null && !selectedPrevalidas.isEmpty())
+                ? new ArrayList<>(selectedPrevalidas)
+                : new ArrayList<>(prevalidas);
+
+        if (aGuardar.isEmpty()) {
+            JsfUtil.addErrorMessage("No hay registros válidos para guardar.");
+            return;
+        }
+        
+        Integer uid = (usuarioFirmado != null) ? usuarioFirmado.obtenerIdUsuario() : null;
+        RnGcUsuariosTbl user = (uid != null) ? usuariosFacade.obtenerUsuarioPorId(uid) : null;
+        RnGcPeriodosTbl p = (user != null) ? periodosFacade.findActivo(user) : null;
+
+        // Asegura que tengas un usuario válido
+        Integer userId = null;
+        try { userId = usuarioFirmado != null ? usuarioFirmado.obtenerIdUsuario() : null; } catch (Exception ignore) {}
+        if (userId == null) {
+            // fallback seguro (ajústalo a tu contexto)
+            userId = 0; // o lanza error si prefieres
+        }
+
+        Date ahora = new Date();
+        int ok = 0, fail = 0;
+        for (RnGcCatalogoCuentasTbl c : aGuardar) {
+            try {
+                if (c.getFechaCreacion() == null) c.setFechaCreacion(ahora);
+                if (c.getInicioVigencia() == null) c.setInicioVigencia(ahora);
+
+                // campos obligatorios de auditoría:
+                if (c.getCreadoPor() == null) c.setCreadoPor(userId);
+                c.setUltimaActualizacionPor(userId);
+                c.setIdPeriodo(p.getPeriodoId());
+                c.setUltimaFechaActualizacion(ahora);
+                
+                 // ===== S A L D O S  =====
+                // Si viene null del Excel, lo normalizamos a 0
+                if (c.getSaldoInicial() == null) {
+                    c.setSaldoInicial(BigDecimal.ZERO);
                 }
-            }else{
-                System.out.println("El campo descripcion de cuenta es obligatorio");
-                listaCuentasSinRegistrar.add(selected);
-                var = true;
+
+                // Si saldo_actual viene null, lo inicializamos igual al saldo_inicial
+                if (c.getSaldoActual() == null) {
+                    c.setSaldoActual(c.getSaldoInicial());
+                }
+
+                // si usas DIOT como String, asegúrate de no enviar nulls inesperados
+                if (c.getAdicional1() == null) c.setAdicional1("FALSE");
+
+                ejbFacade.crea(c);
+                ok++;
+            } catch (Exception ex) {
+                fail++;
+                // opcional: loguea 'ex' con más detalle
             }
-        }else{
-            System.out.println("El campo numero de cuenta es obligatorio");
-            listaCuentasSinRegistrar.add(selected);
-            var = true;
         }
+
+        prevalidas.removeAll(aGuardar);
+        if (selectedPrevalidas != null) selectedPrevalidas.clear();
+        totPrevalidas = prevalidas.size();
+
+        JsfUtil.addSuccessMessage("Guardados: " + ok + " | Fallidos: " + fail);
+    }
+
+    // Cancelar (limpia y cierra)
+    public void cancelarCarga() {
+        if (prevalidas != null) prevalidas.clear();
+        if (rechazadas != null) rechazadas.clear();
+        if (selectedPrevalidas != null) selectedPrevalidas.clear();
+        if (selectedRechazadas != null) selectedRechazadas.clear();
+        totPrevalidas = 0;
+        totRechazadas = 0;
+        // puedes resetear contadores / flags extra
+        this.editar = false;
+        this.editarRechazadas = false;
+        JsfUtil.addSuccessMessage("Proceso cancelado y datos temporales descartados.");
+    }
+    
+
+    private boolean diotEsTrueEstricto(String s) {
+        if (s == null) return false;
+        String v = s.trim().toLowerCase();
+        return v.equals("true") || v.equals("si") || v.equals("sí") || v.equals("1");
+    }
+    private String parseDiot(String s) {
+        return diotEsTrueEstricto(s) ? "TRUE" : "FALSE";
+    }
+    private int inferNivelDesdeAgrupador(String agr) {
+        // Ejemplo: regresa dígitos iniciales o longitud, ajusta a tu regla real
+        String onlyDigits = agr.replaceAll("\\D", "");
+        if (onlyDigits.isEmpty()) return -1;
+        return Math.min(onlyDigits.length(), 9);
+    }
+    private String resolveNaturalezaDesdeAgrupador(String agr) {
+        // Ejemplo: pon tu mapeo real; por ahora “D”/“A” según heurística simple
+        return agr != null && agr.startsWith("1") ? "D" : "A";
+    }
+    private RnGcCatalogoCuentasTbl copiaLigera(RnGcCatalogoCuentasTbl c) {
+        RnGcCatalogoCuentasTbl x = new RnGcCatalogoCuentasTbl();
+        x.setNumeroCuenta(c.getNumeroCuenta());
+        x.setDescripcionCuenta(c.getDescripcionCuenta());
+        x.setTipo(c.getTipo());
+        x.setSubtipo(c.getSubtipo());
+        x.setAdicional2(c.getAdicional2());
+        x.setNaturaleza(c.getNaturaleza());
+        x.setRfc(c.getRfc());
+        x.setMoneda(c.getMoneda());
+        x.setAdicional1(c.getAdicional1());
+        x.setSaldoInicial(c.getSaldoInicial());
+        x.setSaldoActual(c.getSaldoActual());
+        return x;
+    }
+    private AbstractMap.SimpleEntry<Integer, Map<Integer,String>> findHeaderRow(
+            XSSFSheet sheet, DataFormatter fmt, List<String> duplicadas) {
+        // Busca cabecera en primeras 16 filas (ajusta)
+        for (int r=0; r<=Math.min(sheet.getLastRowNum(), 15); r++) {
+            Row row = sheet.getRow(r);
+            if (row == null) continue;
+            Map<Integer,String> idx2name = new LinkedHashMap<>();
+            Set<String> seen = new HashSet<>();
+            boolean ok = false;
+            for (int c=0; c<row.getLastCellNum(); c++) {
+                String val = fmt.formatCellValue(row.getCell(c)).trim().toLowerCase();
+                if (!val.isEmpty()) {
+                    ok = true;
+                    if (!seen.add(val)) duplicadas.add(val);
+                    idx2name.put(c, val);
+                }
+            }
+            if (ok) return new AbstractMap.SimpleEntry<>(r, idx2name);
         }
-        return var;
+        return null;
+    }
+    private Integer findColIndex(Map<Integer,String> headerByIndex, String keyLike) {
+        if (headerByIndex == null) return null;
+        String k = keyLike.toLowerCase();
+        for (Map.Entry<Integer,String> e: headerByIndex.entrySet()) {
+            String h = e.getValue();
+            if (h.contains(k)) return e.getKey();
+        }
+        return null;
+    }
+    // true = YA EXISTE/NO insertar; false = OK para insertar en preview
+    private boolean validarRegistroParaInsertarPreview(RnGcCatalogoCuentasTbl cand) {
+        // Implementación real tuya. Aquí un ejemplo contra número de cuenta:
+        if (cand.getNumeroCuenta() == null) return true;
+        Long cnt = em.createQuery(
+                "select count(c) from RnGcCatalogoCuentasTbl c where c.numeroCuenta = :n",
+                Long.class)
+            .setParameter("n", cand.getNumeroCuenta())
+            .getSingleResult();
+        return cnt != null && cnt > 0;
+    }
+    
+    private String normalizaDiot(String raw) {
+        if (raw == null) return "FALSE";
+        String v = raw.trim().toUpperCase();
+
+        if ("TRUE".equals(v) || "1".equals(v) || "SI".equals(v) || "SÍ".equals(v) || "X".equals(v)) {
+            return "TRUE";
+        }
+        if ("FALSE".equals(v) || "0".equals(v) || "NO".equals(v) || v.isEmpty()) {
+            return "FALSE";
+        }
+        // Si viene algo raro, lo tratamos como FALSE (o podrías agregar error si quieres)
+        return "FALSE";
+    }
+
+    private boolean esRfcValido(String rfc) {
+        if (rfc == null) return false;
+        String v = rfc.trim().toUpperCase();
+        // RFC (simplificado): PM o PF con homoclave
+        return v.matches("^[A-ZÑ&]{3,4}[0-9]{6}[A-Z0-9]{3}$");
+    }
+    
+    private boolean rfcYaRegistradoEnCatalogo(String rfc) {
+        try {
+            return catalogoCuentasFacade.existeRfcEnCatalogo(rfc);
+        } catch (Exception e) {
+            // si quieres, logueas y por seguridad consideras que sí está
+            // LOG.error("Error al validar RFC en catálogo", e);
+            return true;
+        }
+    }
+    
+    private void cargarMonedasValidas() {
+
+        if (idMonedaPorCodigo == null) {
+            idMonedaPorCodigo = new HashMap<String, Integer>();
+        }
+        if (codigosMonedaValidos == null) {
+            codigosMonedaValidos = new HashSet<String>();
+        }
+
+        idMonedaPorCodigo.clear();
+        codigosMonedaValidos.clear();
+
+        // Si el EJB no se inyectó, evita NPE y avisa en log
+        if (ejbMonedas == null) {
+            System.out.println(">>> ejbMonedas es NULL, no se inyectó RnGcMonedasTblFacade");
+            return;
+        }
+
+        List<RnGcMonedasTbl> lista = ejbMonedas.findAll();
+        if (lista == null || lista.isEmpty()) {
+            System.out.println(">>> No se encontraron registros en rn_gc_monedas_tbl");
+            return;
+        }
+
+        for (RnGcMonedasTbl m : lista) {
+            if (m == null) {
+                continue;
+            }
+
+            String codigo = m.getCMoneda(); 
+            Integer id    = m.getId();    
+
+            if (codigo == null || id == null) {
+                continue;
+            }
+
+            codigo = codigo.trim().toUpperCase();
+            if (codigo.isEmpty()) {
+                continue;
+            }
+
+            codigosMonedaValidos.add(codigo);
+            idMonedaPorCodigo.put(codigo, id);
+        }
+
+        System.out.println(">>> Monedas válidas cargadas: " + codigosMonedaValidos);
+    }
+    
+    private void cargarAgrupadoresValidos() {
+        if (agrupadoresCargados) return;
+
+        idAgrupadorPorCodigo.clear();
+        codigosAgrupadorValidos.clear();
+
+        List<RnGcCodigoAgrupadorSatTbl> lista = ejbCodigoAgrupadorSat.findAll();
+        for (RnGcCodigoAgrupadorSatTbl a : lista) {
+            if (a.getCodigoAgrupador() != null) {
+                String cod = normalizaCodigoAgrupador(a.getCodigoAgrupador());
+                codigosAgrupadorValidos.add(cod);
+                idAgrupadorPorCodigo.put(cod, a.getId());
+            }
+        }
+
+        agrupadoresCargados = true;
+        System.out.println(">>> Agrupadores SAT válidos cargados: " + codigosAgrupadorValidos.size());
+    }
+    
+    private String normalizaCodigoAgrupador(String s) {
+        if (s == null) return null;
+        s = s.trim().toUpperCase();
+        s = s.replaceAll("[^0-9A-Z\\.\\-]", "");
+        return s.isEmpty() ? null : s;
+    }
+    
+    private String extraerCodigoMoneda(String celda) {
+        if (celda == null) return null;
+        String t = celda.trim().toUpperCase();
+        if (t.isEmpty()) return null;
+
+        // si viene "MXN Pesos" -> nos quedamos con "MXN"
+        int space = t.indexOf(' ');
+        if (space > 0) {
+            t = t.substring(0, space);
+        }
+
+        // si viene algo tipo "Pesos (MXN)" -> sacamos lo que va entre paréntesis
+        int par = t.indexOf('(');
+        if (par >= 0) {
+            int fin = t.indexOf(')', par + 1);
+            if (fin > par + 1) {
+                t = t.substring(par + 1, fin).trim();
+            }
+        }
+
+        return t.isEmpty() ? null : t;
+    }
+    
+    private String normalizaNaturaleza(String s){
+        if (s == null) return null;
+        s = s.trim().toUpperCase();
+
+        // unifica variantes comunes
+        if (s.equals("DEUDORA") || s.equals("D")) return "D";
+        if (s.equals("ACREEDORA") || s.equals("A")) return "A";
+
+        return s.isEmpty() ? null : s;
+    }
+
+    private String calcularNaturalezaPorCodigoAgrupador(String codigoAgrupadorTxt, List<String> errs) {
+        Integer code = extraeCodigoBase(codigoAgrupadorTxt);
+        if (code == null) {
+            errs.add("Código agrupador SAT inválido para calcular naturaleza: " + codigoAgrupadorTxt);
+            return null;
+        }
+
+        // Reglas no ambiguas
+        if (code >= 100 && code <= 199) return "D"; // Activo
+        if (code >= 200 && code <= 499) return "A"; // Pasivo/Capital/Ingreso
+        if (code >= 500 && code <= 699) return "D"; // Costo/Gasto
+
+        // Rangos ambiguos en tu tabla
+        if ((code >= 700 && code <= 799) || (code >= 800 && code <= 899)) {
+            errs.add("Naturaleza requerida manualmente para código agrupador " + code +
+                     " (700–899 es ambiguo sin concepto).");
+            return null;
+        }
+
+        errs.add("Código agrupador fuera de rango esperado para naturaleza: " + code);
+        return null;
+    }
+
+    private Integer extraeCodigoBase(String codigoTxt) {
+        if (codigoTxt == null) return null;
+        String t = codigoTxt.trim();
+        if (t.isEmpty()) return null;
+
+        // deja números y puntos (por si viene 101.01, 200-01, etc.)
+        t = t.replaceAll("[^0-9.]", "");
+        if (t.isEmpty()) return null;
+
+        try {
+            double d = Double.parseDouble(t);
+            return (int) Math.floor(d);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+    
+    private Integer calcularNivelCuenta(String numeroCuenta) {
+        if (numeroCuenta == null || numeroCuenta.trim().isEmpty()) {
+            return null;
+        }
+        return numeroCuenta.trim().split("-").length;
+    }
+   
+    public void validarSaldosJerarquia() {
+
+        if (prevalidas == null || prevalidas.isEmpty()) {
+            return;
+        }
+
+        if (rechazadas == null) {
+            rechazadas = new ArrayList<>();
+        }
+
+        // Normalizar saldos nulos a 0
+        for (RnGcCatalogoCuentasTbl cta : prevalidas) {
+            if (cta.getSaldoInicial() == null) {
+                cta.setSaldoInicial(BigDecimal.ZERO);
+            }
+        }
+
+        List<RnGcCatalogoCuentasTbl> padresRechazados = new ArrayList<>();
+
+        for (RnGcCatalogoCuentasTbl padre : prevalidas) {
+            String numPadre = padre.getNumeroCuenta();
+            if (numPadre == null || numPadre.isEmpty()) {
+                continue;
+            }
+
+            // Sólo consideramos como "padres" a las cuentas sin guiones: 101, 102, 103...
+            if (numPadre.contains("-")) {
+                continue;
+            }
+
+            BigDecimal sumaHijos = BigDecimal.ZERO;
+            boolean tieneHijos = false;
+
+            for (RnGcCatalogoCuentasTbl posibleHijo : prevalidas) {
+                String numHijo = posibleHijo.getNumeroCuenta();
+                if (numHijo == null) {
+                    continue;
+                }
+
+                // Hijo si empieza con "padre-"
+                if (numHijo.startsWith(numPadre + "-")) {
+                    tieneHijos = true;
+                    if (posibleHijo.getSaldoInicial() != null) {
+                        sumaHijos = sumaHijos.add(posibleHijo.getSaldoInicial());
+                    }
+                }
+            }
+
+            if (!tieneHijos) {
+                continue; // no es padre en esta estructura, no se valida
+            }
+
+            BigDecimal saldoPadre = padre.getSaldoInicial() == null
+                    ? BigDecimal.ZERO
+                    : padre.getSaldoInicial();
+
+            // CASO 1: Padre sin saldo pero hijos sí tienen → completar saldo padre
+            if (saldoPadre.compareTo(BigDecimal.ZERO) == 0
+                    && sumaHijos.compareTo(BigDecimal.ZERO) > 0) {
+
+                padre.setSaldoInicial(sumaHijos);
+                padre.setSaldoActual(sumaHijos); // si quieres arrancar saldo_actual igual
+
+            // CASO 2: Padre con saldo que NO cuadra con la suma de sus hijos → rechazar
+            } else if (saldoPadre.compareTo(sumaHijos) != 0) {
+
+                padresRechazados.add(padre);
+            }
+        }
+
+        // Mover padres no válidos de prevalidas → rechazadas
+        if (!padresRechazados.isEmpty()) {
+            prevalidas.removeAll(padresRechazados);
+            rechazadas.addAll(padresRechazados);
+        }
+    }
+
+
+    public void leerxls(FileUploadEvent event) throws IOException {
+
+        prevalidas  = new ArrayList<>();
+        rechazadas  = new ArrayList<>();
+        rechazadasDetalladas = new ArrayList<>();
+        totalLeidas = 0; totPrevalidas = 0; totRechazadas = 0;
+
+        InputStream in = null;
+        XSSFWorkbook excel = null;
+
+        try {
+            org.primefaces.model.UploadedFile uf = event.getFile();
+            in = uf.getInputstream();
+            excel = new XSSFWorkbook(in);
+
+            DataFormatter fmt = new DataFormatter();
+            XSSFSheet sheet = excel.getSheetAt(0);
+
+            // 1) Cabeceras
+            List<String> cabDup = new ArrayList<>();
+            AbstractMap.SimpleEntry<Integer, Map<Integer,String>> headerInfo =
+                    findHeaderRow(sheet, fmt, cabDup);
+
+            if (headerInfo == null) {
+                JsfUtil.addErrorMessage("No se encontró fila de cabeceras en las primeras 16 filas.");
+                return;
+            }
+            if (!cabDup.isEmpty()) {
+                JsfUtil.addErrorMessage("Hay cabeceras repetidas: " + String.join(", ", cabDup));
+                return;
+            }
+
+            final int headerRowIdx = headerInfo.getKey();
+            final Map<Integer,String> headerByIndex = headerInfo.getValue();
+
+            // 2) Índices de columnas requeridas
+            Integer colCuenta    = findColIndex(headerByIndex, REQ_CUENTA);
+            Integer colDesc      = findColIndex(headerByIndex, REQ_DESCRIPCION);
+            Integer colTipo      = findColIndex(headerByIndex, REQ_TIPO);
+            Integer colSubtipo   = findColIndex(headerByIndex, REQ_SUBTIPO);
+            Integer colAgrupador = findColIndex(headerByIndex, REQ_AGRUPADOR);
+            Integer colMoneda    = findColIndex(headerByIndex, REQ_MONEDA);
+            Integer colDiot      = findColIndex(headerByIndex, REQ_DIOT);
+            Integer colRfc       = findColIndex(headerByIndex, REQ_RFC);
+            Integer colSaldo     = findColIndex(headerByIndex, REQ_INICIAL);
+
+            List<String> faltantes = new ArrayList<>();
+            if (colCuenta == null)    faltantes.add("cuenta");
+            if (colDesc == null)      faltantes.add("descripción");
+            if (colTipo == null)      faltantes.add("tipo");
+            if (colSubtipo == null)   faltantes.add("subtipo");
+            if (colAgrupador == null) faltantes.add("agrupador SAT");
+            if (colMoneda == null)    faltantes.add("moneda");
+            if (colDiot == null)      faltantes.add("DIOT");
+            if (colRfc == null)       faltantes.add("RFC");
+            if (colSaldo == null)     faltantes.add("Saldo");
+            if (!faltantes.isEmpty()) {
+                JsfUtil.addErrorMessage("Faltan columnas requeridas: " + String.join(", ", faltantes));
+                return;
+            }
+
+            cargarAgrupadoresValidos();
+            cargarMonedasValidas();
+            if (idMonedaPorCodigo == null || idMonedaPorCodigo.isEmpty()) {
+                JsfUtil.addErrorMessage("No se pudieron cargar las monedas válidas del catálogo.");
+                return;
+            }
+
+            Map<String, List<Integer>> mapaDuplicadas = new HashMap<>();
+
+            class RowError implements Serializable {
+                private static final long serialVersionUID = 1L;
+                int fila;
+                String cuenta;
+                List<String> errs = new ArrayList<>();
+            }
+            class CandWithErrors {
+                int fila;
+                RnGcCatalogoCuentasTbl cand;
+                String cuentaLimpia;
+                RowError re = new RowError();
+            }
+
+            List<CandWithErrors> temporales = new ArrayList<>();
+
+            // ====== MAPAS PARA VALIDACION PADRE/HJOS ======
+            final Map<String, BigDecimal> sumaSaldoPorCuentaPadre = new HashMap<>();
+            final Map<String, CandWithErrors> porCuenta = new HashMap<>(); // opcional
+            final Set<String> cuentasMarcadasPorSaldo = new HashSet<>();
+
+            // 4) Lectura
+            int firstDataRow = headerRowIdx + 1;
+            int lastRow = sheet.getLastRowNum();
+            totalLeidas = Math.max(0, lastRow - headerRowIdx);
+
+            for (int r = firstDataRow; r <= lastRow; r++) {
+
+                Row row = sheet.getRow(r);
+                if (row == null) continue;
+
+                CandWithErrors cwe = new CandWithErrors();
+                cwe.fila = r + 1;
+                cwe.cand = new RnGcCatalogoCuentasTbl();
+                cwe.re.fila = cwe.fila;
+
+                // ===== CUENTA =====
+                String cuentaRaw = fmt.formatCellValue(row.getCell(colCuenta));
+                if (cuentaRaw != null) {
+                    String raw = cuentaRaw.trim();
+                    int dot = raw.indexOf('.'); if (dot > 0) raw = raw.substring(0, dot).trim();
+                    int sp  = raw.indexOf(' '); if (sp  > 0) raw = raw.substring(0, sp ).trim();
+                    raw = raw.isEmpty()? null : raw;
+
+                    cwe.cand.setNumeroCuenta(raw);
+                    cwe.cuentaLimpia = raw;
+                    cwe.re.cuenta = raw;
+                }
+
+                if (cwe.cand.getNumeroCuenta() == null) {
+                    cwe.cand.setAdicional1("Número de cuenta requerido");
+                } else {
+                    mapaDuplicadas.computeIfAbsent(cwe.cand.getNumeroCuenta(), k -> new ArrayList<>())
+                                  .add(cwe.fila);
+                    porCuenta.put(cwe.cand.getNumeroCuenta(), cwe);
+                }
+
+                // ===== DESCRIPCIÓN =====
+                String desc = fmt.formatCellValue(row.getCell(colDesc)).trim();
+                cwe.cand.setDescripcionCuenta(desc.isEmpty()? null : desc);
+                if (cwe.cand.getDescripcionCuenta() == null) {
+                    cwe.cand.setAdicional1("Descripción requerida");
+                }
+
+                // ===== TIPO / SUBTIPO =====
+                String tipoTxt    = fmt.formatCellValue(row.getCell(colTipo)).trim().replaceAll("[^0-9-]","");
+                String subtipoTxt = fmt.formatCellValue(row.getCell(colSubtipo)).trim().replaceAll("[^0-9-]","");
+                cwe.cand.setTipo(   tipoTxt.isEmpty()? null : tipoTxt);
+                cwe.cand.setSubtipo(subtipoTxt.isEmpty()? null : subtipoTxt);
+                if (cwe.cand.getTipo() == null)    cwe.cand.setAdicional1("Tipo requerido");
+                if (cwe.cand.getSubtipo() == null) cwe.cand.setAdicional1("Subtipo requerido");
+
+                // ===== AGRUPADOR SAT =====
+                String agrupTxtCelda = fmt.formatCellValue(row.getCell(colAgrupador)).trim();
+                String codAgr = normalizaCodigoAgrupador(agrupTxtCelda);
+                Integer idAgr = idAgrupadorPorCodigo.get(codAgr);
+
+                if (idAgr == null) {
+                    cwe.cand.setAdicional1("Agrupador SAT inválido: " + codAgr);
+                } else {
+                    RnGcCodigoAgrupadorSatTbl agr = ejbCodigoAgrupadorSat.find(idAgr);
+                    cwe.cand.setCodigoAgrupadorSatId(agr);
+                }
+
+                // ===== SALDO INICIAL =====
+                BigDecimal saldoInicial = null;
+                if (colSaldo != null) {
+                    String saldoTxt = fmt.formatCellValue(row.getCell(colSaldo)).trim();
+                    if (!saldoTxt.isEmpty()) {
+                        saldoTxt = saldoTxt.replace(",", "");
+                        try {
+                            saldoInicial = new BigDecimal(saldoTxt);
+                        } catch (NumberFormatException ex) {
+                            cwe.cand.setAdicional1("Saldo inicial inválido: " + saldoTxt);
+                        }
+                    }
+                }
+                cwe.cand.setSaldoInicial(saldoInicial);
+                cwe.cand.setSaldoActual(saldoInicial);
+
+                // ===== Acumular subcuentas => padre =====
+                acumularSaldoSoloPadreInmediato(sumaSaldoPorCuentaPadre, cwe.cuentaLimpia, saldoInicial);
+
+                // ===== MONEDA =====
+                String monedaTxtCelda = fmt.formatCellValue(row.getCell(colMoneda)).trim();
+                String codigoMoneda = extraerCodigoMoneda(monedaTxtCelda);
+                Integer idMon = (codigoMoneda != null) ? idMonedaPorCodigo.get(codigoMoneda) : null;
+
+                if (idMon == null) {
+                    cwe.cand.setAdicional1("Moneda inválida o no registrada en catálogo: " + monedaTxtCelda);
+                } else {
+                    cwe.cand.setMoneda(idMon);
+                }
+
+                // ===== NATURALEZA =====
+                String nat = calcularNaturalezaPorCodigoAgrupador(agrupTxtCelda, cwe.re.errs);
+                cwe.cand.setNaturaleza(nat);
+
+                // ===== PERIODO =====
+                if (idPeriodoActivo == null) {
+                    cwe.cand.setAdicional1("No hay periodo activo para registrar");
+                } else {
+                    cwe.cand.setIdPeriodo(idPeriodoActivo);
+                }
+
+                // ===== NIVEL =====
+                Integer nivel = calcularNivelCuenta(cwe.cand.getNumeroCuenta());
+                cwe.cand.setAdicional2(nivel != null ? nivel.toString() : null);
+
+                // ===== DIOT / RFC =====
+                String diotTxt  = fmt.formatCellValue(row.getCell(colDiot)).trim();
+                String diotNorm = normalizaDiot(diotTxt);
+                cwe.cand.setAdicional1(diotNorm);
+
+                String rfcTxt   = fmt.formatCellValue(row.getCell(colRfc)).trim();
+                cwe.cand.setRfc(rfcTxt);
+
+                if ("TRUE".equals(diotNorm)) {
+                    if (rfcTxt == null || rfcTxt.trim().isEmpty()) {
+                        cwe.cand.setAdicional1("RFC requerido porque DIOT=TRUE");
+                    } else if (!esRfcValido(rfcTxt)) {
+                        cwe.cand.setAdicional1("RFC inválido (formato incorrecto)");
+                    } else if (rfcYaRegistradoEnCatalogo(rfcTxt)) {
+                        cwe.cand.setAdicional1("RFC ya registrado en catálogo de cuentas");
+                    }
+                }
+
+                if (cwe.cand.getInicioVigencia() == null) {
+                    cwe.cand.setInicioVigencia(new Date());
+                }
+
+                temporales.add(cwe);
+            }
+
+            // ==========================================================
+            // 5) VALIDAR PADRE vs SUMA SUBCUENTAS (y marcar padre + hijos)
+            // ==========================================================
+            for (CandWithErrors cwe : temporales) {
+            String cuenta = cwe.cuentaLimpia;
+            if (cuenta == null) continue;
+
+            BigDecimal sumaHijosDirectos = sumaSaldoPorCuentaPadre.get(cuenta);
+            if (sumaHijosDirectos == null) continue; // no tiene hijos directos
+
+            BigDecimal saldoCuenta = cwe.cand.getSaldoInicial();
+            if (saldoCuenta == null) saldoCuenta = BigDecimal.ZERO;
+
+            System.out.println("VALIDANDO CUENTA: " + cuenta
+                    + " | saldoCuenta=" + saldoCuenta
+                    + " | sumaHijosDirectos=" + sumaHijosDirectos);
+
+            if (saldoCuenta.compareTo(sumaHijosDirectos) != 0) {
+
+                // error para la cuenta padre/intermedia
+                cwe.cand.setAdicional1("Saldo inconsistente. Cuenta=" + saldoCuenta
+                                + ", suma hijos directos=" + sumaHijosDirectos);
+
+                cuentasMarcadasPorSaldo.add(cuenta);
+
+                // marcar hijos directos
+                for (CandWithErrors hijo : temporales) {
+                    if (hijo.cuentaLimpia == null) continue;
+
+                    String padreDeHijo = obtenerCuentaPadre(hijo.cuentaLimpia);
+                    if (cuenta.equals(padreDeHijo)) {
+                        cwe.cand.setAdicional1("Cuenta pertenece a padre " + cuenta + " con saldo inconsistente.");
+                        cuentasMarcadasPorSaldo.add(hijo.cuentaLimpia);
+                    }
+                }
+            }
+        }
+            // =========================
+            // 6) Marcar duplicadas
+            // =========================
+            Set<Integer> filasConDup = new HashSet<>();
+            for (Map.Entry<String, List<Integer>> e : mapaDuplicadas.entrySet()) {
+                if (e.getValue().size() > 1) filasConDup.addAll(e.getValue());
+            }
+            if (!filasConDup.isEmpty()) {
+                for (CandWithErrors cwe : temporales) {
+                    if (cwe.cuentaLimpia != null && filasConDup.contains(cwe.fila)) {
+                        cwe.cand.setAdicional1("Cuenta duplicada en archivo (filas: " + mapaDuplicadas.get(cwe.cuentaLimpia) + ")");
+                    }
+                }
+            }
+
+            // =========================
+            // 7) Partición final
+            // =========================
+            for (CandWithErrors cwe : temporales) {
+
+                // Si quedó marcada por regla de saldo padre/hijos, se va a rechazadas directo
+                if (cwe.cuentaLimpia != null && cuentasMarcadasPorSaldo.contains(cwe.cuentaLimpia)) {
+                    rechazadas.add(copiaLigera(cwe.cand));
+                    rechazadasDetalladas.add(cwe.re);
+                    continue;
+                }
+
+                if (cwe.re.errs.isEmpty()) {
+                    boolean yaExiste = validarRegistroParaInsertarPreview(cwe.cand);
+                    if (!yaExiste) {
+                        prevalidas.add(cwe.cand);
+                    } else {
+                        rechazadas.add(copiaLigera(cwe.cand));
+                        RowError re = new RowError();
+                        re.fila = cwe.fila;
+                        re.cuenta = cwe.cand.getNumeroCuenta();
+                        re.errs = java.util.Collections.singletonList("Ya existe en sistema / regla negocio");
+                        rechazadasDetalladas.add(re);
+                    }
+                } else {
+                    rechazadas.add(copiaLigera(cwe.cand));
+                    rechazadasDetalladas.add(cwe.re);
+                }
+            }
+
+            totPrevalidas = prevalidas.size();
+            totRechazadas = rechazadas.size();
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Prevalidación",
+                            "Leídas: " + totalLeidas + " | Válidas: " + totPrevalidas + " | Rechazadas: " + totRechazadas));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JsfUtil.addErrorMessage("Ocurrió un error al prevalidar el archivo.");
+        } finally {
+            if (excel != null) try { excel.close(); } catch (Exception ignore) {}
+            if (in != null)    try { in.close(); } catch (Exception ignore) {}
+        }
+    }
+
+    private void acumularSaldoPorCuentaPadre(Map<String, BigDecimal> mapa,
+                                             String numeroCuenta,
+                                             BigDecimal saldoInicial) {
+        if (numeroCuenta == null || saldoInicial == null) return;
+
+        String padre = obtenerCuentaPadre(numeroCuenta);
+        if (padre == null) return; // no es subcuenta
+
+        mapa.merge(padre, saldoInicial, BigDecimal::add);
+    }
+
+    private String obtenerCuentaPadre(String cuenta) {
+        if (cuenta == null || cuenta.trim().isEmpty()) {
+            return null;
+        }
+
+        int idx = cuenta.lastIndexOf("-");
+        if (idx == -1) {
+            return null;
+        }
+
+        return cuenta.substring(0, idx);
+    }
+    
+
+    private void acumularSaldoSoloPadreInmediato(Map<String, BigDecimal> sumaPorPadre,
+                                             String cuenta,
+                                             BigDecimal saldo) {
+        if (cuenta == null || cuenta.trim().isEmpty() || saldo == null) {
+            return;
+        }
+
+        String padre = obtenerCuentaPadre(cuenta);
+        if (padre == null || padre.trim().isEmpty()) {
+            return;
+        }
+
+        BigDecimal actual = sumaPorPadre.get(padre);
+        if (actual == null) {
+            actual = BigDecimal.ZERO;
+        }
+
+        sumaPorPadre.put(padre, actual.add(saldo));
     }
 
 }

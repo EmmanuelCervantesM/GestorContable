@@ -157,7 +157,11 @@ import mx.com.rocketnegocios.entities.RnGcDatosalumnoTbl;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
+import javax.annotation.PostConstruct;
 import javax.xml.transform.OutputKeys;
+import mx.com.rocketnegocios.beans.RnGcPeriodosTblFacade;
+import mx.com.rocketnegocios.entities.RnGcPeriodosTbl;
+import org.primefaces.PrimeFaces;
 
 @SessionScoped
 @Named("facturarContoller")
@@ -275,6 +279,9 @@ public class FacturarController implements Serializable {
 
     @EJB
     private RnGcCpProductosDestinosTblFacade productoDestinoFacade;
+    
+    @EJB 
+    private RnGcPeriodosTblFacade periodosFacade;
 
     private List<RnGcCfdisLineasTbl> cfdisLineas = new ArrayList<>();
     private RnGcCfdisTbl cfdisId;
@@ -351,6 +358,7 @@ public class FacturarController implements Serializable {
     private String prodServicio = "-";
     private boolean complementoEscuela = false;
     private RnGcComplementos complementoE = new RnGcComplementos();
+    private static final Locale ES_MX = new Locale("es", "MX");
 
     public void setComplementoEscuela(boolean complementoEscuela) {
         this.complementoEscuela = complementoEscuela;
@@ -687,6 +695,56 @@ public class FacturarController implements Serializable {
 
     public void elegirTipoCP() {
 
+    }
+    
+    private String periodoActivoLabel;
+
+    @PostConstruct
+    public void init() {
+        actualizar(); // carga inicial segura
+    }
+
+    public void actualizar() {
+        try {
+            Integer uid = (usuarioFirmado != null) ? usuarioFirmado.obtenerIdUsuario() : null;
+            RnGcUsuariosTbl user = (uid != null) ? usuariosFacade.obtenerUsuarioPorId(uid) : null;
+            RnGcPeriodosTbl p = (user != null) ? periodosFacade.findActivo(user) : null;
+
+            if (p != null && p.getFechaInicioPeriodo() != null) {
+                SimpleDateFormat df = new SimpleDateFormat("MMMM yyyy", ES_MX);
+                periodoActivoLabel = df.format(p.getFechaInicioPeriodo()).toUpperCase(ES_MX);
+            } else {
+                periodoActivoLabel = "Se debe activar un periodo";
+            }
+        } catch (Exception e) {
+            periodoActivoLabel = "Se debe activar un periodo";
+        }
+
+        // Agrega callback param SOLO si hay Ajax activo
+        try {
+            PrimeFaces pf = PrimeFaces.current();
+            if (pf != null && pf.isAjaxRequest()) {
+                pf.ajax().addCallbackParam("periodo", periodoActivoLabel);
+            }
+        } catch (Exception ignore) { }
+    }
+
+    /** Llama esto después de crear/activar un periodo. Seguro aunque no haya UI/Ajax. */
+    public void notificarCambio() {
+        // recalcula en servidor; no depende de Ajax
+        actualizar();
+
+        // si hay contexto JSF/PrimeFaces, pide al cliente que ejecute el remoteCommand
+        PrimeFaces pf = null;
+        try { pf = PrimeFaces.current(); } catch (Exception ignore) { }
+        if (pf != null) {
+            pf.executeScript("try{ if(typeof rcPeriodoActivo==='function'){rcPeriodoActivo();} }catch(e){}");
+        }
+        // si pf==null (job/hilo/otra vista), simplemente no intentes UI aquí
+    }
+
+    public String getPeriodoActivoLabel() {
+        return periodoActivoLabel;
     }
 
     public void produtoDestino(RnGcCpOrigendestinoTbl destino, RnGcProductserviciosTbl producto) {

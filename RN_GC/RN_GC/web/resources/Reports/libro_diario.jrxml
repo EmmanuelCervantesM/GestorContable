@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="libro_diario"
+              language="groovy"
+              pageWidth="842"
+              pageHeight="595"
+              orientation="Landscape"
+              columnWidth="802"
+              leftMargin="20"
+              rightMargin="20"
+              topMargin="20"
+              bottomMargin="20"
+              uuid="d3df38a1-f9fd-48ce-9c31-6e3e4f9e1001">
+
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+
+    <style name="Base" fontName="DejaVu Sans" fontSize="8" pdfFontName="Helvetica"/>
+    <style name="Title" style="Base" fontSize="13" isBold="true"/>
+    <style name="Subtitle" style="Base" forecolor="#1F4E79" fontSize="10" isBold="true"/>
+    <style name="InfoLabel" style="Base" isBold="true"/>
+    <style name="InfoValue" style="Base"/>
+    <style name="ColHeader" style="Base" mode="Opaque" forecolor="#FFFFFF" backcolor="#1F4E79" isBold="true"/>
+    <style name="RowNormal" style="Base"/>
+    <style name="RowPoliza" style="Base" mode="Opaque" backcolor="#EAF2F8" isBold="true"/>
+    <style name="RowTotal" style="Base" mode="Opaque" backcolor="#F0F0F0" isBold="true"/>
+    <style name="NumberNormal" style="RowNormal"/>
+    <style name="NumberTotal" style="RowTotal"/>
+
+    <parameter name="P_EMPRESA" class="java.lang.String"/>
+    <parameter name="P_PERIODO" class="java.lang.String"/>
+    <parameter name="P_LOGO" class="java.io.InputStream"/>
+    <parameter name="P_FECHA_HORA" class="java.util.Date"/>
+
+    <field name="sucursal" class="java.lang.String"/>
+    <field name="tipoPoliza" class="java.lang.String"/>
+    <field name="fechaPoliza" class="java.lang.String"/>
+    <field name="numeroPoliza" class="java.lang.String"/>
+    <field name="numeroCuenta" class="java.lang.String"/>
+    <field name="descripcionCuenta" class="java.lang.String"/>
+    <field name="cargo" class="java.math.BigDecimal"/>
+    <field name="abono" class="java.math.BigDecimal"/>
+    <field name="tipoFila" class="java.lang.Integer"/>
+
+    <pageHeader>
+        <band height="90">
+
+            <image scaleImage="RetainShape">
+                <reportElement x="0" y="0" width="120" height="45" uuid="3b16b3df-5c70-401a-86cb-1be2f9c9d001"/>
+                <imageExpression><![CDATA[$P{P_LOGO}]]></imageExpression>
+            </image>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="Title" x="130" y="0" width="470" height="18" uuid="934716e4-c10d-492a-a409-9a27d8b30002"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{P_EMPRESA}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement style="Subtitle" x="130" y="22" width="300" height="16" uuid="5b9dfcdf-993c-42f0-b1d3-5d929e230003"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[LIBRO DIARIO DE PÓLIZAS]]></text>
+            </staticText>
+
+            <textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="true">
+                <reportElement style="InfoValue" x="610" y="0" width="192" height="16" uuid="3fbc2379-01cb-4b7e-9526-73526eb60004"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{P_FECHA_HORA}]]></textFieldExpression>
+            </textField>
+
+            <line>
+                <reportElement x="0" y="50" width="802" height="1" forecolor="#C0C0C0" uuid="ad2d40d5-3753-4849-a8b7-1b57e89d0005"/>
+            </line>
+
+            <staticText>
+                <reportElement style="InfoLabel" x="0" y="58" width="65" height="14" uuid="cc0d3e22-3537-4829-b4a1-50842f910006"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Periodo:]]></text>
+            </staticText>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="InfoValue" x="65" y="58" width="400" height="14" uuid="fa10b29b-9e48-44f4-b2cb-165c192b0007"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{P_PERIODO}]]></textFieldExpression>
+            </textField>
+
+            <line>
+                <reportElement x="0" y="78" width="802" height="1" forecolor="#1F4E79" uuid="d9be2370-fb64-4a21-9aad-b10ee7450008"/>
+            </line>
+
+        </band>
+    </pageHeader>
+
+    <columnHeader>
+        <band height="22">
+
+            <staticText>
+                <reportElement style="ColHeader" x="0" y="2" width="90" height="18" uuid="5cefaefe-813b-4378-92ef-ea09662d0009"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Sucursal]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="90" y="2" width="85" height="18" uuid="f8f2783d-81d8-466b-b498-096f3ad20010"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Tipo Pol.]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="175" y="2" width="105" height="18" uuid="41258967-b6ab-42f6-9731-c221e7e20011"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Cuenta]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="280" y="2" width="342" height="18" uuid="57a3e914-2b1c-43d9-ae2f-b333cd610012"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Descripción cuenta]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="622" y="2" width="90" height="18" uuid="3519e466-65c6-4aa1-b72e-fe91325d0013"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <text><![CDATA[Cargo]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="712" y="2" width="90" height="18" uuid="c5f4f7f1-08b5-48f8-9b23-d711e4b60014"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <text><![CDATA[Abono]]></text>
+            </staticText>
+
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="18">
+
+            <!-- ENCABEZADO DE PÓLIZA -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowPoliza" x="0" y="1" width="622" height="16" uuid="b4ac9298-2ed3-45de-ad5c-23dd72ba0015">
+                    <printWhenExpression><![CDATA[$F{tipoFila} != null && $F{tipoFila}.intValue() == 0]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[
+                    ($F{tipoPoliza} == null ? "" : $F{tipoPoliza})
+                    + " Fecha:"
+                    + ($F{fechaPoliza} == null ? "" : $F{fechaPoliza})
+                    + " No. Póliza "
+                    + ($F{numeroPoliza} == null ? "" : $F{numeroPoliza})
+                ]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement style="RowPoliza" x="622" y="1" width="90" height="16" uuid="ab01dbb4-cd8c-49c2-9eb9-a638a98d0016">
+                    <printWhenExpression><![CDATA[$F{tipoFila} != null && $F{tipoFila}.intValue() == 0]]></printWhenExpression>
+                </reportElement>
+                <textFieldExpression><![CDATA[""]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement style="RowPoliza" x="712" y="1" width="90" height="16" uuid="c9d91ebd-fae2-4e45-9dc2-b00c31bd0017">
+                    <printWhenExpression><![CDATA[$F{tipoFila} != null && $F{tipoFila}.intValue() == 0]]></printWhenExpression>
+                </reportElement>
+                <textFieldExpression><![CDATA[""]]></textFieldExpression>
+            </textField>
+
+            <!-- DETALLE SUCURSAL -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowNormal" x="0" y="1" width="90" height="16" uuid="59e7579b-b484-49bb-b515-40a4b4540018">
+                    <printWhenExpression><![CDATA[$F{tipoFila} != null && $F{tipoFila}.intValue() == 1]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{sucursal}]]></textFieldExpression>
+            </textField>
+
+            <!-- DETALLE TIPO PÓLIZA -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowNormal" x="90" y="1" width="85" height="16" uuid="bf1d4458-38bd-49e2-9c1e-c8f901ba0019">
+                    <printWhenExpression><![CDATA[$F{tipoFila} != null && $F{tipoFila}.intValue() == 1]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{tipoPoliza}]]></textFieldExpression>
+            </textField>
+
+            <!-- DETALLE CUENTA -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowNormal" x="175" y="1" width="105" height="16" uuid="cf34ed22-aec8-49fd-b00e-9cd0221b0020">
+                    <printWhenExpression><![CDATA[$F{tipoFila} != null && $F{tipoFila}.intValue() == 1]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{numeroCuenta}]]></textFieldExpression>
+            </textField>
+
+            <!-- DETALLE DESCRIPCIÓN -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowNormal" x="280" y="1" width="342" height="16" uuid="f154bc28-7164-4ec8-88ba-cac9d69c0021">
+                    <printWhenExpression><![CDATA[$F{tipoFila} != null && $F{tipoFila}.intValue() == 1]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{descripcionCuenta}]]></textFieldExpression>
+            </textField>
+
+            <!-- DETALLE CARGO -->
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberNormal" x="622" y="1" width="90" height="16" uuid="371e5505-c71c-489c-9b98-7b2487d10022">
+                    <printWhenExpression><![CDATA[$F{tipoFila} != null && $F{tipoFila}.intValue() == 1]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{cargo}]]></textFieldExpression>
+            </textField>
+
+            <!-- DETALLE ABONO -->
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberNormal" x="712" y="1" width="90" height="16" uuid="06788e91-53f7-4d31-af6c-f65b88e10023">
+                    <printWhenExpression><![CDATA[$F{tipoFila} != null && $F{tipoFila}.intValue() == 1]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{abono}]]></textFieldExpression>
+            </textField>
+
+            <!-- TOTAL DE PÓLIZA -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowTotal" x="0" y="1" width="280" height="16" uuid="7453e8f7-b47c-4c6f-bf85-7698ca200024">
+                    <printWhenExpression><![CDATA[$F{tipoFila} != null && $F{tipoFila}.intValue() == 2]]></printWhenExpression>
+                </reportElement>
+                <textFieldExpression><![CDATA[""]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement style="RowTotal" x="280" y="1" width="342" height="16" uuid="f16ea545-6fdd-4b6b-a489-a5d8dccb0025">
+                    <printWhenExpression><![CDATA[$F{tipoFila} != null && $F{tipoFila}.intValue() == 2]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <text><![CDATA[TOTAL PÓLIZA:]]></text>
+            </staticText>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberTotal" x="622" y="1" width="90" height="16" uuid="09825b43-e2d0-4c01-8c5f-088540190026">
+                    <printWhenExpression><![CDATA[$F{tipoFila} != null && $F{tipoFila}.intValue() == 2]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{cargo}]]></textFieldExpression>
+            </textField>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberTotal" x="712" y="1" width="90" height="16" uuid="f9a2957d-cea3-42e2-b30a-48cdd5d90027">
+                    <printWhenExpression><![CDATA[$F{tipoFila} != null && $F{tipoFila}.intValue() == 2]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{abono}]]></textFieldExpression>
+            </textField>
+
+            <line>
+                <reportElement x="0" y="17" width="802" height="1" forecolor="#E6E6E6" uuid="acc37c80-305b-4e17-8d39-703464440028"/>
+            </line>
+
+        </band>
+    </detail>
+
+    <pageFooter>
+        <band height="18">
+            <textField>
+                <reportElement style="InfoValue" x="0" y="2" width="200" height="14" uuid="f41a0cf3-5b28-4192-9c1f-cc63c3840029"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+    <summary>
+        <band height="0"/>
+    </summary>
+
+</jasperReport>
