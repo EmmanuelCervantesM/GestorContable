@@ -7,6 +7,7 @@ package mx.com.rocketnegocios.beans;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import mx.com.rocketnegocios.entities.RnGcNomTipoincapacidadTbl;
 
@@ -27,6 +28,31 @@ public class RnGcNomTipoincapacidadTblFacade extends AbstractFacade<RnGcNomTipoi
 
     public RnGcNomTipoincapacidadTblFacade() {
         super(RnGcNomTipoincapacidadTbl.class);
+    }
+    
+    
+    public RnGcNomTipoincapacidadTbl obtenerXClave(String clave){
+        RnGcNomTipoincapacidadTbl incapacidad = null;
+        try{
+            incapacidad = em.createNamedQuery("RnGcNomTipoincapacidadTbl.findByCveTipoIncapacidad", RnGcNomTipoincapacidadTbl.class)
+                    .setParameter("cveTipoIncapacidad", clave)
+                    .getSingleResult();
+        }catch(NoResultException ex){
+            System.out.println(ex);
+        }
+        return incapacidad;
+    }
+    
+    public RnGcNomTipoincapacidadTbl obtenerXDescripcion(String descripcion){
+        RnGcNomTipoincapacidadTbl incapacidad = null;
+        try{
+            incapacidad = em.createNamedQuery("RnGcNomTipoincapacidadTbl.findByDescripcion", RnGcNomTipoincapacidadTbl.class)
+                    .setParameter("descripcion", descripcion)
+                    .getSingleResult();
+        }catch(NoResultException ex){
+            System.out.println(ex);
+        }
+        return incapacidad;
     }
     
 }

@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mx.com.rocketnegocios.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,116 +14,121 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author Consultor
- */
 @Entity
 @Table(name = "rn_gc_catalogo_cuentas_tbl")
-@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "RnGcCatalogoCuentasTbl.findAll", query = "SELECT r FROM RnGcCatalogoCuentasTbl r")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findById", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.id = :id")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByNumeroCuenta", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.numeroCuenta = :numeroCuenta")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByNumeroCuenta2", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.numeroCuenta = :numeroCuenta and r.creadoPor = :creadoPor")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByDescripcionCuenta", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.descripcionCuenta = :descripcionCuenta")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findBySubCuenta", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.subCuenta = :subCuenta")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByNaturaleza", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.naturaleza = :naturaleza")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByVersion", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.version = :version")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByRfc", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.rfc = :rfc")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByInicioVigencia", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.inicioVigencia = :inicioVigencia")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByAdicional1", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.adicional1 = :adicional1")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByAdicional2", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.adicional2 = :adicional2")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByMonedaId", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.monedaId = :monedaId")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByTipo", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.tipo = :tipo")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findBySubtipo", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.subtipo = :subtipo")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByAdicional6", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.adicional6 = :adicional6")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByCreadoPor", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.creadoPor = :creadoPor order by r.codigoAgrupadorSatId.codigoAgrupador, r.numeroCuenta asc")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByCreadoPorCodigoAgrupador", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.creadoPor = :creadoPor and r.codigoAgrupadorSatId = :codigoAgrupador order by r.adicional2, r.numeroCuenta asc")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByFechaCreacion", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.fechaCreacion = :fechaCreacion")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByUltimaActualizacionPor", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.ultimaActualizacionPor = :ultimaActualizacionPor")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByUltimaFechaActualizacion", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.ultimaFechaActualizacion = :ultimaFechaActualizacion")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByDesCuenta", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.descripcionCuenta = :descripcionCuenta and r.creadoPor = :creadoPor")
-    , @NamedQuery(name = "RnGcCatalogoCuentasTbl.findByRfcUser", query = "SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.rfc = :rfc and r.creadoPor = :creadoPor and r.adicional1 = :diot")})
+    @NamedQuery(
+        name = "RnGcCatalogoCuentasTbl.findAll",
+        query = "SELECT c FROM RnGcCatalogoCuentasTbl c"
+    ),
+    @NamedQuery(
+        name = "RnGcCatalogoCuentasTbl.findByCreadoPor",
+        query = "SELECT c FROM RnGcCatalogoCuentasTbl c WHERE c.creadoPor = :creadoPor"
+    ),
+    @NamedQuery(
+        name = "RnGcCatalogoCuentasTbl.findByNumeroCuenta2",
+        query = "SELECT c FROM RnGcCatalogoCuentasTbl c WHERE c.numeroCuenta = :numeroCuenta AND c.creadoPor = :creadoPor"
+    ),
+    @NamedQuery(
+        name = "RnGcCatalogoCuentasTbl.findByDesCuenta",
+        query = "SELECT c FROM RnGcCatalogoCuentasTbl c WHERE c.descripcionCuenta = :descripcionCuenta AND c.creadoPor = :creadoPor"
+    ),
+    @NamedQuery(
+        name = "RnGcCatalogoCuentasTbl.findByRfcUser",
+        query = "SELECT c FROM RnGcCatalogoCuentasTbl c WHERE c.rfc = :rfc AND c.creadoPor = :creadoPor AND c.adicional1 = :diot"
+    )
+})
 public class RnGcCatalogoCuentasTbl implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "catalogoCuentasId")
-    private Collection<RnGcPolizaLineasTbl> rnGcPolizaLineasTblCollection;
-
     private static final long serialVersionUID = 1L;
+
+    // ===== PK =====
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
+
+    // ===== CAMPOS PRINCIPALES =====
+
+    @Size(max = 45)
     @Column(name = "numeroCuenta")
     private String numeroCuenta;
-    @Basic(optional = false)
+
+    @Size(max = 255)
     @Column(name = "descripcionCuenta")
     private String descripcionCuenta;
-    @Column(name = "subCuenta")
-    private double subCuenta;
-    @Basic(optional = false)
+
+    @Size(max = 45)
     @Column(name = "naturaleza")
     private String naturaleza;
-    @Size(max = 45)
-    @Column(name = "version")
-    private String version;
-    @Basic(optional = false)
-    @Column(name = "rfc")
-    private String rfc;
-    @Basic(optional = false)
-    @Column(name = "inicioVigencia")
-    @Temporal(TemporalType.DATE)
-    private Date inicioVigencia;
-    @Column(name = "adicional1")
-    private boolean adicional1;
-    @Size(max = 45)
-    @Column(name = "adicional2")
-    private String adicional2;
-    @JoinColumn(name = "monedaId", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private RnGcMonedasTbl monedaId;
+
     @Size(max = 45)
     @Column(name = "tipo")
     private String tipo;
+
     @Size(max = 45)
     @Column(name = "subtipo")
     private String subtipo;
-    @Size(max = 45)
+    
+    @Column(name = "saldoInicial")
+    private BigDecimal saldoInicial;
+
+    @Column(name = "saldoActual")
+    private BigDecimal saldoActual;
+
+    @Column(name = "monedaId")
+    private Integer moneda;
+
+    @Size(max = 13)
+    @Column(name = "rfc")
+    private String rfc;
+
+    @Column(name = "adicional1", length = 5) // "TRUE"/"FALSE"
+    private String adicional1;
+
+    @Column(name = "adicional2")
+    private String adicional2;
+    
     @Column(name = "adicional6")
     private String adicional6;
-    @Basic(optional = false)
-    @NotNull
+
+    @Column(name = "id_periodo")
+    private Integer idPeriodo;
+
     @Column(name = "creadoPor")
-    private int creadoPor;
-    @Basic(optional = false)
-    @NotNull
+    private Integer creadoPor;
+    
+    @Temporal(TemporalType.DATE)
+    @Column(name = "inicioVigencia")
+    private Date inicioVigencia;
+
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fechaCreacion")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
-    @Basic(optional = false)
-    @NotNull
+
     @Column(name = "ultimaActualizacionPor")
-    private int ultimaActualizacionPor;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "ultimaFechaActualizacion")
+    private Integer ultimaActualizacionPor;
+
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "ultimaFechaActualizacion")
     private Date ultimaFechaActualizacion;
     @JoinColumn(name = "codigo_agrupador_sat_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    
     private RnGcCodigoAgrupadorSatTbl codigoAgrupadorSatId;
+    private Collection<RnGcPolizaLineasTbl> rnGcPolizaLineasTblCollection;
+
+    // ===== CONSTRUCTORES =====
 
     public RnGcCatalogoCuentasTbl() {
     }
@@ -137,18 +137,7 @@ public class RnGcCatalogoCuentasTbl implements Serializable {
         this.id = id;
     }
 
-    public RnGcCatalogoCuentasTbl(Integer id, String numeroCuenta, String descripcionCuenta, String naturaleza, String rfc, Date inicioVigencia, int creadoPor, Date fechaCreacion, int ultimaActualizacionPor, Date ultimaFechaActualizacion) {
-        this.id = id;
-        this.numeroCuenta = numeroCuenta;
-        this.descripcionCuenta = descripcionCuenta;
-        this.naturaleza = naturaleza;
-        this.rfc = rfc;
-        this.inicioVigencia = inicioVigencia;
-        this.creadoPor = creadoPor;
-        this.fechaCreacion = fechaCreacion;
-        this.ultimaActualizacionPor = ultimaActualizacionPor;
-        this.ultimaFechaActualizacion = ultimaFechaActualizacion;
-    }
+    // ===== GETTERS / SETTERS =====
 
     public Integer getId() {
         return id;
@@ -174,68 +163,12 @@ public class RnGcCatalogoCuentasTbl implements Serializable {
         this.descripcionCuenta = descripcionCuenta;
     }
 
-    public double getSubCuenta() {
-        return subCuenta;
-    }
-
-    public void setSubCuenta(double subCuenta) {
-        this.subCuenta = subCuenta;
-    }
-
     public String getNaturaleza() {
         return naturaleza;
     }
 
     public void setNaturaleza(String naturaleza) {
         this.naturaleza = naturaleza;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getRfc() {
-        return rfc;
-    }
-
-    public void setRfc(String rfc) {
-        this.rfc = rfc;
-    }
-
-    public Date getInicioVigencia() {
-        return inicioVigencia;
-    }
-
-    public void setInicioVigencia(Date inicioVigencia) {
-        this.inicioVigencia = inicioVigencia;
-    }
-
-    public boolean getAdicional1() {
-        return adicional1;
-    }
-
-    public void setAdicional1(boolean adicional1) {
-        this.adicional1 = adicional1;
-    }
-
-    public String getAdicional2() {
-        return adicional2;
-    }
-
-    public void setAdicional2(String adicional2) {
-        this.adicional2 = adicional2;
-    }
-
-    public RnGcMonedasTbl getMonedaId() {
-        return monedaId;
-    }
-
-    public void setMonedaId(RnGcMonedasTbl monedaId) {
-        this.monedaId = monedaId;
     }
 
     public String getTipo() {
@@ -250,23 +183,79 @@ public class RnGcCatalogoCuentasTbl implements Serializable {
         return subtipo;
     }
 
+    public BigDecimal getSaldoInicial() {
+        return saldoInicial;
+    }
+
+    public void setSaldoInicial(BigDecimal saldoInicial) {
+        this.saldoInicial = saldoInicial;
+    }
+
+    public BigDecimal getSaldoActual() {
+        return saldoActual;
+    }
+
+    public void setSaldoActual(BigDecimal saldoActual) {
+        this.saldoActual = saldoActual;
+    }
+
     public void setSubtipo(String subtipo) {
         this.subtipo = subtipo;
     }
 
+    public Integer getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(Integer moneda) {
+        this.moneda = moneda;
+    }
+
+    public String getRfc() {
+        return rfc;
+    }
+
+    public void setRfc(String rfc) {
+        this.rfc = rfc;
+    }
+
+    public String getAdicional1() { 
+        return adicional1; 
+    }
+    
+    public void setAdicional1(String adicional1) { 
+        this.adicional1 = adicional1; 
+    }
+
+    public String getAdicional2() {
+        return adicional2;
+    }
+
+    public void setAdicional2(String adicional2) {
+        this.adicional2 = adicional2;
+    }
+    
     public String getAdicional6() {
         return adicional6;
     }
 
-    public void setAdicional6(String adicional6) {
+    public void setAdicional6(String adicional2) {
         this.adicional6 = adicional6;
     }
 
-    public int getCreadoPor() {
+    public Integer getIdPeriodo() {
+        return idPeriodo;
+    }
+
+    public void setIdPeriodo(Integer idPeriodo) {
+        this.idPeriodo = idPeriodo;
+    }
+
+    public Integer getCreadoPor() {
         return creadoPor;
     }
 
-    public void setCreadoPor(int creadoPor) {
+    public void setCreadoPor(Integer creadoPor) {
         this.creadoPor = creadoPor;
     }
 
@@ -278,11 +267,11 @@ public class RnGcCatalogoCuentasTbl implements Serializable {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public int getUltimaActualizacionPor() {
+    public Integer getUltimaActualizacionPor() {
         return ultimaActualizacionPor;
     }
 
-    public void setUltimaActualizacionPor(int ultimaActualizacionPor) {
+    public void setUltimaActualizacionPor(Integer ultimaActualizacionPor) {
         this.ultimaActualizacionPor = ultimaActualizacionPor;
     }
 
@@ -294,29 +283,27 @@ public class RnGcCatalogoCuentasTbl implements Serializable {
         this.ultimaFechaActualizacion = ultimaFechaActualizacion;
     }
 
-    public RnGcCodigoAgrupadorSatTbl getCodigoAgrupadorSatId() {
-        return codigoAgrupadorSatId;
+    public Date getInicioVigencia() {
+        return inicioVigencia;
     }
 
-    public void setCodigoAgrupadorSatId(RnGcCodigoAgrupadorSatTbl codigoAgrupadorSatId) {
-        this.codigoAgrupadorSatId = codigoAgrupadorSatId;
+    public void setInicioVigencia(Date inicioVigencia) {
+        this.inicioVigencia = inicioVigencia;
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+        return (id != null ? id.hashCode() : 0);
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof RnGcCatalogoCuentasTbl)) {
             return false;
         }
         RnGcCatalogoCuentasTbl other = (RnGcCatalogoCuentasTbl) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -329,11 +316,33 @@ public class RnGcCatalogoCuentasTbl implements Serializable {
 
     @XmlTransient
     public Collection<RnGcPolizaLineasTbl> getRnGcPolizaLineasTblCollection() {
-        return rnGcPolizaLineasTblCollection;
-    }
+        return (Collection<RnGcPolizaLineasTbl>) rnGcPolizaLineasTblCollection;
+}
 
     public void setRnGcPolizaLineasTblCollection(Collection<RnGcPolizaLineasTbl> rnGcPolizaLineasTblCollection) {
         this.rnGcPolizaLineasTblCollection = rnGcPolizaLineasTblCollection;
     }
 
+    public RnGcCodigoAgrupadorSatTbl getCodigoAgrupadorSatId() {
+        return codigoAgrupadorSatId;
+    }
+
+    public void setCodigoAgrupadorSatId(RnGcCodigoAgrupadorSatTbl codigoAgrupadorSatId) {
+        this.codigoAgrupadorSatId = codigoAgrupadorSatId;
+    }
+    
+    @PrePersist
+    public void prePersist() {
+        Date ahora = new Date();
+        if (fechaCreacion == null) fechaCreacion = ahora;
+        if (inicioVigencia == null) inicioVigencia = ahora;
+        if (adicional1 == null) adicional1 = "FALSE"; 
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        if (ultimaFechaActualizacion == null) ultimaFechaActualizacion = new Date();
+    }
+
+   
 }

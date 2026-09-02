@@ -42,7 +42,7 @@
                             <f:selectItem itemLabel="Acreedora" itemValue="A" />
                         </p:selectOneMenu>
                         <p:outputLabel value="Moneda: " for="monedaId" />
-                        <p:selectOneMenu id="monedaId" value="#{rnGcCatalogoCuentasTblController.selected.monedaId}"
+                        <p:selectOneMenu id="monedaId" value="#{rnGcCatalogoCuentasTblController.selected.moneda}"
                                          filter="true" filterMatchMode="contains" style="width:350px" panelStyle="width:350px">
                             <f:selectItems value="#{rnGcMonedasTblController.itemsAvailableSelectOne}"
                                            var="monedaItem"

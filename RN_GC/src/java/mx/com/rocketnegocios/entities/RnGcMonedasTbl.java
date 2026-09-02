@@ -49,11 +49,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "RnGcMonedasTbl.findByFechaFinVigencia", query = "SELECT r FROM RnGcMonedasTbl r WHERE r.fechaFinVigencia = :fechaFinVigencia")})
 public class RnGcMonedasTbl implements Serializable {
 
-    @OneToMany(mappedBy = "tipoMoneda")
-    private Collection<RnGcPolizaHeaderTbl> rnGcPolizaHeaderTblCollection;
-    @OneToMany(mappedBy = "monedaId")
-    private Collection<RnGcCatalogoCuentasTbl> rnGcCatalogoCuentasTblCollection;
-
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @NotNull
@@ -103,8 +98,8 @@ public class RnGcMonedasTbl implements Serializable {
     @Column(name = "fechaFinVigencia")
     @Temporal(TemporalType.DATE)
     private Date fechaFinVigencia;
-    @JoinColumn(name = "cfdi_Id", referencedColumnName = "Id")
     @ManyToOne
+    @JoinColumn(name = "cfdi_Id")
     private RnGcCfdisTbl cfdiId;
 
     public RnGcMonedasTbl() {

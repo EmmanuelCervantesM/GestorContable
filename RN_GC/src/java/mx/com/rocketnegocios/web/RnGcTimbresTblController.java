@@ -12,17 +12,22 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import mx.com.rocketnegocios.beans.RnGcTimbresTotalesTblFacade;
 import mx.com.rocketnegocios.beans.RnGcUsuariosTblFacade;
+import mx.com.rocketnegocios.entities.RnGcTimbresTotalTbl;
 import mx.com.rocketnegocios.entities.RnGcUsuariosTbl;
 import mx.com.rocketnegocios.util.UsuarioFirmado;
+import org.primefaces.PrimeFaces;
 
 @Named("rnGcTimbresTblController")
 @SessionScoped
@@ -32,22 +37,70 @@ public class RnGcTimbresTblController implements Serializable {
     private RnGcUsuariosTblFacade usuarioFacade;
 
     @EJB
+    private RnGcTimbresTotalesTblFacade ejbFacadeTimbresTotales;
+
+    @EJB
     private mx.com.rocketnegocios.beans.RnGcTimbresTblFacade ejbFacade;
     private List<RnGcTimbresTbl> items = null;
     private RnGcTimbresTbl selected;
+    private RnGcTimbresTotalTbl selectTimbreTotal;
+    private RnGcTimbresTotalTbl selectAdministrador;
     private UsuarioFirmado usuarioFirmado = new UsuarioFirmado();
     private List<RnGcTimbresTbl> itemsUsuarios = null;
+    private List<RnGcTimbresTotalTbl> itemsAdministrador = null;
     private RnGcUsuariosTbl usuarioId = null;
     private List<RnGcTimbresTbl> timbresList;
     private List<RnGcTimbresTbl> varTimbre;
     private RnGcUsuariosTbl usuarioVar = null;
     private int totalTimbres;
+    private int totalTimbresAdministrador = 0;
+    private int agregarTimbresAdministrador = 0;
 
     public RnGcTimbresTblController() {
     }
 
     public List<RnGcTimbresTbl> getVarTimbre() {
         return varTimbre;
+    }
+
+    public void setAgregarTimbresAdministrador(int nuevoValor) {
+        this.agregarTimbresAdministrador = nuevoValor;
+    }
+
+    public int getAgregarTimbresAdministrador() {
+        return agregarTimbresAdministrador;
+    }
+
+    public void guardarTimbresTotalesAdministrador() {
+        int cantidadTimbres = getAgregarTimbresAdministrador();
+        System.out.print("Guardando estos timbres: " + cantidadTimbres);
+        System.out.print("Guardando estos timbres: " + cantidadTimbres);
+        Date fechaActual = new Date();
+
+        //selectTimbreTotal = ejbFacadeTimbresTotales.obtenerTimbreAdministradorAll(usuarioFirmado.obtenerIdUsuario());
+        // No existe → crear nuevo
+        selectTimbreTotal = new RnGcTimbresTotalTbl();
+
+        usuarioVar = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+        selectTimbreTotal.setUsuarioId(usuarioVar);
+
+        selectTimbreTotal.setTimbresTotal(cantidadTimbres);
+        selectTimbreTotal.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
+        selectTimbreTotal.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
+        selectTimbreTotal.setUltimaFechaActualizacion(fechaActual);
+        selectTimbreTotal.setTipoUsuario("AG");
+
+        selectTimbreTotal = ejbFacadeTimbresTotales.createAndReturn(selectTimbreTotal);
+
+    }
+
+    public void setTotalTimbresAdministrador(int nuevoValor) {
+        this.totalTimbresAdministrador = nuevoValor;
+    }
+
+    public int getTotalTimbresAdministrador() {
+        this.totalTimbresAdministrador = ejbFacadeTimbresTotales.obtenerTimbreAdministrador(usuarioFirmado.obtenerIdUsuario());
+        return totalTimbresAdministrador;
     }
 
     public void setVarTimbre(List<RnGcTimbresTbl> varTimbre) {
@@ -60,6 +113,14 @@ public class RnGcTimbresTblController implements Serializable {
 
     public void setSelected(RnGcTimbresTbl selected) {
         this.selected = selected;
+    }
+
+    public RnGcTimbresTotalTbl getSelectAdministrador() {
+        return selectAdministrador;
+    }
+
+    public void setSelectAdministrador(RnGcTimbresTotalTbl selectAdministrador) {
+        this.selectAdministrador = selectAdministrador;
     }
 
     public int getTotalTimbres() {
@@ -107,9 +168,42 @@ public class RnGcTimbresTblController implements Serializable {
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RnGcTimbresTblCreated"));
-        if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
+
+        try {
+            int totalAdministrador = ejbFacadeTimbresTotales.obtenerTimbreAdministrador(usuarioFirmado.obtenerIdUsuario());
+            System.out.print("Total de timbres del administrador: " + totalAdministrador);
+            if (totalTimbres > totalAdministrador) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                "Error", "El total de timbres no puede ser mayor que el disponible del administrador (" + totalAdministrador + ")."));
+
+                PrimeFaces.current().ajax().addCallbackParam("validationFailed", true);
+                return;
+            }
+
+            System.out.print("Guardando timbres asignados");
+            Date fechaActual = new Date();
+            selectTimbreTotal = new RnGcTimbresTotalTbl();
+            usuarioVar = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+            selectTimbreTotal.setUsuarioId(usuarioVar);
+            selectTimbreTotal.setTimbresTotal(totalTimbres);
+            selectTimbreTotal.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
+            selectTimbreTotal.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
+            selectTimbreTotal.setUltimaFechaActualizacion(fechaActual);
+            selectTimbreTotal.setTipoUsuario("CO");
+
+            selectTimbreTotal = ejbFacadeTimbresTotales.createAndReturn(selectTimbreTotal);
+            System.out.print("Guardando exitoso");
+            persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RnGcTimbresTblCreated"));
+            if (!JsfUtil.isValidationFailed()) {
+                items = null;
+                PrimeFaces.current().ajax().addCallbackParam("validationFailed", false);
+            }
+
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ex.getMessage()));
+            PrimeFaces.current().ajax().addCallbackParam("validationFailed", true);
         }
     }
 
@@ -248,6 +342,18 @@ public class RnGcTimbresTblController implements Serializable {
         return itemsUsuarios;
     }
 
+    public List<RnGcTimbresTotalTbl> getItemsAdministrador() {
+        System.out.println("Usuario : " + usuarioFirmado.obtenerIdUsuario());
+        usuarioVar = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+        this.itemsAdministrador = ejbFacadeTimbresTotales.obtenerPorUsuario(usuarioVar);
+        System.out.println("Cargando valores: " + itemsAdministrador.size());
+        return itemsAdministrador;
+    }
+
+    public void setItemsAdministrador(List<RnGcTimbresTotalTbl> itemsAdministrador) {
+        this.itemsAdministrador = itemsAdministrador;
+    }
+
     public void prepareItemsUsuario(RnGcUsuariosTbl usuarioId) {
         this.usuarioId = usuarioId;
     }
@@ -262,6 +368,15 @@ public class RnGcTimbresTblController implements Serializable {
             }
         }
         return timbresUsuario;
+    }
+
+    public Long obtenerTotalTimbresXUsuario1(Integer Id) {
+        long timbresTotalUsuario = 0L;
+        if (Id != null) {
+            usuarioVar = usuarioFacade.obtenerUsuarioPorId(Id);
+            timbresTotalUsuario = getFacade().obtenerTotalTimbresXUsuario(usuarioVar);
+        }
+        return timbresTotalUsuario;
     }
 
     public boolean asignarTimbres() {

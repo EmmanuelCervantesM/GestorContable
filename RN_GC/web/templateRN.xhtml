@@ -5,17 +5,17 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    
+
     <h:head>
         <title><ui:insert name="title">Default Title</ui:insert></title>
         <h:outputStylesheet library="css" name="jsfcrudRN.css"/>
         <h:outputScript library="js" name="jsfcrud.js"/>
     </h:head>
-    
+
     <h:body>
-        
+
         <p:growl id="growl" life="10000" showDetail="true"/>
-        
+
         <p:layout fullPage="true">
             <p:layoutUnit position="north" size="100" header="#{bundle.AppName}" >
                 <ui:insert name="header">
@@ -32,6 +32,7 @@
                                     </h:panelGrid> 
                                 </td>
                                 <td style="width: 33.3333%; text-align: center;"><h1>Bienvenido #{sessionScope['nombreCompleto']}</h1></td>
+
                                 <td style="width: 16.6667%; text-align: right;">
                                     <h2>
                                         <h:form>
@@ -56,31 +57,64 @@
                         </tbody>
                     </table>
                     <h:form>
-                        
+
                     </h:form>
                 </ui:insert>
             </p:layoutUnit>
-            
+
             <p:layoutUnit position="south" size="65">
                 <ui:insert name="footer">
                     <table style="width: 100%; border-collapse: collapse;">
                         <tbody>
                             <tr>
-                                <td style="width: 33.3333%;">
+                                <td style="width: 20%;">
                                     <h:panelGrid columns="2" cellpadding="10">
                                         <h:form>
                                             <p:outputLabel style="font-weight: 900" value="Timbres Restantes:" for="proveedor" />
-                                            <p:selectOneMenu id="proveedor" style="width: 160px" value="#{facturarContoller.cfdisId.proveedorTimbres}">
+                                            <p:selectOneMenu id="proveedor"
+                                                             widgetVar="wvProveedor"
+                                                             style="width:160px"
+                                                             value="#{facturarContoller.cfdisId.proveedorTimbres}">
                                                 <f:selectItems value="#{facturarContoller.obtenerTimbres()}"
-                                                               var="timbresItem"
-                                                               itemLabel="#{timbresItem.timbresRestantes} timbres restantes"
-                                                               itemValue="#{timbresItem.id}"/>
+                                                               var="t"
+                                                               itemLabel="#{t.timbresRestantes} timbres restantes"
+                                                               itemValue="#{t.id}"/>
+
                                             </p:selectOneMenu>
+
                                         </h:form>
                                     </h:panelGrid>
                                 </td>
-                                <td style="width: 33.3333%; text-align: center;"><h2>Administración Contable. 2023</h2></td>
-                                <td style="width: 33.3333%; text-align: right;">
+                                <td style="width: 20%;">
+                                        <h:form id="footerForm">
+                                        <p:outputLabel value="Periodo Activo:" for="periodoActivoSel"
+                                                       style="font-weight:900; margin-left:10px" />
+
+                                        <!-- Usar el id original: periodoActivoSel -->
+                                        <p:inputText id="periodoActivoSel"
+                                                     value="#{facturarContoller.periodoActivoLabel}"
+                                                     style="width:220px"
+                                                     readonly="true" />
+
+                                        <p:remoteCommand name="rcPeriodoActivo"
+                                                         process="@this"
+                                                         update="@none"
+                                                         actionListener="#{facturarContoller.actualizar}"
+                                                         oncomplete="actualizaPeriodo(xhr, status, args)" />
+                                      </h:form>
+
+                                      <h:outputScript>
+                                      //<![CDATA[
+                                        function actualizaPeriodo(xhr, status, args){
+                                          if (args && args.periodo) {
+                                            document.getElementById('footerForm:periodoActivoSel').value = args.periodo;
+                                          }
+                                        }
+                                      //]]>
+                                      </h:outputScript>
+                                </td>
+                                <td style="width: 30%; text-align: center;"><h2>Administración Contable. 2023</h2></td>
+                                <td style="width: 20%; text-align: right;">
                                     <h:form>
                                         <h2><p:clock pattern="dd/MM/yyyy hh:mm:ss aa" /></h2>
                                     </h:form>
@@ -90,7 +124,15 @@
                     </table>
                 </ui:insert> 
             </p:layoutUnit>
-            
+            <h:outputStylesheet>
+                .timbres-bajos { color: red !important; }
+                .low-timbres .ui-selectonemenu-label {
+                color: red !important;
+                font-weight: bold;
+                }
+            </h:outputStylesheet>
+
+
             <p:layoutUnit position="west" size="173" header="Menu" collapsible="true" >
                 <ui:insert name="menu">
                     <h:form >
@@ -98,18 +140,70 @@
                     </h:form>
                 </ui:insert>
             </p:layoutUnit>
-            
+
             <p:layoutUnit position="center">
                 <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
-                
+
                 <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                     <p:graphicImage value="/resources/images/icons/spinner.gif"/>
                 </p:dialog>
                 <ui:insert name="body"/>
             </p:layoutUnit>
-            
+
         </p:layout>
-        
+        <h:outputScript target="body">
+            //<![CDATA[
+            function colorizarTimbresBajos() {
+            var w = PF('wvProveedor');
+            if (!w || !w.panel) return;
+
+            // limpia clases en el panel
+            w.panel.find('.ui-selectonemenu-item').removeClass('timbres-bajos');
+
+            // marca las opciones <= 15 en el panel
+            w.panel.find('.ui-selectonemenu-item').each(function () {
+            var txt = this.textContent.trim();
+            var m = txt.match(/\d+/);
+            var num = m ? parseInt(m[0], 10) : NaN;
+            if (!isNaN(num) && num <= 15) {
+            this.classList.add('timbres-bajos');
+            }
+            });
+
+            // === marca el valor seleccionado ===
+            var label = w.label.text().trim();
+            var match = label.match(/\d+/);
+            var selectedNum = match ? parseInt(match[0], 10) : NaN;
+
+            // quita siempre antes
+            w.jq.removeClass('low-timbres');
+
+            // aplica solo si <= 15
+            if (!isNaN(selectedNum) && selectedNum <= 15) {
+            w.jq.addClass('low-timbres');
+            }
+            }
+
+            $(function () {
+            colorizarTimbresBajos();
+
+            // cuando se abre el panel
+            $(document).on('click', '#' + PF('wvProveedor').jqId + ' .ui-selectonemenu-trigger', function () {
+            setTimeout(colorizarTimbresBajos, 0);
+            });
+
+            // tras actualizaciones AJAX
+            $(document).on('pfAjaxComplete', function () {
+            setTimeout(colorizarTimbresBajos, 0);
+            });
+
+            // evento oficial de PrimeFaces cuando cambia el valor
+            $(document).on('pfSelectOneMenuChange', function () {
+            setTimeout(colorizarTimbresBajos, 0);
+            });
+            });
+            //]]>
+        </h:outputScript>
     </h:body>
-    
+
 </html>

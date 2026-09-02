@@ -7,8 +7,6 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition template="/templateRN.xhtml">
-
-
         <ui:define name="title">
             <h:outputText value="#{bundle.ListRnGcNomNominasTblTitle}"></h:outputText>
         </ui:define>
@@ -24,9 +22,9 @@
                                  rowsPerPageTemplate="10,20,30,40,50"
                                  >
 
-                        <p:ajax event="rowSelect"   update="deleteButton verDatos download"/>
-                        <p:ajax event="rowUnselect" update="deleteButton verDatos download"/>
-                        
+                        <p:ajax event="rowSelect"   update="deleteButton verDatos duplicarNominaButton download"/>
+                        <p:ajax event="rowUnselect" update="deleteButton verDatos duplicarNominaButton download"/>
+
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListRnGcNomNominasTblTitle_nombreNomina}"/>
@@ -47,10 +45,25 @@
                         </p:column>
                         <f:facet name="footer"> 
                             <p:commandButton id="archivop" icon="ui-icon-plus"   value="Usar plantilla" actionListener="#{rnGcNomNominasTblController.prepareCreate}" update="RnGcNominaTblDocForm" oncomplete="PF('RnGcNominaTblDocDialog').show()"/>
-                            <p:commandButton id="verDatos"   icon="ui-icon-folder-open" value="Facturar Nómina" actionListener="#{rnGcNomSolicitudTrabajadorTblController.obtenerSolicitudesTrabajador(rnGcNomNominasTblController.selected)}" update=":RnGcSolicitudTrabajadorTblListForm" oncomplete="PF('RnGcSolicitudTrabajadorTblDocDialog').show()" disabled="#{empty rnGcNomNominasTblController.selected}"/>
+                            <p:commandButton 
+                                id="verDatos"   
+                                icon="ui-icon-folder-open" 
+                                value="Facturar Nómina" 
+                                actionListener="#{rnGcNomSolicitudTrabajadorTblController.validarYObtenerSolicitudesTrabajador(rnGcNomNominasTblController.selected)}" 
+                                update=":growl, :RnGcSolicitudTrabajadorTblListForm" 
+                                oncomplete="PF('RnGcSolicitudTrabajadorTblDocDialog').show()" 
+                                disabled="#{empty rnGcNomNominasTblController.selected}"/>
+
+                            <p:commandButton id="duplicarNominaButton"
+                                             icon="ui-icon-copy"
+                                             value="Duplicar Nómina"
+                                             update=":formDuplicarNomina"
+                                             oncomplete="PF('dialogDuplicarNomina').show()"
+                                             disabled="#{empty rnGcNomNominasTblController.selected}" />
+
                             <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcNomNominasTblController.eliminarDatos()}" update=":growl,datalist" disabled="#{empty rnGcNomNominasTblController.selected}"/>
                         </f:facet>
-                        
+
                         <f:facet name="header">
                             <p:commandButton id="download" icon="ui-icon-arrowthickstop-1-s" value="Descargar Plantilla Nómina" actionListener="#{rnGcNomNominasTblController.descargaPlantilla()}" ajax="false">
                                 <p:fileDownload value="#{rnGcNomNominasTblController.downLoadFile}"/>
@@ -83,6 +96,23 @@
                     <p:panel header="#{bundle.ListRnGcNomNominasTblTitle}">
 
                         <h:panelGrid columns="4" cellpadding="5">
+                            <p:outputLabel style="font-weight: 900" value="Nombre de nomina" for="nombreNomina" />
+                            <h:panelGroup layout="block" style="display: flex; align-items: center; gap: 8px;">
+                                <p:inputText id="nombreNomina" style="width: 175px" value="#{rnGcNomNominasTblController.selected.nombreNomina}"/>
+
+
+                                <p:commandButton icon="ui-icon-pencil"
+                                                 title="Guardar nombre de nómina"
+                                                 value="Guardar"
+                                                 actionListener="#{rnGcNomNominasTblController.guardarNombreNomina}"
+                                                 update=":RnGcNomNominasTblListForm:datalist, :growl"
+                                                 process="@this nombreNomina" />
+                            </h:panelGroup>
+
+
+                            <h:outputText value="" /> 
+                            <h:outputText value="" /> 
+
                             <p:outputLabel style="font-weight: 900" value="#{bundle.EditRnGcCfdisTblLabel_claveRegimenFiscal}" for="claveRegimenFiscal"/>
                             <p:selectOneMenu id="claveRegimenFiscal" style="width: 482px" value="#{rnGcNomSolicitudTrabajadorTblController.cfdisId2.claveRegimenFiscal}" filter="true" filterMatchMode="contains" required="true" requiredMessage="#{bundle.RnGcCfdisTblRequiredMessage_claveRegimenFiscal}">
                                 <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
@@ -136,11 +166,64 @@
                                                itemValue="#{folioItem.folio}"/>
                             </p:selectOneMenu>
 
+
+
+
+                            <!-- Fila nueva para Select + Botón juntos -->
+
+                            <!--  <h:outputText value="" /> 
+                              <p:outputLabel style="font-weight: 900; margin-right: 8px;" value="Agregar Trabajador:" for="agregarTrabajador" />
+                              <h:panelGroup layout="block" style="display: flex; align-items: center; gap: 8px;">
+                                  <p:selectOneMenu id="agregarTrabajador"
+                                                   value="#{rnGcNomSolicitudTrabajadorTblController.selectedTrabajadorId}"
+                                                   style="width: 160px;">
+                                      <f:selectItem itemLabel="Selecciona un trabajador" itemValue="" />
+                                      <f:selectItems value="#{rnGcTrabajadoresTblController.items}"
+                                                     var="trabajador"
+                                                     itemLabel="#{(trabajador.nombre  != null ? trabajador.nombre.toUpperCase() : '')} #{(trabajador.apPaterno != null ? trabajador.apPaterno.toUpperCase() : '')} #{(trabajador.apMaterno != null ? trabajador.apMaterno.toUpperCase() : '')} - #{(trabajador.rfc != null ? trabajador.rfc.toUpperCase() : '')}"
+                                                     itemValue="#{trabajador}" />
+                                  </p:selectOneMenu>
+  
+  
+  
+                                  <p:commandButton icon="ui-icon-plus" title="Agregar trabajador"
+                                                   actionListener="#{rnGcNomSolicitudTrabajadorTblController.agregarTrabajador()}"
+                                                   ajax="true" update="RnGcNomNominasTblListForm:datalist, RnGcSolicitudTrabajadorTblListForm:datalist"
+                                                   />
+                              </h:panelGroup>  -->
+
+                            <!-- Colocar elementos vacíos para completar las columnas -->
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+
+
+                            <h:panelGroup layout="block" style="display: flex; align-items: center; gap: 8px;">
+
+                                <p:outputLabel style="font-weight: 900" value="Fecha Inicio de Pago: " for="fecha_inicio_pago"/>
+
+                                <p:calendar id="fecha_inicio_pago" style="width: 200px" pattern="dd/MM/yyyy" value="#{rnGcNomNominasTblController.fechaInicioPago}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_fechaExpedicion}" showOn="button"/>
+
+                                <p:outputLabel style="font-weight: 900" value="Fecha Fin de Pago " for="fecha_fin_pago"/>
+                                <p:calendar id="fecha_fin_pago" style="width: 200px" pattern="dd/MM/yyyy" value="#{rnGcNomNominasTblController.fechaFinPago}" required="true" requiredMessage="#{bundle.EditRnGcCfdisTblRequiredMessage_fechaExpedicion}" showOn="button"/>
+
+                                <p:commandButton icon="ui-icon-pencil"
+                                                 title="Guardar fechas de pagos"
+                                                 value="Guardar Fechas"
+                                                 actionListener="#{rnGcNomNominasTblController.guardarFechasPagos}"
+
+                                                 
+                                                 update="@form"
+                                                 process="@this fecha_inicio_pago fecha_fin_pago" 
+                                                 oncomplete="PF('RnGcSolicitudTrabajadorTblDocDialog').show()"
+                                                 />
+                            </h:panelGroup>
+
                         </h:panelGrid>
 
                         <p:dataTable id="datalist" value="#{rnGcNomSolicitudTrabajadorTblController.listaSolicitudesTrabajador}" var="item"
                                      selection="#{rnGcNomSolicitudTrabajadorTblController.seleccionados}"
-                                     paginator="true" disabledSelection="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) == 'Timbrado de forma correcta'}"
+                                     disabledSelection="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) == 'Timbrado de forma correcta'}"
+                                     paginator="true" 
                                      rowKey="#{item.id}"
                                      rows="10"
                                      rowsPerPageTemplate="10,20,30,40,50"
@@ -170,7 +253,16 @@
                                 <f:facet name="header">
                                     <h:outputText value="Estado"/>
                                 </f:facet>
-                                <h:outputText value="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item)}"/>
+
+                                <h:outputText 
+                                    value="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item)}"
+                                    style="#{
+                                    rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) eq 'Timbrado de forma correcta' 
+                                        ? 'color:green; font-weight:bold;' 
+                                        : rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) eq 'UUID CANCELADO CORRECTAMENTE'
+                                        ? 'color:red; font-weight:bold;'
+                                        : ''
+    }" />
                             </p:column>
                             <p:column filterBy="#{item.trabajadorId.nombreCompleto}" filterMatchMode="contains">
                                 <f:facet name="header">
@@ -215,8 +307,13 @@
                                 </h:outputText>
                             </p:column>
                             <p:column style="width:26px;text-align:center">
-                                <p:commandButton icon="ui-icon-arrowstop-1-s" title="Descargar PDF" disabled="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) == 'No Timbrado'}" actionListener="#{rnGcNomSolicitudTrabajadorTblController.descargarPDF(item)}" ajax="false">
+                                <p:commandButton icon="ui-icon-arrowstop-1-s" title="Descargar PDF" disabled="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) == 'No Timbrado'}" actionListener="#{rnGcNomSolicitudTrabajadorTblController.descargarPDF(item)}" ajax="false" process="@this" immediate="true">
                                     <p:fileDownload value="#{rnGcNomSolicitudTrabajadorTblController.downLoadFile}"/>
+                                </p:commandButton>
+                            </p:column>
+                            <p:column style="width:26px;text-align:center">
+                                <p:commandButton icon="ui-icon-arrowstop-1-s" title="Descargar XML" disabled="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) == 'No Timbrado'}" actionListener="#{rnGcNomSolicitudTrabajadorTblController.descargarXml(item)}" ajax="false" process="@this" immediate="true">
+                                    <p:fileDownload value="#{rnGcNomSolicitudTrabajadorTblController.downLoadFileXml}"/>
                                 </p:commandButton>
                             </p:column>
                             <p:column style="width:26px;text-align:center">
@@ -225,14 +322,216 @@
                             <p:column style="width:26px;text-align:center">
                                 <p:commandButton icon="ui-icon-cancel" title="Cancelar timbre" disabled="#{rnGcNomSolicitudTrabajadorTblController.estatusCfdi(item) != 'Timbrado de forma correcta'}" actionListener="#{rnGcNomSolicitudTrabajadorTblController.cancelarTimbre(item)}" ajax="false"/>
                             </p:column>
+                            <p:column style="width:26px;text-align:center">
+                                <p:commandButton icon="ui-icon-pencil" title="Editar Percepciones y Deducciones" 
+                                                 action="#{rnGcNomSolicitudTrabajadorTblController.setSelected(item)}"
+                                                 update=":formPercepcionesDeducciones"
+                                                 oncomplete="PF('dialogEditarPercepciones').show()"
+                                                 actionListener="#{rnGcNomSolicitudTrabajadorTblController.prepararEdicionPercepcionesDeducciones}" 
+                                                 process="@this"/>
+                            </p:column>
                             <f:facet name="footer">
-                                <p:commandButton id="facturar" actionListener="#{rnGcNomSolicitudTrabajadorTblController.obtenerSeleccionados()}" ajax="false" update="RnGcNomNominasTblListForm:datalist, RnGcSolicitudTrabajadorTblListForm:datalist" value="Facturar"/>
+                                <p:commandButton id="facturar" action="#{rnGcNomSolicitudTrabajadorTblController.obtenerSeleccionados()}" ajax="false"  value="Facturar" style="margin-right:10px;" >
+                                </p:commandButton>
                                 <p:commandButton value="Vista Previa" ajax="false" actionListener="#{rnGcNomSolicitudTrabajadorTblController.descargarVistaPrevia()}">
                                     <p:fileDownload value="#{rnGcNomSolicitudTrabajadorTblController.downLoadFile}" />
                                 </p:commandButton>
                             </f:facet>
                         </p:dataTable>
                     </p:panel>
+                </h:form>
+            </p:dialog>
+
+
+            <p:dialog id="dialogEditarPercepciones" widgetVar="dialogEditarPercepciones"
+                      header="Editar Percepciones y Deducciones" modal="true" resizable="false"
+                      appendTo="@(body)" closable="true" width="700">
+
+                <h:form id="formPercepcionesDeducciones">
+
+                    <!-- Sección de Percepciones -->
+                    <h3>Percepciones</h3>
+                    <p:commandButton icon="ui-icon-plus" title="Agregar Percepción"
+                                     actionListener="#{rnGcNomSolicitudTrabajadorTblController.agregarPercepcion}" update="@form" />
+
+                    <p:dataTable value="#{rnGcNomSolicitudTrabajadorTblController.listaPercepciones}" var="p" editable="true"
+                                 style="margin-top:10px">
+
+                        <p:column headerText="Tipo Clave">
+                            <p:selectOneMenu id="tipoClavePercepcion"  style="width: 150px" value="#{p.percepcionId}"  required="true" >
+                                <f:selectItem itemLabel="Selecciona Tipo de percepción"/>
+                                <f:selectItems value="#{rnGcNomPercepcionesTblController.items}" var="percepcion"
+                                               itemLabel="#{percepcion.cveTipoPercepcion} - #{percepcion.descripcion}"
+                                               itemValue="#{percepcion}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column headerText="Gravado">
+                            <p:inputNumber id="gravadoPercepcion" value="#{p.totalGravado}" required="true" decimalSeparator="." decimalPlaces="2" thousandSeparator=""/>
+
+                        </p:column>
+
+                        <p:column headerText="Exento">
+                            <p:inputNumber id="exentoPercepcion" value="#{p.totalExento}" required="true" decimalSeparator="." decimalPlaces="2" thousandSeparator="" />
+
+                        </p:column>
+
+                        <p:column style="width:40px">
+                            <p:commandButton icon="ui-icon-close" title="Eliminar"
+                                             actionListener="#{rnGcNomSolicitudTrabajadorTblController.eliminarPercepcion(p)}"
+                                             update="@form" />
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <!-- Sección de Deducciones -->
+                    <h3 style="margin-top:20px">Deducciones</h3>
+
+                    <p:commandButton icon="ui-icon-plus" title="Agregar Deducción"
+                                     actionListener="#{rnGcNomSolicitudTrabajadorTblController.agregarDeduccion}" update="@form" />
+
+                    <p:dataTable value="#{rnGcNomSolicitudTrabajadorTblController.listaDeducciones}" var="d" editable="true"
+                                 style="margin-top:10px">
+
+                        <p:column headerText="Tipo Clave">
+                            <p:selectOneMenu id="tipoDeduccion" style="width: 200px" value="#{d.deduccionId}"  required="true" >
+                                <f:selectItem itemLabel="Selecciona Tipo de deduccion"/>
+                                <f:selectItems value="#{rnGcNomDeduccionesTblController.items}" var="deduccion"
+                                               itemLabel="#{deduccion.cveTipoDeduccion} - #{deduccion.descripcion}"
+                                               itemValue="#{deduccion}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+
+
+                        <p:column headerText="Gravado">
+                            <p:inputNumber id="gravadoDeduccion" value="#{d.totalGravado}" required="true" decimalSeparator="." decimalPlaces="2" thousandSeparator=""/>
+                        </p:column>
+
+                        <p:column style="width:40px">
+                            <p:commandButton icon="ui-icon-close" title="Eliminar"
+                                             actionListener="#{rnGcNomSolicitudTrabajadorTblController.eliminarDeduccion(d)}"
+                                             update="@form" />
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <!-- Sección de Otros Pagos -->
+                    <h3 style="margin-top:20px">Otros Pagos</h3>
+
+                    <p:separator/>
+
+                    <p:commandButton icon="ui-icon-plus" title="Agregar Otro Pago"
+                                     actionListener="#{rnGcNomSolicitudTrabajadorTblController.agregarOtroPago}" update="@form" />
+
+                    <p:dataTable value="#{rnGcNomSolicitudTrabajadorTblController.listaOtrosPagos}" var="o" editable="true"
+                                 style="margin-top:10px">
+
+                        <p:column headerText="Tipo Clave">
+                            <p:selectOneMenu id="tipoClaveOtroPago"  style="width: 200px" value="#{o.tipoOtroPagoId}"  required="true" >
+                                <f:selectItem itemLabel="Selecciona Tipo de Otro Pago"/>
+                                <f:selectItems value="#{rnGcNomTipootropagoTblController.items}" var="otroPago"
+                                               itemLabel="#{otroPago.cveTipoOtroPago} - #{otroPago.descripcion}"
+                                               itemValue="#{otroPago}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column headerText="Importe">
+                            <p:inputNumber id="importeIncapacidad" value="#{o.totalGravado}" required="true" decimalSeparator="." decimalPlaces="2" thousandSeparator="" />
+
+                        </p:column>
+
+                        <p:column style="width:40px">
+                            <p:commandButton icon="ui-icon-close" title="Eliminar"
+                                             actionListener="#{rnGcNomSolicitudTrabajadorTblController.eliminarOtroPago(o)}"
+                                             update="@form" />
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <!-- Sección de Incapacidad -->
+                    <h3 style="margin-top:20px">Incapacidad</h3>
+
+                    <p:separator/>
+
+                    <p:commandButton icon="ui-icon-plus" title="Agregar Incapacidad"
+                                     actionListener="#{rnGcNomSolicitudTrabajadorTblController.agregarIncapacidad}" update="@form" />
+
+                    <p:dataTable value="#{rnGcNomSolicitudTrabajadorTblController.listaIncapacidad}" var="i" editable="true"
+                                 style="margin-top:10px">
+
+                        <p:column headerText="Tipo Clave">
+                            <p:selectOneMenu id="tipoClaveIncapacidad"  style="width: 150px" value="#{i.tipoIncapacidadId}"  required="true" >
+                                <f:selectItem itemLabel="Selecciona Tipo de incapacidad"/>
+                                <f:selectItems value="#{rnGcNomTipoincapacidadTblController.items}" var="incapacidad"
+                                               itemLabel="#{incapacidad.cveTipoIncapacidad} - #{incapacidad.descripcion}"
+                                               itemValue="#{incapacidad}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column headerText="No. Días">
+                            <p:inputNumber id="noDiasIncapacidad" value="#{i.diasIncapacidad}" required="true" decimalSeparator="." decimalPlaces="2" thousandSeparator=""/>
+
+                        </p:column>
+
+                        <p:column headerText="Importe">
+                            <p:inputNumber id="importeIncapacidad" value="#{i.totalGravado}" required="true" decimalSeparator="." decimalPlaces="2" thousandSeparator="" />
+
+                        </p:column>
+
+                        <p:column style="width:40px">
+                            <p:commandButton icon="ui-icon-close" title="Eliminar"
+                                             actionListener="#{rnGcNomSolicitudTrabajadorTblController.eliminarIncapacidad(i)}"
+                                             update="@form" />
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:commandButton value="Guardar cambios" icon="ui-icon-check"
+                                     actionListener="#{rnGcNomSolicitudTrabajadorTblController.guardarLineasEditadas}"
+                                     update="@form"
+                                     oncomplete="PF('dialogEditarPercepciones').hide()" />
+                    <p:commandButton value="Cancelar" icon="ui-icon-close"
+                                     process="@this"
+                                     actionListener="#{rnGcNomSolicitudTrabajadorTblController.cancelarCambiosPercepcionesDeducciones}"
+                                     oncomplete="PF('dialogEditarPercepciones').hide();"
+                                     style="margin-left:10px" />
+                </h:form>
+            </p:dialog>
+
+
+            <p:dialog id="dialogDuplicarNomina" widgetVar="dialogDuplicarNomina"
+                      header="Duplicar Nómina" modal="true" resizable="false"
+                      appendTo="@(body)" closable="true" width="500">
+
+                <h:form id="formDuplicarNomina">
+
+                    <h:panelGrid columns="2" columnClasses="label,value" style="width:100%; margin-bottom:20px">
+
+                        <h:outputLabel for="nombreNomina" value="Nombre de la Nómina:" />
+                        <p:inputText id="nombreNomina" value="#{rnGcNomNominasTblController.nombreDuplicado}" required="true" style="width:100%" />
+
+                        <h:outputLabel for="fechaInicio" value="Fecha de Inicio:" />
+                        <p:calendar id="fechaInicio" value="#{rnGcNomNominasTblController.fechaInicioDuplicado}" 
+                                    pattern="dd/MM/yyyy" required="true" style="width:100%" />
+
+                        <h:outputLabel for="fechaFin" value="Fecha de Fin:" />
+                        <p:calendar id="fechaFin" value="#{rnGcNomNominasTblController.fechaFinDuplicado}" 
+                                    pattern="dd/MM/yyyy" required="true" style="width:100%" />
+
+                    </h:panelGrid>
+
+                    <p:separator/>
+
+                    <p:commandButton value="Guardar" icon="ui-icon-check"
+                                     actionListener="#{rnGcNomNominasTblController.duplicarNomina((rnGcNomNominasTblController.selected))}"
+                                     update="RnGcNomNominasTblListForm RnGcNomNominasTblListForm:datalist"
+                                     oncomplete="PF('dialogDuplicarNomina').hide()" />
+
+                    <p:commandButton value="Cancelar" icon="ui-icon-close"
+                                     process="@this"
+                                     oncomplete="PF('dialogDuplicarNomina').hide();"
+                                     style="margin-left:10px" />
+
                 </h:form>
             </p:dialog>
 

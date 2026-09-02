@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcMenuslineasTbl.findByUltimaActualizacionPor", query = "SELECT r FROM RnGcMenuslineasTbl r WHERE r.ultimaActualizacionPor = :ultimaActualizacionPor")
     , @NamedQuery(name = "RnGcMenuslineasTbl.findByUltimaFechaActualizacion", query = "SELECT r FROM RnGcMenuslineasTbl r WHERE r.ultimaFechaActualizacion = :ultimaFechaActualizacion")
     , @NamedQuery(name = "RnGcMenuslineasTbl.findById", query = "SELECT r FROM RnGcMenuslineasTbl r WHERE r.id = :id")
-    , @NamedQuery(name = "RnGcMenuslineasTbl.findByMenuId", query = "SELECT r FROM RnGcMenuslineasTbl r WHERE r.menuId = :menuId")
+    , @NamedQuery(name = "RnGcMenuslineasTbl.findByMenuId", query = "SELECT r FROM RnGcMenuslineasTbl r WHERE r.menuId = :menuId ORDER BY r.noSecuencia ASC")
     , @NamedQuery(name = "RnGcMenuslineasTbl.findByFuncionesId", query = "SELECT r FROM RnGcMenuslineasTbl r WHERE r.funcionesId = :funcionesId")
     , @NamedQuery(name = "RnGcMenuslineasTbl.findByFuncionesId2", query = "SELECT r FROM RnGcMenuslineasTbl r WHERE r.menuId = :menuId AND r.funcionesId = :funcionesId")
     , @NamedQuery(name = "RnGcMenuslineasTbl.findByNoSecuencia", query = "SELECT r FROM RnGcMenuslineasTbl r WHERE r.noSecuencia = :noSecuencia")

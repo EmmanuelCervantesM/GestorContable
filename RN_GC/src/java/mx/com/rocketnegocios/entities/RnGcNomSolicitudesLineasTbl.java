@@ -24,6 +24,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import mx.com.rocketnegocios.web.RnGcNomTipootropagoTblController;
 
 /**
  *
@@ -46,7 +47,17 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.findByTotalExento", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.totalExento = :totalExento")
     , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.findByTipoClave", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.tipoClave = :tipoClave")
     , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.findByTipoConcepto", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.tipoConcepto = :tipoConcepto")
-    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.findBySoliTrabajador", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId between :soliTrabajadorUno and :soliTrabajadorDos")})
+    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.findBySoliTrabajador", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId between :soliTrabajadorUno and :soliTrabajadorDos")
+    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.obtenerIncapacidad", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId = :solicitudTrabajadorId and r.tipoIncapacidadId is not null")
+    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.obtenerPercepcionesTipoRegistro", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId = :solicitudTrabajadorId and r.percepcionId is not null and r.tipoRegistro = 'PERCEPCION'")
+    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.obtenerDeduccionesTipoRegistro", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId = :solicitudTrabajadorId and r.deduccionId is not null and r.tipoRegistro = 'DEDUCCION'")
+    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.obtenerOtrosPagosTipoRegistro", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId = :solicitudTrabajadorId and r.tipoOtroPagoId is not null and r.tipoRegistro = 'OTROS PAGOS'")
+    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.obtenerIncapacidadTipoRegistro", query = "SELECT r FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId = :solicitudTrabajadorId and r.tipoIncapacidadId is not null and r.tipoRegistro = 'INCAPACIDAD'")
+    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.obtenerTotalPercepciones", query = "SELECT SUM(r.totalGravado) FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId = :solicitudTrabajadorId and r.percepcionId is not null and r.tipoRegistro = 'PERCEPCION'")
+    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.obtenerTotalDeducciones", query = "SELECT SUM(r.totalGravado) FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId = :solicitudTrabajadorId and r.deduccionId is not null and r.tipoRegistro = 'DEDUCCION'")
+    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.obtenerTotalOtrosPagos", query = "SELECT SUM(r.totalGravado) FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId = :solicitudTrabajadorId and r.tipoOtroPagoId is not null and r.tipoRegistro = 'OTROS PAGOS'")
+    , @NamedQuery(name = "RnGcNomSolicitudesLineasTbl.obtenerTotalIncapacidad", query = "SELECT SUM(r.totalGravado) FROM RnGcNomSolicitudesLineasTbl r WHERE r.solicitudTrabajadorId = :solicitudTrabajadorId and r.tipoIncapacidadId is not null and r.tipoRegistro = 'INCAPACIDAD'")
+})
 public class RnGcNomSolicitudesLineasTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -88,12 +99,25 @@ public class RnGcNomSolicitudesLineasTbl implements Serializable {
     @Size(max = 80)
     @Column(name = "tipoConcepto")
     private String tipoConcepto;
+
+    @Column(name = "tipoRegistro")
+    private String tipoRegistro;
+
+    @Column(name = "diasIncapacidad")
+    private Integer diasIncapacidad;
+
     @JoinColumn(name = "percepcionId", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private RnGcNomPercepcionesTbl percepcionId;
     @JoinColumn(name = "deduccionId", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private RnGcNomDeduccionesTbl deduccionId;
+    @JoinColumn(name = "tipoIncapacidadId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private RnGcNomTipoincapacidadTbl tipoIncapacidadId;
+    @JoinColumn(name = "tipoOtroPagoId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private RnGcNomTipootropagoTbl tipoOtroPagoId;
 
     public RnGcNomSolicitudesLineasTbl() {
     }
@@ -117,6 +141,14 @@ public class RnGcNomSolicitudesLineasTbl implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getTipoRegistro() {
+        return tipoRegistro;
+    }
+
+    public void setTipoRegistro(String tipoRegistro) {
+        this.tipoRegistro = tipoRegistro;
     }
 
     public int getCreadoPor() {
@@ -207,6 +239,30 @@ public class RnGcNomSolicitudesLineasTbl implements Serializable {
         this.deduccionId = deduccionId;
     }
 
+    public RnGcNomTipoincapacidadTbl getTipoIncapacidadId() {
+        return tipoIncapacidadId;
+    }
+
+    public void setTipoIncapacidadId(RnGcNomTipoincapacidadTbl tipoIncapacidadId) {
+        this.tipoIncapacidadId = tipoIncapacidadId;
+    }
+
+    public RnGcNomTipootropagoTbl getTipoOtroPagoId() {
+        return tipoOtroPagoId;
+    }
+
+    public void setTipoOtroPagoId(RnGcNomTipootropagoTbl tipoOtroPagoId) {
+        this.tipoOtroPagoId = tipoOtroPagoId;
+    }
+
+    public Integer getDiasIncapacidad() {
+        return diasIncapacidad;
+    }
+
+    public void setDiasIncapacidad(Integer diasIncapacidad) {
+        this.diasIncapacidad = diasIncapacidad;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -231,5 +287,5 @@ public class RnGcNomSolicitudesLineasTbl implements Serializable {
     public String toString() {
         return "mx.com.rocketnegocios.entities.RnGcNomSolicitudesLineasTbl[ id=" + id + " ]";
     }
-    
+
 }

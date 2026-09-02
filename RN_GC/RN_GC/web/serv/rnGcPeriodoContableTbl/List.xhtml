@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templateRN.xhtml">
+    
+        
+
+    <ui:define name="body">
+        
+    <h:form id="rnGcPeriodoContableTblListForm">
+        <p:confirmDialog global="true"
+                     showEffect="fade" hideEffect="fade"
+                     appendTo="@(body)">
+      <p:commandButton value="Sí" type="button"
+                       styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+      <p:commandButton value="No" type="button"
+                       styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+    </p:confirmDialog>
+      <p:panel header="Gestión de periodos contables">
+        <p:dataTable id="datalist"
+                     value="#{rnGcPeriodoContableTblController.items}"
+                     var="item"
+                     selectionMode="single"
+                     selection="#{rnGcPeriodoContableTblController.selected}"
+                     paginator="true"
+                     rowKey="#{item.id}"
+                     rows="10"
+                     rowsPerPageTemplate="10,20,30,40,50">
+
+          <p:ajax event="rowSelect"   update="@form"/>
+          <p:ajax event="rowUnselect" update="@form"/>
+          
+
+          <!-- Periodo -->
+          <p:column>
+            <f:facet name="header"><h:outputText value="Periodo"/></f:facet>
+            <h:outputText value="#{item.fechaInicioPeriodo}">
+              <f:convertDateTime pattern="dd/MM/yyyy"/>
+            </h:outputText>
+            <h:outputText value=" a "/>
+            <h:outputText value="#{item.fechaFinPeriodo}">
+              <f:convertDateTime pattern="dd/MM/yyyy"/>
+            </h:outputText>
+          </p:column>
+
+          <!-- Descripción (AGOSTO 2025) -->
+          <p:column>
+            <f:facet name="header"><h:outputText value="Descripción"/></f:facet>
+            <h:outputText value="#{rnGcPeriodoContableTblController.descripcion(item)}"/>
+          </p:column>
+
+          <!-- Estatus con icono -->
+        <p:column style="width:240px">
+         <f:facet name="header"><h:outputText value="Estatus"/></f:facet>
+
+         <p:commandButton
+             value="#{rnGcPeriodoContableTblController.labelEstatus(item)}"
+             icon="#{rnGcPeriodoContableTblController.iconoEstatus(item)}"
+             styleClass="#{rnGcPeriodoContableTblController.styleEstatus(item)}"
+             actionListener="#{rnGcPeriodoContableTblController.toggleEstatusSelected}"
+             update="datalist :growl">
+
+             <p:confirm header="Confirmación"
+                        message="¿Seguro que deseas #{item.estatus eq 'A' ? 'cerrar' : 'reabrir'} el periodo #{rnGcPeriodoContableTblController.descripcion(item)}?"
+                        icon="ui-icon-alert"/>
+
+             <f:setPropertyActionListener value="#{item}"
+                                          target="#{rnGcPeriodoContableTblController.selected}"/>
+         </p:commandButton>
+
+       <!-- Separador pequeño -->
+         <span style="display:inline-block; width:8px;"></span>
+
+         <!-- Botón ELIMINAR -->
+         <p:commandButton value="Eliminar"
+                 icon="ui-icon-trash"
+                 styleClass="ui-button-danger"
+                 actionListener="#{rnGcPeriodoContableTblController.eliminarSelected}"
+                 update="datalist :growl"
+                 process="@this">
+  <p:confirm header="Confirmación"
+             message="¿Deseas eliminar definitivamente el periodo #{rnGcPeriodoContableTblController.descripcion(item)}?"
+             icon="ui-icon-alert"/>
+  <!-- pasamos el item a selected ANTES de ejecutar el método -->
+  <f:setPropertyActionListener value="#{item}"
+                               target="#{rnGcPeriodoContableTblController.selected}"/>
+</p:commandButton>
+
+       </p:column>
+          <f:facet name="footer">
+            <p:commandButton id="createBtn"
+                             icon="ui-icon-plus"
+                             value="Inicio Periodo"
+                             action="#{rnGcPeriodoContableTblController.prepareCreate()}"
+                             update=":rnGcPeriodoContableTblCreateForm"
+                             oncomplete="PF('rnGcPeriodoContableTblCreated').show()"
+                             disabled="#{rnGcPeriodoContableTblController.hayPeriodoAbierto}"
+                             styleClass="#{rnGcPeriodoContableTblController.hayPeriodoAbierto ? 'btn-trans' : ''}"/>
+          </f:facet>
+        </p:dataTable>
+      </p:panel>
+    </h:form>
+
+    <style>
+      .btn-trans.ui-button { opacity: .45; }
+    </style>
+    <!-- IMPORTANTE: Create.xhtml es un FRAGMENTO (sin template ni <html>) -->
+    <ui:include src="Create.xhtml"/>
+  </ui:define>
+
+
+</ui:composition>
+</html>

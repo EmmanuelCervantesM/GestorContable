@@ -31,17 +31,22 @@ public abstract class AbstractFacade<T> {
     protected abstract EntityManager getEntityManager();
 
     public void create(T entity) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        javax.validation.Validator validator = factory.getValidator();
-        Set<ConstraintViolation<T>> constraintViolations = validator.validate(entity);
-        if (constraintViolations.size() > 0) {
-            System.out.println("Constraint Violations ocurred...");
-            for (ConstraintViolation<T> contraints : constraintViolations) {
-                System.out.println("ERROR: " +  contraints.getRootBeanClass().getSimpleName() + "." + contraints.getPropertyPath() + " " + contraints.getMessage());
-            }
-            getEntityManager().persist(entity);
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    javax.validation.Validator validator = factory.getValidator();
+    Set<ConstraintViolation<T>> constraintViolations = validator.validate(entity);
+
+    if (!constraintViolations.isEmpty()) {
+        System.out.println("Constraint Violations occurred...");
+        for (ConstraintViolation<T> contraints : constraintViolations) {
+            System.out.println("ERROR: " + contraints.getRootBeanClass().getSimpleName() + "." + contraints.getPropertyPath() + " " + contraints.getMessage());
         }
+        // ⚠️ No persisto porque hay errores
+        throw new IllegalArgumentException("Entidad no válida, revisar restricciones");
+    } else {
+        // ✅ Solo persisto si está correcto
+        getEntityManager().persist(entity);
     }
+}
 
     public void edit(T entity) {
         //getEntityManager().merge(entity);
@@ -99,7 +104,7 @@ public abstract class AbstractFacade<T> {
     }
     
        public void crea(T entity) {
-        System.out.println("AQUI ESTOY");
+        System.out.println("---------INIIA PROCESO GUARDANDO CATALOGO DE CUENTAS ----------");
         //getEntityManager().merge(entity);
         try {
             getEntityManager().merge(entity);

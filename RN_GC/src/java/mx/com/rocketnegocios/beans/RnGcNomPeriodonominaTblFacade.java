@@ -40,8 +40,9 @@ public class RnGcNomPeriodonominaTblFacade extends AbstractFacade<RnGcNomPeriodo
     public RnGcNomPeriodonominaTbl obtenerXNomina(RnGcNomNominasTbl nomina){
         RnGcNomPeriodonominaTbl periodoNomina = null;
         try{
+            System.out.print("Buscando la nomina con id: " + nomina.getId());
             periodoNomina = em.createNamedQuery("RnGcNomPeriodonominaTbl.findByNomina", RnGcNomPeriodonominaTbl.class)
-                    .setParameter("nominaId", nomina)
+                    .setParameter("nominaId", nomina.getId())
                     .getSingleResult();
         }catch(NoResultException ex){
             System.err.println("No se encontraro periodo nomina");

@@ -1,120 +1,357 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <ui:composition>
-        <h:form id="CargaMasivaFormGeneral">
-        <p:dialog id="CargaMasivaDlg" widgetVar="CargaMasivaDialog" modal="true" resizable="false" appendTo="@(body)" header="Carga de Cuentas">
-            <h:form id="CargaMasivaForm" enctype="multipart/form-data">
-                <p:growl id="msgg" life="5000" showDetail="true"/>
-                <p:panel header="Contabilidad - Cargar Cuentas">
-                    <p:fileUpload id="uploader1" mode="advanced" styleClass="p-d-block p-mb-5" label="Buscar Archivo" cancelLabel="Cancelar" uploadLabel="Cargar"
-                                  fileUploadListener="#{rnGcCatalogoCuentasTblController.leerxls}" dragDropSupport="false" sequential="true" multiple="true"
-                                  update=":RnGcCatalogoCuentasTblListForm:datalist, msgg, :RnGcCatalogoCuentasTblListForm:mssg, :CargaMasivaFormGeneral:CuentasDlg, :CargaMasivaFormGeneral" 
-                                  fileLimit="1" allowTypes="/(\.|\/)(xlsx)$/" accept=".xlsx" oncomplete="PF('CargaMasivaDialog').hide()"/>
-                    <!--<p:fileUpload value="#/{rnGcCatalogoCuentasTblController.file}" 
-                                  mode="simple" 
-                                  id="archivo"
-                                  skinSimple="true"
-                                  label="Seleccionar Archivo"/>
-                    <br />
-                    <p:commandButton value="Cargar" ajax="false" action="#/{rnGcCatalogoCuentasTblController.leerxls(event)}" update=":RnGcCatalogoCuentasTblListForm:datalist"/>-->
-                </p:panel>
-            </h:form>            
-        </p:dialog>
-        <!--Lista de Cuentas-->
-        <p:dialog id="CuentasDlg" style="width: 200px" widgetVar="CuentasDialog" modal="true" resizable="false" appendTo="@(body)" header="Alerta">
-            <h:form id="RnGcCatalogoCuentasTblListForm2">
-                <p:scrollPanel mode="native" style="height: 450px">
-                <p:panel header="Lo sentimos!. Estas Cuentas no se pudierón registrar, debido a que:">
-                    <h:outputText rendered="#{rnGcCatalogoCuentasTblController.motivo != ''}" value="Hay cuentas sin#{rnGcCatalogoCuentasTblController.motivo} 
-                                   porque no se ingresaron de acuerdo a las instrucciones o  no se ingresaron" style="font-size: 15px"/>
-                    <br/>
-                    <h:outputText rendered="#{rnGcCatalogoCuentasTblController.motivoVal != ''}" value="Hay cuentas con#{rnGcCatalogoCuentasTblController.motivoVal} ya existente" style="font-size: 15px"/>
-                     <p:dataTable value="#{rnGcCatalogoCuentasTblController.obtenerCuentasNoRegistradas()}" var="item"                             
-                                 >
-                        <p:column headerText="Número Cuenta">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_numeroCuenta}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.numeroCuenta}"/>
-                        </p:column>
-                        <p:column headerText="Descripción Cuenta">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_descripcionCuenta}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.descripcionCuenta}"/>
-                        </p:column>
-                        <p:column headerText="Nivel">
-                            <f:facet name="header">
-                                <h:outputText value="Nivel"/>
-                            </f:facet>
-                            <h:outputText value="#{item.adicional2}"/>
-                        </p:column>
-                         <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Codigo agrupador"/>
-                            </f:facet>
-                             <h:outputText value="#{item.codigoAgrupadorSatId.codigoAgrupador}"/>
-                        </p:column>
-                         <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Tipo"/>
-                            </f:facet>
-                             <h:outputText value="#{item.tipo}"/>
-                        </p:column>
-                         <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Subtipo"/>
-                            </f:facet>
-                             <h:outputText value="#{item.subtipo}"/>
-                        </p:column>
-                        <p:column headerText="Naturaleza">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_naturaleza}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.naturaleza}"/>
-                        </p:column>
-                          <p:column headerText="Moneda">
-                            <f:facet name="header">
-                                <h:outputText value="Moneda"/>
-                            </f:facet>
-                            <h:outputText value="#{item.monedaId.CMoneda}"/>
-                        </p:column>
-                          <p:column headerText="Diot">
-                            <f:facet name="header">
-                                <h:outputText value="DIOT"/>
-                            </f:facet>
-                              <h:outputText value="#{item.adicional1}"/>
-                        </p:column>
-                         <p:column headerText="rfc">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_rfc}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.rfc}"/>
-                        </p:column>
-                         <p:column headerText="inicio Vigencia">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListRnGcCatalogoCuentasTblTitle_inicioVigencia}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.inicioVigencia}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </h:outputText>
-                        </p:column>          
-                        <f:facet name="footer">
-                            <p:commandButton id="cancelar" icon="ui-icon-close"   value="Cerrar" onclick="PF('CuentasDialog').hide()" />
-                        </f:facet>
-                    </p:dataTable>
-                  
-                </p:panel>
-                </p:scrollPanel>
-            </h:form>
-        </p:dialog>
-        <!--Lista de Cuentas-->
-        </h:form>
-    </ui:composition>
+<ui:composition>
+
+  <!-- =========================================
+       0) GROWL GLOBAL EN SU PROPIO FORM
+       ========================================= -->
+  <h:form id="GrowlForm">
+    <p:growl id="msgg" life="6000" showDetail="true" />
+  </h:form>
+
+  <!-- =========================================
+       0.1) JS DE PROGRESO FALSO
+       ========================================= -->
+  <h:outputScript target="body">
+  var __fakePBTimer = null;
+  function startFakeProgress(totalMs) {
+    try {
+      var stepMs = 200;
+      var steps = Math.max(1, Math.floor(totalMs / stepMs));
+      var val = 0;
+      if (PF('ProgDlg')) PF('ProgDlg').show();
+      if (PF('fakePB')) PF('fakePB').setValue(0);
+      __fakePBTimer = setInterval(function() {
+        val += Math.ceil(100 / steps);
+        if (val >= 100) { val = 100; }
+        if (PF('fakePB')) PF('fakePB').setValue(val);
+        if (val >= 100) {
+          clearInterval(__fakePBTimer);
+          __fakePBTimer = null;
+        }
+      }, stepMs);
+    } catch(e) { console &amp;&amp; console.warn(e); }
+  }
+  function stopFakeProgress(afterFn) {
+    try {
+      if (__fakePBTimer) { clearInterval(__fakePBTimer); __fakePBTimer = null; }
+      if (PF('fakePB')) PF('fakePB').setValue(100);
+      setTimeout(function(){
+        if (PF('ProgDlg')) PF('ProgDlg').hide();
+        if (typeof afterFn === 'function') afterFn();
+      }, 250);
+    } catch(e) { console &amp;&amp; console.warn(e); }
+  }
+</h:outputScript>
+
+
+  <!-- =========================================
+       1) DIÁLOGO: PROGRESO
+       ========================================= -->
+  <p:dialog id="ProgressDlg"
+            widgetVar="ProgDlg"
+            header="Procesando..."
+            modal="true" resizable="false"
+            closable="false" draggable="false"
+            appendTo="@(body)" width="420">
+    <h:panelGroup layout="block" style="padding:8px">
+      <p:progressBar id="pb"
+                     widgetVar="fakePB"
+                     value="0"
+                     labelTemplate="{value}%"
+                     displayOnly="true"
+                     style="width:100%" />
+      <h:outputText value="Por favor espera mientras procesamos tu archivo..." />
+    </h:panelGroup>
+  </p:dialog>
+
+  <!-- =========================================
+       2) DIÁLOGO: CARGA / PREVALIDAR
+       ========================================= -->
+  <p:dialog id="CargaMasivaDlg"
+            widgetVar="CargaMasivaDialog"
+            header="Carga de Cuentas"
+            modal="true" resizable="false"
+            appendTo="@(body)" width="620">
+    <h:form id="UploadForm" enctype="multipart/form-data">
+      <p:panel header="Contabilidad - Cargar Cuentas">
+        <p:fileUpload id="uploader1"
+                      mode="advanced"
+                      styleClass="p-d-block p-mb-4"
+                      label="Buscar Archivo"
+                      cancelLabel="Cancelar"
+                      uploadLabel="Prevalidar"
+                      fileLimit="1"
+                      multiple="false"
+                      dragDropSupport="false"
+                      sequential="true"
+                      allowTypes="/(\.|\/)(xlsx)$/"
+                      accept=".xlsx"
+                      fileUploadListener="#{rnGcCatalogoCuentasTblController.leerxls}"
+                      process="@this"
+                      update=":GuardadoDlg :CuentasDlg :GrowlForm:msgg :RnGcCatalogoCuentasTblListForm:datalist"
+                      onstart="startFakeProgress(10000);"
+                      oncomplete="stopFakeProgress(function(){ if (PF('GuardadoDlg')) PF('GuardadoDlg').show(); if (PF('CuentasDialog')) PF('CuentasDialog').show(); });" />
+        <h:panelGroup layout="block" style="margin-top:6px">
+        </h:panelGroup>
+      </p:panel>
+    </h:form>
+  </p:dialog>
+
+  <!-- =========================================
+       3) DIÁLOGO: GUARDADO CORRECTO (PREVÁLIDAS)
+       ========================================= -->
+  <p:dialog id="GuardadoDlg"
+            widgetVar="GuardadoDlg"
+            header="Registros válidos (Guardado Correcto)"
+            modal="true" resizable="false"
+            appendTo="@(body)" width="980">
+    <h:form id="GuardadoForm">
+      <h:panelGroup layout="block" style="margin-bottom:8px">
+        <h:outputText
+          value="Leídas: #{rnGcCatalogoCuentasTblController.totalLeidas}  |  Válidas: #{rnGcCatalogoCuentasTblController.totPrevalidas}  |  Rechazadas: #{rnGcCatalogoCuentasTblController.totRechazadas}" />
+      </h:panelGroup>
+
+      <!-- Tabla EDITABLE y con selección múltiple -->
+      <p:dataTable id="tablaPrevalidas"
+                   value="#{rnGcCatalogoCuentasTblController.prevalidas}"
+                   var="c"
+                   rowKey="#{c.numeroCuenta}"
+                   selectionMode="multiple"
+                   selection="#{rnGcCatalogoCuentasTblController.selectedPrevalidas}"
+                   rows="10"
+                   paginator="true"
+                   paginatorPosition="bottom"
+                   emptyMessage="No hay registros válidos."
+                   editable="true"
+                   editMode="cell"
+                   disabled="#{!rnGcCatalogoCuentasTblController.editar}">
+        <p:column selectionMode="multiple" style="width:40px;text-align:center" />
+
+        <p:column headerText="Cuenta" style="min-width:120px">
+          <p:cellEditor>
+            <f:facet name="output"><h:outputText value="#{c.numeroCuenta}" /></f:facet>
+            <f:facet name="input"><p:inputText value="#{c.numeroCuenta}" /></f:facet>
+          </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="Descripción" style="min-width:220px">
+          <p:cellEditor>
+            <f:facet name="output"><h:outputText value="#{c.descripcionCuenta}" /></f:facet>
+            <f:facet name="input"><p:inputText value="#{c.descripcionCuenta}" /></f:facet>
+          </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="Nivel" style="width:100px">
+          <p:cellEditor>
+            <f:facet name="output"><h:outputText value="#{c.adicional2}" /></f:facet>
+            <f:facet name="input"><p:inputText value="#{c.adicional2}" /></f:facet>
+          </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="Naturaleza" style="width:140px">
+          <p:cellEditor>
+            <f:facet name="output"><h:outputText value="#{c.naturaleza}" /></f:facet>
+            <f:facet name="input"><p:inputText value="#{c.naturaleza}" /></f:facet>
+          </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="Tipo" style="width:100px">
+          <p:cellEditor>
+            <f:facet name="output"><h:outputText value="#{c.tipo}" /></f:facet>
+            <f:facet name="input"><p:inputText value="#{c.tipo}" /></f:facet>
+          </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="Subtipo" style="width:110px">
+          <p:cellEditor>
+            <f:facet name="output"><h:outputText value="#{c.subtipo}" /></f:facet>
+            <f:facet name="input"><p:inputText value="#{c.subtipo}" /></f:facet>
+          </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="RFC" style="min-width:160px">
+          <p:cellEditor>
+            <f:facet name="output"><h:outputText value="#{c.rfc}" /></f:facet>
+            <f:facet name="input"><p:inputText value="#{c.rfc}" /></f:facet>
+          </p:cellEditor>
+        </p:column>
+      </p:dataTable>
+
+      <!-- Botones debajo de la tabla -->
+      <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap">
+        <!-- EDITAR -->
+        <p:commandButton value="#{rnGcCatalogoCuentasTblController.editar ? 'Desactivar edición' : 'Editar'}"
+                         icon="ui-icon-pencil"
+                         actionListener="#{rnGcCatalogoCuentasTblController.toggleEditar}"
+                         process="@this"
+                         update=":GuardadoForm:tablaPrevalidas" />
+
+        <!-- ELIMINAR seleccionadas -->
+        <p:commandButton value="Eliminar seleccionadas"
+                         icon="ui-icon-trash"
+                         actionListener="#{rnGcCatalogoCuentasTblController.eliminarSeleccion}"
+                         process="@this"
+                         update=":GuardadoForm:tablaPrevalidas :GrowlForm:msgg" />
+
+        <!-- GUARDAR (con confirmación) -->
+        <p:commandButton id="btnGuardarPrevalidas"
+                         value="Confirmar y guardar"
+                         icon="ui-icon-disk"
+                         actionListener="#{rnGcCatalogoCuentasTblController.guardarCorrecto}"
+                         process="@this"
+                         update=":RnGcCatalogoCuentasTblListForm:datalist :GrowlForm:msgg"
+                         onstart="startFakeProgress(8000);"
+                         oncomplete="stopFakeProgress(function(){ PF('GuardadoDlg').hide(); });">
+          <p:confirm header="Confirmación"
+                     message="¿Seguro que deseas guardar los registros seleccionados?"
+                     icon="ui-icon-alert" />
+        </p:commandButton>
+
+        <!-- CANCELAR (con confirmación) -->
+        <p:commandButton id="btnCancelarPrevalidas"
+                         value="Cancelar"
+                         icon="ui-icon-close"
+                         actionListener="#{rnGcCatalogoCuentasTblController.cancelarCarga}"
+                         process="@this"
+                         update=":GuardadoForm :RechazadasForm :GrowlForm:msgg"
+                         oncomplete="PF('GuardadoDlg').hide(); PF('CuentasDialog').hide();">
+          <p:confirm header="Cancelar proceso"
+                     message="¿Deseas cancelar el registro del catálogo? Se perderán los datos prevalidados."
+                     icon="ui-icon-alert" />
+        </p:commandButton>
+      </div>
+
+      <!-- ConfirmDialog global -->
+      <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" appendTo="@(body)">
+        <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        <p:commandButton value="No" type="button"  styleClass="ui-confirmdialog-no"  icon="ui-icon-close" />
+      </p:confirmDialog>
+
+    </h:form>
+  </p:dialog>
+
+  <!-- =========================================
+       4) DIÁLOGO: RECHAZADAS (EDITABLES)
+       ========================================= -->
+  <p:dialog id="CuentasDlg"
+            widgetVar="CuentasDialog"
+            header="Registros rechazados"
+            modal="true" resizable="false"
+            appendTo="@(body)" width="980">
+    <h:form id="RechazadasForm">
+      <p:scrollPanel mode="native" style="height: 450px">
+        <p:panel header="Estas cuentas no se pudieron registrar:">
+          <p:dataTable id="tablaRechazadas"
+                       value="#{rnGcCatalogoCuentasTblController.rechazadas}"
+                       var="r"
+                       rows="10"
+                       paginator="true"
+                       paginatorPosition="bottom"
+                       emptyMessage="Sin rechazadas."
+                       editable="true"
+                       editMode="cell">
+            <p:column headerText="Número Cuenta">
+              <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{r.numeroCuenta}" /></f:facet>
+                <f:facet name="input"><p:inputText value="#{r.numeroCuenta}" /></f:facet>
+              </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Descripción">
+              <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{r.descripcionCuenta}" /></f:facet>
+                <f:facet name="input"><p:inputText value="#{r.descripcionCuenta}" /></f:facet>
+              </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Nivel">
+              <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{r.adicional2}" /></f:facet>
+                <f:facet name="input"><p:inputText value="#{r.adicional2}" /></f:facet>
+              </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Naturaleza">
+              <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{r.naturaleza}" /></f:facet>
+                <f:facet name="input"><p:inputText value="#{r.naturaleza}" /></f:facet>
+              </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Tipo">
+              <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{r.tipo}" /></f:facet>
+                <f:facet name="input"><p:inputText value="#{r.tipo}" /></f:facet>
+              </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Subtipo">
+              <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{r.subtipo}" /></f:facet>
+                <f:facet name="input"><p:inputText value="#{r.subtipo}" /></f:facet>
+              </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="RFC">
+              <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{r.rfc}" /></f:facet>
+                <f:facet name="input"><p:inputText value="#{r.rfc}" /></f:facet>
+              </p:cellEditor>
+            </p:column>
+               <p:column headerText="Descripción / Motivo">
+        <p:cellEditor>
+            <f:facet name="output">
+                <h:outputText value="#{r.adicional1}" />
+            </f:facet>
+            <f:facet name="input">
+                <p:inputText value="#{r.adicional1}" />
+            </f:facet>
+        </p:cellEditor>
+    </p:column>
+
+    <!-- NUEVO: SALDO CUENTA (archivo) -->
+    <p:column headerText="Saldo cuenta (archivo)">
+        <h:outputText value="#{r.saldoInicial}">
+            <f:convertNumber type="currency" currencySymbol="$" />
+        </h:outputText>
+    </p:column>
+          </p:dataTable>
+
+          <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap">
+            <!-- REVALIDAR TODO -->
+            <p:commandButton value="Revalidar todo"
+                             icon="ui-icon-refresh"
+                             actionListener="#{rnGcCatalogoCuentasTblController.revalidarRechazadas}"
+                             process="@this"
+                             update=":RechazadasForm:tablaRechazadas :GuardadoForm:tablaPrevalidas :GrowlForm:msgg" />
+
+            <!-- MOVER seleccionadas a válidos (si manejas selección en backing) -->
+            <p:commandButton value="Mover seleccionadas a válidos"
+                             icon="ui-icon-arrowthick-1-e"
+                             actionListener="#{rnGcCatalogoCuentasTblController.moverRechazadasAValidas}"
+                             process="@this"
+                             update=":RechazadasForm:tablaRechazadas :GuardadoForm:tablaPrevalidas :GrowlForm:msgg" />
+
+            <!-- CERRAR -->
+            <p:commandButton id="cerrarRechazadas"
+                             type="button"
+                             icon="ui-icon-close"
+                             value="Cerrar"
+                             onclick="PF('CuentasDialog').hide();" />
+          </div>
+        </p:panel>
+      </p:scrollPanel>
+    </h:form>
+  </p:dialog>
+
+</ui:composition>
 </html>

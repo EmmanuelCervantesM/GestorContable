@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="auxiliar_cuentas"
+              language="groovy"
+              pageWidth="842"
+              pageHeight="595"
+              orientation="Landscape"
+              columnWidth="802"
+              leftMargin="20"
+              rightMargin="20"
+              topMargin="20"
+              bottomMargin="20"
+              uuid="ff1321e1-6df8-435c-958e-f9ea0ba0aaa3">
+
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+
+    <style name="Base" fontName="DejaVu Sans" fontSize="8" pdfFontName="Helvetica"/>
+    <style name="Title" style="Base" fontSize="13" isBold="true"/>
+    <style name="Subtitle" style="Base" forecolor="#1F4E79" fontSize="10" isBold="true"/>
+    <style name="InfoLabel" style="Base" fontSize="8" isBold="true"/>
+    <style name="InfoValue" style="Base" fontSize="8"/>
+
+    <style name="ColHeader" style="Base" mode="Opaque" forecolor="#FFFFFF" backcolor="#1F4E79" fontSize="8" isBold="true"/>
+
+    <style name="RowData" style="Base" fontSize="8">
+        <conditionalStyle>
+            <conditionExpression><![CDATA[
+                $F{numeroCuenta} != null && !$F{numeroCuenta}.contains("-")
+            ]]></conditionExpression>
+            <style mode="Opaque" backcolor="#F0F0F0" isBold="true"/>
+        </conditionalStyle>
+    </style>
+
+    <style name="NumberData" style="RowData" fontSize="8"/>
+
+    <style name="TotalLabel" style="Base" mode="Opaque" backcolor="#F0F0F0" fontSize="8" isBold="true"/>
+    <style name="TotalNumber" style="Base" mode="Opaque" backcolor="#F0F0F0" fontSize="8" isBold="true"/>
+
+    <parameter name="P_EMPRESA" class="java.lang.String"/>
+    <parameter name="P_PERIODO" class="java.lang.String"/>
+    <parameter name="P_LOGO" class="java.io.InputStream"/>
+    <parameter name="P_FECHA_HORA" class="java.util.Date"/>
+
+    <field name="id" class="java.lang.Integer"/>
+    <field name="fechaCreacion" class="java.lang.String"/>
+    <field name="periodo" class="java.lang.String"/>
+    <field name="tipoPoliza" class="java.lang.String"/>
+    <field name="numeroPoliza" class="java.lang.String"/>
+    <field name="numeroCuenta" class="java.lang.String"/>
+    <field name="descripcionCuenta" class="java.lang.String"/>
+    <field name="cargo" class="java.math.BigDecimal"/>
+    <field name="abono" class="java.math.BigDecimal"/>
+    <field name="importeEstadoResultado" class="java.math.BigDecimal"/>
+
+    <variable name="V_TOTAL_CARGO" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[
+            $F{cargo} == null ? java.math.BigDecimal.ZERO : $F{cargo}
+        ]]></variableExpression>
+        <initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
+    </variable>
+
+    <variable name="V_TOTAL_ABONO" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[
+            $F{abono} == null ? java.math.BigDecimal.ZERO : $F{abono}
+        ]]></variableExpression>
+        <initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
+    </variable>
+
+    <variable name="V_TOTAL_SALDO" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[
+            $F{importeEstadoResultado} == null ? java.math.BigDecimal.ZERO : $F{importeEstadoResultado}
+        ]]></variableExpression>
+        <initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
+    </variable>
+
+    <pageHeader>
+        <band height="92">
+
+            <image scaleImage="RetainShape" onErrorType="Blank">
+                <reportElement x="0" y="0" width="115" height="42" uuid="bbbd1356-76d7-4e1b-88fe-097b4f8cfb77">
+                    <printWhenExpression><![CDATA[$P{P_LOGO} != null]]></printWhenExpression>
+                </reportElement>
+                <imageExpression><![CDATA[$P{P_LOGO}]]></imageExpression>
+            </image>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="Title" x="125" y="0" width="475" height="18" uuid="b0c87f2e-226c-4972-986d-57ba762583e6"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{P_EMPRESA}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement style="Subtitle" x="125" y="20" width="300" height="16" uuid="d75210ad-89e4-404e-bd18-f5061000802e"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[AUXILIAR DE CUENTAS]]></text>
+            </staticText>
+
+            <textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="true">
+                <reportElement style="InfoValue" x="610" y="0" width="192" height="16" uuid="fa92e1bc-89d7-4435-a489-7f6dd9f0c835"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{P_FECHA_HORA}]]></textFieldExpression>
+            </textField>
+
+            <line>
+                <reportElement x="0" y="48" width="802" height="1" forecolor="#C0C0C0" uuid="af1599a6-b255-4af8-a156-846752489fcf"/>
+            </line>
+
+            <staticText>
+                <reportElement style="InfoLabel" x="0" y="56" width="55" height="14" uuid="1c2f8184-a2af-462a-91c8-ef2c47f88f91"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Periodo:]]></text>
+            </staticText>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="InfoValue" x="55" y="56" width="390" height="14" uuid="9494d7b3-778b-4f96-bb5b-8b70a47f17d9"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{P_PERIODO}]]></textFieldExpression>
+            </textField>
+
+            <line>
+                <reportElement x="0" y="82" width="802" height="1" forecolor="#1F4E79" uuid="63e6f059-ca3b-4534-bfd4-3f875c790713"/>
+            </line>
+
+        </band>
+    </pageHeader>
+
+    <columnHeader>
+        <band height="22">
+
+            <staticText>
+                <reportElement style="ColHeader" x="0" y="2" width="62" height="18" uuid="28214e03-74fb-4496-b291-0e9c09c55be9"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Fecha]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="62" y="2" width="52" height="18" uuid="d92cfc22-7a10-4a5a-9bbf-3d136a9d9001"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Periodo]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="114" y="2" width="70" height="18" uuid="fd0e962d-d4bd-4755-bcc1-69b708fb9002"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Tipo]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="184" y="2" width="58" height="18" uuid="ea1896f7-c287-438c-a5b7-9dc3a05c9003"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[No. Pól.]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="242" y="2" width="86" height="18" uuid="64954c92-d855-4541-b614-916feb0204b6"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Cuenta]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="328" y="2" width="264" height="18" uuid="d1fef118-be64-4fed-85de-790d52664df1"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Descripción]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="592" y="2" width="70" height="18" uuid="313f3a7a-d481-4378-a1c8-e0da4703778b"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <text><![CDATA[Cargo]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="662" y="2" width="70" height="18" uuid="d79d6178-17e7-42c1-b04d-a886ee3d0e5e"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <text><![CDATA[Abono]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="732" y="2" width="70" height="18" uuid="9c3a547e-6217-41a2-aa32-8a051f10522c"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <text><![CDATA[Saldo]]></text>
+            </staticText>
+
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="18">
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowData" x="0" y="1" width="62" height="16" uuid="8eedf8cc-f625-450c-b1f7-78d0fbe6b793"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{fechaCreacion}]]></textFieldExpression>
+            </textField>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowData" x="62" y="1" width="52" height="16" uuid="5ea1b336-ff9a-4502-9407-410700409004"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{periodo}]]></textFieldExpression>
+            </textField>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowData" x="114" y="1" width="70" height="16" uuid="e90f3c4e-5a44-431c-a0f4-1df163fa9005"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{tipoPoliza}]]></textFieldExpression>
+            </textField>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowData" x="184" y="1" width="58" height="16" uuid="60c285e5-9ed2-453c-87e0-52f3df409006"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{numeroPoliza}]]></textFieldExpression>
+            </textField>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowData" x="242" y="1" width="86" height="16" uuid="e95d2050-59cf-4d46-b380-2d1211604190"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{numeroCuenta}]]></textFieldExpression>
+            </textField>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowData" x="328" y="1" width="264" height="16" uuid="53205cb4-2b36-49d9-af04-d02d503a8fa8"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{descripcionCuenta}]]></textFieldExpression>
+            </textField>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberData" x="592" y="1" width="70" height="16" uuid="55a43b89-ce57-4a85-a621-04eaa904cc4d"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[
+                    ($F{numeroCuenta} != null && !$F{numeroCuenta}.contains("-"))
+                    ? null
+                    : $F{cargo}
+                ]]></textFieldExpression>
+            </textField>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberData" x="662" y="1" width="70" height="16" uuid="42b835c1-e238-4b41-aa50-7aecfc8180da"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[
+                    ($F{numeroCuenta} != null && !$F{numeroCuenta}.contains("-"))
+                    ? null
+                    : $F{abono}
+                ]]></textFieldExpression>
+            </textField>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberData" x="732" y="1" width="70" height="16" uuid="de8c951b-4aad-4d98-ad3e-885e67ff597b"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{importeEstadoResultado}]]></textFieldExpression>
+            </textField>
+
+            <line>
+                <reportElement x="0" y="17" width="802" height="1" forecolor="#E6E6E6" uuid="bb7caf67-b917-40dd-bc74-9b23096c1001"/>
+            </line>
+
+        </band>
+    </detail>
+
+    <pageFooter>
+        <band height="18">
+            <textField>
+                <reportElement style="InfoValue" x="0" y="2" width="200" height="14" uuid="1abf322e-3c31-4ad3-b54e-644ef9f400fd"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+    <summary>
+        <band height="28">
+
+            <line>
+                <reportElement x="0" y="2" width="802" height="1" forecolor="#1F4E79" uuid="fd6fad44-6428-48d0-b85e-093ad8dec67f"/>
+            </line>
+
+            <staticText>
+                <reportElement style="TotalLabel" x="328" y="8" width="264" height="16" uuid="09e472b6-2583-4ce7-88dc-91dcbc446557"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <text><![CDATA[TOTALES]]></text>
+            </staticText>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00">
+                <reportElement style="TotalNumber" x="592" y="8" width="70" height="16" uuid="53ece004-04c0-42d2-9306-1617279f7fd2"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$V{V_TOTAL_CARGO}]]></textFieldExpression>
+            </textField>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00">
+                <reportElement style="TotalNumber" x="662" y="8" width="70" height="16" uuid="e2ccc625-21cc-485f-8178-79ea2a290a5c"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$V{V_TOTAL_ABONO}]]></textFieldExpression>
+            </textField>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00">
+                <reportElement style="TotalNumber" x="732" y="8" width="70" height="16" uuid="109ef492-d2a6-46c2-a876-c484a91caf65"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$V{V_TOTAL_SALDO}]]></textFieldExpression>
+            </textField>
+
+        </band>
+    </summary>
+
+</jasperReport>

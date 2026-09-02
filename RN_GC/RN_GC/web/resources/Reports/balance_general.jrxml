@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="balance_general"
+              language="groovy"
+              pageWidth="842"
+              pageHeight="595"
+              orientation="Landscape"
+              columnWidth="802"
+              leftMargin="20"
+              rightMargin="20"
+              topMargin="20"
+              bottomMargin="20"
+              uuid="a6ed4683-e08c-403f-bd91-4d2d6bb0d83e">
+
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+
+    <style name="Base" fontName="DejaVu Sans" fontSize="8" pdfFontName="Helvetica"/>
+    <style name="Title" style="Base" fontSize="13" isBold="true"/>
+    <style name="Subtitle" style="Base" forecolor="#1F4E79" fontSize="10" isBold="true"/>
+    <style name="InfoLabel" style="Base" isBold="true"/>
+    <style name="InfoValue" style="Base"/>
+    <style name="SectionHeader" style="Base" mode="Opaque" forecolor="#FFFFFF" backcolor="#1F4E79" isBold="true"/>
+    <style name="ColHeader" style="Base" mode="Opaque" forecolor="#FFFFFF" backcolor="#1F4E79" isBold="true"/>
+    <style name="RowNormal" style="Base"/>
+    <style name="RowParent" style="Base" mode="Opaque" backcolor="#EAF2F8" isBold="true"/>
+    <style name="NumberNormal" style="RowNormal"/>
+    <style name="NumberParent" style="RowParent"/>
+    <style name="TotalLabel" style="Base" isBold="true"/>
+    <style name="TotalNumber" style="Base" isBold="true"/>
+
+    <parameter name="P_EMPRESA" class="java.lang.String"/>
+    <parameter name="P_PERIODO" class="java.lang.String"/>
+    <parameter name="P_LOGO" class="java.io.InputStream"/>
+    <parameter name="P_FECHA_HORA" class="java.util.Date"/>
+
+    <field name="cuentaActivo" class="java.lang.String"/>
+    <field name="descripcionActivo" class="java.lang.String"/>
+    <field name="saldoActivo" class="java.math.BigDecimal"/>
+    <field name="cuentaPasivo" class="java.lang.String"/>
+    <field name="descripcionPasivo" class="java.lang.String"/>
+    <field name="saldoPasivo" class="java.math.BigDecimal"/>
+
+    <variable name="V_TOTAL_ACTIVO" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[
+            ($F{cuentaActivo} != null
+                && $F{cuentaActivo}.trim().equals("100")
+                && $F{saldoActivo} != null)
+            ? $F{saldoActivo}
+            : java.math.BigDecimal.ZERO
+        ]]></variableExpression>
+        <initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
+    </variable>
+
+    <variable name="V_TOTAL_PASIVO_CAPITAL" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[
+            ($F{cuentaPasivo} != null
+                && (
+                    $F{cuentaPasivo}.trim().equals("200")
+                    || $F{cuentaPasivo}.trim().equals("300")
+                )
+                && $F{saldoPasivo} != null)
+            ? $F{saldoPasivo}
+            : java.math.BigDecimal.ZERO
+        ]]></variableExpression>
+        <initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
+    </variable>
+
+    <pageHeader>
+        <band height="85">
+
+            <image scaleImage="RetainShape">
+                <reportElement x="0" y="0" width="120" height="45" uuid="001ac537-d34f-4a80-a717-b2cd7fcdb147"/>
+                <imageExpression><![CDATA[$P{P_LOGO}]]></imageExpression>
+            </image>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="Title" x="130" y="0" width="470" height="18" uuid="83951419-e84b-45bf-a9c1-08b096cfcd16"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{P_EMPRESA}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement style="Subtitle" x="130" y="22" width="300" height="16" uuid="02e31d9f-06ed-43cf-a1a0-822dd247f127"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[BALANCE GENERAL]]></text>
+            </staticText>
+
+            <textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="true">
+                <reportElement style="InfoValue" x="610" y="0" width="192" height="16" uuid="7b3a2926-c9d4-40d0-be9c-3bfdd81e13dd"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{P_FECHA_HORA}]]></textFieldExpression>
+            </textField>
+
+            <line>
+                <reportElement x="0" y="50" width="802" height="1" forecolor="#C0C0C0" uuid="d070ed59-3c38-401a-9514-eed588094c60"/>
+            </line>
+
+            <staticText>
+                <reportElement style="InfoLabel" x="0" y="58" width="65" height="14" uuid="0d66273a-9d6c-49e1-8f4f-8b22db895fb5"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Periodo:]]></text>
+            </staticText>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="InfoValue" x="65" y="58" width="500" height="14" uuid="48258c05-33c9-40e0-a464-d33678f756d2"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{P_PERIODO}]]></textFieldExpression>
+            </textField>
+
+            <line>
+                <reportElement x="0" y="78" width="802" height="1" forecolor="#1F4E79" uuid="d8db38de-8cc4-42fe-9eb5-b9b78d586fb7"/>
+            </line>
+
+        </band>
+    </pageHeader>
+
+    <columnHeader>
+        <band height="44">
+
+            <staticText>
+                <reportElement style="SectionHeader" x="0" y="0" width="390" height="18" uuid="62ba762c-fae7-448a-81cb-6dc8e4d7aa0c"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[ACTIVO]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="SectionHeader" x="412" y="0" width="390" height="18" uuid="351e87ea-6d21-4f7c-ab3a-da4dd069f63d"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[PASIVO + CAPITAL]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="0" y="20" width="75" height="18" uuid="0d7c2dc2-7681-4527-8acc-3893d5c04898"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Cuenta]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="75" y="20" width="220" height="18" uuid="67eceb02-c551-4a1d-99ad-ead73ba1b6cb"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Descripción]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="295" y="20" width="95" height="18" uuid="948e349c-4a1b-4049-9178-72a2d917d869"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Saldo]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="412" y="20" width="75" height="18" uuid="57eac02b-9092-485e-b6d1-54ade4e518fd"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Cuenta]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="487" y="20" width="220" height="18" uuid="0a8d0ba3-7de5-4375-a4e9-a1056d8224c2"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Descripción]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="707" y="20" width="95" height="18" uuid="99cdcf2a-18b9-4ad3-aaa3-9485929274b9"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Saldo]]></text>
+            </staticText>
+
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="18">
+
+            <!-- ACTIVO CUENTA TITULO -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowParent" x="0" y="1" width="75" height="16" uuid="50f952b7-f0c8-4cc0-a063-7e047aa45cca">
+                    <printWhenExpression><![CDATA[
+                        $F{cuentaActivo} != null
+                        && (
+                            $F{cuentaActivo}.trim().equals("100")
+                            || $F{cuentaActivo}.trim().equals("100.01")
+                            || $F{cuentaActivo}.trim().equals("100.02")
+                        )
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{cuentaActivo}]]></textFieldExpression>
+            </textField>
+
+            <!-- ACTIVO CUENTA DETALLE -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowNormal" x="0" y="1" width="75" height="16" uuid="58515151-af3d-46e7-9b34-99459bfda303">
+                    <printWhenExpression><![CDATA[
+                        $F{cuentaActivo} != null
+                        && !$F{cuentaActivo}.trim().equals("")
+                        && !$F{cuentaActivo}.trim().equals("100")
+                        && !$F{cuentaActivo}.trim().equals("100.01")
+                        && !$F{cuentaActivo}.trim().equals("100.02")
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{cuentaActivo}]]></textFieldExpression>
+            </textField>
+
+            <!-- ACTIVO DESCRIPCION TITULO -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowParent" x="75" y="1" width="220" height="16" uuid="fb121a78-7888-49d4-8915-25722309a639">
+                    <printWhenExpression><![CDATA[
+                        $F{cuentaActivo} != null
+                        && (
+                            $F{cuentaActivo}.trim().equals("100")
+                            || $F{cuentaActivo}.trim().equals("100.01")
+                            || $F{cuentaActivo}.trim().equals("100.02")
+                        )
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{descripcionActivo}]]></textFieldExpression>
+            </textField>
+
+            <!-- ACTIVO DESCRIPCION DETALLE -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowNormal" x="75" y="1" width="220" height="16" uuid="b01faa7a-2574-46b7-a27c-56a2fd82c90c">
+                    <printWhenExpression><![CDATA[
+                        $F{cuentaActivo} != null
+                        && !$F{cuentaActivo}.trim().equals("")
+                        && !$F{cuentaActivo}.trim().equals("100")
+                        && !$F{cuentaActivo}.trim().equals("100.01")
+                        && !$F{cuentaActivo}.trim().equals("100.02")
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{descripcionActivo}]]></textFieldExpression>
+            </textField>
+
+            <!-- ACTIVO SALDO TITULO -->
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberParent" x="295" y="1" width="95" height="16" uuid="02a7012f-e85e-4333-8ac5-d7b1688061b9">
+                    <printWhenExpression><![CDATA[
+                        $F{cuentaActivo} != null
+                        && (
+                            $F{cuentaActivo}.trim().equals("100")
+                            || $F{cuentaActivo}.trim().equals("100.01")
+                            || $F{cuentaActivo}.trim().equals("100.02")
+                        )
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{saldoActivo}]]></textFieldExpression>
+            </textField>
+
+            <!-- ACTIVO SALDO DETALLE -->
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberNormal" x="295" y="1" width="95" height="16" uuid="efe9a20d-4671-4d6b-8dd9-74e4009a53ee">
+                    <printWhenExpression><![CDATA[
+                        $F{cuentaActivo} != null
+                        && !$F{cuentaActivo}.trim().equals("")
+                        && !$F{cuentaActivo}.trim().equals("100")
+                        && !$F{cuentaActivo}.trim().equals("100.01")
+                        && !$F{cuentaActivo}.trim().equals("100.02")
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{saldoActivo}]]></textFieldExpression>
+            </textField>
+
+            <!-- PASIVO CUENTA TITULO -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowParent" x="412" y="1" width="75" height="16" uuid="894a77f0-0ed1-4026-8e98-0d0b40954286">
+                    <printWhenExpression><![CDATA[
+                        $F{cuentaPasivo} != null
+                        && (
+                            $F{cuentaPasivo}.trim().equals("200")
+                            || $F{cuentaPasivo}.trim().equals("200.01")
+                            || $F{cuentaPasivo}.trim().equals("200.02")
+                            || $F{cuentaPasivo}.trim().equals("300")
+                        )
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{cuentaPasivo}]]></textFieldExpression>
+            </textField>
+
+            <!-- PASIVO CUENTA DETALLE -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowNormal" x="412" y="1" width="75" height="16" uuid="da038fdb-adf5-4426-8e82-edf57b02ea72">
+                    <printWhenExpression><![CDATA[
+                        $F{cuentaPasivo} != null
+                        && !$F{cuentaPasivo}.trim().equals("")
+                        && !$F{cuentaPasivo}.trim().equals("200")
+                        && !$F{cuentaPasivo}.trim().equals("200.01")
+                        && !$F{cuentaPasivo}.trim().equals("200.02")
+                        && !$F{cuentaPasivo}.trim().equals("300")
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{cuentaPasivo}]]></textFieldExpression>
+            </textField>
+
+            <!-- PASIVO DESCRIPCION TITULO -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowParent" x="487" y="1" width="220" height="16" uuid="26d8a41a-a63f-47fd-bee1-43ec1705c5da">
+                    <printWhenExpression><![CDATA[
+                        $F{cuentaPasivo} != null
+                        && (
+                            $F{cuentaPasivo}.trim().equals("200")
+                            || $F{cuentaPasivo}.trim().equals("200.01")
+                            || $F{cuentaPasivo}.trim().equals("200.02")
+                            || $F{cuentaPasivo}.trim().equals("300")
+                        )
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{descripcionPasivo}]]></textFieldExpression>
+            </textField>
+
+            <!-- PASIVO DESCRIPCION DETALLE -->
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowNormal" x="487" y="1" width="220" height="16" uuid="3480e5ef-25df-4868-9646-45e049473742">
+                    <printWhenExpression><![CDATA[
+                        $F{cuentaPasivo} != null
+                        && !$F{cuentaPasivo}.trim().equals("")
+                        && !$F{cuentaPasivo}.trim().equals("200")
+                        && !$F{cuentaPasivo}.trim().equals("200.01")
+                        && !$F{cuentaPasivo}.trim().equals("200.02")
+                        && !$F{cuentaPasivo}.trim().equals("300")
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{descripcionPasivo}]]></textFieldExpression>
+            </textField>
+
+            <!-- PASIVO SALDO TITULO -->
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberParent" x="707" y="1" width="95" height="16" uuid="a0824b2e-5377-4bec-96bd-f4b9bc1ffa52">
+                    <printWhenExpression><![CDATA[
+                        $F{cuentaPasivo} != null
+                        && (
+                            $F{cuentaPasivo}.trim().equals("200")
+                            || $F{cuentaPasivo}.trim().equals("200.01")
+                            || $F{cuentaPasivo}.trim().equals("200.02")
+                            || $F{cuentaPasivo}.trim().equals("300")
+                        )
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{saldoPasivo}]]></textFieldExpression>
+            </textField>
+
+            <!-- PASIVO SALDO DETALLE -->
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberNormal" x="707" y="1" width="95" height="16" uuid="8a16ddc6-c5fc-4fd7-8c14-0305d0b3b6d4">
+                    <printWhenExpression><![CDATA[
+                        $F{cuentaPasivo} != null
+                        && !$F{cuentaPasivo}.trim().equals("")
+                        && !$F{cuentaPasivo}.trim().equals("200")
+                        && !$F{cuentaPasivo}.trim().equals("200.01")
+                        && !$F{cuentaPasivo}.trim().equals("200.02")
+                        && !$F{cuentaPasivo}.trim().equals("300")
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{saldoPasivo}]]></textFieldExpression>
+            </textField>
+
+            <line>
+                <reportElement x="0" y="17" width="390" height="1" forecolor="#E6E6E6" uuid="fbbb4b0c-6e04-46dd-93ff-d74de9998d28"/>
+            </line>
+
+            <line>
+                <reportElement x="412" y="17" width="390" height="1" forecolor="#E6E6E6" uuid="70dd3728-1cc8-4afd-be32-fa64064597ea"/>
+            </line>
+
+        </band>
+    </detail>
+
+    <pageFooter>
+        <band height="18">
+            <textField>
+                <reportElement style="InfoValue" x="0" y="2" width="200" height="14" uuid="6a306146-ea5b-4c74-93f4-55482dbe82b9"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+    <summary>
+        <band height="40">
+
+            <line>
+                <reportElement x="0" y="2" width="390" height="1" forecolor="#1F4E79" uuid="0c047c2f-fd8d-470b-81d7-4ddef6ff38b8"/>
+            </line>
+
+            <line>
+                <reportElement x="412" y="2" width="390" height="1" forecolor="#1F4E79" uuid="e5ee6961-479d-4a13-8991-6ba383e4a914"/>
+            </line>
+
+            <staticText>
+                <reportElement style="TotalLabel" x="75" y="10" width="220" height="18" uuid="de8959c8-1606-4268-af42-1a2bd07a61c1"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <text><![CDATA[TOTAL ACTIVO:]]></text>
+            </staticText>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00">
+                <reportElement style="TotalNumber" x="295" y="10" width="95" height="18" uuid="ab579e08-b557-47f7-8ac8-b08629d7d258"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$V{V_TOTAL_ACTIVO}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement style="TotalLabel" x="487" y="10" width="220" height="18" uuid="5bb8d2fe-9ddf-43a2-b3d4-c59a4be43558"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <text><![CDATA[TOTAL PASIVO + CAPITAL:]]></text>
+            </staticText>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00">
+                <reportElement style="TotalNumber" x="707" y="10" width="95" height="18" uuid="f8939f5e-5dc8-405e-8aeb-aa72c48b3f66"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$V{V_TOTAL_PASIVO_CAPITAL}]]></textFieldExpression>
+            </textField>
+
+        </band>
+    </summary>
+
+</jasperReport>

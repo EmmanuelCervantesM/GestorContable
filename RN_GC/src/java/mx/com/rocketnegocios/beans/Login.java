@@ -77,7 +77,7 @@ public class Login implements Serializable {
 
     public String validateUsernamePassword() throws ClassNotFoundException, Exception {
         System.out.println("Entre a validateUsernamePassword");
-        //pwd = encriptarPwd(pwd);
+        pwd = encriptarPwd(pwd);
         boolean valid = loginDAO.validate(user, pwd);
         System.out.println("valid: " + valid);
         if (valid) {

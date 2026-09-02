@@ -48,4 +48,18 @@ public class RnGcNomTiponominaTblFacade extends AbstractFacade<RnGcNomTiponomina
         return tipoNomina;
     }
     
+    
+      
+    public RnGcNomTiponominaTbl obtenerXDescripcion(String clave){
+        RnGcNomTiponominaTbl tipoNomina = new RnGcNomTiponominaTbl();
+        try{
+            tipoNomina = em.createNamedQuery("RnGcNomTiponominaTbl.findByDescripcion", RnGcNomTiponominaTbl.class)
+                    .setParameter("descripcion", clave)
+                    .getSingleResult();
+        }catch(NoResultException ex){
+            System.out.println("No encontro tipo nomina");
+        }
+        return tipoNomina;
+    }
+    
 }

@@ -47,7 +47,11 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "RnGcPolizaHeaderTbl.findByCreadoPor", query = "SELECT r FROM RnGcPolizaHeaderTbl r WHERE r.creadoPor = :creadoPor order by r.id desc")
     , @NamedQuery(name = "RnGcPolizaHeaderTbl.findByFechaCreacion", query = "SELECT r FROM RnGcPolizaHeaderTbl r WHERE r.fechaCreacion = :fechaCreacion")
     , @NamedQuery(name = "RnGcPolizaHeaderTbl.findByUltimaActualizacionPor", query = "SELECT r FROM RnGcPolizaHeaderTbl r WHERE r.ultimaActualizacionPor = :ultimaActualizacionPor")
-    , @NamedQuery(name = "RnGcPolizaHeaderTbl.findByUltimaFechaActualizacion", query = "SELECT r FROM RnGcPolizaHeaderTbl r WHERE r.ultimaFechaActualizacion = :ultimaFechaActualizacion")})
+    , @NamedQuery(name = "RnGcPolizaHeaderTbl.findByUltimaFechaActualizacion", query = "SELECT r FROM RnGcPolizaHeaderTbl r WHERE r.ultimaFechaActualizacion = :ultimaFechaActualizacion") 
+    , @NamedQuery(
+        name = "RnGcPolizaHeaderTbl.countByCreadoPor",
+        query = "SELECT COUNT(r) FROM RnGcPolizaHeaderTbl r WHERE r.creadoPor = :creadoPor"
+    )})
 public class RnGcPolizaHeaderTbl implements Serializable {
 
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -68,15 +72,12 @@ public class RnGcPolizaHeaderTbl implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "numeroPoliza")
     private int numeroPoliza;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "tipoPoliza")
     private String tipoPoliza;
@@ -107,20 +108,16 @@ public class RnGcPolizaHeaderTbl implements Serializable {
     @Column(name = "adicional2")
     private String adicional2;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "creadoPor")
     private int creadoPor;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "fechaCreacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ultimaActualizacionPor")
     private int ultimaActualizacionPor;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ultimaFechaActualizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaFechaActualizacion;

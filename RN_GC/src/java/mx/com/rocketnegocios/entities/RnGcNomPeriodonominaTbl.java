@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcNomPeriodonominaTbl.findByMesPeriodo", query = "SELECT r FROM RnGcNomPeriodonominaTbl r WHERE r.mesPeriodo = :mesPeriodo")
     , @NamedQuery(name = "RnGcNomPeriodonominaTbl.findByNumMesPeriodo", query = "SELECT r FROM RnGcNomPeriodonominaTbl r WHERE r.numMesPeriodo = :numMesPeriodo")
     , @NamedQuery(name = "RnGcNomPeriodonominaTbl.findByEstatus", query = "SELECT r FROM RnGcNomPeriodonominaTbl r WHERE r.estatus = :estatus")
-    , @NamedQuery(name = "RnGcNomPeriodonominaTbl.findByNomina", query = "SELECT r FROM RnGcNomPeriodonominaTbl r WHERE r.nominaId = :nominaId")})
+    , @NamedQuery(name = "RnGcNomPeriodonominaTbl.findByNomina", query = "SELECT r FROM RnGcNomPeriodonominaTbl r WHERE r.nominaId.id = :nominaId")})
 public class RnGcNomPeriodonominaTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -74,7 +74,7 @@ public class RnGcNomPeriodonominaTbl implements Serializable {
     private Date ultimaFechaActualizacion;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
+    @Size(min = 1, max = 60)
     @Column(name = "nombrePeriodo")
     private String nombrePeriodo;
     @Basic(optional = false)

@@ -569,7 +569,32 @@ public class cargarArchivosController implements Serializable {
                     String str = new String(xml, StandardCharsets.UTF_8);
                     CfdiId.setXmlTrama(str);
                     CfdiId.setImporteLetra(importeLetra(CfdiId.getImporte()));
-                    CfdiId = rnGcCfdisTblFacade.refreshFromDB(CfdiId);
+                    try {
+                        CfdiId = rnGcCfdisTblFacade.refreshFromDB(CfdiId);
+                    } catch (Exception ex) {
+                        Throwable cause = ex.getCause();
+                        while (cause != null) {
+                            String message = cause.getMessage();
+                            // UUID duplicado
+                            if (message != null && message.contains("Duplicate entry") && message.contains("uuid_UNIQUE")) {
+                                JsfUtil.addErrorMessage("Ya existe un registro de la poliza "+ personas.getRfc() +" en el sistema. El archivo no fue cargado.");
+                                System.out.println("Error: UUID duplicado -> " + CfdiId.getUuid());
+                                return; // corta el flujo
+                            }
+                            // Error de conexión a BD
+                            if (message != null && (message.contains("Communications link failure") || message.contains("Connection refused") || message.toLowerCase().contains("connection"))) {
+                                JsfUtil.addErrorMessage("No se pudo guardar el CFDI por un problema de conexión a la base de datos. Intente más tarde.");
+                                System.out.println("Error: Fallo de conexión a BD -> " + message);
+                                return;
+                            }
+                            cause = cause.getCause();
+                        }
+
+                        // Error inesperado
+                        JsfUtil.addErrorMessage("Ocurrió un error inesperado al guardar el CFDI.");
+                        ex.printStackTrace();
+                        return;
+                    }
                     System.out.println("*** personas.getRfc() ****" + personas.getRfc());
                         if (!obtenerClientes(personas.getRfc())) {
                             personas.setTipo("Matriz");

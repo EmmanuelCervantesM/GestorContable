@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Servicios SAT"/>
+        </ui:define>
+
+        <ui:define name="body">
+
+            <h:form id="formDocumentos">
+
+                <!-- BOTONES SUPERIORES -->
+                <div style="
+                     display:flex;
+                     gap:15px;
+                     margin-bottom:25px;
+                     justify-content:center;
+                     flex-wrap:wrap;
+                     ">
+
+                    <p:commandButton
+                        value="Cambiar Contraseña"
+                        icon="pi pi-key"
+                        type="button"
+                        onclick="PF('dlgCambiarContrasena').show()"
+                        styleClass="ui-button-warning"/>
+
+                </div>
+
+                <!-- CARDS -->
+                <div class="ui-g"
+                     style="display:flex; flex-wrap:wrap;">
+
+                    <!-- CONSTANCIA -->
+                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+
+                        <p:panel style="
+                                 border-radius:12px;
+                                 text-align:center;
+                                 padding:20px;
+                                 box-shadow:0 4px 12px rgba(0,0,0,.10);
+                                 min-height:260px;
+                                 ">
+
+                            <div style="
+                                 font-size:60px;
+                                 margin-bottom:15px;">
+                                🧾
+                            </div>
+
+                            <h2 style="margin-top:0">
+                                Constancia de Situación Fiscal
+                            </h2>
+
+                            <p style="
+                               color:#666;
+                               margin-bottom:20px;
+                               line-height:1.6;">
+                                Consulta y descarga tu constancia
+                                directamente desde el portal del SAT.
+                            </p>
+
+                            <p:button
+                                value="Abrir Portal"
+                                icon="pi pi-external-link"
+                                href="https://www.sat.gob.mx/"
+                                target="_blank"
+                                styleClass="ui-button-info"/>
+
+                        </p:panel>
+
+                    </div>
+
+                    <!-- SOLICITUD -->
+                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+
+                        <p:panel style="
+                                 border-radius:12px;
+                                 text-align:center;
+                                 padding:20px;
+                                 box-shadow:0 4px 12px rgba(0,0,0,.10);
+                                 min-height:260px;
+                                 ">
+
+                            <div style="
+                                 font-size:60px;
+                                 margin-bottom:15px;">
+                                📄
+                            </div>
+
+                            <h2 style="margin-top:0">
+                                Solicitud
+                            </h2>
+
+                            <p style="
+                               color:#666;
+                               margin-bottom:20px;
+                               line-height:1.6;">
+                                Consulta y descarga tu solicitud SAT.
+                            </p>
+
+                            <p:button
+                                value="Abrir Portal"
+                                icon="pi pi-external-link"
+                                href="https://portalcfdi.facturaelectronica.sat.gob.mx/"
+                                target="_blank"
+                                styleClass="ui-button-info"/>
+
+                        </p:panel>
+
+                    </div>
+
+                    <!-- FEC Y CONTRASEÑA -->
+                    <div class="ui-g-12 ui-md-6 ui-lg-4"
+                         style="margin-left:auto;">
+
+                        <p:panel style="
+                                 border-radius:12px;
+                                 text-align:center;
+                                 padding:20px;
+                                 box-shadow:0 4px 12px rgba(0,0,0,.10);
+                                 min-height:260px;
+                                 background:#fafafa;
+                                 ">
+
+                            <div style="
+                                 font-size:60px;
+                                 margin-bottom:15px;">
+                                🔐
+                            </div>
+
+                            <h2 style="margin-top:0">
+                                FEC y Contraseña
+                            </h2>
+
+                            <p style="
+                               color:#666;
+                               margin-bottom:20px;
+                               line-height:1.6;">
+                                Administra tu contraseña y accesos
+                                relacionados con los servicios SAT.
+                            </p>
+
+                            <!-- DATOS -->
+                            <div style="
+                                 text-align:left;
+                                 margin-bottom:20px;
+                                 background:#f5f5f5;
+                                 padding:15px;
+                                 border-radius:10px;
+                                 ">
+
+                                <div style="margin-bottom:10px;">
+
+                                    <strong>RFC:</strong>
+
+                                    <span style="color:#1976d2;">
+                                        #{rnGcDocumentosFiscalesTblController.getUsuarioRfc()}
+                                    </span>
+
+                                </div>
+
+                                <div>
+
+                                    <strong>Contraseña:</strong>
+
+                                    <span style="color:#d32f2f;">
+                                        #{rnGcDocumentosFiscalesTblController.getUsuarioContrasena()}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </p:panel>
+
+                    </div>
+
+                </div>
+
+                <!-- MODAL CAMBIAR CONTRASEÑA -->
+                <p:dialog
+                    header="Cambiar Contraseña SAT"
+                    widgetVar="dlgCambiarContrasena"
+                    modal="false"
+                    closable="true"
+                    resizable="false"
+                    width="400"
+                    responsive="true">
+
+                    <div style="padding:10px;">
+
+                        <!-- CONTRASEÑA -->
+                        <div style="margin-bottom:20px;">
+
+                            <p:outputLabel
+                                value="Nueva Contraseña"
+                                style="
+                                font-weight:bold;
+                                display:block;
+                                margin-bottom:8px;"/>
+
+                            <p:password
+                                value="#{rnGcDocumentosFiscalesTblController.nuevaContrasena}"
+                                feedback="false"
+                                redisplay="true"
+                                placeholder="Ingrese nueva contraseña"
+                                style="width:100%;"/>
+
+                        </div>
+
+                        <!-- BOTONES -->
+                        <div style="
+                             display:flex;
+                             justify-content:flex-end;
+                             gap:10px;">
+
+                            <p:commandButton
+                                value="Cancelar"
+                                type="button"
+                                icon="pi pi-times"
+                                onclick="PF('dlgCambiarContrasena').hide()"
+                                styleClass="ui-button-secondary"/>
+
+                            <p:commandButton
+                                value="Guardar"
+                                icon="pi pi-save"
+                                action="#{rnGcDocumentosFiscalesTblController.cambiarContrasena()}"
+                                update="formDocumentos"
+                                oncomplete="PF('dlgCambiarContrasena').hide()"
+                                styleClass="ui-button-success"/>
+
+                        </div>
+
+                    </div>
+
+                </p:dialog>
+            </h:form>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>

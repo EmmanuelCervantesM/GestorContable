@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="estado_resultado"
+              language="groovy"
+              pageWidth="842"
+              pageHeight="595"
+              orientation="Landscape"
+              columnWidth="802"
+              leftMargin="20"
+              rightMargin="20"
+              topMargin="20"
+              bottomMargin="20"
+              uuid="d0d2f0f7-8f63-4d68-9df2-2f7f7b4f1001">
+
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+
+    <style name="Base" fontName="DejaVu Sans" fontSize="9" pdfFontName="Helvetica"/>
+    <style name="Title" style="Base" fontSize="14" isBold="true"/>
+    <style name="Subtitle" style="Base" forecolor="#1F4E79" fontSize="10" isBold="true"/>
+    <style name="InfoLabel" style="Base" isBold="true"/>
+    <style name="InfoValue" style="Base"/>
+    <style name="ColHeader" style="Base" mode="Opaque" forecolor="#FFFFFF" backcolor="#1F4E79" isBold="true"/>
+    <style name="RowNormal" style="Base"/>
+    <style name="RowParent" style="Base" mode="Opaque" backcolor="#EAF2F8" isBold="true"/>
+    <style name="NumberNormal" style="RowNormal"/>
+    <style name="NumberParent" style="RowParent"/>
+
+    <parameter name="P_EMPRESA" class="java.lang.String"/>
+    <parameter name="P_PERIODO" class="java.lang.String"/>
+    <parameter name="P_LOGO" class="java.io.InputStream"/>
+    <parameter name="P_FECHA_HORA" class="java.util.Date"/>
+
+    <field name="id" class="java.lang.Integer"/>
+    <field name="numeroCuenta" class="java.lang.String"/>
+    <field name="descripcionCuenta" class="java.lang.String"/>
+    <field name="importeEstadoResultado" class="java.math.BigDecimal"/>
+
+    <pageHeader>
+        <band height="95">
+
+            <image scaleImage="RetainShape">
+                <reportElement x="0" y="0" width="120" height="45"/>
+                <imageExpression><![CDATA[$P{P_LOGO}]]></imageExpression>
+            </image>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="Title" x="130" y="0" width="470" height="18"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{P_EMPRESA}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement style="Subtitle" x="130" y="22" width="300" height="16"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[ESTADO DE RESULTADOS]]></text>
+            </staticText>
+
+            <textField pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="true">
+                <reportElement style="InfoValue" x="610" y="0" width="192" height="16"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{P_FECHA_HORA}]]></textFieldExpression>
+            </textField>
+
+            <line>
+                <reportElement x="0" y="50" width="802" height="1" forecolor="#C0C0C0"/>
+            </line>
+
+            <staticText>
+                <reportElement style="InfoLabel" x="0" y="58" width="65" height="14"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Periodo:]]></text>
+            </staticText>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="InfoValue" x="65" y="58" width="350" height="14"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{P_PERIODO}]]></textFieldExpression>
+            </textField>
+
+            <line>
+                <reportElement x="0" y="82" width="802" height="1" forecolor="#1F4E79"/>
+            </line>
+
+        </band>
+    </pageHeader>
+
+    <columnHeader>
+        <band height="22">
+
+            <staticText>
+                <reportElement style="ColHeader" x="0" y="2" width="120" height="18"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Cuenta]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="120" y="2" width="390" height="18"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Descripción]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="510" y="2" width="145" height="18"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Saldo del periodo]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="ColHeader" x="655" y="2" width="147" height="18"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Acumulado]]></text>
+            </staticText>
+
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="18">
+
+            <textField isBlankWhenNull="true">
+                <reportElement x="0" y="1" width="120" height="16"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{numeroCuenta}]]></textFieldExpression>
+            </textField>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowParent" x="120" y="1" width="390" height="16">
+                    <printWhenExpression><![CDATA[
+                        $F{numeroCuenta} == null
+                        || $F{numeroCuenta}.trim().isEmpty()
+                        || $F{numeroCuenta}.equals("400")
+                        || $F{numeroCuenta}.equals("500")
+                        || $F{numeroCuenta}.equals("600")
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{descripcionCuenta}]]></textFieldExpression>
+            </textField>
+
+            <textField isBlankWhenNull="true">
+                <reportElement style="RowNormal" x="135" y="1" width="375" height="16">
+                    <printWhenExpression><![CDATA[
+                        $F{numeroCuenta} != null
+                        && !$F{numeroCuenta}.trim().isEmpty()
+                        && !$F{numeroCuenta}.equals("400")
+                        && !$F{numeroCuenta}.equals("500")
+                        && !$F{numeroCuenta}.equals("600")
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{descripcionCuenta}]]></textFieldExpression>
+            </textField>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberParent" x="510" y="1" width="145" height="16">
+                    <printWhenExpression><![CDATA[
+                        $F{numeroCuenta} == null
+                        || $F{numeroCuenta}.trim().isEmpty()
+                        || $F{numeroCuenta}.equals("400")
+                        || $F{numeroCuenta}.equals("500")
+                        || $F{numeroCuenta}.equals("600")
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{importeEstadoResultado}]]></textFieldExpression>
+            </textField>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberNormal" x="510" y="1" width="145" height="16">
+                    <printWhenExpression><![CDATA[
+                        $F{numeroCuenta} != null
+                        && !$F{numeroCuenta}.trim().isEmpty()
+                        && !$F{numeroCuenta}.equals("400")
+                        && !$F{numeroCuenta}.equals("500")
+                        && !$F{numeroCuenta}.equals("600")
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{importeEstadoResultado}]]></textFieldExpression>
+            </textField>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberParent" x="655" y="1" width="147" height="16">
+                    <printWhenExpression><![CDATA[
+                        $F{numeroCuenta} == null
+                        || $F{numeroCuenta}.trim().isEmpty()
+                        || $F{numeroCuenta}.equals("400")
+                        || $F{numeroCuenta}.equals("500")
+                        || $F{numeroCuenta}.equals("600")
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{importeEstadoResultado}]]></textFieldExpression>
+            </textField>
+
+            <textField pattern="$ #,##0.00;-$ #,##0.00" isBlankWhenNull="true">
+                <reportElement style="NumberNormal" x="655" y="1" width="147" height="16">
+                    <printWhenExpression><![CDATA[
+                        $F{numeroCuenta} != null
+                        && !$F{numeroCuenta}.trim().isEmpty()
+                        && !$F{numeroCuenta}.equals("400")
+                        && !$F{numeroCuenta}.equals("500")
+                        && !$F{numeroCuenta}.equals("600")
+                    ]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{importeEstadoResultado}]]></textFieldExpression>
+            </textField>
+
+            <line>
+                <reportElement x="0" y="17" width="802" height="1" forecolor="#E6E6E6"/>
+            </line>
+
+        </band>
+    </detail>
+
+    <pageFooter>
+        <band height="18">
+            <textField>
+                <reportElement style="InfoValue" x="0" y="2" width="200" height="14"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+    <summary>
+        <band height="0"/>
+    </summary>
+
+</jasperReport>

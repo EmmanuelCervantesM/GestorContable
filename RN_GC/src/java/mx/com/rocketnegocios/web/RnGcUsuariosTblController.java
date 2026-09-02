@@ -100,6 +100,12 @@ public class RnGcUsuariosTblController implements Serializable {
         this.editar = editar;
     }
 
+    public void cancelarEdicion() {
+        this.editar = false;
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Edición cancelada", "Los cambios no fueron guardados."));
+    }
+
     public RnGcUsuariosTbl getUser() {
         user = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
         return user;
@@ -264,10 +270,10 @@ public class RnGcUsuariosTblController implements Serializable {
 
     public void create() {
         usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-        if (selected != null) {            
+        if (selected != null) {
             try {
                 //Codificar la Contraseña. Modif 080923 IMUNOZ
-                selected.setContrasenia(encriptarPwd(selected.getContrasenia())); 
+                selected.setContrasenia(encriptarPwd(selected.getContrasenia()));
                 if (usuarioId.getTipoUsuario().equals("CO")) {
                     if (selected.getRfc().toUpperCase().equals(usuarioId.getRfc())) {
                         usuariosPermitidos();
@@ -297,8 +303,8 @@ public class RnGcUsuariosTblController implements Serializable {
     public void update() {
         usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
         if (selected != null) {
-            try { 
-                selected.setContrasenia(encriptarPwd(selected.getContrasenia())); 
+            try {
+                selected.setContrasenia(encriptarPwd(selected.getContrasenia()));
                 if (usuarioId.getTipoUsuario().equals("CO")) {
                     if (selected.getRfc().equals(usuarioId.getRfc())) {
                         eliminarUsuarioPerfil(selected);
@@ -328,11 +334,11 @@ public class RnGcUsuariosTblController implements Serializable {
         items = getFacade().findAll();
         return items;
     }
-    
-    public void eliminarUsuarioPerfil(RnGcUsuariosTbl usuario){
+
+    public void eliminarUsuarioPerfil(RnGcUsuariosTbl usuario) {
         List<RnGcUsuariosPerfilesTbl> listaUsuarioPerfil = new ArrayList<>();
         listaUsuarioPerfil = usuarioPerfilFacade.obtenerPerfilesPorUsuario(usuario);
-        for(RnGcUsuariosPerfilesTbl usuarioPerfil : listaUsuarioPerfil){
+        for (RnGcUsuariosPerfilesTbl usuarioPerfil : listaUsuarioPerfil) {
             usuarioPerfilFacade.remove(usuarioPerfil);
         }
     }
@@ -353,22 +359,24 @@ public class RnGcUsuariosTblController implements Serializable {
             usuarioPerfilFacade.edit(usuarioPerfil);
         }
     }
-    
-    public void valores(){
+
+    public void valores() {
         editar = true;
         usuarioCert = user;
-        System.out.print("1 - regimen: "+ usuarioCert.getRegimenId()+ "  telefono: "+ usuarioCert.getTelefono() + "  codigo: " + usuarioCert.getCodigoPostal());
-        
+        System.out.print("1 - regimen: " + usuarioCert.getRegimenId() + "  telefono: " + usuarioCert.getTelefono() + "  codigo: " + usuarioCert.getCodigoPostal());
+
     }
-    
+
     public void actualizarUsuario() {
-        if(usuarioCert != null){
+        if (usuarioCert != null) {
             usuarioCert.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
             usuarioCert.setUltimaFechaActualizacion(new Date());
-            System.out.print("regimen: "+ usuarioCert.getRegimenId()+ "  telefono: "+ usuarioCert.getTelefono() + "  codigo: " 
-               + usuarioCert.getCodigoPostal() + "  correo: " + usuarioCert.getEmail()+ "  contraseña: " + usuarioCert.getPasswordEmail());
+            System.out.print("regimen: " + usuarioCert.getRegimenId() + "  telefono: " + usuarioCert.getTelefono() + "  codigo: "
+                    + usuarioCert.getCodigoPostal() + "  correo: " + usuarioCert.getEmail() + "  contraseña: " + usuarioCert.getPasswordEmail());
             getFacade().edit(usuarioCert);
             System.out.print("Datos actualizados correctamente");
+            // Vuelve a desactivar el modo edición
+            this.editar = false;
             JsfUtil.addSuccessMessage("Datos actualizados correctamente");
         }
     }
@@ -664,41 +672,42 @@ public class RnGcUsuariosTblController implements Serializable {
         usuarioEditar = getFacade().obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
         return usuarioEditar;
     }
-    
-    public boolean obtenerTipoUsuario(){
+
+    public boolean obtenerTipoUsuario() {
         String tipoUsuario = null;
         boolean bool = false;
         tipoUsuario = getFacade().obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario()).getTipoUsuario();
-        if(tipoUsuario != null){
-            if(tipoUsuario.contains("AG") || tipoUsuario.contains("AD"))
+        if (tipoUsuario != null) {
+            if (tipoUsuario.contains("AG") || tipoUsuario.contains("AD")) {
                 bool = true;
+            }
         }
         return bool;
     }
-    
-    public void usuariosPermitidos(){
+
+    public void usuariosPermitidos() {
         RnGcUsuariosTbl usuarioRegis = new RnGcUsuariosTbl();
         usuarioRegis = obtenerUsuarioParaEditar();
-        if(usuarioRegis.getTipoUsuario().contains("AD")){
-            if(selected.getTipoUsuario().contains("AD")){
+        if (usuarioRegis.getTipoUsuario().contains("AD")) {
+            if (selected.getTipoUsuario().contains("AD")) {
                 selected.setNoUsuarios(50);
-            }else if(selected.getTipoUsuario().contains("CO")){
+            } else if (selected.getTipoUsuario().contains("CO")) {
                 selected.setNoUsuarios(3);
-            }else{
+            } else {
                 selected.setNoUsuarios(0);
             }
-        }else if(usuarioRegis.getTipoUsuario().contains("AG")){
-            if(selected.getTipoUsuario().contains("AD")){
+        } else if (usuarioRegis.getTipoUsuario().contains("AG")) {
+            if (selected.getTipoUsuario().contains("AD")) {
                 selected.setNoUsuarios(50);
-            }else if(selected.getTipoUsuario().contains("CO")){
+            } else if (selected.getTipoUsuario().contains("CO")) {
                 selected.setNoUsuarios(3);
-            }else{
+            } else {
                 selected.setNoUsuarios(0);
             }
         }
         System.out.println("noUsuarios: " + selected.getNoUsuarios());
     }
-    
+
     public String iniMayusculas(String nombre) {
         nombre = nombre.toLowerCase();
         char[] caracteres = nombre.toCharArray();
@@ -710,50 +719,51 @@ public class RnGcUsuariosTblController implements Serializable {
         }
         return new String(caracteres);
     }
-    
-    public void pruebasMayusculas(String persona){
+
+    public void pruebasMayusculas(String persona) {
         String vacias[] = {"De", "Y", "Con", "Del", "El", "En", "Es", "No", "Para", "Pero", "Por", "Que", "Se", "Si", "Sin", "Solo", "Tan", "Te", "Tu"};
         persona = iniMayusculas(persona.toLowerCase());
-        
+
         String[] parts = persona.split(" ");
         List<String> nombreFinal = new ArrayList<>();
         String nombreFin = "";
-        
-        for(String nombre : parts){
+
+        for (String nombre : parts) {
             nombreFinal.add(nombre);
         }
-        for(int i = 0; i < nombreFinal.size(); i++){
-            for(String nombre : vacias){
-                if(nombreFinal.get(i).equals(nombre))
+        for (int i = 0; i < nombreFinal.size(); i++) {
+            for (String nombre : vacias) {
+                if (nombreFinal.get(i).equals(nombre)) {
                     nombreFinal.set(i, nombre.toLowerCase());
+                }
             }
         }
-        for(String nombre : nombreFinal){
+        for (String nombre : nombreFinal) {
             nombreFin = nombreFin + nombre + " ";
         }
-        selected.setNombreCompleto(nombreFin.substring(0, nombreFin.length()-1));
+        selected.setNombreCompleto(nombreFin.substring(0, nombreFin.length() - 1));
         System.out.println("nombreCompleto: " + selected.getNombreCompleto());
     }
 
-    public String encriptarPwd(String plainPwd) throws Exception{
+    public String encriptarPwd(String plainPwd) throws Exception {
         TrippleDes td;
         td = new TrippleDes();
-        String encrypted=td.encrypt(plainPwd);
+        String encrypted = td.encrypt(plainPwd);
 
-        System.out.println("String To Encrypt: "+ plainPwd);
+        System.out.println("String To Encrypt: " + plainPwd);
         System.out.println("Encrypted String:" + encrypted);
-        
+
         return encrypted;
     }
 
-    public String desencriptarPwd(String encryptedPwd) throws Exception{
+    public String desencriptarPwd(String encryptedPwd) throws Exception {
         TrippleDes td;
         td = new TrippleDes();
-        String decrypted=td.decrypt(encryptedPwd);
+        String decrypted = td.decrypt(encryptedPwd);
 
-        System.out.println("String To Decrypt: "+ encryptedPwd);
+        System.out.println("String To Decrypt: " + encryptedPwd);
         System.out.println("Decrypted String:" + decrypted);
-        
+
         return decrypted;
     }
 

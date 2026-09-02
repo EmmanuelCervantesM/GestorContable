@@ -46,6 +46,13 @@ public class JsfUtil {
         FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
         FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
+    
+    public static void addWarningMessage(String msg) {
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_WARN, msg, msg);
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
+    }
+    
+    
 
     // SE AGREGA METODO PERSONALIZADO PARA ENVIO DE MENSAJES EMMANUEL 
     public static void addErrorMessage(String title, String detail) {
@@ -65,6 +72,10 @@ public class JsfUtil {
     public static Object getObjectFromRequestParameter(String requestParameterName, Converter converter, UIComponent component) {
         String theId = JsfUtil.getRequestParameter(requestParameterName);
         return converter.getAsObject(FacesContext.getCurrentInstance(), component, theId);
+    }
+
+    public static void addWarnMessage(String no_puedes_eliminar_un_periodo_abierto_Cié) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public static enum PersistAction {

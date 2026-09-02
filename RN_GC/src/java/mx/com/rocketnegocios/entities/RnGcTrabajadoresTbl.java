@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -46,7 +48,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcTrabajadoresTbl.findByNss", query = "SELECT r FROM RnGcTrabajadoresTbl r WHERE r.nss = :nss")
     , @NamedQuery(name = "RnGcTrabajadoresTbl.findBySdi", query = "SELECT r FROM RnGcTrabajadoresTbl r WHERE r.sdi = :sdi")
     , @NamedQuery(name = "RnGcTrabajadoresTbl.findByTipoPersona", query = "SELECT r FROM RnGcTrabajadoresTbl r WHERE r.tipoPersona = :tipoPersona")
-    , @NamedQuery(name = "RnGcTrabajadoresTbl.findByNominaId", query = "SELECT r FROM RnGcTrabajadoresTbl r WHERE r.nominaId = :nominaId")})
+    , @NamedQuery(name = "RnGcTrabajadoresTbl.findByNominaId", query = "SELECT r FROM RnGcTrabajadoresTbl r WHERE r.nominaId = :nominaId")
+    , @NamedQuery(name = "RnGcTrabajadoresTbl.countTrabajador", query = "SELECT COUNT(r) FROM RnGcTrabajadoresTbl r WHERE r.creadoPor = :idUsuario  AND (r.curp = :curp or r.rfc = :rfc or r.nss = :nss)")
+    , @NamedQuery(name = "RnGcTrabajadoresTbl.findTrabajador", query = "SELECT r FROM RnGcTrabajadoresTbl r WHERE r.curp = :curp OR r.rfc = :rfc OR r.nss = :nss")
+    , @NamedQuery(name = "RnGcTrabajadoresTbl.findByNoTrabajador", query = "SELECT r FROM RnGcTrabajadoresTbl r WHERE r.noTrabajador = :noTrabajador AND r.creadoPor = :creadoPor"),})
 public class RnGcTrabajadoresTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -119,7 +124,42 @@ public class RnGcTrabajadoresTbl implements Serializable {
     private Integer estadoId;
     @Column(name = "email1")
     private String email1;
+    @Size(max = 5)
+    @Column(name = "codigoPostal")
+    private String codigoPostal;
+    @Size(max = 250)
+    @Column(name = "observaciones")
+    private String observaciones;
+    
+    @Size(max = 10)
+    @Column(name = "tipoEmpleado")
+    private String tipoEmpleado;
+    
+    @Size(max = 1)
+    @Column(name = "sindicalizado")
+    private String sindicalizado;
+    
+    @ManyToOne
+    @JoinColumn(name = "tipoJornadaTblId", referencedColumnName = "id")
+    private RnGcNomTipojornadaTbl  tipoJornadaTblId;
+    
+    @ManyToOne
+    @JoinColumn(name = "riesgoPuestoTblId", referencedColumnName = "id")
+    private RnGcNomRiesgopuestoTbl riesgoPuestoTblId;
+    
+    @ManyToOne
+    @JoinColumn(name = "regimenContratacionId", referencedColumnName = "id")
+    private RnGcNomTiporegimencontratacionTbl regimenContratacionId;
 
+    @ManyToOne
+    @JoinColumn(name = "entidadFederativaId", referencedColumnName = "id")
+    private RnGcNomEstadosTbl entidadFederativaId;
+    
+    @ManyToOne
+    @JoinColumn(name = "regimenFiscalId", referencedColumnName = "id")
+    private RnGcNomTiporegimenTbl  regimenFicalId;
+
+    
     public RnGcTrabajadoresTbl() {
     }
 
@@ -135,6 +175,49 @@ public class RnGcTrabajadoresTbl implements Serializable {
         this.ultimaFechaActualizacion = ultimaFechaActualizacion;
     }
 
+    public RnGcNomTiporegimencontratacionTbl getRegimenContratacionId() {
+        return regimenContratacionId;
+    }
+
+    public void setRegimenFicalId(RnGcNomTiporegimenTbl  regimenFicalId) {
+        this.regimenFicalId = regimenFicalId;
+    }
+    
+    public RnGcNomTiporegimenTbl  getRegimenFicalId() {
+        return regimenFicalId;
+    }
+    
+    
+    public void setEntidadFederativaId(RnGcNomEstadosTbl entidadFederativaId) {
+        this.entidadFederativaId = entidadFederativaId;
+    }
+    
+    public RnGcNomEstadosTbl getEntidadFederativaId() {
+        return entidadFederativaId;
+    }
+    
+
+    
+    public void setRegimenContratacionId(RnGcNomTiporegimencontratacionTbl regimenContratacionId) {
+        this.regimenContratacionId = regimenContratacionId;
+    }
+    
+    public RnGcNomRiesgopuestoTbl getRiesgoPuestoTblId() {
+        return riesgoPuestoTblId;
+    }
+
+    public void setRiesgoPuestoTblId(RnGcNomRiesgopuestoTbl riesgoPuestoTblId) {
+        this.riesgoPuestoTblId = riesgoPuestoTblId;
+    }
+    
+    public RnGcNomTipojornadaTbl getTipoJornadaTblId() {
+        return tipoJornadaTblId;
+    }
+
+    public void setTipoJornadaTblId(RnGcNomTipojornadaTbl tipoJornadaTblId) {
+        this.tipoJornadaTblId = tipoJornadaTblId;
+    }
+    
     public Integer getId() {
         return id;
     }
@@ -142,7 +225,43 @@ public class RnGcTrabajadoresTbl implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+    
+     public String getCodigoPostal() {
+        return codigoPostal;
+    }
 
+    public void setCodigoPostal(String codigoPostal) {
+        this.codigoPostal = codigoPostal;
+    }
+    
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+    
+    public String getTipoEmpleado() {
+        return tipoEmpleado;
+    }
+
+    public void setTipoEmpleado(String tipoEmpleado) {
+        if (tipoEmpleado == null) {
+        this.tipoEmpleado = "Salariado";
+    } else {
+        this.tipoEmpleado = tipoEmpleado;
+    }
+    }
+    
+        public String getSindicalizado() {
+        return sindicalizado;
+    }
+
+    public void setSindicalizado(String sindicalizado) {
+        this.sindicalizado = sindicalizado;
+    }
+    
     public int getCreadoPor() {
         return creadoPor;
     }
@@ -177,7 +296,7 @@ public class RnGcTrabajadoresTbl implements Serializable {
 
     public String getApPaterno() {
         if(apPaterno == null)
-            this.apPaterno = "-";
+            this.apPaterno = "";
         return apPaterno;
     }
 
@@ -187,7 +306,7 @@ public class RnGcTrabajadoresTbl implements Serializable {
 
     public String getApMaterno() {
         if(apMaterno == null)
-            this.apMaterno = "-";
+            this.apMaterno = "";
         return apMaterno;
     }
 
@@ -197,7 +316,7 @@ public class RnGcTrabajadoresTbl implements Serializable {
 
     public String getNombre() {
         if(nombre == null)
-            this.nombre = "-";
+            this.nombre = "";
         return nombre;
     }
 
@@ -215,7 +334,7 @@ public class RnGcTrabajadoresTbl implements Serializable {
 
     public String getCurp() {
         if(curp == null)
-            this.curp = "-";
+            this.curp = "";
         return curp;
     }
 
@@ -225,7 +344,7 @@ public class RnGcTrabajadoresTbl implements Serializable {
 
     public String getRfc() {
         if(rfc == null)
-            this.rfc = "-";
+            this.rfc = "";
         return rfc;
     }
     public void setRfc(String rfc) {
@@ -234,7 +353,7 @@ public class RnGcTrabajadoresTbl implements Serializable {
 
     public String getNss() {
         if(nss == null)
-            this.nss = "-";
+            this.nss = "";
         return nss;
     }
 
@@ -244,7 +363,7 @@ public class RnGcTrabajadoresTbl implements Serializable {
 
     public String getSdi() {
         if(sdi == null)
-            this.sdi = "-";
+            this.sdi = "";
         return sdi;
     }
 

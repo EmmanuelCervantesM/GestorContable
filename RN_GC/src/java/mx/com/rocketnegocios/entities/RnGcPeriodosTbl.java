@@ -43,71 +43,74 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "RnGcPeriodosTbl.findByCreadoPor", query = "SELECT r FROM RnGcPeriodosTbl r WHERE r.creadoPor = :creadoPor")
     , @NamedQuery(name = "RnGcPeriodosTbl.findByFechaCreacion", query = "SELECT r FROM RnGcPeriodosTbl r WHERE r.fechaCreacion = :fechaCreacion")
     , @NamedQuery(name = "RnGcPeriodosTbl.findByUltimaActualizacionPor", query = "SELECT r FROM RnGcPeriodosTbl r WHERE r.ultimaActualizacionPor = :ultimaActualizacionPor")
+    , @NamedQuery(name = "RnGcPeriodosTbl.findActivoByUsuario", query = "SELECT r FROM RnGcPeriodosTbl r WHERE r.usuariosId = :usuario AND r.estatus = 'A' ORDER BY r.fechaInicioPeriodo DESC")
     , @NamedQuery(name = "RnGcPeriodosTbl.findByUltimaFechaActualizacion", query = "SELECT r FROM RnGcPeriodosTbl r WHERE r.ultimaFechaActualizacion = :ultimaFechaActualizacion")})
 public class RnGcPeriodosTbl implements Serializable {
 
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "año")
-    private Integer año;
+    @Column(name = "anio")
+    private Integer anio;
+
     @Basic(optional = false)
-    @NotNull
     @Column(name = "mes")
     private String mes;
+
     @Basic(optional = false)
-    @NotNull
     @Column(name = "estatus")
     private String estatus;
+
     @Basic(optional = false)
-    @NotNull
     @Column(name = "tipoPeriodo")
     private String tipoPeriodo;
+
     @Column(name = "libroContableId")
     private Integer libroContableId;
+
     @JoinColumn(name = "usuarioId", referencedColumnName = "Id")
-    @ManyToOne
+    @ManyToOne(optional = true) // deja true si la columna permite NULL en BD
     private RnGcUsuariosTbl usuariosId;
-    
-    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "Id")
     private Integer id;
+
     @Basic(optional = false)
-    @NotNull
     @Column(name = "periodoId")
     private int periodoId;
-    @Column(name = "fechaInicioPeriodo")
-    @Temporal(TemporalType.DATE)
-    private Date fechaInicioPeriodo;
-    @Size(min = 1, max = 45)
-    @Column(name = "fechaFinPeriodo")
-    private String fechaFinPeriodo;
-    @Basic(optional = false)
+
     @NotNull
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fechaInicioPeriodo")
+    private Date fechaInicioPeriodo;
+
+    @NotNull
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fechaFinPeriodo")
+    private Date fechaFinPeriodo;
+
+    @Basic(optional = false)
     @Column(name = "creadoPor")
     private int creadoPor;
+
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "fechaCreacion")
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fechaCreacion")
     private Date fechaCreacion;
+
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ultimaActualizacionPor")
     private int ultimaActualizacionPor;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "ultimaFechaActualizacion")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date ultimaFechaActualizacion;
-    @OneToMany(mappedBy = "periodosId")
-    private Collection<RnGcCfdisTbl> rnGcCfdisTblCollection;
-    @JoinColumn(name = "cfdis_Id", referencedColumnName = "Id")
-    @ManyToOne(optional = false)
-    private RnGcCfdisTbl cfdisId;
 
+    @Basic(optional = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "ultimaFechaActualizacion")
+    private Date ultimaFechaActualizacion;
+
+    @JoinColumn(name = "cfdis_Id", referencedColumnName = "Id")
+    @ManyToOne(optional = true) // CAMBIA a true si en BD cfdis_Id permite NULL
+    private RnGcCfdisTbl cfdisId;
     public RnGcPeriodosTbl() {
     }
 
@@ -119,7 +122,6 @@ public class RnGcPeriodosTbl implements Serializable {
         this.id = id;
         this.periodoId = periodoId;
         this.fechaInicioPeriodo = fechaInicioPeriodo;
-        this.fechaFinPeriodo = fechaFinPeriodo;
         this.creadoPor = creadoPor;
         this.fechaCreacion = fechaCreacion;
         this.ultimaActualizacionPor = ultimaActualizacionPor;
@@ -150,11 +152,11 @@ public class RnGcPeriodosTbl implements Serializable {
         this.fechaInicioPeriodo = fechaInicioPeriodo;
     }
 
-    public String getFechaFinPeriodo() {
+    public Date getFechaFinPeriodo() {
         return fechaFinPeriodo;
     }
 
-    public void setFechaFinPeriodo(String fechaFinPeriodo) {
+    public void setFechaFinPeriodo(Date fechaFinPeriodo) {
         this.fechaFinPeriodo = fechaFinPeriodo;
     }
 
@@ -190,12 +192,12 @@ public class RnGcPeriodosTbl implements Serializable {
         this.ultimaFechaActualizacion = ultimaFechaActualizacion;
     }
 
-    public Integer getAño() {
-        return año;
+    public Integer getAnio() {
+        return anio;
     }
 
-    public void setAño(Integer año) {
-        this.año = año;
+    public void setAnio(Integer anio) {
+        this.anio = anio;
     }
 
     public String getMes() {
@@ -238,15 +240,6 @@ public class RnGcPeriodosTbl implements Serializable {
         this.usuariosId = usuariosId;
     }
 
-    @XmlTransient
-    public Collection<RnGcCfdisTbl> getRnGcCfdisTblCollection() {
-        return rnGcCfdisTblCollection;
-    }
-
-    public void setRnGcCfdisTblCollection(Collection<RnGcCfdisTbl> rnGcCfdisTblCollection) {
-        this.rnGcCfdisTblCollection = rnGcCfdisTblCollection;
-    }
-
     public RnGcCfdisTbl getCfdisId() {
         return cfdisId;
     }
@@ -275,6 +268,14 @@ public class RnGcPeriodosTbl implements Serializable {
     @Override
     public String toString() {
         return "mx.com.rocketnegocios.entities.RnGcPeriodosTbl[ id=" + id + " ]";
+    }
+
+    public Object getActivo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Object getIdPeri() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

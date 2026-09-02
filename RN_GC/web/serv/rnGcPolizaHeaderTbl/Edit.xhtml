@@ -36,7 +36,7 @@
                             <f:selectItems value="#{rnGcPeriodosTblController.obtenerPeriodoUsuario()}"
                                            var="periodo"
                                            itemValue="#{periodo}"
-                                           itemLabel="#{periodo.mes} #{periodo.año}"/>
+                                           itemLabel="#{periodo.mes} #{periodo.anio}"/>
                             <p:ajax event="change" update="periodo"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="Estatus: " for="estatus" />
@@ -67,7 +67,12 @@
                     <p:commandButton value="Agregar nuevo asiento" process="@this" update=":form4:msgs2,polizaLineasEdittable2"
                                              action="#{rnGcPolizaHeaderTblController.onAddNew()}" />
 
-                    <p:commandButton id="createButton2" icon="ui-icon-plus"   value="Agregar Nueva Cuenta" actionListener="#{rnGcCatalogoCuentasTblController.prepareCreate}" update=":RnGcCatalogoCuentasTblCreateForm" oncomplete="PF('RnGcCatalogoCuentasTblCreateDialog').show()"/>
+                    <p:commandButton id="createButton2"
+                                    icon="ui-icon-plus"
+                                    value="Nueva cuenta"
+                                    process="@this"
+                                    actionListener="#{rnGcCatalogoCuentasTblController.prepareCreate}"
+                                    oncomplete="PF('RnGcCatalogoCuentasTblCreateDialog').show()" />
                     <p:growl id="msgs2" showDetail="true"/>
                     <p:remoteCommand name="refreshFooter" update=":form4:polizaLineasEdittable2"/>
 

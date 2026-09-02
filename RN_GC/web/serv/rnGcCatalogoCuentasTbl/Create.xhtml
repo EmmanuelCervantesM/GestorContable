@@ -45,12 +45,12 @@
                             <f:selectItem itemLabel="Acreedora" itemValue="A" />
                         </p:selectOneMenu>
                         <p:outputLabel value="Moneda: " for="monedaId" />
-                        <p:selectOneMenu id="monedaId" value="#{rnGcCatalogoCuentasTblController.selected.monedaId}"
+                        <p:selectOneMenu id="monedaId" value="#{rnGcCatalogoCuentasTblController.selected.moneda}"
                                          filter="true" filterMatchMode="contains" style="width:350px" panelStyle="width:350px">
                             <f:selectItems value="#{rnGcMonedasTblController.itemsAvailableSelectOne}"
                                            var="monedaItem"
                                            itemLabel="#{monedaItem.CMoneda} - #{monedaItem.descripcion}"
-                                           itemValue="#{monedaItem}"/>
+                                           itemValue="#{monedaItem.id}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="DIOT" for="diot" />
                         <p:selectBooleanCheckbox value="#{rnGcCatalogoCuentasTblController.selected.adicional1}" itemLabel="Seleccionar" id="diot">
@@ -61,7 +61,17 @@
                             <p:ajax event="blur" update="rfc, msg" listener="#{rnGcCatalogoCuentasTblController.validarRFC()}"/>
                         </p:inputText>
                         <p:outputLabel value="#{bundle.CreateRnGcCatalogoCuentasTblLabel_inicioVigencia}" for="inicioVigencia" />
-                        <p:calendar id="inicioVigencia"  locale="mx" pattern="MM/yyyy" value="#{rnGcCatalogoCuentasTblController.selected.inicioVigencia}" title="#{bundle.EditRnGcCatalogoCuentasTblTitle_inicioVigencia}" showOn="button" style="width:350px"/>
+                        <p:calendar id="inicioVigencia"
+                                    value="#{rnGcCatalogoCuentasTblController.selected.inicioVigencia}"
+                                    pattern="dd/MM/yyyy"
+                                    locale="es"
+                                    mindate="#{rnGcCatalogoCuentasTblController.periodoActivoInicio}"
+                                    maxdate="#{rnGcCatalogoCuentasTblController.periodoActivoFin}"
+                                    navigator="false"
+                                    readonlyInput="true"
+                                    showButtonPanel="false"
+                                    showOn="button"
+                                    style="width:350px"/>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{rnGcCatalogoCuentasTblController.create}" value="#{bundle.Save}" update="display,:RnGcCatalogoCuentasTblListForm:datalist,:growl"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCatalogoCuentasTblCreateDialog.hide()"/>
