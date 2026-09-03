@@ -5,7 +5,6 @@
  */
 package mx.com.rocketnegocios.beans;
 
-import com.sun.xml.ws.tx.at.validation.TXAttributesValidator.TransactionAttributeType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,7 +70,7 @@ public class RnGcPeriodosTblFacade extends AbstractFacade<RnGcPeriodosTbl> {
 
         List<RnGcPeriodosTbl> lista = em.createQuery(
                 "SELECT p FROM RnGcPeriodosTbl p " +
-                "WHERE p.usuarioId = :usr " +
+                "WHERE p.usuariosId = :usr " +
                 "  AND p.fechaInicioPeriodo < :fi " +
                 "ORDER BY p.fechaInicioPeriodo DESC",
                 RnGcPeriodosTbl.class)
@@ -151,11 +150,21 @@ public RnGcPeriodosTbl buscarUltimoPeriodoPorUsuario(RnGcUsuariosTbl usuario){
 }
 
     public List<RnGcPeriodosTbl> findByUsuario(RnGcUsuariosTbl user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createQuery(
+                "SELECT p FROM RnGcPeriodosTbl p WHERE p.usuariosId = :u",
+                RnGcPeriodosTbl.class)
+            .setParameter("u", user)
+            .getResultList();
     }
 
     public RnGcPeriodosTbl obtenerPeriodoActivo(Integer idUsuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<RnGcPeriodosTbl> l = em.createQuery(
+                "SELECT p FROM RnGcPeriodosTbl p WHERE p.usuariosId.id = :id AND p.estatus = 'A' ORDER BY p.periodoId DESC",
+                RnGcPeriodosTbl.class)
+            .setParameter("id", idUsuario)
+            .setMaxResults(1)
+            .getResultList();
+        return l.isEmpty() ? null : l.get(0);
     }
 
 

@@ -97,8 +97,13 @@ public class RnGcCodigoAgrupadorSatTbl implements Serializable {
     @Column(name = "ultimaFechaActualizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaFechaActualizacion;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoAgrupadorSatId")
     private Collection<RnGcCatalogoCuentasTbl> rnGcCatalogoCuentasTblCollection;
+    @OneToMany(mappedBy = "codigoAgrupadorSatId")
     private Collection<RnGcCodigoAgrupadorSatTbl> rnGcCodigoAgrupadorSatTblCollection;
+    @JoinColumn(name = "codigo_agrupador_sat_id", referencedColumnName = "id")
+    @ManyToOne
+    private RnGcCodigoAgrupadorSatTbl codigoAgrupadorSatId;
     
 
     public RnGcCodigoAgrupadorSatTbl() {
