@@ -5,8 +5,7 @@
  */
 package mx.com.rocketnegocios.beans;
 
-import static com.itextpdf.kernel.pdf.PdfName.T;
-import jakarta.annotation.security.PermitAll;
+import javax.annotation.security.PermitAll;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,7 +16,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import mx.com.rocketnegocios.entities.RnGcPolizaHeaderTbl;
 import mx.com.rocketnegocios.entities.RnGcUsuariosTbl;
-import org.apache.poi.ss.formula.functions.T;
 
 /**
  *
@@ -58,7 +56,8 @@ public class RnGcPolizaHeaderTblFacade extends AbstractFacade<RnGcPolizaHeaderTb
         return polizas;
     }
      
-    public void create(T entity) {
+    @Override
+    public void create(RnGcPolizaHeaderTbl entity) {
         try {
             em.persist(entity);
             em.flush(); // fuerza el INSERT y las validaciones aquí
@@ -130,7 +129,6 @@ public class RnGcPolizaHeaderTblFacade extends AbstractFacade<RnGcPolizaHeaderTb
         return idGenerado;
     }
 
-    @PermitAll
     public int obtenerConsecutivoPorUsuario(Integer creadoPor) {
         try {
             Long total = em.createNamedQuery("RnGcPolizaHeaderTbl.countByCreadoPor", Long.class)

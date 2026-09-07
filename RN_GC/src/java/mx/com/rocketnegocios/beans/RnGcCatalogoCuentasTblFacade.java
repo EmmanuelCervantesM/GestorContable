@@ -5,7 +5,7 @@
  */
 package mx.com.rocketnegocios.beans;
 
-import jakarta.annotation.security.PermitAll;
+import javax.annotation.security.PermitAll;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
