@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Términos y Aviso de Privacidad"/>
+        </ui:define>
+        <ui:define name="body">
+            <!-- solo el admnistrador puede subir un documento para los temrinos y condicones -->
+            <h:form id="uploadTerminosForm" enctype="multipart/form-data"
+                    rendered="#{rnGcDocumentosLegalesTblController.esAdministrador}">
+                <p:panel header="Publicar nueva versión">
+                    <p:growl id="msgTerminos" showDetail="true"/>
+                <h:panelGrid columns="2" cellpadding="10">
+                    <p:outputLabel value="Documento:" for="tipoDoc"/>
+                    <p:selectOneMenu id="tipoDoc" value="#{rnGcDocumentosLegalesTblController.tipoDocumento}">
+                        <f:selectItem itemLabel="Términos y Condiciones" itemValue="TERMINOS"/>
+                        <f:selectItem itemLabel="Aviso de Privacidad" itemValue="PRIVACIDAD"/>
+                    </p:selectOneMenu>
+
+                        <p:outputLabel value="Versión:" for="version"/>
+                        <p:inputText id="version" value="#{rnGcDocumentosLegalesTblController.version}" placeholder="ej. 1.1"/>
+
+                        <p:outputLabel value="Archivo PDF:"/>
+                        <p:fileUpload value="#{rnGcDocumentosLegalesTblController.file}"
+                                mode="simple" skinSimple="true" label="Elegir PDF"
+                                allowTypes="/(\.|\/)(pdf)$/" sizeLimit="5000000"/>
+                    </h:panelGrid>
+                    <p:commandButton value="Publicar" ajax="false"
+                                action="#{rnGcDocumentosLegalesTblController.subirDocumento()}"
+                                update="msgTerminos"/>
+                </p:panel>
+            </h:form>
+            <h:outputText value="No tienes permisos para ver esta página."
+                    rendered="#{!rnGcDocumentosLegalesTblController.esAdministrador}"/>
+        </ui:define>
+    </ui:composition>
+</html>
