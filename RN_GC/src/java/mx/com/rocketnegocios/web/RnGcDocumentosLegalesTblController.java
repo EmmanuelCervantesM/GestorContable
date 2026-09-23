@@ -95,6 +95,11 @@ public class RnGcDocumentosLegalesTblController implements Serializable {
         String firma = new String (contenido, 0,5 , java.nio.charset.StandardCharsets.US_ASCII);
         return firma.equals("%PDF-");
     }
+    //para ver si existe un documento 
+    public boolean existeDocumento(String tipoDocumento) {
+    return ejbFacade.obtenerVigentePorTipo(tipoDocumento) != null;
+    }
+
 
     //Convierte el PDF vigente en Byte 
     public DefaultStreamedContent verDocumento(String tipoDocumento) {

@@ -47,7 +47,7 @@ public class RnGcDocumentosLegalesTbl implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min=1, max=1)
-    private String Vigente; 
+    private String vigente; 
 
     @Basic(optional = false) 
     @NotNull 
@@ -76,8 +76,8 @@ public class RnGcDocumentosLegalesTbl implements Serializable {
     public void setArchivoPdf (byte[] archivoPdf) {this.archivoPdf = archivoPdf;}
     public String getNombreArchivo() {return nombreArchivo;}
     public void setNombreArchivo(String nombreArchivo) {this.nombreArchivo = nombreArchivo;}
-    public String getVigente() {return Vigente;}
-    public void setVigente(String vigente) {this.Vigente = vigente;}
+    public String getVigente() {return vigente;}
+    public void setVigente(String vigente) {this.vigente = vigente;}
     public Date getFechaPublicacion() {return fechaPublicacion;}
     public void setFechaPublicacion(Date fechaPublicacion) {this.fechaPublicacion = fechaPublicacion;}
     public int getCreadoPor() {return creadoPor;}

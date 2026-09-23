@@ -28,12 +28,12 @@ public class RnGcAceptacionTerminosTbl implements Serializable {
 
     @Basic (optional = false)
     @NotNull 
-    @Size (min=1, max=20)
+    @Size ( max=20)
     private String versionTerminos; 
     
     @Basic(optional = false)
     @NotNull
-    @Size (min=1, max=20)
+    @Size ( max=20)
     private String versionPrivacidad;
 
     @Basic (optional =false)
