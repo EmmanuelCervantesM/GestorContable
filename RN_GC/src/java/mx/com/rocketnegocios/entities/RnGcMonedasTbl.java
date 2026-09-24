@@ -101,6 +101,8 @@ public class RnGcMonedasTbl implements Serializable {
     @ManyToOne
     @JoinColumn(name = "cfdi_Id")
     private RnGcCfdisTbl cfdiId;
+    @OneToMany(mappedBy = "tipoMoneda")
+    private Collection<RnGcPolizaHeaderTbl> rnGcPolizaHeaderTblCollection;
 
     public RnGcMonedasTbl() {
     }
@@ -246,14 +248,5 @@ public class RnGcMonedasTbl implements Serializable {
 
     public void setRnGcPolizaHeaderTblCollection(Collection<RnGcPolizaHeaderTbl> rnGcPolizaHeaderTblCollection) {
         this.rnGcPolizaHeaderTblCollection = rnGcPolizaHeaderTblCollection;
-    }
-    
-    @XmlTransient
-    public Collection<RnGcCatalogoCuentasTbl> getRnGcCatalogoCuentasTblCollection() {
-        return rnGcCatalogoCuentasTblCollection;
-    }
-
-    public void setRnGcCatalogoCuentasTblCollection(Collection<RnGcCatalogoCuentasTbl> rnGcCatalogoCuentasTblCollection) {
-        this.rnGcCatalogoCuentasTblCollection = rnGcCatalogoCuentasTblCollection;
     }
 }

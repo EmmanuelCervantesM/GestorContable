@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ================================================================ -->
+    <!-- RN_GC — Migration from Ant (NetBeans) to Maven WAR, Java 8     -->
+    <!-- Parity with original Ant build: glassfish-web.xml context-root   -->
+    <!-- /RN_GC, persistence-unit RN_GCPU with jndi jdbc/GC_PROD        -->
+    <!-- Ant layout preserved: src/java -> classpath, web -> war root     -->
+    <!-- ================================================================ -->
+    <groupId>mx.com.rocketnegocios</groupId>
+    <artifactId>RN_GC</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <name>RN_GC — GestorContable</name>
+    <description>JSF 2.2 + PrimeFaces 6.2 + JPA 2.1 (EclipseLink) on GlassFish 5 / Payara 5, Java 8. Migrated from Ant.</description>
+
+    <properties>
+        <!-- Compiler parity: nbproject/project.properties javac.source=1.8 target=1.8, source.encoding=UTF-8 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <!-- Dependency versions — Java 8 compatible, last javax namespace -->
+        <javaee-api.version>7.0</javaee-api.version>
+        <primefaces.version>6.2</primefaces.version>
+        <primefaces-extensions.version>6.2.1</primefaces-extensions.version>
+        <mysql.version>5.1.49</mysql.version>
+        <!-- Alternative: 8.0.33 — requires DataConnect update to com.mysql.cj.jdbc.MysqlDataSource
+             and URL param changes; see comment in mysql dependency below. -->
+        <jdom2.version>2.0.6</jdom2.version>
+        <commons-codec.version>1.15</commons-codec.version>
+        <commons-io.version>2.11.0</commons-io.version>
+        <commons-fileupload.version>1.5</commons-fileupload.version>
+        <not-yet-commons-ssl.version>0.3.9</not-yet-commons-ssl.version>
+        <poi.version>3.15</poi.version>
+        <jasperreports.version>6.20.6</jasperreports.version>
+        <itext5.version>5.5.13.3</itext5.version>
+        <itext7.version>7.2.5</itext7.version>
+        <eclipselink.version>2.7.9</eclipselink.version>
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <commons-digester.version>2.1</commons-digester.version>
+        <commons-collections.version>3.2.2</commons-collections.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <commons-logging.version>1.2</commons-logging.version>
+        <groovy.version>3.0.9</groovy.version>
+
+        <!-- Plugin versions -->
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
+        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+        <maven-dependency-plugin.version>3.6.0</maven-dependency-plugin.version>
+        <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
+        <build-helper-plugin.version>3.5.0</build-helper-plugin.version>
+    </properties>
+
+    <dependencies>
+        <!-- ============================================================ -->
+        <!-- Java EE 7 API — provided by GlassFish 5 / Payara 5 runtime   -->
+        <!-- Covers: javax.faces 2.2, javax.ejb, javax.persistence 2.1,    -->
+        <!-- javax.servlet 3.1, javax.mail, javax.validation, etc.        -->
+        <!-- Do NOT bundle: scope=provided.                               -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>${javaee-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- ============================================================ -->
+        <!-- PrimeFaces 6.2 — matches RN_GC/librerias/primefaces-6.2.jar  -->
+        <!-- Check web.xml: primefaces.THEME=omega, FONT_AWESOME=true    -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>${primefaces.version}</version>
+        </dependency>
+
+        <!-- Optional but common with PrimeFaces 6.2: themes and extensions
+             Keep commented unless needed — omega theme is bundled in PF 6.2 core.
+        <dependency>
+            <groupId>org.primefaces.themes</groupId>
+            <artifactId>all-themes</artifactId>
+            <version>1.0.10</version>
+        </dependency>
+        -->
+
+        <!-- ============================================================ -->
+        <!-- MySQL Connector — original: mysql-connector-java-5.1.23-bin  -->
+        <!-- Recommended: 5.1.49 (latest 5.x, drop-in, keeps               -->
+        <!-- com.mysql.jdbc.jdbc2.optional.MysqlDataSource classname used   -->
+        <!-- in configQA/domail.xml).                                      -->
+        <!-- Trade-off 5.x vs 8.x:                                         -->
+        <!--   5.1.49 -> zero code change, DataConnect and domain.xml work -->
+        <!--           as-is. EOL but stable for Java 8.                  -->
+        <!--   8.0.33 -> requires:                                         -->
+        <!--     - datasource-classname: com.mysql.cj.jdbc.MysqlDataSource  -->
+        <!--     - driver: com.mysql.cj.jdbc.Driver                        -->
+        <!--     - URL property handling changed (serverTimezone, sslMode)   -->
+        <!--   If you switch to 8.0.33, update domail.xml pools and any     -->
+        <!--   DriverManager.getConnection hardcodes.                       -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+            <!-- 5.1.49 — scope runtime; keep compile so DataConnect compiles if needed -->
+            <!-- If switching to 8.x use: com.mysql:mysql-connector-j:8.0.33 -->
+        </dependency>
+
+        <!-- ============================================================ -->
+        <!-- JDOM2 2.0.6 — matches jdom-2.0.6.jar                        -->
+        <!-- Used in cargarArchivosController, cargarFacturasController     -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom2</artifactId>
+            <version>${jdom2.version}</version>
+        </dependency>
+
+        <!-- ============================================================ -->
+        <!-- Apache Commons Codec — original org-apache-commons-codec.jar -->
+        <!-- Used for Base64, DigestUtils in util and web layers          -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>${commons-codec.version}</version>
+        </dependency>
+
+        <!-- ============================================================ -->
+        <!-- Apache Commons IO — used via org.apache.commons.io.FileUtils -->
+        <!-- in cargarArchivosController and web controllers               -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
+
+        <!-- PrimeFaces fileUploadFilter in web.xml needs Commons FileUpload -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commons-fileupload.version}</version>
+        </dependency>
+
+        <!-- ============================================================ -->
+        <!-- Not-Yet-Commons-SSL — org.apache.commons.ssl.PKCS8Key        -->
+        <!-- Used in FacturarController, FacturarNominaController, etc.   -->
+        <!-- for decrypting llave privada CSD.                             -->
+        <!-- Artifact is deployed as 'not-yet-commons-ssl' on Central.    -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>ca.juliusdavies</groupId>
+            <artifactId>not-yet-commons-ssl</artifactId>
+            <version>${not-yet-commons-ssl.version}</version>
+        </dependency>
+
+        <!-- ============================================================ -->
+        <!-- Apache POI — Java 8 parity notes:                            -->
+        <!--   Original project had POI ~3.7-class usage (XSSF, etc.) but -->
+        <!--   no jar was checked in to RN_GC/librerias (likely via Ant   -->
+        <!--   external lib or GlassFish). POI 3.7 DOES compile on Java 8 -->
+        <!--   but fails on JDK 9+ due to removed JAXB.                    -->
+        <!--   Recommendation: upgrade to 5.2.5 (last Java 8 compatible).  -->
+        <!--   If you MUST keep 3.7 for byte-identical reports, pin:       -->
+        <!--     <poi.version>3.17</poi.version> (last 3.x, still Java 8)  -->
+        <!--   POI 5.x API is compatible for used classes:                 -->
+        <!--     Cell, Row, Sheet, Workbook, DataFormatter, DateUtil,      -->
+        <!--     XSSFWorkbook, XSSFSheet, IOUtils                           -->
+        <!--   Note: poi-ooxml brings xmlbeans, commons-compress, curves   -->
+        <!--   transitively — do not add them manually.                    -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
+        <!-- ============================================================ -->
+        <!-- JasperReports UNIFIED 6.20.6 — last version with javax.*     -->
+        <!-- Replaces fragmented jasperreports jars. Brings transitively: -->
+        <!--   commons-beanutils, commons-digester, commons-collections,  -->
+        <!--   commons-logging, groovy-all, ecj, etc.                      -->
+        <!-- Scope compile. Fonts artifact is optional but included for    -->
+        <!-- reports using DejaVu / default fonts.                         -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>${jasperreports.version}</version>
+            <exclusions>
+                <!-- ECJ is needed for report compilation at runtime; keep unless you pre-compile .jrxml -->
+                <!-- Exclude transitive groovy if you want explicit version control — but keep it for now -->
+                <!-- Example to force groovy 3.0.9:
+                <exclusion>
+                    <groupId>org.codehaus.groovy</groupId>
+                    <artifactId>groovy-all</artifactId>
+                </exclusion>
+                -->
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-fonts</artifactId>
+            <version>${jasperreports.version}</version>
+        </dependency>
+
+        <!-- Groovy runtime required by JasperReports (expressions, etc.) -->
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>${groovy.version}</version>
+            <type>pom</type>
+        </dependency>
+
+        <!-- ============================================================ -->
+        <!-- iText 5 — com.itextpdf.text.* and com.itextpdf.text.pdf.*   -->
+        <!-- Used in FacturarController for legacy PDF handling            -->
+        <!-- 5.5.13.3 is last 5.x (LGPL/MPL).                             -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>${itext5.version}</version>
+        </dependency>
+
+        <!-- ============================================================ -->
+        <!-- iText 7 Kernel — com.itextpdf.kernel.*                       -->
+        <!-- Used alongside iText 5 in same codebase (PdfDocument, etc.)  -->
+        <!-- Kernel + layout + io are modular; kernel pulls io, layout    -->
+        <!-- pulls kernel. Include both for compilation parity.            -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>kernel</artifactId>
+            <version>${itext7.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>layout</artifactId>
+            <version>${itext7.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>io</artifactId>
+            <version>${itext7.version}</version>
+        </dependency>
+
+        <!-- ============================================================ -->
+        <!-- EclipseLink (JPA provider) — provided by GlassFish 5         -->
+        <!-- Keep provided scope so WAR does not bundle it; GlassFish     -->
+        <!-- modules/org.eclipse.persistence.jpa.jar wins.                -->
+        <!-- Only needed if you compile against EclipseLink extensions;   -->
+        <!-- javax.persistence API already via javaee-api.                -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa</artifactId>
+            <version>${eclipselink.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- ============================================================ -->
+        <!-- SAT CFD v3.2 bindings — cfdv32.jar (XMLBeans generated)      -->
+        <!-- No Maven Central coordinate. Two options:                    -->
+        <!--   A) system scope (quick parity, no repo) — used below       -->
+        <!--   B) mvn install:install-file to local repo (recommended)    -->
+        <!--      see instructions at bottom of this POM.                 -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>mx.gob.sat</groupId>
+            <artifactId>cfdv32</artifactId>
+            <version>3.2</version>
+        </dependency>
+
+        <!-- ============================================================ -->
+        <!-- Sefactura PAC kit — com.sefactura.* (Sefactura,             -->
+        <!-- RespuestaTimbrado, SolCancelacion, etc.)                     -->
+        <!-- No Maven Central coordinate. Vendor jar.                     -->
+        <!-- Uses same two options as cfdv32. Expected path:              -->
+        <!--   RN_GC/librerias/sefacturakit.jar  (or lib/sefactura-1.0.jar) -->
+        <!-- If your jar has different name, update systemPath.           -->
+        <!-- NOTE: jar NOT found in RN_GC/librerias (only 5 jars present) -->
+        <!-- Build will hold `provided` until you install it.             -->
+        <!-- ============================================================ -->
+        <dependency>
+            <groupId>com.sefactura</groupId>
+            <artifactId>sefacturakit</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- ============================================================ -->
+        <!-- Transitive dependencies that should NOT be added explicitly: -->
+        <!-- They are pulled by jasperreports / poi-ooxml:               -->
+        <!--   commons-beanutils, commons-digester, commons-collections,  -->
+        <!--   commons-collections4, commons-logging, groovy-all (above), -->
+        <!--   org.eclipse.jdt.core.compiler:ecj,                         -->
+        <!--   org.apache.xmlbeans:xmlbeans, commons-compress, curvesapi  -->
+        <!-- Adding them manually risks version skew.                     -->
+        <!-- ============================================================ -->
+    </dependencies>
+
+    <build>
+        <finalName>RN_GC</finalName>
+        <!-- Preserve Ant layout for zero-move migration:
+             src/java -> sourceDirectory
+             web      -> warSourceDirectory
+             To adopt Maven standard layout later, see instructions below. -->
+        <sourceDirectory>RN_GC/src/java</sourceDirectory>
+
+        <resources>
+            <!-- Bundle handling: copy Bundle*.properties from src/java root -->
+            <resource>
+                <directory>RN_GC/src/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <!-- persistence.xml is in RN_GC/src/conf — map to META-INF -->
+            <resource>
+                <directory>RN_GC/src/conf</directory>
+                <targetPath>META-INF</targetPath>
+                <includes>
+                    <include>persistence.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>RN_GC/src/conf</directory>
+                <includes>
+                    <include>MANIFEST.MF</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <!-- ======================================================== -->
+            <!-- Enforcer — catch Java / Maven version drift early         -->
+            <!-- ======================================================== -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.6.3</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>1.8</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- ======================================================== -->
+            <!-- Compiler — parity with project.properties javac.source=1.8 -->
+            <!-- ======================================================== -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <compilerArgs>
+                        <arg>-Xlint:none</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <!-- ======================================================== -->
+            <!-- Resources — UTF-8 parity with source.encoding=UTF-8     -->
+            <!-- ======================================================== -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <!-- ======================================================== -->
+            <!-- WAR — warSourceDirectory=web, webXml=web/WEB-INF/web.xml -->
+            <!-- context-root /RN_GC is defined in GlassFish deployment    -->
+            <!-- (applications/application/@context-root in domain.xml)    -->
+            <!-- or via glassfish-web.xml — no pom config needed.          -->
+            <!-- ======================================================== -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
+                <configuration>
+                    <warSourceDirectory>RN_GC/web</warSourceDirectory>
+                    <webXml>RN_GC/web/WEB-INF/web.xml</webXml>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <archive>
+                        <manifest>
+                            <addClasspath>false</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Built-By>Maven</Built-By>
+                        </manifestEntries>
+                    </archive>
+                    <!-- Exclude system-scoped jars from WEB-INF/lib duplication if needed -->
+                    <packagingExcludes></packagingExcludes>
+                </configuration>
+            </plugin>
+
+            <!-- ======================================================== -->
+            <!-- Dependency — useful for parity check: mvn dependency:tree -->
+            <!-- ======================================================== -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${maven-dependency-plugin.version}</version>
+            </plugin>
+
+            <!-- ======================================================== -->
+            <!-- Helper — optional: if you migrate to standard layout,     -->
+            <!-- add additional source dirs without moving files.          -->
+            <!-- Currently not needed because sourceDirectory is set.      -->
+            <!-- ======================================================== -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build-helper-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- ================================================================ -->
+    <!-- INSTALL INSTRUCTIONS (English — artifact language contract)       -->
+    <!-- ================================================================
+         1) Install vendor JARs that have no Maven Central coordinate:
+
+            # cfdv32 — SAT CFD 3.2 XMLBeans bindings
+            mvn install:install-file \
+              -Dfile=RN_GC/librerias/cfdv32.jar \
+              -DgroupId=mx.gob.sat \
+              -DartifactId=cfdv32 \
+              -Dversion=3.2 \
+              -Dpackaging=jar
+
+            # sefactura PAC kit — adjust -Dfile to actual jar name
+            # If your file is named differently, locate it first:
+            #   find . -name "*sefactura*.jar" -o -name "*Sefactura*.jar"
+            mvn install:install-file \
+              -Dfile=RN_GC/librerias/sefacturakit.jar \
+              -DgroupId=com.sefactura \
+              -DartifactId=sefacturakit \
+              -Dversion=1.0.0 \
+              -Dpackaging=jar
+
+            After install-file succeeds, edit this POM:
+              - For cfdv32: remove <scope>system</scope> and <systemPath>, keep <scope>compile</scope> (default)
+              - For sefacturakit: same
+
+            System scope is intentional for zero-setup parity; CI should
+            use install-file instead (system scope breaks on other machines
+            and is deprecated in Maven 3).
+
+         2) Build:
+
+            mvn clean package
+            # Output: target/RN_GC.war  (or RN_GC/target/RN_GC.war if pom is at repo root
+            #  — see layout note below)
+
+            mvn dependency:tree   # verify no duplicate jasper/itext/commons jars
+            mvn dependency:analyze  # flag unused/undeclared
+
+         3) Deploy to GlassFish 5 / Payara 5:
+
+            asadmin deploy -‐contextroot /RN_GC target/RN_GC.war
+            # Or via admin console. Pools already in configQA/domail.xml:
+            #   jdbc/GC_PROD -> mysql_rn_gc_db_prod_rngcusrpPool (prod)
+            #   jdbc/GC_PROD -> rn_gc_db_qa_pool (qa) — jndi-name jdbc/GC_PROD
+            # persistence.xml <jta-data-source>jdbc/GC_PROD</jta-data-source>
+            # Must match deployed jdbc-resource jndi-name.
+
+         4) Layout migration (OPTIONAL — current POM works with Ant layout):
+
+            Option A — Keep Ant layout (recommended for first migration):
+              No file moves. This POM already sets:
+                <sourceDirectory>RN_GC/src/java</sourceDirectory>
+                <warSourceDirectory>RN_GC/web</warSourceDirectory>
+              Run mvn from repo root (where this POM lives alongside RN_GC/).
+
+            Option B — Adopt Maven standard layout:
+              mkdir -p src/main/java src/main/resources/META-INF src/main/webapp
+              # Move sources:
+              cp -r RN_GC/src/java/* src/main/java/
+              cp RN_GC/src/conf/persistence.xml src/main/resources/META-INF/
+              cp -r RN_GC/web/* src/main/webapp/
+              # Then update this POM:
+              #   remove <sourceDirectory> and <resources> overrides
+              #   set <warSourceDirectory>src/main/webapp</warSourceDirectory>
+              #   (or remove it — default is src/main/webapp)
+
+         5) MySQL driver switch (if moving to 8.x):
+
+            <dependency>
+              <groupId>com.mysql</groupId>
+              <artifactId>mysql-connector-j</artifactId>
+              <version>8.0.33</version>
+            </dependency>
+            And update configQA/domail.xml:
+              datasource-classname: com.mysql.cj.jdbc.MysqlDataSource
+              add connection property: serverTimezone=America/Mexico_City
+
+         6) JavaFX — REMOVED:
+            Any javafx-*.jar found in legacy Librerias/ is intentionally
+            NOT mapped. RN_GC is a WAR (JSF/Servlet 3.1, web.xml version
+            3.1), not a desktop app. GlassFish 5 runs on JDK 8 where
+            JavaFX is in the JDK extension, not a WAR lib. Bundling it
+            bloats the WAR and can cause classloader conflicts.
+
+         7) Transitive hygiene:
+            Do NOT manually add:
+              commons-beanutils, commons-digester, commons-collections,
+              commons-logging, ecj, xmlbeans, commons-compress, curvesapi
+            They come via jasperreports 6.20.6 and poi-ooxml 5.2.5.
+            If you see duplicates in `mvn dependency:tree`, add <exclusion>
+            in the offending direct dependency, not a new <dependency>.
+    -->
+</project>
