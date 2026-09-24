@@ -56,13 +56,67 @@
                          <br></br><br></br>
 
                          <h:outputLabel value="Contraseña:" />
-                         <!--<p:password id="password" value="#{login.pwd}" required="true" requiredMessage="Favor de ingresar la contraseña"></p:password>-->
                          <p:password id="password" value="#{login.pwd}" style="width: 185px"></p:password>
                          <br></br><br></br>
 
-                         <p:commandButton id="loginButton" action="#{login.validateUsernamePassword()}" value="Ingresar" accesskey="I"></p:commandButton>                        
+                         <p:selectBooleanCheckbox id="chkAcepto" value="#{login.aceptaCheckbox}">
+                             <p:ajax update="loginButton" />
+                         </p:selectBooleanCheckbox>
+                         <h:outputLabel for="chkAcepto" value=" He leído y acepto los "/>
+                         <p:commandLink value="Términos y Condiciones" onclick="PF('dlgTerminos').show(); return false;" style="font-weight:bold;"/>
+                         <br></br><br></br>
+
+                         <p:commandButton id="loginButton" action="#{login.validateUsernamePassword()}" value="Ingresar" accesskey="I"></p:commandButton>
                          <br/><br/>
                         <p:commandLink id="modifPwd" action="#{login.modificarPassword()}" value="¿Olvidaste tu contraseña?"></p:commandLink>
+
+                        <p:dialog widgetVar="dlgTerminos" header="Términos y Condiciones" modal="true" width="700" height="500" closable="true" appendTo="@(body)">
+                            <div style="text-align:left; max-height:420px; overflow-y:auto; padding:10px; line-height:1.5;">
+                                <h3 style="text-align:center;">TÉRMINOS Y CONDICIONES DE USO</h3>
+                                <p style="text-align:center; font-style:italic;">Plataforma Contable Digital – Versión Privada / Acceso Restringido</p>
+                                <p><strong>AVISO IMPORTANTE:</strong> El presente documento regula el uso restringido y confidencial del Software Contable. Al presionar el botón de aceptación o acceder al sistema, el Usuario otorga su consentimiento vinculante con la totalidad de estas cláusulas.</p>
+
+                                <h4>1. Naturaleza del Acceso Restringido y Privado</h4>
+                                <p>El acceso a [Nombre de la Plataforma/Software] (en adelante, "el Software") se proporciona de manera estrictamente privada y restringida a personas físicas o morales expresamente autorizadas mediante invitación previa, credenciales individuales o acuerdos específicos. El Software NO se encuentra disponible para el público en general. El Proveedor se reserva el derecho de revocar, suspender o denegar el acceso a cualquier usuario no autorizado o que incumpla las condiciones de uso aquí dispuestas.</p>
+
+                                <h4>2. Estado del Software y Fase de Uso Privado / Piloto</h4>
+                                <p>El Usuario reconoce y acepta que el Software se encuentra en un entorno de desarrollo controlado, acceso privado o versión Beta/Piloto. Por consiguiente:</p>
+                                <ul>
+                                    <li><strong>Suministro "Tal Cual":</strong> El servicio se proporciona "tal cual" (as is) y "según disponibilidad".</li>
+                                    <li><strong>Ausencia de Garantía de Continuidad:</strong> El Proveedor no garantiza el funcionamiento ininterrumpido, la ausencia total de errores de código, ni la continuidad permanente de la plataforma durante esta etapa.</li>
+                                </ul>
+
+                                <h4>3. Confidencialidad y Propiedad Intelectual</h4>
+                                <p>Toda la información referente a la estructura, arquitectura, interfaces de usuario, flujos de trabajo, documentación técnica, algoritmos y código fuente del Software constituye información altamente confidencial y propiedad intelectual exclusiva del Proveedor.</p>
+                                <p>Queda estrictamente prohibido al Usuario:</p>
+                                <ul>
+                                    <li>Compartir, publicar, reproducir o difundir capturas de pantalla, grabaciones en video o descripciones del Software con terceros sin autorización previa y por escrito.</li>
+                                    <li>Transferir, ceder o compartir las credenciales de acceso con personas no autorizadas dentro o fuera de su organización.</li>
+                                    <li>Realizar ingeniería inversa, descompilar, desmontar o intentar derivar el código fuente de la plataforma.</li>
+                                </ul>
+
+                                <h4>4. Uso Contable y Limitación de Responsabilidad Profesional</h4>
+                                <p><strong>Sin Asesoría Profesional:</strong> El Software es únicamente una herramienta tecnológica de procesamiento y gestión de datos. El uso del servicio NO constituye ni sustituye la asesoría contable, fiscal, financiera o legal proporcionada por un profesional cualificado.</p>
+                                <p><strong>Responsabilidad de la Información:</strong> El Usuario es el único responsable de la veracidad, exactitud, integridad y legalidad de los datos financieros, comprobantes y registros ingresados en el sistema. El Proveedor no asume responsabilidad alguna por multas, recargos, auditorías o inconsistencias fiscales derivadas del ingreso de información errónea o incompleta.</p>
+
+                                <h4>5. Seguridad y Custodia de Credenciales</h4>
+                                <p>El Usuario es plenamente responsable de mantener la confidencialidad de su nombre de usuario, contraseña y tokens de acceso. Cualquier actividad realizada a través de su cuenta se presumirá efectuada legítimamente por el Usuario o por personal debidamente autorizado por este.</p>
+
+                                <h4>6. Suspensión y Cancelación del Servicio</h4>
+                                <p>El Proveedor se reserva el derecho de suspender o cancelar el acceso al Software de forma inmediata, con o sin aviso previo, en los siguientes supuestos:</p>
+                                <ul>
+                                    <li>Detección de accesos no autorizados o actividades sospechosas que pongan en riesgo la seguridad de la plataforma.</li>
+                                    <li>Incumplimiento de cualquiera de las cláusulas establecidas en este documento.</li>
+                                    <li>Finalización del periodo de prueba, cambio de fase en el proyecto o decisión operativa del Proveedor.</li>
+                                </ul>
+
+                                <h4>7. Modificaciones a los Términos</h4>
+                                <p>El Proveedor podrá actualizar los presentes Términos y Condiciones cuando resulte necesario. Las modificaciones serán notificadas a través de la interfaz de la plataforma o por correo electrónico. El uso continuado del Software tras dicha notificación implicará la plena aceptación de las condiciones modificadas.</p>
+
+                                <h4>8. Legislación Aplicable y Jurisdicción</h4>
+                                <p>Estos Términos y Condiciones se regirán e interpretarán de conformidad con la legislación vigente en [País / Estado de la empresa]. Para la resolución de cualquier controversia judicial o extrajudicial, las partes se someten expresamente a la jurisdicción de los tribunales competentes de [Ciudad, País].</p>
+                            </div>
+                        </p:dialog>
                      </h:form>
                 </div>
             </p:layoutUnit>     

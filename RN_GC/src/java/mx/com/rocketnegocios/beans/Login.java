@@ -18,6 +18,9 @@ import mx.com.rocketnegocios.util.TrippleDes;
 import mx.com.rocketnegocios.web.util.SSLEmail;
 import org.apache.commons.codec.digest.DigestUtils;
 
+//Terminos y condiciones 
+import mx.com.rocketnegocios.entities.RnGcAceptacionTerminosTbl;
+
 @ManagedBean
 @SessionScoped
 public class Login implements Serializable {
@@ -30,6 +33,10 @@ public class Login implements Serializable {
     @EJB
     private mx.com.rocketnegocios.beans.RnGcUsuariosTblFacade ejbFacade;
     private RnGcUsuariosTbl usuarioTbl;
+
+    @EJB 
+    private RnGcAceptacionTerminosTblFacade rnGcAceptacionTerminosTblFacade;
+    private boolean aceptaCheckbox;
 
     private String pwd;
     private String msg;
@@ -74,6 +81,9 @@ public class Login implements Serializable {
     public void setUser(String user) {
         this.user = user;
     }   
+    // Temrinos y condicones 
+    public boolean isAceptaCheckbox() {return aceptaCheckbox;}
+    public void setAceptaCheckbox(boolean aceptaCheckbox) {this.aceptaCheckbox=aceptaCheckbox;}
 
     public String validateUsernamePassword() throws ClassNotFoundException, Exception {
         System.out.println("Entre a validateUsernamePassword");
@@ -81,6 +91,11 @@ public class Login implements Serializable {
         boolean valid = loginDAO.validate(user, pwd);
         System.out.println("valid: " + valid);
         if (valid) {
+            // Checkbox de terminos y condiciones 
+            if (!aceptaCheckbox){
+                FacesContext.getCurrentInstance().addMessage("loginButon", new FacesMessage(FacesMessage.SEVERITY_WARN,"Debes acpetar los Términos y Condiciones", "Marca la casilla para continuar"));
+                return "login.xhtml";
+            }
             System.out.println("Clave de Usuario y Password CORRECTO");
             setNombreCompleto(loginDAO.getNombreUsuario(user, pwd));
             if (session == null)
@@ -90,6 +105,7 @@ public class Login implements Serializable {
             System.out.println("Usuario: " + String.valueOf(session.getAttribute("username")));
             System.out.println("NC: " + String.valueOf(session.getAttribute("nombreCompleto")));
             cargarPerfiles();
+            registrarAceptacionTerminos();
             return "admin.xhtml?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(
@@ -107,6 +123,22 @@ public class Login implements Serializable {
         session.invalidate();
         return "/login.xhtml?faces-redirect=true";
     }
+    // Nuevo metodo para los terminos y condiciones 
+    private void registrarAceptacionTerminos(){
+        try{
+            int usuarioId = loginDAO.getUsuarioId(user);
+            RnGcUsuariosTbl usuarioBd = getRnGcUsuariosTbl(usuarioId);
+            RnGcAceptacionTerminosTbl aceptacion = new RnGcAceptacionTerminosTbl();
+            aceptacion.setUsuarioId(usuarioBd);
+            aceptacion.setVersion("1.0"); //Mover cada vez que se actualice los TC
+            aceptacion.setEstado("ACEPTADO");
+            aceptacion.setFechaHora(new java.util.Date());
+            rnGcAceptacionTerminosTblFacade.create(aceptacion);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     public String getMenuSeleccionado() {
         System.out.println("getMenuSeleccionado()");
@@ -125,7 +157,7 @@ public class Login implements Serializable {
         String urlIcon = "/resources/images/logoAdminContable.png";
         if (session == null)
             session = SessionUtils.getSession();
-        String menuseleccionado = String.valueOf(session.getAttribute("nombreMenu"));
+        String menuSeleccionado = String.valueOf(session.getAttribute("nombreMenu"));
         switch (menuSeleccionado) {
             default:
                 urlIcon = "/resources/images/logoAdminContable.png";
