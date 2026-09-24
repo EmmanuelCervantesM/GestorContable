@@ -28,7 +28,9 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import mx.com.rocketnegocios.beans.RnGcUsuariosTblFacade;
 import mx.com.rocketnegocios.entities.RnGcUsuariosTbl;
+import mx.com.rocketnegocios.util.CertificadoTipoUtil;
 import mx.com.rocketnegocios.util.UsuarioFirmado;
+import org.apache.commons.ssl.PKCS8Key;
 import org.apache.poi.util.IOUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
@@ -90,6 +92,9 @@ public class RnGcCertificadosTblController implements Serializable {
     }
 
     public void create() {
+        if (!validarAntesDeGuardarAlta()) {
+            return;
+        }
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RnGcCertificadosTblCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
@@ -97,7 +102,65 @@ public class RnGcCertificadosTblController implements Serializable {
     }
 
     public void update() {
+        if (!validarAntesDeGuardarEdicion()) {
+            return;
+        }
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RnGcCertificadosTblUpdated"));
+    }
+
+    /**
+     * CTR-13 / CTR-13.1: validaciones de alta, en el orden en que deben
+     * rechazar el guardado: contraseña de la llave, tipo determinado, y
+     * unicidad GLOBAL de numeroCertificado (CTR-13.1). Si es FIEL, reemplaza
+     * automáticamente la FIEL vigente anterior del usuario por Inactivo.
+     */
+    private boolean validarAntesDeGuardarAlta() {
+        if (selected == null) {
+            return true;
+        }
+        if (!contraseniaLlaveValida(selected.getLlavePrivada(), selected.getContraseniaLlavePrivada())) {
+            JsfUtil.addErrorMessage("La contraseña de la llave privada es incorrecta");
+            return false;
+        }
+        if (selected.getTipo() == null) {
+            JsfUtil.addErrorMessage("No se pudo determinar si el certificado es FIEL o CSD");
+            return false;
+        }
+        if (getFacade().existeNumeroCertificado(selected.getNumeroCertificado(), null)) {
+            JsfUtil.addErrorMessage("Ya existe un certificado registrado con el número " + selected.getNumeroCertificado());
+            return false;
+        }
+        if (CertificadoTipoUtil.TIPO_FIEL.equals(selected.getTipo())) {
+            RnGcCertificadosTbl fielVigente = getFacade().obtenerFielVigente(selected.getUsuariosId());
+            if (fielVigente != null) {
+                fielVigente.setEstado("Inactivo");
+                fielVigente.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
+                fielVigente.setUltimaFechaActualizacion(new Date());
+                getFacade().edit(fielVigente);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * CTR-13: numeroCertificado y tipo son de solo-lectura una vez creado el
+     * registro; se restauran desde BD sin importar lo que llegue del formulario.
+     * Si se recarga la llave/contraseña en la edición, se vuelve a validar.
+     */
+    private boolean validarAntesDeGuardarEdicion() {
+        if (selected == null || selected.getId() == null) {
+            return true;
+        }
+        RnGcCertificadosTbl original = getFacade().find(selected.getId());
+        if (original != null) {
+            selected.setNumeroCertificado(original.getNumeroCertificado());
+            selected.setTipo(original.getTipo());
+        }
+        if (!contraseniaLlaveValida(selected.getLlavePrivada(), selected.getContraseniaLlavePrivada())) {
+            JsfUtil.addErrorMessage("La contraseña de la llave privada es incorrecta");
+            return false;
+        }
+        return true;
     }
 
     public void destroy() {
@@ -231,22 +294,72 @@ public class RnGcCertificadosTblController implements Serializable {
         byte[] certificado = null;
         byte[] llave = null;
         if (event != null) {
-            if (event.getFile().getContentType().equals("application/x-x509-ca-cert")) {
+            // CTR-13.1: se discrimina por extension, no por content-type: cada
+            // browser manda content-types distintos (.cer llega como
+            // application/x-x509-ca-cert, pkix-cert u octet-stream segun
+            // version/SO) y el gate anterior ignoraba el archivo en silencio.
+            // El contenido real igual se valida abajo (X.509 y PKCS8).
+            String nombreArchivo = event.getFile().getFileName() == null ? "" : event.getFile().getFileName().toLowerCase();
+            if (nombreArchivo.endsWith(".cer")) {
                 certificado = IOUtils.toByteArray(event.getFile().getInputstream());
+                X509Certificate certificate;
+                try {
+                    CertificateFactory cf = CertificateFactory.getInstance("X.509");
+                    certificate = (X509Certificate) cf.generateCertificate(new java.io.ByteArrayInputStream(certificado));
+                } catch (CertificateException ex) {
+                    JsfUtil.addErrorMessage("El archivo .cer no es un certificado X.509 válido");
+                    return;
+                }
                 selected.setCertificadoSelloDigital(certificado);
-                InputStream is = event.getFile().getInputstream();
-                CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                X509Certificate certificate = (X509Certificate) cf.generateCertificate(is);
                 byte[] byteArray = certificate.getSerialNumber().toByteArray();
                 selected.setNumeroCertificado(new String(byteArray));
                 selected.setFechaVencimiento(certificate.getNotAfter());
-                System.out.println("getNotAfter: " + certificate.getNotAfter());
-            } else if (event.getFile().getContentType().equals("application/octet-stream")) {
+                String tipo = CertificadoTipoUtil.determinarTipo(certificate);
+                selected.setTipo(tipo);
+                if (tipo == null) {
+                    JsfUtil.addErrorMessage("No se pudo determinar si el certificado es FIEL o CSD");
+                }
+                System.out.println("getNotAfter: " + certificate.getNotAfter() + " | tipo: " + tipo);
+            } else if (nombreArchivo.endsWith(".key")) {
                 llave = IOUtils.toByteArray(event.getFile().getInputstream());
+                if (!esLlavePrivadaValida(llave)) {
+                    JsfUtil.addErrorMessage("El archivo .key no es una llave privada válida");
+                    return;
+                }
                 selected.setLlavePrivada(llave);
+            } else {
+                JsfUtil.addErrorMessage("Solo se permiten archivos .cer y .key");
+                return;
             }
         }
         validarFechaVencimiento();
+    }
+
+    /**
+     * CTR-13: valida el contenido real del .key (no solo su extensión), sin
+     * requerir aún la contraseña: una llave PKCS8 (cifrada o no) es una
+     * secuencia ASN.1/DER, así que se descarta cualquier archivo que no
+     * arranque con el tag SEQUENCE (0x30).
+     */
+    private boolean esLlavePrivadaValida(byte[] llave) {
+        return llave != null && llave.length > 0 && (llave[0] & 0xFF) == 0x30;
+    }
+
+    /**
+     * CTR-13: valida la contraseña de la llave privada intentando abrirla
+     * (reutiliza PKCS8Key, ya usado en FacturarController para descifrar la
+     * llave al timbrar).
+     */
+    private boolean contraseniaLlaveValida(byte[] llave, String contrasenia) {
+        if (llave == null || llave.length == 0 || contrasenia == null) {
+            return false;
+        }
+        try {
+            PKCS8Key pkcs8 = new PKCS8Key(llave, contrasenia.toCharArray());
+            return pkcs8.getDecryptedBytes() != null;
+        } catch (Exception ex) {
+            return false;
+        }
     }
     
     public boolean validarFechaVencimiento(){
@@ -292,6 +405,20 @@ public class RnGcCertificadosTblController implements Serializable {
         } else {
             usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
             items = getFacade().obtenerCertificadosActivosDeUsuario(usuarioId);
+        }
+        return items;
+    }
+
+    /**
+     * CTR-13 punto 7: certificados que deben ofrecerse al timbrar. Solo CSD
+     * vigentes y Activos; un FIEL nunca debe listarse aqui.
+     */
+    public List<RnGcCertificadosTbl> listaCertificadosCsdActivos() {
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+            items = getFacade().certificadosCsdActivos();
+        } else {
+            usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+            items = getFacade().obtenerCertificadosCsdActivosDeUsuario(usuarioId);
         }
         return items;
     }

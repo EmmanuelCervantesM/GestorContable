@@ -30,6 +30,10 @@
                             <f:selectItem itemLabel="#{rnGcCertificadosTblController.selected.usuariosId.nombreCompleto}"
                                            itemValue="#{rnGcCertificadosTblController.selected.usuariosId}"/>
                         </p:selectOneMenu>
+                        <p:outputLabel value="No. Certificado" for="numeroCertificado" />
+                        <h:outputText id="numeroCertificado" value="#{rnGcCertificadosTblController.selected.numeroCertificado}" />
+                        <p:outputLabel value="Tipo" for="tipo" />
+                        <h:outputText id="tipo" value="#{rnGcCertificadosTblController.selected.tipo}" />
                     </p:panelGrid>
                     <p:commandButton actionListener="#{rnGcCertificadosTblController.update}" value="#{bundle.Save}" update="display,:RnGcCertificadosTblListForm:datalist,:growl" oncomplete="handleSubmit(args, 'RnGcCertificadosTblEditDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="RnGcCertificadosTblEditDialog.hide()"/>

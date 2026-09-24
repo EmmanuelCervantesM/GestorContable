@@ -43,6 +43,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcCertificadosTbl.findByUltimaFechaActualizacion", query = "SELECT r FROM RnGcCertificadosTbl r WHERE r.ultimaFechaActualizacion = :ultimaFechaActualizacion")
     , @NamedQuery(name = "RnGcCertificadosTbl.findByUsuarioId", query = "SELECT r FROM RnGcCertificadosTbl r WHERE r.usuariosId = :usuariosId")
     , @NamedQuery(name = "RnGcCertificadosTbl.findByActivoUsuarioId", query = "SELECT r FROM RnGcCertificadosTbl r WHERE r.usuariosId = :usuariosId AND r.estado = 'Activo' AND r.fechaVencimiento >= CURRENT_TIMESTAMP order by r.id desc")
+    , @NamedQuery(name = "RnGcCertificadosTbl.findByActivoCsdUsuarioId", query = "SELECT r FROM RnGcCertificadosTbl r WHERE r.usuariosId = :usuariosId AND r.estado = 'Activo' AND r.tipo = 'CSD' AND r.fechaVencimiento >= CURRENT_TIMESTAMP order by r.id desc")
+    , @NamedQuery(name = "RnGcCertificadosTbl.findByFielVigenteUsuarioId", query = "SELECT r FROM RnGcCertificadosTbl r WHERE r.usuariosId = :usuariosId AND r.estado = 'Activo' AND r.tipo = 'FIEL' order by r.id desc")
+    , @NamedQuery(name = "RnGcCertificadosTbl.findByTipo", query = "SELECT r FROM RnGcCertificadosTbl r WHERE r.tipo = :tipo")
     , @NamedQuery(name = "RnGcCertificadosTbl.findByEstado", query = "SELECT r FROM RnGcCertificadosTbl r WHERE r.estado = :estado") })
 public class RnGcCertificadosTbl implements Serializable {
 
@@ -96,6 +99,12 @@ public class RnGcCertificadosTbl implements Serializable {
     private RnGcUsuariosTbl usuariosId;
     @Column(name = "nombreCertificado")
     private String nombreCertificado;
+    // CTR-13: FIEL o CSD, determinado automaticamente al leer el certificado
+    // (OU en Subject => CSD; Extended Key Usage con Client Authentication => FIEL).
+    // Solo-lectura desde la UI/controller una vez establecido en el alta.
+    @Size(max = 10)
+    @Column(name = "tipo")
+    private String tipo;
 
     public RnGcCertificadosTbl() {
     }
@@ -220,6 +229,14 @@ public class RnGcCertificadosTbl implements Serializable {
 
     public void setNombreCertificado(String nombreCertificado) {
         this.nombreCertificado = nombreCertificado;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     @Override

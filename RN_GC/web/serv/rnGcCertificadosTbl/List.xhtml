@@ -127,6 +127,12 @@
                             </f:facet>
                             <h:outputText value="#{item.numeroCertificado}"/>
                         </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Tipo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipo}"/>
+                        </p:column>
                         <p:column sortBy="#{item.fechaVencimiento}">
                             <f:facet name="header">
                                 <h:outputText value="Fecha Vencimiento"/>

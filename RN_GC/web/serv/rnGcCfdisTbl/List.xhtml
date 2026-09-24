@@ -381,7 +381,7 @@
                                     <p:outputLabel style="font-weight: 900" value="No. Certificado" for="certificado"/>
                                     <p:selectOneMenu id="certificado" style="width: 160px" value="#{rnGcCfdisLineasTblController.cfdiId.certificados_Id}" required="true" requiredMessage="El numero de certificado es necesario">
                                         <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                                        <f:selectItems value="#{rnGcCertificadosTblController.listaCertificadosActivos()}"
+                                        <f:selectItems value="#{rnGcCertificadosTblController.listaCertificadosCsdActivos()}"
                                                        var="certificadoItem"
                                                        itemLabel="#{certificadoItem.numeroCertificado}"
                                                        itemValue="#{certificadoItem}"/>

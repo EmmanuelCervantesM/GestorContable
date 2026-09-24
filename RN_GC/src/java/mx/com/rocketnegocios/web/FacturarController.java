@@ -1447,7 +1447,13 @@ public class FacturarController implements Serializable {
             RnGcMonedasTbl moneda = monedaFacade.obtenerMoneda();
             cfdisId.setMoneda(moneda.getCMoneda());
             cfdisId.setLugarExpedicion(listaUsuarios.get(0).getCodigoPostal());
-            cfdisId.setCertificados_Id(certificadosTbl.obtenerCertificadosActivosDeUsuario(listaUsuarios.get(0)).get(0));
+            // CTR-13 punto 7: al timbrar solo se ofrecen CSD vigentes/Activos; un FIEL nunca se usa aquí.
+            List<RnGcCertificadosTbl> csdActivos = certificadosTbl.obtenerCertificadosCsdActivosDeUsuario(listaUsuarios.get(0));
+            if (csdActivos != null && !csdActivos.isEmpty()) {
+                cfdisId.setCertificados_Id(csdActivos.get(0));
+            } else {
+                JsfUtil.addErrorMessage("El usuario no tiene un certificado CSD vigente y Activo para timbrar");
+            }
         }
     }
 
@@ -1531,7 +1537,9 @@ public class FacturarController implements Serializable {
                         if (timbres.get(0).getTimbresRestantes() > 0) {
                             timbres.get(0).setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
                             timbres.get(0).setUltimaFechaActualizacion(new Date());
-                            if (crearXML()) {
+                            // CTR-13 punto 8: el tipo de certificado se valida ANTES de intentar timbrar,
+                            // para que un certificado equivocado (p.ej. FIEL) nunca consuma un timbre.
+                            if (validarCertificadoParaTimbrado() && crearXML()) {
                                 try {
                                     System.out.println("Timbrado Correctamente");
                                     if (cfdisId.getEstatus().equals("Guardado")) {
@@ -1708,11 +1716,10 @@ public class FacturarController implements Serializable {
                                 }
                             } else {
                                 try {
+                                    // CTR-13 punto 8: intento fallido (certificado equivocado o error de timbrado)
+                                    // no debe consumir un timbre; antes se descontaba aquí incorrectamente.
                                     JsfUtil.addErrorMessage("Error al intentar el timbrado2");
                                     System.out.println(cfdisId.getRespuestaTimbrado());
-                                    timbres.get(0).setTimbresUsados(timbres.get(0).getTimbresUsados() + 1);
-                                    timbres.get(0).setTimbresRestantes(timbres.get(0).getTimbresRestantes() - 1);
-                                    timbresFacade.edit(timbres.get(0));
                                     producServicio = new RnGcProductserviciosTbl();
                                     lineas = new RnGcCfdisLineasTbl();
                                     personas = new RnGcPersonasTbl();
@@ -2323,6 +2330,20 @@ public class FacturarController implements Serializable {
         String res = firstLtr + secondLtrs + restLtrs;
         cfdisId.setImporteLetra(res);
         return res;
+    }
+
+    /**
+     * CTR-13 punto 7/8: solo un CSD vigente y Activo puede timbrar. Se valida
+     * ANTES de intentar el timbrado para que un certificado equivocado (p.ej.
+     * FIEL) nunca consuma un timbre.
+     */
+    private boolean validarCertificadoParaTimbrado() {
+        RnGcCertificadosTbl cert = cfdisId.getCertificados_Id();
+        if (cert == null || !"CSD".equals(cert.getTipo())) {
+            JsfUtil.addErrorMessage("El certificado seleccionado no es un CSD válido para timbrar");
+            return false;
+        }
+        return true;
     }
 
     public boolean crearXML() throws Exception {
