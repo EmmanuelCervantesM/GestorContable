@@ -27,19 +27,9 @@ public class Login implements Serializable {
 
     private static final long serialVersionUID = 109480182528386363L;
 
-    // Terminos y condiciones
-    @EJB
-    private mx.com.rocketnegocios.beans.RnGcDocumentosLegalesTblFacade rnGcDocumentosLegalesTblFacade;
-    @EJB
-    private mx.com.rocketnegocios.beans.RnGcAceptacionTerminosTblFacade rnGcAceptacionTerminosTblFacade;
-    private String versionTerminosVigente;
-    private String versionPrivacidadVigente;
-
     @EJB
     private mx.com.rocketnegocios.beans.RnGcUsuariosTblFacade ejbFacade;
     private RnGcUsuariosTbl usuarioTbl;
-
-
 
     private String pwd;
     private String msg;
@@ -100,7 +90,7 @@ public class Login implements Serializable {
             System.out.println("Usuario: " + String.valueOf(session.getAttribute("username")));
             System.out.println("NC: " + String.valueOf(session.getAttribute("nombreCompleto")));
             cargarPerfiles();
-            return "terminosCondiciones.xhtml?faces-redirect=true";
+            return "admin.xhtml?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(
                     "loginButon",
@@ -117,46 +107,6 @@ public class Login implements Serializable {
         session.invalidate();
         return "/login.xhtml?faces-redirect=true";
     }
-    // cargar las condiciones la verison de cada coducmento para guardar en bitacora 
-    public String prepararTerminos(){
-        mx.com.rocketnegocios.entities.RnGcDocumentosLegalesTbl terminos =rnGcDocumentosLegalesTblFacade.obtenerVigentePorTipo("TERMINOS");
-        mx.com.rocketnegocios.entities.RnGcDocumentosLegalesTbl privacidad = rnGcDocumentosLegalesTblFacade.obtenerVigentePorTipo("PRIVACIDAD");
-        versionTerminosVigente = terminos != null ? terminos.getVersion():"";
-        versionPrivacidadVigente = privacidad !=null ? privacidad.getVersion():"";
-        return null;
-    }
-
-    // Da clic en Aceptar y se guarda en la bitacora 
-    public String aceptarTerminos() throws ClassNotFoundException{
-        int usuarioId = loginDAO.getUsuarioId(user);
-        RnGcUsuariosTbl usuarioTbl = getRnGcUsuariosTbl(usuarioId);
-        try{
-            mx.com.rocketnegocios.entities.RnGcAceptacionTerminosTbl aceptacion= new mx.com.rocketnegocios.entities.RnGcAceptacionTerminosTbl();
-            aceptacion.setUsuarioId(usuarioTbl);
-            aceptacion.setVersionTerminos(versionTerminosVigente);
-            aceptacion.setVersionPrivacidad(versionPrivacidadVigente);
-            aceptacion.setEstado("ACEPTADO");
-            aceptacion.setFechaHora(new java.util.Date());
-            rnGcAceptacionTerminosTblFacade.create(aceptacion);
-            if (session == null) session = SessionUtils.getSession();
-            session.setAttribute("terminosAceptados", true);
-            return "admin.xhtml?faces-redirect=true";
-        } catch (Exception e){
-            //si fallael registro,no se marca comoaceptado y el usuario se queda en la misma pantalla 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"No fue posible registrar tu aceptación","Intenta Nuevamente :)"));
-            return null; 
-        }
-    }
-    //el usuario rechazó los terminos no se le permite entrar 
-    public String rechazarTerminos(){
-        return logout();
-    }
-    public String getVersionTerminosVigente() { return versionTerminosVigente;}
-    public String getVersionPrivacidadVigente() {return versionPrivacidadVigente;}
-
-    ////////////////////////////////////////////
-    //Termina los temrinos y condiciones 
-    ////////////////////////////////////////7
 
     public String getMenuSeleccionado() {
         System.out.println("getMenuSeleccionado()");
@@ -175,7 +125,7 @@ public class Login implements Serializable {
         String urlIcon = "/resources/images/logoAdminContable.png";
         if (session == null)
             session = SessionUtils.getSession();
-        String menuSeleccionado = String.valueOf(session.getAttribute("nombreMenu"));
+        String menuseleccionado = String.valueOf(session.getAttribute("nombreMenu"));
         switch (menuSeleccionado) {
             default:
                 urlIcon = "/resources/images/logoAdminContable.png";
@@ -191,7 +141,7 @@ public class Login implements Serializable {
     }
 
     public static String toSHA1(String cadena) {
-        return DigestUtils.sha1Hex(cadena);
+        return DigestUtils.shaHex(cadena);
     }
 
     public RnGcUsuariosTbl getRnGcUsuariosTbl(java.lang.Integer id) {
@@ -295,4 +245,5 @@ public class Login implements Serializable {
             return decrypted;
         }         
          /*temporal*/
+
 }
