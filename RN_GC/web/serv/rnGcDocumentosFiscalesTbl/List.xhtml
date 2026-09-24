@@ -28,12 +28,17 @@
                      flex-wrap:wrap;
                      ">
 
+                    <!-- CTR-04/CTR-05: bloque Cambiar Contraseña SAT deshabilitado - solo e.firma, se elimina entrada CIEC -->
+                    <!--
+                    /*
                     <p:commandButton
                         value="Cambiar Contraseña"
                         icon="pi pi-key"
                         type="button"
                         onclick="PF('dlgCambiarContrasena').show()"
                         styleClass="ui-button-warning"/>
+                    */
+                    -->
 
                 </div>
 
@@ -66,22 +71,26 @@
                                color:#666;
                                margin-bottom:20px;
                                line-height:1.6;">
-                                Consulta y descarga tu constancia
-                                directamente desde el portal del SAT.
+                                 Visualiza tu constancia del SAT en el navegador.
                             </p>
 
-                            <p:button
-                                value="Abrir Portal"
-                                icon="pi pi-external-link"
-                                href="https://www.sat.gob.mx/"
-                                target="_blank"
-                                styleClass="ui-button-info"/>
+                            <p:commandButton
+                                id="btnVerConstancia"
+                                value="Ver"
+                                icon="pi pi-eye"
+                                action="#{rnGcDocumentosFiscalesTblController.descargarConstancia()}"
+                                onstart="document.getElementById('formDocumentos:btnVerConstancia').disabled=true;"
+                                oncomplete="document.getElementById('formDocumentos:btnVerConstancia').disabled=false; PF('dlgVerOpinion').hide(); if (args.ok) { PF('dlgVerConstancia').show(); }"
+                                onerror="document.getElementById('formDocumentos:btnVerConstancia').disabled=false;"
+                                update=":formDocumentos:dlgVerConstancia :formDocumentos:msgs"
+                                styleClass="ui-button-info">
+                            </p:commandButton>
 
                         </p:panel>
 
                     </div>
 
-                    <!-- SOLICITUD -->
+                    <!-- OPINION DE CUMPLIMIENTO -->
                     <div class="ui-g-12 ui-md-6 ui-lg-4">
 
                         <p:panel style="
@@ -99,22 +108,27 @@
                             </div>
 
                             <h2 style="margin-top:0">
-                                Solicitud
+                                Opinión de Cumplimiento SAT
                             </h2>
 
                             <p style="
                                color:#666;
                                margin-bottom:20px;
                                line-height:1.6;">
-                                Consulta y descarga tu solicitud SAT.
+                                 Visualiza tu opinión de cumplimiento SAT en el navegador.
                             </p>
 
-                            <p:button
-                                value="Abrir Portal"
-                                icon="pi pi-external-link"
-                                href="https://portalcfdi.facturaelectronica.sat.gob.mx/"
-                                target="_blank"
-                                styleClass="ui-button-info"/>
+                            <p:commandButton
+                                id="btnVerOpinion"
+                                value="Ver"
+                                icon="pi pi-eye"
+                                action="#{rnGcDocumentosFiscalesTblController.descargarOpinion()}"
+                                onstart="document.getElementById('formDocumentos:btnVerOpinion').disabled=true;"
+                                oncomplete="document.getElementById('formDocumentos:btnVerOpinion').disabled=false; PF('dlgVerConstancia').hide(); if (args.ok) { PF('dlgVerOpinion').show(); }"
+                                onerror="document.getElementById('formDocumentos:btnVerOpinion').disabled=false;"
+                                update=":formDocumentos:dlgVerOpinion :formDocumentos:msgs"
+                                styleClass="ui-button-info">
+                            </p:commandButton>
 
                         </p:panel>
 
@@ -189,9 +203,13 @@
                 </div>
 
                 <!-- MODAL CAMBIAR CONTRASEÑA -->
+                <!-- CTR-04/CTR-05: modal Cambiar Contraseña SAT deshabilitado - solo e.firma, se elimina entrada CIEC -->
+                <!--
+                /*
                 <p:dialog
                     header="Cambiar Contraseña SAT"
                     widgetVar="dlgCambiarContrasena"
+                    appendTo="@(body)"
                     modal="false"
                     closable="true"
                     resizable="false"
@@ -200,7 +218,6 @@
 
                     <div style="padding:10px;">
 
-                        <!-- CONTRASEÑA -->
                         <div style="margin-bottom:20px;">
 
                             <p:outputLabel
@@ -219,7 +236,6 @@
 
                         </div>
 
-                        <!-- BOTONES -->
                         <div style="
                              display:flex;
                              justify-content:flex-end;
@@ -242,6 +258,86 @@
 
                         </div>
 
+                    </div>
+
+                </p:dialog>
+                */
+                -->
+
+                <p:messages id="msgs" showDetail="true" closable="true"/>
+
+                <!-- PREVIEW CONSTANCIA (inline, sin descarga automatica) -->
+                <p:dialog
+                    id="dlgVerConstancia"
+                    header="Constancia de Situación Fiscal"
+                    widgetVar="dlgVerConstancia"
+                    appendTo="@(body)"
+                    modal="true"
+                    closable="true"
+                    resizable="false"
+                    width="80%"
+                    responsive="true">
+
+                    <p:media
+                        value="#{rnGcDocumentosFiscalesTblController.previewConstancia}"
+                        player="pdf"
+                        width="100%"
+                        height="550px"/>
+
+                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+                        <p:commandButton
+                            value="Descargar PDF"
+                            icon="pi pi-download"
+                            ajax="false"
+                            styleClass="ui-button-secondary">
+                            <f:passThroughAttribute name="form" value="formDocumentos"/>
+                            <p:fileDownload value="#{rnGcDocumentosFiscalesTblController.downLoadConstancia}" contentDisposition="attachment"/>
+                        </p:commandButton>
+
+                        <p:commandButton
+                            value="Cerrar"
+                            type="button"
+                            icon="pi pi-times"
+                            onclick="PF('dlgVerConstancia').hide()"
+                            styleClass="ui-button-secondary"/>
+                    </div>
+
+                </p:dialog>
+
+                <!-- PREVIEW OPINION (inline, sin descarga automatica) -->
+                <p:dialog
+                    id="dlgVerOpinion"
+                    header="Opinión de Cumplimiento SAT"
+                    widgetVar="dlgVerOpinion"
+                    appendTo="@(body)"
+                    modal="true"
+                    closable="true"
+                    resizable="false"
+                    width="80%"
+                    responsive="true">
+
+                    <p:media
+                        value="#{rnGcDocumentosFiscalesTblController.previewOpinion}"
+                        player="pdf"
+                        width="100%"
+                        height="550px"/>
+
+                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+                        <p:commandButton
+                            value="Descargar PDF"
+                            icon="pi pi-download"
+                            ajax="false"
+                            styleClass="ui-button-secondary">
+                            <f:passThroughAttribute name="form" value="formDocumentos"/>
+                            <p:fileDownload value="#{rnGcDocumentosFiscalesTblController.downLoadOpinion}" contentDisposition="attachment"/>
+                        </p:commandButton>
+
+                        <p:commandButton
+                            value="Cerrar"
+                            type="button"
+                            icon="pi pi-times"
+                            onclick="PF('dlgVerOpinion').hide()"
+                            styleClass="ui-button-secondary"/>
                     </div>
 
                 </p:dialog>

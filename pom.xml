@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ================================================================ -->
@@ -56,6 +55,11 @@
         <maven-dependency-plugin.version>3.6.0</maven-dependency-plugin.version>
         <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
         <build-helper-plugin.version>3.5.0</build-helper-plugin.version>
+
+        <!-- NetBeans IDE only: binds Maven Run (F6) / Deploy on Save to the
+             registered GlassFish instance (type gfv510ee8, localhost:4848,
+             domain1). Plain CLI Maven builds ignore this property. -->
+        <netbeans.deployment.server.id>gfv510ee8:localhost:4848</netbeans.deployment.server.id>
     </properties>
 
     <dependencies>
@@ -311,6 +315,20 @@
         <!--   org.apache.xmlbeans:xmlbeans, commons-compress, curvesapi  -->
         <!-- Adding them manually risks version skew.                     -->
         <!-- ============================================================ -->
+
+        <!-- Selenium WebDriver -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.10.0</version>             <!-- Selenium 4: protocolo W3C (requerido por Chrome 115+). 4.10.0 es la última versión compatible con Java 8; 4.11+ exige Java 11. Incluye Selenium Manager (chromedriver automático). -->
+        </dependency>
+        <!-- TestNG para gestionar las pruebas -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.4.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -341,6 +359,14 @@
                 <directory>RN_GC/src/conf</directory>
                 <includes>
                     <include>MANIFEST.MF</include>
+                </includes>
+            </resource>
+            <!-- Selenium HttpClient.Factory service registration (Jdk8UrlConnectionClient) -->
+            <resource>
+                <directory>RN_GC/src/conf/META-INF</directory>
+                <targetPath>META-INF</targetPath>
+                <includes>
+                    <include>services/*</include>
                 </includes>
             </resource>
         </resources>
@@ -457,22 +483,12 @@
          1) Install vendor JARs that have no Maven Central coordinate:
 
             # cfdv32 — SAT CFD 3.2 XMLBeans bindings
-            mvn install:install-file \
-              -Dfile=RN_GC/librerias/cfdv32.jar \
-              -DgroupId=mx.gob.sat \
-              -DartifactId=cfdv32 \
-              -Dversion=3.2 \
-              -Dpackaging=jar
+            mvn install:install-file \ -Dfile=RN_GC/librerias/cfdv32.jar \ -DgroupId=mx.gob.sat \ -DartifactId=cfdv32 \ -Dversion=3.2 \ -Dpackaging=jar
 
             # sefactura PAC kit — adjust -Dfile to actual jar name
             # If your file is named differently, locate it first:
             #   find . -name "*sefactura*.jar" -o -name "*Sefactura*.jar"
-            mvn install:install-file \
-              -Dfile=RN_GC/librerias/sefacturakit.jar \
-              -DgroupId=com.sefactura \
-              -DartifactId=sefacturakit \
-              -Dversion=1.0.0 \
-              -Dpackaging=jar
+            mvn install:install-file \ -Dfile=RN_GC/librerias/sefacturakit.jar \ -DgroupId=com.sefactura \ -DartifactId=sefacturakit \ -Dversion=1.0.0 \ -Dpackaging=jar
 
             After install-file succeeds, edit this POM:
               - For cfdv32: remove <scope>system</scope> and <systemPath>, keep <scope>compile</scope> (default)

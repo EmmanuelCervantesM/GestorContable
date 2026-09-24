@@ -1,8 +1,11 @@
 package mx.com.rocketnegocios.web;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import mx.com.rocketnegocios.entities.RnGcUsuariosTbl;
 import mx.com.rocketnegocios.web.util.JsfUtil;
 import mx.com.rocketnegocios.web.util.JsfUtil.PersistAction;
@@ -37,16 +40,24 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import mx.com.rocketnegocios.beans.RnGcCertificadosTblFacade;
 import mx.com.rocketnegocios.beans.RnGcPerfilesTblFacade;
 import mx.com.rocketnegocios.beans.RnGcTimbresTblFacade;
+import mx.com.rocketnegocios.entities.RnGcCertificadosTbl;
 import mx.com.rocketnegocios.entities.RnGcPerfilesTbl;
 import mx.com.rocketnegocios.entities.RnGcTimbresTbl;
 import mx.com.rocketnegocios.entities.RnGcUsuariosPerfilesTbl;
+import mx.com.rocketnegocios.util.SatDocsAuto.MapObjectConstanciaHeadless;
+import mx.com.rocketnegocios.util.SatDocsAuto.MapObjectOpiniónHeadless;
 import mx.com.rocketnegocios.util.TrippleDes;
 import mx.com.rocketnegocios.util.UsuarioFirmado;
 import org.apache.poi.util.IOUtils;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.context.RequestContext;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 @Named("rnGcDocumentosFiscalesTblController")
@@ -68,6 +79,9 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
 
     @EJB
     private RnGcTimbresTblFacade timbresFacade;
+
+    @EJB
+    private RnGcCertificadosTblFacade certificadosFacade;
 
     private List<RnGcUsuariosTbl> items = null;
     private RnGcUsuariosTbl selected;
@@ -92,6 +106,10 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
     private List<RnGcPerfilesTbl> listaPerfiles = null;
     private RnGcUsuariosTbl usuarioCert, user;
     private String nuevaContrasena;
+    private StreamedContent downLoadConstancia;
+    private StreamedContent downLoadOpinion;
+    private byte[] constanciaBytes;
+    private byte[] opinionBytes;
 
     public String getNuevaContrasena() {
         return nuevaContrasena;
@@ -185,6 +203,175 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
     public String getUsuarioRfc() {
         user = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
         return user.getRfc();
+    }
+
+    public StreamedContent getDownLoadConstancia() {
+        return downLoadConstancia;
+    }
+
+    public void setDownLoadConstancia(StreamedContent downLoadConstancia) {
+        this.downLoadConstancia = downLoadConstancia;
+    }
+
+    public StreamedContent getDownLoadOpinion() {
+        return downLoadOpinion;
+    }
+
+    public void setDownLoadOpinion(StreamedContent downLoadOpinion) {
+        this.downLoadOpinion = downLoadOpinion;
+    }
+
+    /**
+     * Preview inline (p:media): stream fresco en cada request desde los bytes
+     * en memoria. El InputStream se consume al primer uso, por eso no se
+     * reusa el DefaultStreamedContent guardado.
+     */
+    public StreamedContent getPreviewConstancia() {
+        if (constanciaBytes == null) {
+            return null;
+        }
+        return new DefaultStreamedContent(new ByteArrayInputStream(constanciaBytes), "application/pdf");
+    }
+
+    public StreamedContent getPreviewOpinion() {
+        if (opinionBytes == null) {
+            return null;
+        }
+        return new DefaultStreamedContent(new ByteArrayInputStream(opinionBytes), "application/pdf");
+    }
+
+    /**
+     * FIEL vigente (Activa, no vencida) del usuario logueado, desde la BD —
+     * nunca archivos locales. Usa {@code obtenerFielVigente} (filtra
+     * {@code tipo='FIEL'}): un CSD activo no sirve para el login e.firma del
+     * SAT, asi que no se devuelve. Sin FIEL el caller muestra el mensaje
+     * especifico sin quemar una corrida de Selenium.
+     */
+    private RnGcCertificadosTbl obtenerCertificadoActivo() {
+        RnGcUsuariosTbl usuario = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+        if (usuario == null) {
+            return null;
+        }
+        return certificadosFacade.obtenerFielVigente(usuario);
+    }
+
+    /**
+     * Generates the Constancia de Situación Fiscal PDF for preview in browser
+     * (no auto-download). Runs the SAT e.firma automation synchronously in
+     * this request (no async job queue exists in this project): the click
+     * blocks until the headless browser finishes, up to
+     * MapObjectConstanciaHeadless.DEFAULT_DOWNLOAD_TIMEOUT_SECONDS.
+     * The FIEL (.cer/.key/password) comes from {@link #obtenerCertificadoActivo()}
+     * (database), never from local files. Bytes stay in memory for
+     * {@link #getPreviewConstancia()}; the per-request temp dir is deleted.
+     */
+    public void descargarConstancia() {
+        RnGcCertificadosTbl certificado = obtenerCertificadoActivo();
+        if (certificado == null) {
+            RequestContext.getCurrentInstance().addCallbackParam("ok", false);
+            JsfUtil.addErrorMessage("Sin FIEL vigente",
+                    "No tiene una FIEL activa y vigente registrada. Cárguela primero en Certificados antes de descargar la Constancia.");
+            return;
+        }
+        ChromeDriver driver = null;
+        Path tempDownloadDir = null;
+        try {
+            tempDownloadDir = Files.createTempDirectory("constancia-dl-");
+            driver = MapObjectConstanciaHeadless.buildChromeDriverConDescargas(tempDownloadDir.toString());
+            MapObjectConstanciaHeadless page = new MapObjectConstanciaHeadless(driver, tempDownloadDir.toString());
+            page.irAlEjecutor().loginConEFirma(
+                    certificado.getCertificadoSelloDigital(),
+                    certificado.getLlavePrivada(),
+                    certificado.getContraseniaLlavePrivada());
+            File pdf = page.generarYDescargar();
+            byte[] pdfBytes = Files.readAllBytes(pdf.toPath());
+            constanciaBytes = pdfBytes;
+            downLoadConstancia = new DefaultStreamedContent(new ByteArrayInputStream(pdfBytes),
+                    "application/pdf", "ConstanciaSituacionFiscal.pdf");
+            RequestContext.getCurrentInstance().addCallbackParam("ok", true);
+        } catch (Exception e) {
+            constanciaBytes = null;
+            downLoadConstancia = null;
+            RequestContext.getCurrentInstance().addCallbackParam("ok", false);
+            Logger.getLogger(RnGcDocumentosFiscalesTblController.class.getName())
+                    .log(Level.SEVERE, "Error al generar la Constancia de Situación Fiscal", e);
+            JsfUtil.addErrorMessage("No se pudo generar la Constancia",
+                    "No se pudo generar la Constancia de Situación Fiscal. Verifique que su FIEL esté vigente e intente de nuevo.");
+        } finally {
+            if (driver != null) {
+                try {
+                    driver.quit();
+                } catch (Exception ignored) {
+                    // Best effort close.
+                }
+            }
+            borrarDirectorioTemporal(tempDownloadDir);
+        }
+    }
+
+    /**
+     * Generates the Opinión de Cumplimiento PDF for preview in browser
+     * (no auto-download). Same synchronous/DB-sourced-FIEL model as
+     * {@link #descargarConstancia()}; bytes stay in memory for
+     * {@link #getPreviewOpinion()}.
+     */
+    public void descargarOpinion() {
+        RnGcCertificadosTbl certificado = obtenerCertificadoActivo();
+        if (certificado == null) {
+            RequestContext.getCurrentInstance().addCallbackParam("ok", false);
+            JsfUtil.addErrorMessage("Sin FIEL vigente",
+                    "No tiene una FIEL activa y vigente registrada. Cárguela primero en Certificados antes de descargar la Opinión de Cumplimiento.");
+            return;
+        }
+        ChromeDriver driver = null;
+        Path tempDownloadDir = null;
+        try {
+            tempDownloadDir = Files.createTempDirectory("opinion-dl-");
+            driver = MapObjectOpiniónHeadless.buildChromeDriverConDescargas(tempDownloadDir.toString());
+            MapObjectOpiniónHeadless page = new MapObjectOpiniónHeadless(driver, tempDownloadDir.toString());
+            page.open().loginConEFirma(
+                    certificado.getCertificadoSelloDigital(),
+                    certificado.getLlavePrivada(),
+                    certificado.getContraseniaLlavePrivada());
+            File pdf = page.generarYDescargar();
+            byte[] pdfBytes = Files.readAllBytes(pdf.toPath());
+            opinionBytes = pdfBytes;
+            downLoadOpinion = new DefaultStreamedContent(new ByteArrayInputStream(pdfBytes),
+                    "application/pdf", "OpinionCumplimiento.pdf");
+            RequestContext.getCurrentInstance().addCallbackParam("ok", true);
+        } catch (Exception e) {
+            opinionBytes = null;
+            downLoadOpinion = null;
+            RequestContext.getCurrentInstance().addCallbackParam("ok", false);
+            Logger.getLogger(RnGcDocumentosFiscalesTblController.class.getName())
+                    .log(Level.SEVERE, "Error al generar la Opinión de Cumplimiento", e);
+            JsfUtil.addErrorMessage("No se pudo generar la Opinión",
+                    "No se pudo generar la Opinión de Cumplimiento. Verifique que su FIEL esté vigente e intente de nuevo.");
+        } finally {
+            if (driver != null) {
+                try {
+                    driver.quit();
+                } catch (Exception ignored) {
+                    // Best effort close.
+                }
+            }
+            borrarDirectorioTemporal(tempDownloadDir);
+        }
+    }
+
+    /** Best-effort recursive delete of the per-request Selenium download dir. */
+    private void borrarDirectorioTemporal(Path dir) {
+        if (dir == null) {
+            return;
+        }
+        File folder = dir.toFile();
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                f.delete();
+            }
+        }
+        folder.delete();
     }
 
     protected void setEmbeddableKeys() {
