@@ -37,3 +37,27 @@ RN_GC/nbproject/genfiles.properties
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+
+# Project Personal (keep)
+.atl/
+.codegraph/
+librerias/
+TODO
+RN_GC/nbbuild.xml
+RN_GC/.vscode/
+RN_GC/manifest.mf
+.vscode/
+HowTo12.6.md
+glassfish-5.1.0/
+iReport-5.6.0/
+.idea/
+RN_GC/.idea/
+nb-configuration.xml
+RN_GC/src/java/mx/com/rocketnegocios/util/ConfigUtil.java
+,env
+docs/
+tools/
+test-prod/
+contarec-plan-trabajo-v2.md
+

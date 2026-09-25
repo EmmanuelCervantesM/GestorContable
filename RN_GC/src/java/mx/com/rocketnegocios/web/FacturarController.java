@@ -167,6 +167,13 @@ import org.primefaces.PrimeFaces;
 @Named("facturarContoller")
 public class FacturarController implements Serializable {
 
+    /**
+     * CTR-03 (v2.27): umbral unico para el repintado en rojo del footer y
+     * para el banner de aviso (timbres restantes y dias antes de vencer un
+     * certificado).
+     */
+    private static final int UMBRAL_ALERTA_TIMBRES_CERT = 10;
+
     private static final String ORIGINAL
             = "ÁáÉéÍíÓóÚúÑñÜü";
     private static final String REPLACEMENT
@@ -3756,6 +3763,55 @@ public class FacturarController implements Serializable {
         }
         System.out.println("listaTimbres: " + listaTimbres);
         return listaTimbres;
+    }
+
+    /**
+     * CTR-03: total real de timbres disponibles del usuario en sesion (suma
+     * de todos los lotes Activo/con saldo/vigentes por fecha), en vez de
+     * exponer el detalle por lote. Alimenta el footer (templateRN.xhtml) y
+     * el umbral de alerta.
+     */
+    public long obtenerTotalTimbresVigentes() {
+        usuario = usuariosFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+        return timbresFacade.obtenerTotalTimbresVigentesXUsuario(usuario);
+    }
+
+    /**
+     * CTR-03: certificados del usuario en sesion a menos de 10 dias de
+     * vencer (aun Activos, no confundir con los ya Inactivo por
+     * RnGcCertificadosTblFacade.actualizarSiVencido()).
+     */
+    public List<RnGcCertificadosTbl> obtenerCertificadosPorVencer() {
+        usuario = usuariosFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+        return certificadosTbl.obtenerCertificadosPorVencer(usuario, UMBRAL_ALERTA_TIMBRES_CERT);
+    }
+
+    /**
+     * CTR-03: umbral unico de alerta (rojo del footer + banner de login),
+     * v2.27 — un solo valor para timbres y dias de aviso
+     * de certificados.
+     */
+    public boolean isMostrarAlertaTimbresCert() {
+        return obtenerTotalTimbresVigentes() <= UMBRAL_ALERTA_TIMBRES_CERT
+                || !obtenerCertificadosPorVencer().isEmpty();
+    }
+
+    public List<String> obtenerMensajesAlertaTimbresCert() {
+        List<String> mensajes = new ArrayList<>();
+        long totalTimbres = obtenerTotalTimbresVigentes();
+        if (totalTimbres <= UMBRAL_ALERTA_TIMBRES_CERT) {
+            // Los timbres los asigna el administrador (no hay pasarela de compra
+            // propia todavia, ver CTR-02): el contacto correcto es el admin.
+            mensajes.add("Te quedan " + totalTimbres + " timbres. "
+                    + "Contacta al administrador para comprar mas timbres.");
+        }
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+        for (RnGcCertificadosTbl certificado : obtenerCertificadosPorVencer()) {
+            mensajes.add("Tu " + ("FIEL".equals(certificado.getTipo()) ? "firma" : "sello")
+                    + " esta por vencer " + formatoFecha.format(certificado.getFechaVencimiento()) + ". "
+                    + "Renuévalo directamente en el portal del SAT antes de esa fecha.");
+        }
+        return mensajes;
     }
 
     public RnGcCfdisTbl getCfdiUuid() {

@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcTimbresTbl.findByUltimaActualizacionPor", query = "SELECT r FROM RnGcTimbresTbl r WHERE r.ultimaActualizacionPor = :ultimaActualizacionPor")
     , @NamedQuery(name = "RnGcTimbresTbl.findByUltimaFechaActualizacion", query = "SELECT r FROM RnGcTimbresTbl r WHERE r.ultimaFechaActualizacion = :ultimaFechaActualizacion")
     , @NamedQuery(name = "RnGcTimbresTbl.findByUsuarioId", query = "SELECT r FROM RnGcTimbresTbl r WHERE r.usuarioId = :usuarioId")
-    , @NamedQuery(name = "RnGcTimbresTbl.findByProveedorUsuario", query = "SELECT r FROM RnGcTimbresTbl r WHERE r.proveedor = :proveedor AND r.usuarioId = :usuarioId AND r.estado = 'Activo' and r.timbresRestantes > 0")
+    , @NamedQuery(name = "RnGcTimbresTbl.findByProveedorUsuario", query = "SELECT r FROM RnGcTimbresTbl r WHERE r.proveedor = :proveedor AND r.usuarioId = :usuarioId AND r.estado = 'Activo' and r.timbresRestantes > 0 AND (r.fechaFin IS NULL OR r.fechaFin >= CURRENT_DATE)")
     , @NamedQuery(name = "RnGcTimbresTbl.SUMTimbresActivos", query = "SELECT SUM(r.timbresRestantes) FROM RnGcTimbresTbl r WHERE r.proveedor = :proveedor AND r.usuarioId = :usuarioId AND r.estado = 'Activo'")
     , @NamedQuery(name = "RnGcTimbresTbl.SUMTimbresTotal", query = "SELECT SUM(r.timbresTotal) FROM RnGcTimbresTbl r WHERE r.proveedor = :proveedor AND r.usuarioId = :usuarioId AND r.estado = 'Activo'")
     , @NamedQuery(name = "RnGcTimbresTbl.findByUsuarioEstado", query = "SELECT r FROM RnGcTimbresTbl r WHERE r.usuarioId = :usuarioId AND r.estado = 'Activo'")
@@ -53,6 +53,18 @@ import javax.xml.bind.annotation.XmlRootElement;
             query = "SELECT SUM(r.timbresTotal) - SUM(r.timbresUsados) "
             + "FROM RnGcTimbresTbl r "
             + "WHERE r.usuarioId = :usuarioId"
+    )
+    , @NamedQuery(
+            name = "RnGcTimbresTbl.SUMTimbresVigentesByUsuario",
+            query = "SELECT SUM(r.timbresRestantes) FROM RnGcTimbresTbl r "
+            + "WHERE r.usuarioId = :usuarioId AND r.estado = 'Activo' AND r.timbresRestantes > 0 "
+            + "AND (r.fechaFin IS NULL OR r.fechaFin >= CURRENT_DATE)"
+    )
+    , @NamedQuery(
+            name = "RnGcTimbresTbl.marcarVencidosInactivos",
+            query = "UPDATE RnGcTimbresTbl r SET r.estado = 'Inactivo' "
+            + "WHERE r.usuarioId = :usuarioId AND r.estado = 'Activo' "
+            + "AND r.fechaFin IS NOT NULL AND r.fechaFin < CURRENT_DATE"
     )})
 public class RnGcTimbresTbl implements Serializable {
 
