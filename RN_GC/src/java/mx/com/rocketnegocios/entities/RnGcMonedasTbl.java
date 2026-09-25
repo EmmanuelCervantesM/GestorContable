@@ -101,6 +101,10 @@ public class RnGcMonedasTbl implements Serializable {
     @ManyToOne
     @JoinColumn(name = "cfdi_Id")
     private RnGcCfdisTbl cfdiId;
+    
+    private Collection<RnGcPolizaHeaderTbl> rnGcPolizaHeaderTblCollection;
+
+    private Collection<RnGcCatalogoCuentasTbl> rnGcCatalogoCuentasTblCollection;
 
     public RnGcMonedasTbl() {
     }

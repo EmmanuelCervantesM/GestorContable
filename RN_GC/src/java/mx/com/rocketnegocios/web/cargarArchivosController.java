@@ -794,7 +794,7 @@ public class cargarArchivosController implements Serializable {
                 cuentaNueva.setNumeroCuenta(calcularNumeroCuenta2(catalogoCuenta.getCodigoAgrupadorSatId().getCodigoAgrupador()));
             }
             cuentaNueva.setDescripcionCuenta(persona.getNombre());
-            cuentaNueva.setSubCuenta(0);
+            //cuentaNueva.setSubCuenta(0);
             if(persona.getTipoPersonaId().getTipoPersona().equals("Cliente")){
                 cuentaNueva.setNaturaleza("D");
             }else{
@@ -830,7 +830,7 @@ public class cargarArchivosController implements Serializable {
             cuentaAcumulativa.setCodigoAgrupadorSatId(codigoAgrupador);
             cuentaAcumulativa.setNumeroCuenta(cuenta.toString());
             cuentaAcumulativa.setDescripcionCuenta("Cuenta " + codigoAgrupador.getNombreCuenta().toUpperCase());
-            cuentaAcumulativa.setSubCuenta(0);
+            //cuentaAcumulativa.setSubCuenta(0);
             cuentaAcumulativa.setNaturaleza("A");
             cuentaAcumulativa.setRfc("SIn Registro");
             cuentaAcumulativa.setInicioVigencia(numeroCuenta.getInicioVigencia());

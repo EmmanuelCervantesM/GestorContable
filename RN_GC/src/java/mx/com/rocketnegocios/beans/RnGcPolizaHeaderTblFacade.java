@@ -17,7 +17,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import mx.com.rocketnegocios.entities.RnGcPolizaHeaderTbl;
 import mx.com.rocketnegocios.entities.RnGcUsuariosTbl;
-import org.apache.poi.ss.formula.functions.T;
+import org.apache.poi.hssf.record.formula.functions.T;
 
 /**
  *

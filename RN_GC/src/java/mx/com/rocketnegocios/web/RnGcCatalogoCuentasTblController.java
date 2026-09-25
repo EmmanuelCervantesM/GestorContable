@@ -2076,7 +2076,7 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
             e.printStackTrace();
             JsfUtil.addErrorMessage("Ocurrió un error al prevalidar el archivo.");
         } finally {
-            if (excel != null) try { excel.close(); } catch (Exception ignore) {}
+            if (excel != null) try { /*excel.close();*/ } catch (Exception ignore) {}
             if (in != null)    try { in.close(); } catch (Exception ignore) {}
         }
     }
