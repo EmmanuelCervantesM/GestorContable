@@ -5,6 +5,8 @@
  */
 package mx.com.rocketnegocios.beans;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -191,5 +193,36 @@ public class RnGcCertificadosTblFacade extends AbstractFacade<RnGcCertificadosTb
             edit(certificado);
         }
         return certificado;
+    }
+
+    /**
+     * CTR-03: certificados Activos cuya fechaVencimiento cae dentro de los
+     * proximos diasAviso dias (pero que todavia no vencieron: el lazy-check
+     * de actualizarSiVencido ya los hubiera pasado a Inactivo). Usado para
+     * el aviso "tu sello/firma esta por vencer".
+     */
+    public List<RnGcCertificadosTbl> obtenerCertificadosPorVencer(RnGcUsuariosTbl usuarioId, int diasAviso) {
+        List<RnGcCertificadosTbl> activos = obtenerCertificadosActivosDeUsuario(usuarioId);
+        List<RnGcCertificadosTbl> porVencer = new ArrayList<>();
+        if (activos == null) {
+            return porVencer;
+        }
+        Date ahora = new Date();
+        Calendar limite = Calendar.getInstance();
+        limite.add(Calendar.DAY_OF_MONTH, diasAviso);
+        Date fechaLimite = limite.getTime();
+        for (RnGcCertificadosTbl certificado : activos) {
+            // obtenerCertificadosActivosDeUsuario() ya corrio el lazy-check: un
+            // certificado que vencio JUSTO ahora sigue en esta lista (el objeto
+            // ya quedo Inactivo en BD/memoria, pero la referencia no se filtra
+            // solita). Sin el chequeo "after(ahora)" ese certificado ya vencido
+            // se colaba como si estuviera "por vencer" con fecha pasada.
+            if (certificado.getFechaVencimiento() != null
+                    && certificado.getFechaVencimiento().after(ahora)
+                    && !certificado.getFechaVencimiento().after(fechaLimite)) {
+                porVencer.add(certificado);
+            }
+        }
+        return porVencer;
     }
 }

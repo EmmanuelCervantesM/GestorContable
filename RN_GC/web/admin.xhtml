@@ -15,11 +15,23 @@
             <br />
             <div align="center" style="vertical-align: middle;" height="300" width="300">
                 <h:form>
-                    <p:graphicImage id="graficosImagen" value="#{rnGcImagenesTblController.byteToImage(facturarContoller.obtenerRFCUsuario())}" width="250" height="250" cache="false"/>                                       
+                    <p:graphicImage id="graficosImagen" value="#{rnGcImagenesTblController.byteToImage(facturarContoller.obtenerRFCUsuario())}" width="250" height="250" cache="false"/>
                 </h:form>
-            </div>            
-        </ui:define>        
-        
+            </div>
+
+            <!-- CTR-03 (v2.27): banner de timbres bajos / certificados por vencer.
+                 Se recalcula en vivo en cada carga de admin.xhtml (landing tras login),
+                 sin persistencia de "ya mostrado". -->
+            <p:dialog header="Aviso" widgetVar="dlgAlertaTimbresCert" modal="true" closable="true"
+                      resizable="false" appendTo="@(body)" visible="#{facturarContoller.mostrarAlertaTimbresCert}">
+                <h:panelGroup rendered="#{facturarContoller.mostrarAlertaTimbresCert}">
+                    <ui:repeat value="#{facturarContoller.obtenerMensajesAlertaTimbresCert()}" var="mensajeAlerta">
+                        <p>#{mensajeAlerta}</p>
+                    </ui:repeat>
+                </h:panelGroup>
+            </p:dialog>
+        </ui:define>
+
     </ui:composition>
 </html>
 

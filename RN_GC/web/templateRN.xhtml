@@ -70,18 +70,10 @@
                                 <td style="width: 20%;">
                                     <h:panelGrid columns="2" cellpadding="10">
                                         <h:form>
-                                            <p:outputLabel style="font-weight: 900" value="Timbres Restantes:" for="proveedor" />
-                                            <p:selectOneMenu id="proveedor"
-                                                             widgetVar="wvProveedor"
-                                                             style="width:160px"
-                                                             value="#{facturarContoller.cfdisId.proveedorTimbres}">
-                                                <f:selectItems value="#{facturarContoller.obtenerTimbres()}"
-                                                               var="t"
-                                                               itemLabel="#{t.timbresRestantes} timbres restantes"
-                                                               itemValue="#{t.id}"/>
-
-                                            </p:selectOneMenu>
-
+                                            <p:outputLabel style="font-weight: 900" value="Timbres Restantes:" for="totalTimbres" />
+                                            <h:outputText id="totalTimbres"
+                                                          value="#{facturarContoller.obtenerTotalTimbresVigentes()}"
+                                                          styleClass="#{facturarContoller.obtenerTotalTimbresVigentes() le 10 ? 'timbres-bajos' : ''}" />
                                         </h:form>
                                     </h:panelGrid>
                                 </td>
@@ -125,11 +117,7 @@
                 </ui:insert> 
             </p:layoutUnit>
             <h:outputStylesheet>
-                .timbres-bajos { color: red !important; }
-                .low-timbres .ui-selectonemenu-label {
-                color: red !important;
-                font-weight: bold;
-                }
+                .timbres-bajos { color: red !important; font-weight: bold; }
             </h:outputStylesheet>
 
 
@@ -151,59 +139,6 @@
             </p:layoutUnit>
 
         </p:layout>
-        <h:outputScript target="body">
-            //<![CDATA[
-            function colorizarTimbresBajos() {
-            var w = PF('wvProveedor');
-            if (!w || !w.panel) return;
-
-            // limpia clases en el panel
-            w.panel.find('.ui-selectonemenu-item').removeClass('timbres-bajos');
-
-            // marca las opciones <= 15 en el panel
-            w.panel.find('.ui-selectonemenu-item').each(function () {
-            var txt = this.textContent.trim();
-            var m = txt.match(/\d+/);
-            var num = m ? parseInt(m[0], 10) : NaN;
-            if (!isNaN(num) && num <= 15) {
-            this.classList.add('timbres-bajos');
-            }
-            });
-
-            // === marca el valor seleccionado ===
-            var label = w.label.text().trim();
-            var match = label.match(/\d+/);
-            var selectedNum = match ? parseInt(match[0], 10) : NaN;
-
-            // quita siempre antes
-            w.jq.removeClass('low-timbres');
-
-            // aplica solo si <= 15
-            if (!isNaN(selectedNum) && selectedNum <= 15) {
-            w.jq.addClass('low-timbres');
-            }
-            }
-
-            $(function () {
-            colorizarTimbresBajos();
-
-            // cuando se abre el panel (fix: jqId ya incluye #, no duplicar)
-            $(document).on('click', PF('wvProveedor').jqId + ' .ui-selectonemenu-trigger', function () {
-            setTimeout(colorizarTimbresBajos, 0);
-            });
-
-            // tras actualizaciones AJAX
-            $(document).on('pfAjaxComplete', function () {
-            setTimeout(colorizarTimbresBajos, 0);
-            });
-
-            // evento oficial de PrimeFaces cuando cambia el valor
-            $(document).on('pfSelectOneMenuChange', function () {
-            setTimeout(colorizarTimbresBajos, 0);
-            });
-            });
-            //]]>
-        </h:outputScript>
     </h:body>
 
 </html>

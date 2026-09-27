@@ -104,6 +104,44 @@ public class RnGcTimbresTblFacade extends AbstractFacade<RnGcTimbresTbl> {
         return listaTimbres;
     }
 
+    /**
+     * CTR-03: lazy-check de vigencia de lotes de timbres, mismo patron que
+     * RnGcCertificadosTblFacade.actualizarSiVencido() para certificados. Un
+     * lote con fechaFin ya vencida pasa a Inactivo la primera vez que se
+     * consulta, para que deje de contar como disponible en cualquier
+     * pantalla que filtre por estado='Activo'.
+     */
+    public void actualizarTimbresVencidos(RnGcUsuariosTbl usuario) {
+        try {
+            em.createNamedQuery("RnGcTimbresTbl.marcarVencidosInactivos")
+                    .setParameter("usuarioId", usuario)
+                    .executeUpdate();
+        } catch (Exception ex) {
+            System.out.println("Error en actualizarTimbresVencidos: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * CTR-03: total real de timbres disponibles (Activo + con saldo + dentro
+     * de vigencia por fecha). Reemplaza mostrar la lista de lotes por un
+     * unico numero.
+     */
+    public long obtenerTotalTimbresVigentesXUsuario(RnGcUsuariosTbl usuario) {
+        if (usuario == null) {
+            return 0L;
+        }
+        actualizarTimbresVencidos(usuario);
+        Long total = 0L;
+        try {
+            total = em.createNamedQuery("RnGcTimbresTbl.SUMTimbresVigentesByUsuario", Long.class)
+                    .setParameter("usuarioId", usuario)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            System.out.println("Error en obtenerTotalTimbresVigentesXUsuario: " + ex.getMessage());
+        }
+        return total != null ? total : 0L;
+    }
+
     public long obtenerTotalTimbresXUsuario(RnGcUsuariosTbl usuario) {
         if (usuario == null) {
             return 0L;
