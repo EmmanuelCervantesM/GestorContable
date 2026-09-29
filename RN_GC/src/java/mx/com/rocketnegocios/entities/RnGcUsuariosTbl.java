@@ -119,7 +119,8 @@ public class RnGcUsuariosTbl implements Serializable {
     @Size(min = 1, max = 2)
     private String tipoUsuario;
     @Basic(optional = false)
-    @NotNull
+    @NotNull // NUEVO PARA USUARIOS 
+    private String tipoCuenta; //NUEVO PARA LOS USUARIOS 
     private int noUsuarios;
     @Basic(optional = false)
     @NotNull
@@ -216,6 +217,9 @@ public class RnGcUsuariosTbl implements Serializable {
     public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
+    // ---------Nuevooo------------
+    public String getTipoCuenta(){return tipoCuenta;}
+    public void setTipoCuenta(String tipoCuenta) { this.tipoCuenta =tipoCuenta;}
 
     public Integer getId() {
         return id;

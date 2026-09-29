@@ -96,6 +96,8 @@ public class RnGcCertificadosTbl implements Serializable {
     private RnGcUsuariosTbl usuariosId;
     @Column(name = "nombreCertificado")
     private String nombreCertificado;
+    @Size(max = 10) //NUEVO para certificados 
+    private String tipoCertificado; // Nuevo para los certificados 
 
     public RnGcCertificadosTbl() {
     }
@@ -221,6 +223,10 @@ public class RnGcCertificadosTbl implements Serializable {
     public void setNombreCertificado(String nombreCertificado) {
         this.nombreCertificado = nombreCertificado;
     }
+
+        // ----------------Nuevooo para registrar sus certificados----------
+    public String getTipoCertificado(){return tipoCertificado;}
+    public void setTipoCertificado(String tipoCertificado) {this.tipoCertificado = tipoCertificado;}
 
     @Override
     public int hashCode() {

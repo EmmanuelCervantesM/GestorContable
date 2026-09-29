@@ -69,6 +69,8 @@
                          <p:commandButton id="loginButton" action="#{login.validateUsernamePassword()}" value="Ingresar" accesskey="I"></p:commandButton>
                          <br/><br/>
                         <p:commandLink id="modifPwd" action="#{login.modificarPassword()}" value="¿Olvidaste tu contraseña?"></p:commandLink>
+                        <br/><br/>
+                        <h:link outcome="/public/crearCuenta.xhtml" value="¿No tienes cuenta?" />
 
                         <p:dialog widgetVar="dlgTerminos" header="Términos y Condiciones" modal="true" width="700" height="500" closable="true" appendTo="@(body)">
                             <div style="text-align:left; max-height:420px; overflow-y:auto; padding:10px; line-height:1.5;">
