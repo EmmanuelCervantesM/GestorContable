@@ -17,6 +17,7 @@ import mx.com.rocketnegocios.entities.RnGcUsuariosPerfilesTbl;
 import mx.com.rocketnegocios.util.TrippleDes;
 import mx.com.rocketnegocios.web.util.SSLEmail;
 import org.apache.commons.codec.digest.DigestUtils;
+import mx.com.rocketnegocios.entities.RnGcTerminosCondicionesTbl;
 
 //Terminos y condiciones 
 import mx.com.rocketnegocios.entities.RnGcAceptacionTerminosTbl;
@@ -37,6 +38,9 @@ public class Login implements Serializable {
     @EJB 
     private RnGcAceptacionTerminosTblFacade rnGcAceptacionTerminosTblFacade;
     private boolean aceptaCheckbox;
+
+    @EJB 
+    private RnGcTerminosCondicionesTblFacade rnGcTerminosCondicionesTblFacade;
 
     private String pwd;
     private String msg;
@@ -128,16 +132,23 @@ public class Login implements Serializable {
         try{
             int usuarioId = loginDAO.getUsuarioId(user);
             RnGcUsuariosTbl usuarioBd = getRnGcUsuariosTbl(usuarioId);
+            RnGcTerminosCondicionesTbl vigente = rnGcTerminosCondicionesTblFacade.obtenerVigente();
             RnGcAceptacionTerminosTbl aceptacion = new RnGcAceptacionTerminosTbl();
             aceptacion.setUsuarioId(usuarioBd);
-            aceptacion.setVersion("1.0"); //Mover cada vez que se actualice los TC
+            aceptacion.setVersion(vigente != null ? vigente.getVersion() : "1.0");
             aceptacion.setEstado("ACEPTADO");
             aceptacion.setFechaHora(new java.util.Date());
             rnGcAceptacionTerminosTblFacade.create(aceptacion);
-        } catch (Exception e){
+        }   catch (Exception e){
             e.printStackTrace();
         }
     }
+    public String getTerminosVigentesContenido() {
+    RnGcTerminosCondicionesTbl vigente = rnGcTerminosCondicionesTblFacade.obtenerVigente();
+    return vigente != null ? vigente.getContenido() : "No hay Términos y Condiciones publicados.";
+}
+
+
 
 
     public String getMenuSeleccionado() {
