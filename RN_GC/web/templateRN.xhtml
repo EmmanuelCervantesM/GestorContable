@@ -36,6 +36,8 @@
                                         <h:outputText value="#{facturarContoller.obtenerNombreCompletoUsuario()}" />
                                         <h:outputText value="RFC:" style="font-weight: bold"/>
                                         <h:outputText value="#{facturarContoller.obtenerRFCUsuario()}"/>
+                                        <h:outputText value="ID Despacho:" style="font-weight: bold;" rendered="#{login.esDespacho}"/>
+                                        <h:outputText value="#{login.idDespachoActual}" rendered="#{login.esDespacho}"/>
                                     </h:panelGrid> 
                                 </td>
                                 <td style="width: 33.3333%; text-align: center;"><h1>Bienvenido #{sessionScope['nombreCompleto']}</h1></td>

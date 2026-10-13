@@ -7,7 +7,8 @@ import java.util.logging.Level;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
+//import javax.faces.bean.ManagedBean;
+import javax.inject.Named;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
@@ -22,7 +23,7 @@ import mx.com.rocketnegocios.entities.RnGcTerminosCondicionesTbl;
 //Terminos y condiciones 
 import mx.com.rocketnegocios.entities.RnGcAceptacionTerminosTbl;
 
-@ManagedBean
+@Named
 @SessionScoped
 public class Login implements Serializable {
     
@@ -143,6 +144,42 @@ public class Login implements Serializable {
             e.printStackTrace();
         }
     }
+
+    // metodo para poder ver el id en el menu principal 
+    private RnGcUsuariosTbl obtenerUsuarioActual(){
+        try {
+            mx.com.rocketnegocios.util.UsuarioFirmado usuarioFirmado = new mx.com.rocketnegocios.util.UsuarioFirmado();
+            int usuarioId = usuarioFirmado.obtenerIdUsuario();
+            RnGcUsuariosTbl u = getRnGcUsuariosTbl(usuarioId);
+            System.out.println("DEBUG obtenerUsuarioActual -> usuarioId: " + usuarioId + " | encontrado: " + u + " | tipoCuenta: " + (u != null ? u.getTipoCuenta() : "null"));
+            return u;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean isEsDespacho(){
+        RnGcUsuariosTbl u = obtenerUsuarioActual();
+        return u != null && "DESPACHO".equals(u.getTipoCuenta());
+    }
+    public Integer getIdDespachoActual(){
+        RnGcUsuariosTbl u = obtenerUsuarioActual();
+        return u != null ? u.getId() : null;
+    }
+
+    public String obtenerRfcParaLogo(){
+        RnGcUsuariosTbl u = obtenerUsuarioActual();
+        if (u == null){
+            return "";
+        }
+        if (u.getDespachoId() != null) {
+            return u.getDespachoId().getRfc();
+        }
+        return u.getRfc();
+    }
+    
+
     public String getTerminosVigentesContenido() {
     RnGcTerminosCondicionesTbl vigente = rnGcTerminosCondicionesTblFacade.obtenerVigente();
     return vigente != null ? vigente.getContenido() : "No hay Términos y Condiciones publicados.";

@@ -10,10 +10,19 @@
     </h:head>
     <h:body>
         <p:growl id="growl" showDetail="true" autoUpdate="true" />
+        <h:outputScript>
+            function togglePassword(id){
+                var el = document.getElementById('frmRegistro:' + id);
+                if (el) {
+                    el.type = (el.type === 'password') ? 'text' : 'password';
+                }
+            }
+        </h:outputScript>
+
 
         <div align="center" style="max-width: 500px; margin: 60px auto; text-align: left;">
             <h2 style="text-align:center;">Crear cuenta nueva</h2>
-            <h:form enctype="multipart/form-data">
+            <h:form id="frmRegistro" enctype="multipart/form-data">
                 <p:outputLabel value="Tipo de cuenta:" />
                 <p:selectOneMenu value="#{registroPublicoController.tipoCuenta}" style="width:100%;">
                     <f:selectItem itemLabel="Selecciona..." itemValue="" noSelectionOption="true"/>
@@ -24,7 +33,8 @@
                 <p:outputLabel value="RFC:" />
                 <p:inputText value="#{registroPublicoController.rfc}" style="width:100%;" />
                 <br/><br/>
-                <p:commandButton value="Verificar RFC" action="#{registroPublicoController.validarRfc()}" update="growl @form" style="width:100%;"/>
+                <p:commandButton value="Verificar RFC" action="#{registroPublicoController.validarRfc()}" update="growl mensajes @form" style="width:100%;"/>
+                <p:messages id="mensajes" showDetail="true" closable="true" style="width: 100%;" />
 
                 <p:panel rendered="#{registroPublicoController.rfcValidado}" style="margin-top:20px;">
                     <p:outputLabel value="Nombre completo / Razón social:" />
@@ -34,17 +44,36 @@
                     <p:outputLabel value="Correo electrónico:" />
                     <p:inputText value="#{registroPublicoController.email}" style="width:100%;" />
                     <br/><br/>
+                    <!-- Para verificar tu correo electrónico, haz clic en el botón de abajo. Se enviará un código de verificación a tu correo, el cual deberás ingresar en el campo correspondiente. -->
+                    <p:commandButton value="Enviar correo de verificación" action="#{registroPublicoController.enviarCodigoVerificacion()}" update="growl @form" style="width:100%;"/>
+                    <br/><br/>
+                    <p:outputLabel value="Código de verificación:" />
+                    <p:inputText value="#{registroPublicoController.codigoIngresado}" maxlength="6" placeholder="6 dígitos" autocomplate="off" style="width:100%;" />
+                    <small style="color:#666">Ingresa el código de verificación que recibiste en tu correo electrónico o en SPAM </small>
+                    <br/><br/>
 
                     <p:outputLabel value="Contraseña:" />
-                    <p:password value="#{registroPublicoController.password}" style="width:100%;" />
+                    <p:password id="password" value="#{registroPublicoController.password}" autocomplete="new-password" style="width:100%;" />
+                    <h:selectBooleanCheckbox id="verPassword" onchange="togglePassword('password')" />
+                    <p:outputLabel for="verPassword" value=" Mostrar contraseña" />
                     <br/><br/>
 
                     <p:outputLabel value="Confirma tu contraseña:" />
-                    <p:password value="#{registroPublicoController.confirmarPassword}" style="width:100%;" />
+                    <p:password id="confirmarPassword" value="#{registroPublicoController.confirmarPassword}" autocomplete="new-password" style="width:100%;" />
+                    <h:selectBooleanCheckbox id="verConfirmarPassword" onchange="togglePassword('confirmarPassword')" />
+                    <p:outputLabel for="verConfirmarPassword" value=" Mostrar contraseña" />
                     <br/><br/>
 
-                    <p:outputLabel value="Código Postal:" />
-                    <p:inputNumber value="#{registroPublicoController.codigoPostal}" style="width:100%;" />
+
+                    <p:outputLabel value="Código Postal (fiscal):" />
+                    <p:inputNumber value="#{registroPublicoController.codigoPostal}" decimalPlaces="0" thousandSeparator="" style="width:100%;" />
+                    <small style="color:#666">Ingresa el código postal registrado ante el SAT (tu domicilio fiscal)</small>
+                    <br/><br/>
+                    
+                    <!-- Id de Despacho al que pertenece  -->
+                    <p:outputLabel value="Id de Despacho al que perteneces (Opcional)::" />
+                    <p:inputNumber value="#{registroPublicoController.despachoId}" emptyValue="" decimalPlaces="0" thousandSeparator="" style="width:100%;" />
+                    <small style="color:#666">Si perteneces a un despacho, ingresa el Id de despacho que te proporcionó tu administrador. Si no perteneces a un despacho, deja este campo vacío.</small>
                     <br/><br/>
 
                     <h3>Certificado (CSD o e.firma) #{'DESPACHO' eq registroPublicoController.tipoCuenta ? '- opcional' : '- obligatorio'}</h3>
@@ -55,11 +84,15 @@
                     <p:fileUpload mode="simple" skinSimple="true" value="#{registroPublicoController.certificadoKey}" label="Elegir .key"/>
                     <br/><br/>
                     <p:outputLabel value="Contraseña de la llave privada:" />
-                    <p:password value="#{registroPublicoController.certificadoPassword}" style="width:100%;" />
+                    <small style="color:#666">Verifica que la contraseña sea la correcta; si no coincide con tu archivo .key no podrás timbrar después</small>
+                    <p:password id="certificadoPassword" value="#{registroPublicoController.certificadoPassword}" autocomplete="new-password" style="width:100%;" />
+                    <h:selectBooleanCheckbox id="verCertificadoPassword" onchange="togglePassword('certificadoPassword')" />
+                    <p:outputLabel for="verCertificadoPassword" value=" Mostrar contraseña" />
                     <br/><br/>
                     <p:panel rendered="#{'DESPACHO' eq registroPublicoController.tipoCuenta}" style="margin-top:20px;">
                     <h3>Logo de tu despacho (opcional)</h3>
                     <p:fileUpload mode="simple" skinSimple="true" value="#{registroPublicoController.logoDespacho}" label="Elegir imagen"/>
+                    <small style="color:#666;">Formato PNG, cuadrado, recomendado 500x500 px, máximo 500 KB. Si no subes uno, se usará el logo por defecto.</small>
                     </p:panel>
                     <p:commandButton value="Crear cuenta" ajax="false" action="#{registroPublicoController.crearCuenta()}" style="width:100%;"/>
                 </p:panel>

@@ -29,7 +29,19 @@ public class CertificadoUtil {
             return null;
         }
     }
+    //  detectar tipo de certificado a partir del archivo .cer
     public static String detectarTipoCertificado(byte[] archivoCer) throws Exception {
         return detectarTipoCertificado(parseCertificado(archivoCer));
     }
+        public static String obtenerNumeroSerie(X509Certificate cert) {
+        byte[] bytesSerie = cert.getSerialNumber().toByteArray();
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytesSerie) {
+            if (b != 0) {
+                sb.append((char) b);
+            }
+        }
+        return sb.toString();
+    }
+
 }

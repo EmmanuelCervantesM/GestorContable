@@ -156,6 +156,12 @@ public class RnGcUsuariosTblFacade extends AbstractFacade<RnGcUsuariosTbl> {
         }
         return usuarioRfc;
     }
+    // obtener usuarios por rfc 
+    public List<RnGcUsuariosTbl> obtenerUsuariosPorRfc(String rfc){
+        return em.createQuery("SELECT u FROM RnGcUsuariosTbl u WHERE u.rfc = :rfc", RnGcUsuariosTbl.class )
+                .setParameter("rfc", rfc)
+                .getResultList();
+    }
 
     public RnGcUsuariosTbl obtenerNoUsuariosPorUsuario(int noUsuarios, RnGcUsuariosTbl usuario) {
         RnGcUsuariosTbl numUsuarios = null;

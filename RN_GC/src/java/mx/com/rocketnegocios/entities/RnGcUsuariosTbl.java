@@ -60,14 +60,15 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcUsuariosTbl.findByUsuarioId", query = "SELECT r FROM RnGcUsuariosTbl r WHERE r.usuarioId = :usuarioId")})
 public class RnGcUsuariosTbl implements Serializable {
 
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
+    @Size(max = 20)
     private String passwordEmail;
 
     @JoinColumn(name = "regimenId", referencedColumnName = "Id")
     @ManyToOne
     private RnGcRegimenfiscalTbl regimenId;
+    @JoinColumn(name = "despachoId", referencedColumnName = "Id")
+    @ManyToOne 
+    private RnGcUsuariosTbl despachoId;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -217,10 +218,19 @@ public class RnGcUsuariosTbl implements Serializable {
     public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
-    // ---------Nuevooo------------
+    // ---------Nuevooos------------
     public String getTipoCuenta(){return tipoCuenta;}
     public void setTipoCuenta(String tipoCuenta) { this.tipoCuenta =tipoCuenta;}
 
+    // despachoId para obtener el despacho al que pertenece el usuario
+    public RnGcUsuariosTbl getDespachoId(){
+        return despachoId;
+    }
+
+    public void setDespachoId(RnGcUsuariosTbl despachoId){
+        this.despachoId = despachoId;
+    }
+    // -------------------------
     public Integer getId() {
         return id;
     }
