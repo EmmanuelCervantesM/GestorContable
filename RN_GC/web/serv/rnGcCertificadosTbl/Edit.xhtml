@@ -12,9 +12,17 @@
             <h:form id="RnGcCertificadosTblEditForm">
                 <h:panelGroup id="display">
                     <p:outputLabel value="Los archivos .cer y .key se cargan de forma automatica al escogerlos" style="font-weight: 900" rendered="#{rnGcCertificadosTblController.selected != null}" />
-                    <p:fileUpload fileUploadListener="#{rnGcCertificadosTblController.fileUpload}" rendered="#{rnGcCertificadosTblController.selected != null}" invalidFileMessage="Solo se permiten archivos .cer y .key" label="Cargar Certificados" multiple="true" fileLimit="2" fileLimitMessage="Solo se puede escoger un archivo cer y key" mode="advanced" auto="true" sizeLimit="100000" allowTypes="/(\.|\/)(key|cer)$/">
-                        <p:growl life="10000" showDetail="true" />
+                    <p:fileUpload fileUploadListener="#{rnGcCertificadosTblController.fileUpload}" rendered="#{rnGcCertificadosTblController.selected != null}" invalidFileMessage="Solo se permiten archivos .cer y .key" label="Cargar Certificados" multiple="true" fileLimit="2" fileLimitMessage="Solo se puede escoger un archivo cer y key" mode="advanced" auto="true" sizeLimit="100000" allowTypes="/(\.|\/)(key|cer)$/" update="display">
+                    <p:growl life="10000" showDetail="true" />
                     </p:fileUpload>
+
+                    <p:panelGrid columns="2" rendered="#{rnGcCertificadosTblController.selected != null}">
+                        <p:outputLabel value="Archivo .cer:" style="font-weight: bold"/>
+                        <h:outputText value="#{rnGcCertificadosTblController.nombreArchivoCer != null ? rnGcCertificadosTblController.nombreArchivoCer : 'No cargado'}"/>
+                        <p:outputLabel value="Archivo .key:" style="font-weight: bold"/>
+                        <h:outputText value="#{rnGcCertificadosTblController.nombreArchivoKey != null ? rnGcCertificadosTblController.nombreArchivoKey : 'No cargado'}"/>
+                    </p:panelGrid>
+
                     <p:panelGrid columns="4" rendered="#{rnGcCertificadosTblController.selected != null}">
                         <p:outputLabel value="Nombre del Certificado" for="nombre" />
                         <p:inputText id="nombre" value="#{rnGcCertificadosTblController.selected.nombreCertificado}" style="width: 160px" title="Nombre Certificado"/>

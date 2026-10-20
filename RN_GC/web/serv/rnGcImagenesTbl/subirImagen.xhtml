@@ -19,7 +19,7 @@
                         <h:panelGrid columns="3" cellpadding="10">
                             <p:fileUpload value="#{rnGcImagenesTblController.file}" 
                                           mode="simple" skinSimple="true" label="Elegir Imagen"
-                                          sizeLimit="100000"/>
+                                          sizeLimit="512000"/>
                             
                             <p:commandButton value="Subir Imágen" ajax="false" 
                                              action="#{rnGcImagenesTblController.subirImagen(facturarContoller.obtenerRFCUsuario())}"

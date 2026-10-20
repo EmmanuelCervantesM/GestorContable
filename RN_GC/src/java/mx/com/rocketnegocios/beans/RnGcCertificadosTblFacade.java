@@ -80,4 +80,16 @@ public class RnGcCertificadosTblFacade extends AbstractFacade<RnGcCertificadosTb
         }
         return listaActivos;
     }
+    // busca un certificado por su numero y lo devuelve 
+    public RnGcCertificadosTbl obtenerPorNumeroCertificado(String numeroCertificado){
+        RnGcCertificadosTbl certificado =null; 
+        try {
+            certificado = em.createNamedQuery("RnGcCertificadosTbl.findByNumeroCertificado", RnGcCertificadosTbl.class)
+            .setParameter("numeroCertificado", numeroCertificado)
+            .getSingleResult();
+        } catch (NoResultException ex){
+            System.out.println("No existe certificadocon ese numero.");
+        }
+        return certificado;
+    }
 }

@@ -13,10 +13,13 @@
 
         <ui:define name="body">
             <br />
-            <div align="center" style="vertical-align: middle;" height="300" width="300">
-                <h:form>
-                    <p:graphicImage id="graficosImagen" value="#{rnGcImagenesTblController.byteToImage(facturarContoller.obtenerRFCUsuario())}" width="250" height="250" cache="false"/>                                     
-                </h:form>
+            <div style="position: relative;">
+                <p:graphicImage value="/resources/images/logoAdminContableV2.png" width="120" style="position: absolute; top: 0; left:20px;"/>
+                <div align="center" style="vertical-align: middle;" height="300" width="300">
+                    <h:form>
+                        <p:graphicImage id="graficosImagen" value="#{rnGcImagenesTblController.byteToImage(facturarContoller.obtenerRFCUsuario())}" width="250" height="250" cache="false"/>                                     
+                    </h:form>
+                </div>
             </div>            
         </ui:define>        
         

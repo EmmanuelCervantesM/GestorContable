@@ -28,7 +28,31 @@
 
                     <br/>
                     <p:commandButton value="Publicar nueva version" action="#{rnGcTerminosCondicionesTblController.publicarNuevaVersion()}" />
+                    <p:commandButton value= "Ver historial de versiones" icon="pi pi-hisotry" type="button" onclick="PF('historialVersionesDialog').show()" style= "margin-left:10px" />
                 </p:panel>
+                <p:dialog header="Historial de Terminos y Condiciones" widgetVar="historialVersionesDialog" modal="true" width="700" height="600" resizable="false" appendTo="@(body)">
+                                        <p:dataTable value="#{rnGcTerminosCondicionesTblController.historial}" var="item" rowKey="#{item.id}" scrollable="true" scrollHeight="350">
+                        <p:column style="width:2rem">
+                            <p:rowToggler />
+                        </p:column>
+                        <p:column headerText="Version" style="width:100px">
+                            <h:outputText value="#{item.version}"/>
+                        </p:column>
+                        <p:column headerText="Fecha de publicación" style="width:200px">
+                            <h:outputText value="#{item.fechaPublicacion}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Vigente" style="width:100px">
+                            <h:outputText value="#{item.vigente eq 'S' ? 'Si': 'No'}"/>
+                        </p:column>
+                        <p:rowExpansion>
+                            <div style="max-height:250px; overflow-y:auto; white-space:pre-wrap; background:#f7f7f7; border:1px solid #ddd; border-radius:4px; padding:12px; font-size:0.9em;">
+                                <h:outputText value="#{item.contenido}"/>
+                            </div>
+                        </p:rowExpansion>
+                    </p:dataTable>
+                </p:dialog>
             </h:form>
             <h:outputText value="No tienes permisos para ver esta pagina." rendered="#{!rnGcTerminosCondicionesTblController.esAdministrador}"/>
         </ui:define>

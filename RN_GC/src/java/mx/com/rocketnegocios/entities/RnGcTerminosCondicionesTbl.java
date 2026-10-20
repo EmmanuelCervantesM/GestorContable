@@ -12,8 +12,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "RnGcTerminosCondicionesTbl.findAll", query = "SELECT r FROM RnGcTerminosCondicionesTbl r"),
-    @NamedQuery(name = "RnGcTerminosCondicionesTbl.findVigente", query = "SELECT r FROM RnGcTerminosCondicionesTbl r WHERE r.vigente ='S'")
+    @NamedQuery(name = "RnGcTerminosCondicionesTbl.findVigente", query = "SELECT r FROM RnGcTerminosCondicionesTbl r WHERE r.vigente ='S'"),
+    @NamedQuery(name = "RnGcTerminosCondicionesTbl.findByVersion", query = "SELECT r FROM RnGcTerminosCondicionesTbl r WHERE r.version = :version"),
+    @NamedQuery(name = "RnGcTerminosCondicionesTbl.findAllOrdenado", query = "SELECT r FROM RnGcTerminosCondicionesTbl r ORDER BY r.fechaPublicacion DESC")
 })
+
 public class RnGcTerminosCondicionesTbl implements Serializable {
     private static final long serialVersionUID = 1L;
 
