@@ -120,7 +120,7 @@ public class RnGcImagenesTblController implements Serializable {
                                 rnGcImagenes.setFechaCreacion(new Date());
                                 rnGcImagenes.setUltimaActualizacionPor(idUsuario);
                                 rnGcImagenes.setUltimaFechaActualizacion(new Date());
-                                ejbFacade.edit(rnGcImagenes);
+                                ejbFacade.create(rnGcImagenes);
                                 FacesMessage mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "La imagen " + file.getFileName() + " se subió con exito");
                                 FacesContext.getCurrentInstance().addMessage(null, mensaje);
                             } catch (Exception e) {
@@ -221,16 +221,18 @@ public class RnGcImagenesTblController implements Serializable {
 
     }
 
-    public void subirImagen(String RFC) {
+        public void subirImagen(String RFC) {
         System.out.println("Subir imagen");
         System.out.println("RFC:" + RFC);
 
-        if (file != null && !RFC.isEmpty()) {
+        if (file != null && RFC != null && !RFC.isEmpty()) {
             RFC_Contribuyente = RFC;
             idUsuario = usuarioFirmado.obtenerIdUsuario();
-            if (rnGcImagenesTbl.getRfc().equals("ADMINISTRADOR")) {
+            RnGcImagenesTbl existente = ejbFacade.obtenerImagenPorRFC(RFC);
+            if (existente == null) {
                 persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RnGcImagenesTblCreated"));
             } else {
+                rnGcImagenesTbl = existente;
                 persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RnGcImagenesTblUpdated"));
             }
         } else if (file == null) {

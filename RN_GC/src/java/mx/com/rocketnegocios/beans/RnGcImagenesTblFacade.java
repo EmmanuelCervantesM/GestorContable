@@ -6,6 +6,7 @@
 package mx.com.rocketnegocios.beans;
 
 import javax.ejb.Stateless;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -33,13 +34,17 @@ public class RnGcImagenesTblFacade extends AbstractFacade<RnGcImagenesTbl> {
     public RnGcImagenesTbl obtenerImagenPorRFC(String RFC){
         RnGcImagenesTbl imagen = null;
         try {
-            imagen = em.createNamedQuery("RnGcImagenesTbl.findByRfc",RnGcImagenesTbl.class)
+            List<RnGcImagenesTbl> resultados = em.createNamedQuery("RnGcImagenesTbl.findByRfc", RnGcImagenesTbl.class)
                     .setParameter("rfc", RFC)
-                    .getSingleResult();
+                    .getResultList();
+            if (!resultados.isEmpty()) {
+                imagen = resultados.get(resultados.size() - 1); // si hay duplicados, usa la más reciente
+            }
         } catch (NoResultException ex) {
             System.out.println("No se encontro imagenId utilizando RFC");
         }
         return imagen;
     }
+
     
 }

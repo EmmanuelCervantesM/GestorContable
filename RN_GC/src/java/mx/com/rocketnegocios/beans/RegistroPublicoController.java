@@ -9,6 +9,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+
+
 import mx.com.rocketnegocios.entities.RnGcCertificadosTbl;
 import mx.com.rocketnegocios.entities.RnGcImagenesTbl;
 import mx.com.rocketnegocios.entities.RnGcTimbresTbl;
@@ -81,6 +83,12 @@ public class RegistroPublicoController implements Serializable {
     private UploadedFile certificadoKey;
     private String certificadoPassword;
 
+    // CERTIFICADOS de CSD 
+    private UploadedFile certificadoCsdCer; 
+    private UploadedFile certificadoCsdKey; 
+    private String certificadoCsdPassword; 
+
+
     private UploadedFile logoDespacho;
 
     // Getters and Setters
@@ -122,6 +130,16 @@ public class RegistroPublicoController implements Serializable {
     public void setCertificadoKey(UploadedFile certificadoKey) {this.certificadoKey = certificadoKey; }
     public String getCertificadoPassword() {return certificadoPassword; }
     public void setCertificadoPassword(String certificadoPassword) {this.certificadoPassword = certificadoPassword; }
+
+    // getter y setter para los certificados 
+    public UploadedFile getCertificadoCsdCer(){return certificadoCsdCer;}
+    public void setCertificadoCsdCer(UploadedFile certificadoCsdCer) {this.certificadoCsdCer = certificadoCsdCer;}
+    public UploadedFile getCertificadoCsdKey(){ return certificadoCsdKey;}
+    public void setCertificadoCsdKey(UploadedFile certificadoCsdKey) {this.certificadoCsdKey = certificadoCsdKey;}
+    public String getCertificadoCsdPassword() {return certificadoCsdPassword;}
+    public void setCertificadoCsdPassword(String certificadoCsdPassword){this.certificadoCsdPassword= certificadoCsdPassword;}
+
+
 
     public UploadedFile getLogoDespacho() {return logoDespacho; }
     public void setLogoDespacho(UploadedFile logoDespacho) {this.logoDespacho = logoDespacho;}
@@ -182,6 +200,15 @@ public class RegistroPublicoController implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se pudo enviar el correo de verificación", "Intenta nuevamente o contacta a soporte"));
         }
     }
+    // Cargar las cosas CSD sean opcionale sy no olbigatorias 
+    public void iniciarFormulario(){
+        certificadoCer = null;
+        certificadoKey = null; 
+        certificadoPassword = null; 
+        certificadoCsdCer = null; 
+        certificadoKey = null; 
+        certificadoCsdPassword = null;
+    }
 
     private boolean correoVerificado(){
         if (codigoEnviado == null || codigoExpiracion == null || emailCodigo == null){
@@ -202,20 +229,22 @@ public class RegistroPublicoController implements Serializable {
         }
         return true;
     }
+    
 
-    public String crearCuenta() {
+
+
+        public String crearCuenta() {
         if (!rfcValidado) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Primero verifica tu RFC", ""));
             return null;
         }
         // Verificar si el RFC ya está registrado
-        List<RnGcUsuariosTbl> existentes =rnGcUsuariosTblFacade.obtenerUsuariosPorRfc(rfc);
+        List<RnGcUsuariosTbl> existentes = rnGcUsuariosTblFacade.obtenerUsuariosPorRfc(rfc);
         boolean yaTieneEsteTipo = existentes.stream().anyMatch(u -> tipoCuenta.equals(u.getTipoCuenta()) || u.getTipoCuenta() == null || u.getTipoCuenta().isEmpty());
         if (yaTieneEsteTipo) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este RFC ya tiene una cuenta de tipo " + tipoCuenta, "Un mismo RFC solo puede tener una cuenta de Despacho y una de Contribuyente"));
             return null;
         }
-
 
         if (nombreCompleto == null || nombreCompleto.isEmpty()
                 || email == null || email.isEmpty()
@@ -224,8 +253,8 @@ public class RegistroPublicoController implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_WARN, "Completa nombre, correo y contraseña", ""));
             return null;
         }
-        if (codigoPostal < 10000 || codigoPostal > 99999){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage (FacesMessage.SEVERITY_ERROR, "El código postal debe tener 5 dígitos", ""));
+        if (codigoPostal < 10000 || codigoPostal > 99999) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El código postal debe tener 5 dígitos", ""));
             return null;
         }
         if (!password.equals(confirmarPassword)) {
@@ -233,7 +262,7 @@ public class RegistroPublicoController implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_WARN, "Las contraseñas no coinciden", ""));
             return null;
         }
-        if (!correoVerificado()){
+        if (!correoVerificado()) {
             return null; // el correo no ha sido verificado
         }
 
@@ -265,6 +294,37 @@ public class RegistroPublicoController implements Serializable {
             }
         }
 
+        // Validar archivo CSD (opcional, independiente del certificado principal)
+        boolean csdCerSubido = certificadoCsdCer != null && certificadoCsdCer.getFileName() != null && !certificadoCsdCer.getFileName().isEmpty();
+        boolean csdKeySubido = certificadoCsdKey != null && certificadoCsdKey.getFileName() != null && !certificadoCsdKey.getFileName().isEmpty();
+        boolean csdPasswordLlenada = certificadoCsdPassword != null && !certificadoCsdPassword.isEmpty();
+
+        boolean csdAlgunArchivo = csdCerSubido || csdKeySubido || csdPasswordLlenada;
+        boolean csdProporcionado = csdCerSubido && csdKeySubido && csdPasswordLlenada;
+
+        if (csdAlgunArchivo && !csdProporcionado) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Para subir tu CSD sube el .cer, el .key y su contraseña", ""));
+            return null;
+        }
+        if (csdProporcionado) {
+            if (certificadoCsdCer.getFileName() == null || !certificadoCsdCer.getFileName().toLowerCase().endsWith(".cer")) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El archivo del CSD debe tener extensión .cer", ""));
+                return null;
+            }
+            if (certificadoCsdKey.getFileName() == null || !certificadoCsdKey.getFileName().toLowerCase().endsWith(".key")) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El archivo de la llave privada del CSD debe tener extensión .key", ""));
+                return null;
+            }
+            if (certificadoCsdCer.getContents().length == 0 || certificadoCsdCer.getContents().length > 8192) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El archivo .cer del CSD no tiene un tamaño válido", ""));
+                return null;
+            }
+            if (certificadoCsdKey.getContents().length == 0 || certificadoCsdKey.getContents().length > 8192) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El archivo .key del CSD no tiene un tamaño válido", ""));
+                return null;
+            }
+        }
+
         try {
             utx.begin();
             String tipoDetectado = null;
@@ -283,7 +343,7 @@ public class RegistroPublicoController implements Serializable {
                     throw new IllegalStateException();
                 }
                 tipoDetectado = CertificadoUtil.detectarTipoCertificado(certParsed);
-                
+
                 // Validar que el número de serie del certificado tenga 20 caracteres
                 String numeroSerie = CertificadoUtil.obtenerNumeroSerie(certParsed);
                 if (numeroSerie.length() != 20) {
@@ -292,13 +352,44 @@ public class RegistroPublicoController implements Serializable {
                     throw new IllegalStateException();
                 }
 
-
                 if (tipoDetectado == null) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se pudo determinar si el certificado es CSD o FIEL", ""));
                     throw new IllegalStateException();
                 }
             }
 
+            String tipoDetectadoCsd = null;
+            X509Certificate certParsedCsd = null;
+            if (csdProporcionado) {
+                try {
+                    certParsedCsd = CertificadoUtil.parseCertificado(certificadoCsdCer.getContents());
+                } catch (Exception exParse) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El archivo .cer del CSD no es un certificado válido", "Verifica que sea un archivo .cer real del SAT"));
+                    throw new IllegalStateException();
+                }
+                try {
+                    certParsedCsd.checkValidity();
+                } catch (Exception exVigencia) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El CSD está vencido o aún no es vigente", "Sube un CSD vigente"));
+                    throw new IllegalStateException();
+                }
+                try {
+                    tipoDetectadoCsd = CertificadoUtil.detectarTipoCertificado(certParsedCsd);
+                } catch (Exception exTipo) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se pudo determinar el tipo del CSD", ""));
+                    throw new IllegalStateException();
+                }
+
+                String numeroSerieCsd = CertificadoUtil.obtenerNumeroSerie(certParsedCsd);
+                if (numeroSerieCsd.length() != 20) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El CSD no tiene un número de serie válido del SAT", "Verifica que sea un certificado CSD válido"));
+                    throw new IllegalStateException();
+                }
+                if (!"CSD".equals(tipoDetectadoCsd)) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El archivo que subiste en esta sección no es un CSD", "Sube tu Certificado de Sello Digital, no tu e.firma"));
+                    throw new IllegalStateException();
+                }
+            }
 
             TrippleDes td = new TrippleDes();
             String contraseniaCifrada = td.encrypt(password);
@@ -321,7 +412,7 @@ public class RegistroPublicoController implements Serializable {
             usuario.setFechaCreacion(new Date());
             usuario.setUltimaActualizacionPor(0);
             usuario.setUltimaFechaActualizacion(new Date());
-            //si es cuenta de contribuyente, asociar el despacho si se proporcionó un despachoid 
+            //si es cuenta de contribuyente, asociar el despacho si se proporcionó un despachoid
             RnGcUsuariosTbl despacho = null;
             if (despachoId != null && despachoId > 0) {
                 despacho = rnGcUsuariosTblFacade.obtenerUsuarioPorId(despachoId);
@@ -352,9 +443,26 @@ public class RegistroPublicoController implements Serializable {
                 certificado.setUltimaFechaActualizacion(new Date());
                 rnGcCertificadosTblFacade.create(certificado);
             }
-            
-            // verificar el logo que subieron 
-                       // verificar el logo que subieron 
+
+            if (csdProporcionado) {
+                RnGcCertificadosTbl certificadoCsd = new RnGcCertificadosTbl();
+                certificadoCsd.setCertificadoSelloDigital(certificadoCsdCer.getContents());
+                certificadoCsd.setLlavePrivada(certificadoCsdKey.getContents());
+                certificadoCsd.setContraseniaLlavePrivada(certificadoCsdPassword);
+                certificadoCsd.setNumeroCertificado(CertificadoUtil.obtenerNumeroSerie(certParsedCsd));
+                certificadoCsd.setFechaVencimiento(certParsedCsd.getNotAfter());
+                certificadoCsd.setEstado("Activo");
+                certificadoCsd.setNombreCertificado("CSD - " + rfc);
+                certificadoCsd.setTipoCertificado("CSD");
+                certificadoCsd.setUsuariosId(usuario);
+                certificadoCsd.setCreadoPor(0);
+                certificadoCsd.setFechaCreacion(new Date());
+                certificadoCsd.setUltimaActualizacionPor(0);
+                certificadoCsd.setUltimaFechaActualizacion(new Date());
+                rnGcCertificadosTblFacade.create(certificadoCsd);
+            }
+
+            // verificar el logo que subieron
             if ("DESPACHO".equals(tipoCuenta) && logoDespacho != null && logoDespacho.getFileName() != null && !logoDespacho.getFileName().isEmpty()) {
                 if (!logoDespacho.getFileName().toLowerCase().endsWith(".png")) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El logo debe ser un archivo .png", ""));
@@ -389,7 +497,6 @@ public class RegistroPublicoController implements Serializable {
                 rnGcImagenesTblFacade.create(logo);
             }
 
-
             Calendar unAnioDespues = Calendar.getInstance();
             unAnioDespues.add(Calendar.YEAR, 1);
 
@@ -409,19 +516,20 @@ public class RegistroPublicoController implements Serializable {
             rnGcTimbresTblFacade.create(timbres);
 
             utx.commit();
-            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Cuenta creada correctamente", "Ya puedes iniciar sesión con tu correo y contraseña"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cuenta creada correctamente", "Ya puedes iniciar sesión con tu correo y contraseña"));
             return "/login.xhtml?faces-redirect=true";
         } catch (Exception e) {
             try {
                 utx.rollback();
-            } catch (Exception exRollback){
+            } catch (Exception exRollback) {
                 exRollback.printStackTrace();
             }
             e.printStackTrace();
             return null;
         }
     }
-    //Para asignaar un nuveo perfil sea despacho a contribuyente a los nuevos usuarios y ver los menus  
+
+    //Para asignaar un nuveo perfil sea despacho a contribuyente a los nuevos usuarios y ver los menus
     private void asignarPerfil(RnGcUsuariosTbl usuario) {
         List<Integer> perfilesAAsignar = new ArrayList<>();
         if ("DESPACHO".equals(tipoCuenta)) {
@@ -453,5 +561,4 @@ public class RegistroPublicoController implements Serializable {
             rnGcUsuariosPerfilesTblFacade.create(usuarioPerfil);
         }
     }
-
 }

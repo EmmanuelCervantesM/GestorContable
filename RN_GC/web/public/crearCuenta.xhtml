@@ -9,6 +9,9 @@
         <h:outputStylesheet library="css" name="jsfcrudRN.css"/>
     </h:head>
     <h:body>
+        <f:metadata>
+            <f:viewAction action="#{registroPublicoController.iniciarFormulario()}" onPostback="false" />
+        </f:metadata>
         <p:growl id="growl" showDetail="true" autoUpdate="true" />
         <h:outputScript>
             function togglePassword(id){
@@ -76,18 +79,33 @@
                     <small style="color:#666">Si perteneces a un despacho, ingresa el Id de despacho que te proporcionó tu administrador. Si no perteneces a un despacho, deja este campo vacío.</small>
                     <br/><br/>
 
-                    <h3>Certificado (CSD o e.firma) #{'DESPACHO' eq registroPublicoController.tipoCuenta ? '- opcional' : '- obligatorio'}</h3>
-                    <p:outputLabel value="Archivo .cer:" />
+                    <h3>E.firma (FIEL) #{'DESPACHO' eq registroPublicoController.tipoCuenta ? '- Opcional' : '- Obligatorio'}</h3>
+                    <p:outputLabel value="Archivo .cer (FIEL):" />
                     <p:fileUpload mode="simple" skinSimple="true" value="#{registroPublicoController.certificadoCer}" label="Elegir .cer"/>
                     <br/><br/>
-                    <p:outputLabel value="Archivo .key:" />
+                    <p:outputLabel value="Archivo .key (FIEL):" />
                     <p:fileUpload mode="simple" skinSimple="true" value="#{registroPublicoController.certificadoKey}" label="Elegir .key"/>
                     <br/><br/>
-                    <p:outputLabel value="Contraseña de la llave privada:" />
+                    <p:outputLabel value="Contraseña de la llave privada (E.firma):" />
                     <small style="color:#666">Verifica que la contraseña sea la correcta; si no coincide con tu archivo .key no podrás timbrar después</small>
                     <p:password id="certificadoPassword" value="#{registroPublicoController.certificadoPassword}" autocomplete="new-password" style="width:100%;" />
                     <h:selectBooleanCheckbox id="verCertificadoPassword" onchange="togglePassword('certificadoPassword')" />
                     <p:outputLabel for="verCertificadoPassword" value=" Mostrar contraseña" />
+                    <!-- Sello Digital disponible para los demas  -->
+                    <br/><br/>
+                    <h3>Certificado de Sello Digital (CSD) - Opcional</h3>
+                    <small style="color:#666">Si ya tienes tu CSD para timbrar facturas puedes subirlo aquí. Si no la tienes ahora, lo puedes agregar después.</small>
+                    <br/> <br/> 
+                    <p:outputLabel value="Archivo .cer (CSD):" />
+                    <p:fileUpload mode="simple" skinSimple="true" value="#{registroPublicoController.certificadoCsdCer}" label="Elegir .cer" />
+                    <br/><br/>
+                    <p:outputLabel value="Archivo .key(CSD):" /> 
+                    <p:fileUpload mode="simple" skinSimple="true" value="#{registroPublicoController.certificadoCsdKey}" label="Elegir .key" />
+                    <br/><br/> 
+                    <p:outputLabel value="Contraseña de la llave privada del CSD:" />
+                    <p:password id="certificadosCsdPassword" value="#{registroPublicoController.certificadoCsdPassword}" autocomplate="new-password" style="width:100%;" />
+                    <h:selectBooleanCheckbox id="verCertificadoCsdPassword" onchange="togglePassword('certificadoCsdPassword')" />
+                    <p:outputLabel for="verCertificadoCsdPassword" value=" Mostrar contraseña" /> 
                     <br/><br/>
                     <p:panel rendered="#{'DESPACHO' eq registroPublicoController.tipoCuenta}" style="margin-top:20px;">
                     <h3>Logo de tu despacho (opcional)</h3>
