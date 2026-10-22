@@ -2,6 +2,7 @@ package mx.com.rocketnegocios.web;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -21,10 +22,19 @@ public class RnGcTerminosCondicionesTblController implements Serializable {
     private UsuarioFirmado usuarioFirmado = new UsuarioFirmado();
     private String version;
     private String contenido;
+    private List<RnGcTerminosCondicionesTbl> historial;
+
     public String getVersion() { return version; }
     public void setVersion(String version) { this.version = version; }
     public String getContenido() { return contenido; }
     public void setContenido(String contenido) { this.contenido = contenido; }
+
+    public List<RnGcTerminosCondicionesTbl> getHistorial() {
+        if (historial == null) {
+            historial = rnGcTerminosCondicionesTblFacade.obtenerHistorial();
+        }
+        return historial;
+    }
 
     public boolean isEsAdministrador() {
         String listaPerfiles = String.valueOf(
@@ -51,6 +61,12 @@ public class RnGcTerminosCondicionesTblController implements Serializable {
             return;
         }
 
+        RnGcTerminosCondicionesTbl existente = rnGcTerminosCondicionesTblFacade.obtenerPorVersion(version);
+        if (existente != null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Version duplicada", "La version " + version + " ya fue publicada antes, usa un numero de version distinto"));
+            return;
+        }
+
         try {
             rnGcTerminosCondicionesTblFacade.marcarNoVigentes();
             RnGcTerminosCondicionesTbl nuevo = new RnGcTerminosCondicionesTbl();
@@ -61,6 +77,7 @@ public class RnGcTerminosCondicionesTblController implements Serializable {
             nuevo.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
             nuevo.setFechaCreacion(new Date());
             rnGcTerminosCondicionesTblFacade.create(nuevo);
+            historial = null; // forzar recarga del historial con la nueva version
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Nueva version de Terminos y Condiciones publicada"));
         } catch (Exception e) {
             e.printStackTrace();
