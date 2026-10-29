@@ -122,8 +122,10 @@ public class RnGcPersonas_clientesTblController implements Serializable {
     }
 
     public List<RnGcPersonasTbl> getItems() {
-        if (items == null) {
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
             items = getFacade().findAll();
+        } else {
+            items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
         }
         return items;
     }
@@ -192,11 +194,17 @@ public class RnGcPersonas_clientesTblController implements Serializable {
     }
 
     public List<RnGcPersonasTbl> getItemsAvailableSelectMany() {
-        return getFacade().findAll();
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+            return getFacade().findAll();
+        }
+        return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
     }
 
     public List<RnGcPersonasTbl> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+            return getFacade().findAll();
+        }
+        return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
     }
 
     @FacesConverter(forClass = RnGcPersonasTbl.class)
@@ -245,7 +253,7 @@ public class RnGcPersonas_clientesTblController implements Serializable {
             if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
                 items = getFacade().findAll();
             } else {
-                items = getFacade().obtenerCreadoPor(usuarioFirmado.obtenerIdUsuario());
+                items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
             }
         } catch (ClassFormatError ex) {
             ex.printStackTrace();
@@ -262,7 +270,7 @@ public class RnGcPersonas_clientesTblController implements Serializable {
     public boolean obtenerClientes(RnGcPersonasTbl persona) {
         List<RnGcPersonasTbl> listaPersonas = null;
         boolean valor = false;
-        listaPersonas = getFacade().obtenerCreadoPor(usuarioFirmado.obtenerIdUsuario());
+        listaPersonas = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
         for (int i = 0; i < listaPersonas.size(); i++) {
             if (selected.getRfc().toUpperCase().equals(listaPersonas.get(i).getRfc())) {
                 System.out.println("La persona ya existe");

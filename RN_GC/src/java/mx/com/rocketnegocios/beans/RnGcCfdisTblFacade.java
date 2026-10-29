@@ -262,4 +262,14 @@ public class RnGcCfdisTblFacade extends AbstractFacade<RnGcCfdisTbl> {
         System.out.println("El tamaño de la lista es: " + lista.size());
         return lista;
     }
+    // Este método consulta y devuelve las personas de la tabla RnGcPersonasTbl cuyo campo creadoPor coincide con alguno de los identificadores incluidos en la lista ids 
+    public List<RnGcCfdisTbl> obtenerCreadoPorLista (List<Integer> ids){
+        List<RnGcCfdisTbl> lista = null; 
+        try {
+            lista = em.createQuery("SELECT r FROM RnGcCfdisTbl r WHERE r.creadoPor IN:ids", RnGcCfdisTbl.class).setParameter("ids", ids).getResultList();
+        } catch (NoResultException ex) {
+            System.out.println("No hay CFDIs para ese grupo de usuarios");
+        }
+        return lista; 
+    }
 }

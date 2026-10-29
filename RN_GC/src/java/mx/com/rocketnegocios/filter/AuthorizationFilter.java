@@ -14,7 +14,24 @@ import javax.servlet.http.HttpSession;
 
 @WebFilter(filterName = "AuthFilter", urlPatterns = {"*.xhtml"})
 public class AuthorizationFilter implements Filter {
-    
+
+    // Pantallas exclusivas de ADMINISTRADOR
+    private static final String[] RUTAS_SOLO_ADMIN = {
+        "/serv/rnGcUsuariosTbl/",
+        "/serv/rnGcPerfilesTbl/",
+        "/serv/rnGcUsuariosPerfilesTbl/",
+        "/serv/rnGcMenusTbl/",
+        "/serv/rnGcMenuslineasTbl/",
+        "/serv/rnGcFuncionesTbl/",
+        "/serv/rnGcTerminosCondicionesTbl/",
+        "/serv/rnGcListaNegraTbl/"
+    };
+
+    // Excepciones: pantallas dentro de esas carpetas que SI puede usar cualquier usuario logueado
+    private static final String[] EXCEPCIONES = {
+        "/serv/rnGcUsuariosTbl/cambioPwd.xhtml"
+    };
+
     public AuthorizationFilter() {
     }
 
@@ -33,16 +50,52 @@ public class AuthorizationFilter implements Filter {
             HttpSession ses = reqt.getSession(false);
 
             String reqURI = reqt.getRequestURI();
+            boolean logueado = ses != null && ses.getAttribute("username") != null;
+
             if (reqURI.indexOf("/login.xhtml") >= 0
-                            || (ses != null && ses.getAttribute("username") != null)
                             || reqURI.indexOf("/public/") >= 0
-                            || reqURI.contains("javax.faces.resource"))
-                    chain.doFilter(request, response);
-            else 
-                    resp.sendRedirect(reqt.getContextPath() + "/faces/login.xhtml");            
+                            || reqURI.contains("javax.faces.resource")) {
+                chain.doFilter(request, response);
+                return;
+            }
+
+            if (!logueado) {
+                resp.sendRedirect(reqt.getContextPath() + "/faces/login.xhtml");
+                return;
+            }
+
+            if (esRutaSoloAdmin(reqURI) && !esExcepcion(reqURI) && !esAdministrador(ses)) {
+                resp.sendRedirect(reqt.getContextPath() + "/faces/admin.xhtml");
+                return;
+            }
+
+            chain.doFilter(request, response);
         } catch (Exception e) {
                 System.out.println(e.getMessage());
         }
+    }
+
+    private boolean esRutaSoloAdmin(String reqURI) {
+        for (String ruta : RUTAS_SOLO_ADMIN) {
+            if (reqURI.contains(ruta)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean esExcepcion(String reqURI) {
+        for (String ruta : EXCEPCIONES) {
+            if (reqURI.contains(ruta)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean esAdministrador(HttpSession ses) {
+        Object listaPerfiles = ses.getAttribute("listaPerfiles");
+        return listaPerfiles != null && String.valueOf(listaPerfiles).contains("ADMINISTRADOR");
     }
 
     @Override
@@ -50,4 +103,3 @@ public class AuthorizationFilter implements Filter {
 
     }    
 }
-

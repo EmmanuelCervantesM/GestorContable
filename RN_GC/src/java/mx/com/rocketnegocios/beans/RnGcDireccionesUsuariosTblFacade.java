@@ -43,5 +43,14 @@ public class RnGcDireccionesUsuariosTblFacade extends AbstractFacade<RnGcDirecci
         }
         return listaDireccionesUsuarios;
     }
-    
+    // metodo para msotrar las pantallas correctas 
+    public List<RnGcDireccionesUsuariosTbl> obtenerCreadoPorLista(List<Integer> ids) {
+        List<RnGcDireccionesUsuariosTbl> lista = null;
+        try {
+            lista = em.createQuery("SELECT r FROM RnGcDireccionesUsuariosTbl r WHERE r.creadoPor IN :ids", RnGcDireccionesUsuariosTbl.class).setParameter("ids", ids).getResultList();
+        } catch (NoResultException ex) {
+            System.out.println("No hay direcciones de usuario para ese grupo de usuarios");
+        }
+        return lista;
+    }
 }

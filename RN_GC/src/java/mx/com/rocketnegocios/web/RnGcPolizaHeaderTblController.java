@@ -232,8 +232,10 @@ public class RnGcPolizaHeaderTblController implements Serializable {
     }
 
     public List<RnGcPolizaHeaderTbl> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+            items = getFacade().findAll(); 
+        }else {
+            items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
         }
         return items;
     }

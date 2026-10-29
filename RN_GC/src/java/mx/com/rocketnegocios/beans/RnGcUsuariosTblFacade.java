@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import mx.com.rocketnegocios.entities.RnGcUsuariosTbl;
+import java.util.ArrayList; // CTR-21 para los usuarios 
 
 @Stateless
 public class RnGcUsuariosTblFacade extends AbstractFacade<RnGcUsuariosTbl> {
@@ -186,5 +187,18 @@ public class RnGcUsuariosTblFacade extends AbstractFacade<RnGcUsuariosTbl> {
             System.out.println("No hay Usuario");
         }
         return usuario;
+    }
+    public List<Integer> obtenerIdsGrupoDespacho(int despachoId){
+        List<Integer> ids = new ArrayList<>(); 
+        ids.add(despachoId); 
+        try {
+            List<RnGcUsuariosTbl> contribuyentes = em.createNamedQuery("RnGcUsuariosTbl.findByDespachoIdValue", RnGcUsuariosTbl.class).setParameter("despachoId", despachoId).getResultList();
+            for (RnGcUsuariosTbl c : contribuyentes){
+                ids.add(c.getId());
+            }
+        } catch (NoResultException ex){
+            System.out.println("El despacho no tiene contribuyentes :( ");
+        }
+        return ids; 
     }
 }

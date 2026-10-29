@@ -140,4 +140,15 @@ public class RnGcPersonasTblFacade extends AbstractFacade<RnGcPersonasTbl> {
         return personaId;
     }
     
+    // Este metodo consulta y devuelve las personas de la tabla RnGcPersonasTbl cuyo campo creadoPor coincide con alguno de los identificadores incluidos en la lista ids 
+    public List<RnGcPersonasTbl> obtenerCreadoPorLista(List<Integer> ids) {
+        List<RnGcPersonasTbl> lista= null ;
+        try {
+            lista = em.createQuery("SELECT r FROM RnGcPersonasTbl r WHERE r.creadoPor IN :ids", RnGcPersonasTbl.class).setParameter("ids", ids).getResultList();
+        } catch (NoResultException ex){
+            System.out.println("No hay personas para este grupo de usuarios ");
+        }
+        return lista; 
+    }
+    
 }

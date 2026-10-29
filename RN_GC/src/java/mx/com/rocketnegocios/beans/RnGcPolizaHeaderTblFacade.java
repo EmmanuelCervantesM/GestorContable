@@ -145,4 +145,14 @@ public class RnGcPolizaHeaderTblFacade extends AbstractFacade<RnGcPolizaHeaderTb
             return 0;
         }
     }
+    // nuevo metodo para la clasificacion de usuarios 
+    public List<RnGcPolizaHeaderTbl> obtenerCreadoPorLista(List<Integer> ids){
+        List<RnGcPolizaHeaderTbl> lista  = null; 
+        try{
+            lista = em.createQuery("SELECT r FROM RnGcPolizaHeaderTbl r WHERE r.creadoPor IN :ids", RnGcPolizaHeaderTbl.class).setParameter("ids", ids).getResultList();
+        } catch (NoResultException ex){
+            System.out.println("No hay polizas para ese grupo de ususarios");
+        }
+        return lista;
+    }
 }

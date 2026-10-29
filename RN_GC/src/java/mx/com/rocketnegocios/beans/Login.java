@@ -22,6 +22,8 @@ import mx.com.rocketnegocios.entities.RnGcTerminosCondicionesTbl;
 
 //Terminos y condiciones 
 import mx.com.rocketnegocios.entities.RnGcAceptacionTerminosTbl;
+// Permisos de usuarios 
+import java.util.ArrayList;
 
 @Named
 @SessionScoped
@@ -291,6 +293,22 @@ public class Login implements Serializable {
             session.setAttribute("listaPerfiles", listaPerfiles);
         }
         System.out.println("listaPerfiles: " + usuarioId + listaPerfiles);
+        // Metodo para la filtracion de usuarios y que menus pueden ver 
+        List<Integer> idsAlcance; 
+        if ("DESPACHO".equals(usuarioTbl.getTipoCuenta())){
+            idsAlcance = ejbFacade.obtenerIdsGrupoDespacho(usuarioTbl.getId());
+        } else {
+            idsAlcance = new ArrayList<>();
+            idsAlcance.add(usuarioTbl.getId());
+        }
+        StringBuilder idsTexto = new StringBuilder();
+        for (Integer id : idsAlcance){
+            if (idsTexto.length() > 0){
+                idsTexto.append(",");
+            }
+            idsTexto.append(id);
+        }
+        session.setAttribute("idsAlcanceUsuario", idsTexto.toString());
     }
     
         public void persist(Object object){

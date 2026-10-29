@@ -171,11 +171,14 @@ public class RnGcArchivosTblController implements Serializable {
         }
     }
 
+    // Mejora para que solo administrador vea todo 
     public List<RnGcArchivosTbl> getItems() {
-        if (items == null) {
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
             items = getFacade().findAll();
+        } else {
+            items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
         }
-        return items;
+        return items; 
     }
 
     private void persist(PersistAction persistAction, String successMessage) {

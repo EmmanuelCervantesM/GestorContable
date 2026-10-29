@@ -140,11 +140,20 @@ public class RnGcUsuariosPerfilesTblController implements Serializable {
         return items;
     }
 
+    // Mejora para reconcoer los usuarios 
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
+                    if (selected.getPerfilesId() != null && selected.getUsuariosId() != null
+                            && "ADMINISTRADOR".equals(selected.getPerfilesId().getPerfilNombre())) {
+                        RnGcUsuariosTbl usuario = usuarioFacade.find(selected.getUsuariosId().getId());
+                        if (usuario != null && ("DESPACHO".equals(usuario.getTipoCuenta()) || "CONTRIBUYENTE".equals(usuario.getTipoCuenta()))) {
+                            JsfUtil.addErrorMessage("El perfil ADMINISTRADOR no se puede asignar a cuentas de Despacho o Contribuyente");
+                            return;
+                        }
+                    }
                     getFacade().edit(selected);
                 } else {
                     getFacade().remove(selected);
@@ -168,6 +177,7 @@ public class RnGcUsuariosPerfilesTblController implements Serializable {
         }
     }
 
+    
     public RnGcUsuariosPerfilesTbl getRnGcUsuariosPerfilesTbl(java.lang.Integer id) {
         return getFacade().find(id);
     }

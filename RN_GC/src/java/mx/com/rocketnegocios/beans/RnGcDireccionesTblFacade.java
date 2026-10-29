@@ -62,4 +62,24 @@ public class RnGcDireccionesTblFacade extends AbstractFacade<RnGcDireccionesTbl>
         
         return listaDirecciones;
     }
+    // Metodo para filtrar a los usuarios 
+    public List<RnGcDireccionesTbl> obtenerCreadorPor(int creadoPor){
+        List<RnGcDireccionesTbl> lista = null; 
+        try {
+            lista = em.createNamedQuery("RnGcDireccionesTbl.findByCreadoPor", RnGcDireccionesTbl.class).setParameter("creadoPor", creadoPor).getResultList();
+        } catch (NoResultException ex){
+            System.out.println("No hay direcciones para ese usuario :(");
+        }
+        return lista;
+    }
+    // Este método consulta y devuelve las personas de la tabla RnGcPersonasTbl cuyo campo creadoPor coincide con alguno de los identificadores incluidos en la lista ids
+    public List<RnGcDireccionesTbl> obtenerCreadoPorLista(List<Integer>ids){
+        List<RnGcDireccionesTbl> lista = null; 
+        try {
+            lista = em.createQuery("SELECT r FROM RnGcDireccionesTbl r WHERE r.creadoPor IN:ids", RnGcDireccionesTbl.class).setParameter("ids", ids).getResultList();
+        } catch (NoResultException ex){
+            System.out.println ("No hay CFDIs para ese grupo de usuarios");
+        }
+        return lista;
+    }
 }

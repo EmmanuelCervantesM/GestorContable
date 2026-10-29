@@ -57,7 +57,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcUsuariosTbl.findByUltimaActualizacionPor", query = "SELECT r FROM RnGcUsuariosTbl r WHERE r.ultimaActualizacionPor = :ultimaActualizacionPor")
     , @NamedQuery(name = "RnGcUsuariosTbl.findByUltimaFechaActualizacion", query = "SELECT r FROM RnGcUsuariosTbl r WHERE r.ultimaFechaActualizacion = :ultimaFechaActualizacion")
     , @NamedQuery(name = "RnGcUsuariosTbl.findByNoUsuarios", query = "SELECT r FROM RnGcUsuariosTbl r WHERE r.noUsuarios = :noUsuarios AND r.usuarioId = :usuarioId AND r.estado = 'Activo'")
-    , @NamedQuery(name = "RnGcUsuariosTbl.findByUsuarioId", query = "SELECT r FROM RnGcUsuariosTbl r WHERE r.usuarioId = :usuarioId")})
+    , @NamedQuery(name = "RnGcUsuariosTbl.findByUsuarioId", query = "SELECT r FROM RnGcUsuariosTbl r WHERE r.usuarioId = :usuarioId")
+    , @NamedQuery(name = "RnGcUsuariosTbl.findByDespachoIdValue", query = "SELECT r FROM RnGcUsuariosTbl r WHERE r.despachoId.id = :despachoId")})
+
 public class RnGcUsuariosTbl implements Serializable {
 
     @Size(max = 20)
