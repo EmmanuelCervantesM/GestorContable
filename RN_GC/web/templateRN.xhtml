@@ -16,13 +16,53 @@
 
         <p:growl id="growl" life="10000" showDetail="true"/>
 
+        <!-- Aviso global de Opinión/Constancia SAT generadas en segundo plano.
+             Solo con sesion iniciada; el poll arranca si hay trabajos en curso o
+             avisos sin ver y se detiene solo cuando ya no hay nada pendiente. -->
+        <h:form id="formAvisosDocsSat" rendered="#{avisosDocumentosSatController.usuarioFirmado}">
+            <p:poll widgetVar="pollDocsSat"
+                    interval="10"
+                    global="false"
+                    process="@this"
+                    autoStart="#{avisosDocumentosSatController.activo}"
+                    listener="#{avisosDocumentosSatController.revisar}"
+                    update=":growl"
+                    oncomplete="docsSatTrasRevision(args);"
+                    onerror="docsSatDetenerAvisos();"/>
+        </h:form>
+        <h:outputScript>
+            //<![CDATA[
+            function docsSatIniciarAvisos() {
+                var poll = PrimeFaces.widgets['pollDocsSat'];
+                if (poll) { poll.start(); }
+            }
+            function docsSatDetenerAvisos() {
+                var poll = PrimeFaces.widgets['pollDocsSat'];
+                if (poll) { poll.stop(); }
+            }
+            function docsSatTrasRevision(args) {
+                if (!args) { return; }
+                if (args.docsSatFinalizado && typeof docsSatRefrescar === 'function') {
+                    docsSatRefrescar();
+                }
+                if (args.descargaSatFinalizado && typeof descargaSatRefrescar === 'function') {
+                    descargaSatRefrescar();
+                }
+                if (args.docsSatActivo === false) {
+                    docsSatDetenerAvisos();
+                }
+            }
+            //]]>
+        </h:outputScript>
+
         <p:layout fullPage="true">
             <p:layoutUnit position="north" size="100" header="#{bundle.AppName}" >
                 <ui:insert name="header">
                     <table style="width: 100%; border-collapse: collapse;">
                         <tbody>
                             <tr>
-                                <!--<td style="width: 16.66665%;"><p:graphicImage id="graficosImagen" value="#{rnGcImagenesTblController.byteToImage(facturarContoller.obtenerRFCUsuario())}"  height="70" width="75" cache="false"/></td> -->
+                                <!-- Se usa ui:remove y no un comentario HTML: Facelets evalua el EL dentro de los comentarios y ejecutaba byteToImage() en cada pagina -->
+                                <ui:remove><td style="width: 16.66665%;"><p:graphicImage id="graficosImagen" value="#{rnGcImagenesTblController.byteToImage(facturarContoller.obtenerRFCUsuario())}"  height="70" width="75" cache="false"/></td></ui:remove>
                                 <td style="width: 16.66665%;">
                                     <h:panelGrid columns="2" cellpadding="5">
                                         <h:outputText value="Emisor:" style="font-weight: bold"/>

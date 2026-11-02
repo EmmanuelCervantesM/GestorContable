@@ -18,28 +18,29 @@ import org.openqa.selenium.remote.http.HttpClientName;
 import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.http.HttpResponse;
 import org.openqa.selenium.remote.http.WebSocket;
+import java.nio.charset.StandardCharsets;
 
 /**
- * Selenium {@link HttpClient} backed by plain {@link HttpURLConnection},
- * selected with {@code -Dwebdriver.http.factory=jdk8-urlconnection}.
+ * {@link HttpClient} de Selenium respaldado por un {@link HttpURLConnection} plano,
+ * seleccionado con {@code -Dwebdriver.http.factory=jdk8-urlconnection}.
  *
- * <p>Why this exists: the GlassFish runtime is Temurin JDK 8u504, whose
- * {@code rt.jar} no longer ships {@code sun.security.ssl.Debug}. Selenium's
- * default Netty HTTP client eagerly builds an SSL context in its static
+ * <p>Por qué existe: el runtime de GlassFish es Temurin JDK 8u504, cuyo
+ * {@code rt.jar} ya no incluye {@code sun.security.ssl.Debug}. El HTTP client
+ * por defecto de Selenium (Netty) construye eagerly un SSL context en su static
  * initializer ({@code NettyClient.<clinit>} &rarr; async-http-client &rarr;
- * Netty {@code JdkSslContext} &rarr; {@code SSLEngineImpl.<clinit>}), which
- * throws {@code NoClassDefFoundError: sun/security/ssl/Debug} and makes
- * <b>every</b> {@code new ChromeDriver()} fail on this JVM — even though the
- * chromedriver protocol itself is plain HTTP on localhost and never needs
- * an {@code SSLEngine}. This client performs the same WebDriver wire
- * calls over {@code HttpURLConnection} without touching Netty/SSL
- * initialization, so driver sessions work on this runtime.
+ * {@code JdkSslContext} de Netty &rarr; {@code SSLEngineImpl.<clinit>}), lo que
+ * lanza {@code NoClassDefFoundError: sun/security/ssl/Debug} y hace
+ * que <b>todo</b> {@code new ChromeDriver()} falle en esta JVM — aunque el
+ * protocolo de chromedriver en sí es HTTP plano sobre localhost y nunca necesita
+ * un {@code SSLEngine}. Este client hace las mismas llamadas del protocolo WebDriver
+ * sobre {@code HttpURLConnection} sin tocar la inicialización de Netty/SSL,
+ * así las sesiones del driver funcionan en este runtime.
  *
- * <p>Selected by name through Selenium's {@code HttpClient.Factory}
- * service mechanism: the nested {@link Factory} is registered in
+ * <p>Seleccionado por nombre a través del mecanismo de servicios
+ * {@code HttpClient.Factory} de Selenium: la {@link Factory} anidada está registrada en
  * {@code META-INF/services/org.openqa.selenium.remote.http.HttpClient$Factory}
- * and picked when {@code webdriver.http.factory=jdk8-urlconnection}.
- * No new third-party dependency; Java 8 API only.
+ * y se elige cuando {@code webdriver.http.factory=jdk8-urlconnection}.
+ * Sin ninguna dependencia nueva de terceros; solo API de Java 8.
  */
 public class Jdk8UrlConnectionClient implements HttpClient {
 
@@ -48,10 +49,10 @@ public class Jdk8UrlConnectionClient implements HttpClient {
     private final int readTimeoutMillis;
 
     /**
-     * Service-loader entry point picked by {@code webdriver.http.factory}.
-     * The {@code HttpClientName} annotation MUST be on this Factory class
-     * (not on the outer client class): Selenium's
-     * {@code HttpClient.Factory.create(name)} matches
+     * Punto de entrada del service-loader elegido por {@code webdriver.http.factory}.
+     * La anotación {@code HttpClientName} DEBE estar en esta clase Factory
+     * (no en la clase client externa): el
+     * {@code HttpClient.Factory.create(name)} de Selenium hace match contra
      * {@code factory.getClass().getAnnotation(HttpClientName.class)}.
      */
     @HttpClientName("jdk8-urlconnection")
@@ -59,11 +60,11 @@ public class Jdk8UrlConnectionClient implements HttpClient {
 
         @Override
         public HttpClient createClient(ClientConfig config) {
-            // Selenium 4.10's ChromiumDriver eagerly resolves the CDP/BiDi
-            // endpoint (a ws:// URI from the se:cdp capability) through this
-            // same factory. This app never uses CDP/BiDi, so non-HTTP(S)
-            // endpoints get a no-op client: CdpEndpointFinder catches the
-            // resulting UncheckedIOException and falls back to NoOp CDP.
+            // El ChromiumDriver de Selenium 4.10 resuelve eagerly el endpoint
+            // de CDP/BiDi (una URI ws:// de la capability se:cdp) a través de esta
+            // misma factory. Esta app nunca usa CDP/BiDi, así que los
+            // endpoints no HTTP(S) reciben un client no-op: CdpEndpointFinder captura la
+            // UncheckedIOException resultante y hace fallback a un CDP NoOp.
             String scheme = config.baseUri() == null ? null : config.baseUri().getScheme();
             if (!"http".equalsIgnoreCase(scheme) && !"https".equalsIgnoreCase(scheme)) {
                 return new NoOpClient();
@@ -73,11 +74,11 @@ public class Jdk8UrlConnectionClient implements HttpClient {
 
         @Override
         public void cleanupIdleClients() {
-            // Stateless: one connection per request, nothing to clean up.
+            // Stateless: una conexión por request, nada que limpiar.
         }
     }
 
-    /** No-op client for endpoints this factory cannot speak (ws:// CDP). */
+    /** Client no-op para los endpoints que esta factory no sabe hablar (ws:// de CDP). */
     private static class NoOpClient implements HttpClient {
 
         @Override
@@ -88,20 +89,20 @@ public class Jdk8UrlConnectionClient implements HttpClient {
 
         @Override
         public WebSocket openSocket(HttpRequest request, WebSocket.Listener listener) {
-            // ChromiumDriver opens the CDP socket eagerly at construction but
-            // never sends through it unless CDP/BiDi commands are issued
-            // (this app issues none). A stub socket keeps construction alive
-            // while CDP stays effectively disconnected.
+            // ChromiumDriver abre el socket de CDP eagerly al construirse pero
+            // nunca envía nada por él salvo que se emitan comandos CDP/BiDi
+            // (esta app no emite ninguno). Un socket stub mantiene viva la construcción
+            // mientras CDP queda efectivamente desconectado.
             return new NoOpWebSocket();
         }
 
         @Override
         public void close() {
-            // Nothing to close.
+            // Nada que cerrar.
         }
     }
 
-    /** WebSocket stub: accepts sends silently, never receives anything. */
+    /** Stub de WebSocket: acepta los sends en silencio, nunca recibe nada. */
     private static class NoOpWebSocket implements WebSocket {
 
         @Override
@@ -111,7 +112,7 @@ public class Jdk8UrlConnectionClient implements HttpClient {
 
         @Override
         public void close() {
-            // Nothing to close.
+            // Nada que cerrar.
         }
     }
 
@@ -160,9 +161,9 @@ public class Jdk8UrlConnectionClient implements HttpClient {
                     response.addHeader(header.getKey(), value);
                 }
             }
-            // NOTE: the supplier MUST provide an InputStream (not byte[]):
-            // Selenium reads response content via Contents.bytes(), which
-            // casts getContent().get() to InputStream.
+            // NOTA: el supplier DEBE proveer un InputStream (no byte[]):
+            // Selenium lee el response content vía Contents.bytes(), que
+            // hace cast de getContent().get() a InputStream.
             response.setContent((Supplier) (() -> new ByteArrayInputStream(responseBytes)));
             return response;
         } catch (IOException e) {
@@ -178,7 +179,7 @@ public class Jdk8UrlConnectionClient implements HttpClient {
 
     @Override
     public void close() {
-        // Stateless: nothing to close.
+        // Stateless: nada que cerrar.
     }
 
     private static byte[] contentBytes(Supplier<?> supplier, Charset encoding) throws IOException {
@@ -189,8 +190,8 @@ public class Jdk8UrlConnectionClient implements HttpClient {
         if (content == null) {
             return null;
         }
-        // NOTE: Selenium sets request content as Supplier<InputStream>
-        // (see Contents.* helpers), not Supplier<byte[]>.
+        // NOTA: Selenium setea el request content como Supplier<InputStream>
+        // (ver helpers Contents.*), no como Supplier<byte[]>.
         if (content instanceof InputStream) {
             return readAll((InputStream) content);
         }
@@ -198,9 +199,9 @@ public class Jdk8UrlConnectionClient implements HttpClient {
             return (byte[]) content;
         }
         if (content instanceof String) {
-            return ((String) content).getBytes(encoding == null ? Charset.forName("UTF-8") : encoding);
+            return ((String) content).getBytes(encoding == null ? StandardCharsets.UTF_8 : encoding);
         }
-        return String.valueOf(content).getBytes(Charset.forName("UTF-8"));
+        return String.valueOf(content).getBytes(StandardCharsets.UTF_8);
     }
 
     private static byte[] readAll(InputStream in) throws IOException {

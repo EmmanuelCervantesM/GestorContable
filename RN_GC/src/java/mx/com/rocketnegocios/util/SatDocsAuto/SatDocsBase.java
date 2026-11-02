@@ -1,6 +1,15 @@
 package mx.com.rocketnegocios.util.SatDocsAuto;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,6 +21,9 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -42,6 +54,11 @@ public abstract class SatDocsBase {
     // arranque headless en frío la pestaña tarda más de 5 s y el timeout silencioso
     // quema luego los 30 s completos en el input del certificado (FAIL ~41 s).
     protected static final long SHORT_TIMEOUT_SECONDS = 10L;
+
+    // Tope de carga de pagina (get() y clicks que navegan). Sin el, si el login del
+    // SAT deja un script colgado el click espera los 180 s del cliente HTTP y falla
+    // como UnreachableBrowserException en vez de un TimeoutException claro.
+    public static final long PAGE_LOAD_TIMEOUT_SECONDS = 60L;
 
     /** Prefijo del payload PDF en línea dentro del iframe. */
     protected static final String PDF_BASE64_PREFIX = "data:application/pdf;base64,";
@@ -175,12 +192,16 @@ public abstract class SatDocsBase {
      * formulario ya esté visible. El retorno se ignora en todos los callers.
      */
     protected void seleccionarEFirma(By tabLocator) {
+        WebElement tab;
         try {
-            WebElement tab = shortWait.until(ExpectedConditions.elementToBeClickable(tabLocator));
-            tab.click();
+            tab = shortWait.until(ExpectedConditions.elementToBeClickable(tabLocator));
         } catch (TimeoutException alreadyOnEFirma) {
             // Formulario ya visible o pestaña ausente; loginConEFirma muestra fallas reales.
+            return;
         }
+        // Fuera del try: si la pagina e.firma no termina de cargar, el TimeoutException
+        // de carga debe propagarse y no confundirse con "pestaña ausente".
+        tab.click();
     }
 
     /**
@@ -238,6 +259,26 @@ public abstract class SatDocsBase {
     public static ChromeDriver buildChromeDriverConDescargas(String downloadDirAbsoluteOrRelative,
             String browserBinaryPath,
             boolean headless) {
+        return buildChromeDriverConDescargas(downloadDirAbsoluteOrRelative, browserBinaryPath, headless, null);
+    }
+
+    /**
+     * Igual que la anterior (binario por defecto, headless) con un perfil propio
+     * para esta corrida. Ver {@link #cerrarNavegador(WebDriver, Path)}.
+     */
+    public static ChromeDriver buildChromeDriverConDescargas(String downloadDirAbsoluteOrRelative, Path perfilDir) {
+        return buildChromeDriverConDescargas(downloadDirAbsoluteOrRelative, DEFAULT_BRAVE_BINARY, true, perfilDir);
+    }
+
+    /**
+     * @param perfilDir si no es null, el navegador usa ese directorio como
+     * {@code --user-data-dir}: identifica sin ambiguedad sus procesos para poder
+     * cerrarlos con {@link #cerrarNavegador(WebDriver, Path)}.
+     */
+    public static ChromeDriver buildChromeDriverConDescargas(String downloadDirAbsoluteOrRelative,
+            String browserBinaryPath,
+            boolean headless,
+            Path perfilDir) {
         Path dir = resolveOrCreateDir(downloadDirAbsoluteOrRelative == null
                 || downloadDirAbsoluteOrRelative.trim().isEmpty()
                         ? DEFAULT_DOWNLOAD_DIR
@@ -264,11 +305,129 @@ public abstract class SatDocsBase {
                 "--disable-extensions",
                 "--no-first-run",
                 "--no-default-browser-check");
+        if (perfilDir != null) {
+            options.addArguments(ARG_PERFIL + perfilDir.toAbsolutePath());
+        }
         if (browserBinaryPath != null && !browserBinaryPath.trim().isEmpty()
                 && new File(browserBinaryPath.trim()).isFile()) {
             options.setBinary(browserBinaryPath.trim());
         }
-        return new ChromeDriver(options);
+        ChromeDriver driver = new ChromeDriver(options);
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(PAGE_LOAD_TIMEOUT_SECONDS));
+        return driver;
+    }
+
+    private static final Logger LOG_NAVEGADOR = Logger.getLogger(SatDocsBase.class.getName());
+
+    private static final String ARG_PERFIL = "--user-data-dir=";
+
+    /** Tiempo que se espera a que el navegador cierre solo antes de forzarlo. */
+    private static final long ESPERA_CIERRE_MS = 3000;
+
+    /**
+     * Cierra el navegador y garantiza que no quede ningun proceso vivo.
+     *
+     * <p>{@code driver.quit()} no basta en este servidor: Selenium no logra
+     * detener chromedriver a tiempo ("stop timeout of 2000 ms was exceeded" /
+     * "Unable to kill process"), lo mata a la fuerza y el navegador queda
+     * huerfano (adoptado por init) con ~700 MB, uno por cada documento
+     * generado. Ademas ignora SIGTERM en ese estado. Por eso, despues de
+     * {@code quit()}, se terminan los procesos cuyo comando incluye el
+     * {@code --user-data-dir} unico de esta corrida (nunca los de otra) y todos
+     * sus descendientes: primero SIGTERM y, si siguen vivos tras
+     * {@link #ESPERA_CIERRE_MS}, SIGKILL.
+     * Solo en sistemas con {@code pgrep}/{@code pkill} (Linux/macOS).
+     */
+    public static void cerrarNavegador(WebDriver driver, Path perfilDir) {
+        if (driver != null) {
+            try {
+                driver.quit();
+            } catch (Exception ex) {
+                LOG_NAVEGADOR.log(Level.FINE, "driver.quit() fallo; se cierran los procesos del perfil", ex);
+            }
+        }
+        if (perfilDir == null || File.separatorChar != '/') {
+            return;
+        }
+        String patron = escaparRegex(ARG_PERFIL + perfilDir.toAbsolutePath());
+        try {
+            // El proceso principal lleva el perfil en su linea de comandos; sus hijos
+            // (zygote, renderers) no siempre, por eso se cierra el arbol completo.
+            Set<String> pids = arbolDeProcesos(salida("pgrep", "-f", "--", patron));
+            if (pids.isEmpty()) {
+                return;
+            }
+            senal("-TERM", pids);
+            long limite = System.currentTimeMillis() + ESPERA_CIERRE_MS;
+            while (!vivos(pids).isEmpty() && System.currentTimeMillis() < limite) {
+                Thread.sleep(200);
+            }
+            Set<String> restantes = vivos(pids);
+            if (!restantes.isEmpty()) {
+                senal("-KILL", restantes);
+                LOG_NAVEGADOR.log(Level.WARNING, "Navegador del perfil {0} cerrado con SIGKILL ({1} procesos)",
+                        new Object[]{perfilDir, restantes.size()});
+            }
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        } catch (IOException ex) {
+            LOG_NAVEGADOR.log(Level.WARNING, "No se pudieron cerrar los procesos del navegador del perfil " + perfilDir, ex);
+        }
+    }
+
+    /** Los PIDs dados mas todos sus descendientes. */
+    private static Set<String> arbolDeProcesos(List<String> raices) throws IOException, InterruptedException {
+        Set<String> todos = new LinkedHashSet<>(raices);
+        Deque<String> pendientes = new ArrayDeque<>(raices);
+        while (!pendientes.isEmpty()) {
+            for (String hijo : salida("pgrep", "-P", pendientes.poll())) {
+                if (todos.add(hijo)) {
+                    pendientes.add(hijo);
+                }
+            }
+        }
+        return todos;
+    }
+
+    private static Set<String> vivos(Set<String> pids) {
+        Set<String> vivos = new LinkedHashSet<>();
+        for (String pid : pids) {
+            if (new File("/proc/" + pid).exists()) {
+                vivos.add(pid);
+            }
+        }
+        return vivos;
+    }
+
+    private static void senal(String senal, Set<String> pids) throws IOException, InterruptedException {
+        List<String> comando = new ArrayList<>();
+        comando.add("kill");
+        comando.add(senal);
+        comando.addAll(pids);
+        salida(comando.toArray(new String[0]));
+    }
+
+    /** Ejecuta el comando y devuelve sus lineas de salida (leidas completas, sin cortar el pipe). */
+    private static List<String> salida(String... comando) throws IOException, InterruptedException {
+        Process proceso = new ProcessBuilder(comando).redirectErrorStream(true).start();
+        List<String> lineas = new ArrayList<>();
+        try (BufferedReader lector = new BufferedReader(new InputStreamReader(proceso.getInputStream(), StandardCharsets.UTF_8))) {
+            String linea;
+            while ((linea = lector.readLine()) != null) {
+                if (linea.trim().matches("\\d+")) {
+                    lineas.add(linea.trim());
+                }
+            }
+        }
+        if (!proceso.waitFor(5, TimeUnit.SECONDS)) {
+            proceso.destroyForcibly();
+        }
+        return lineas;
+    }
+
+    /** Escapa la ruta para usarla literal en el regex extendido de pgrep/pkill. */
+    private static String escaparRegex(String texto) {
+        return texto.replaceAll("([\\\\.^$|?*+()\\[\\]{}])", "\\\\$1");
     }
 
     protected static Path toAbsolutePath(String dir) {

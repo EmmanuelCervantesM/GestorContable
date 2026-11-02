@@ -2,11 +2,14 @@ package mx.com.rocketnegocios.util.SatDocsAuto;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * Page object de la Opinión de Cumplimiento con e.firma (sin captcha ni CIEC).
@@ -17,6 +20,10 @@ public class MapObjectOpiniónHeadless extends SatDocsBase {
 
     /** Login directo PTSC que genera la opinión en línea. */
     public static final String URL_FUNCIONAL = "https://ptsc32d.clouda.sat.gob.mx/?/reporteOpinion32DContribuyente";
+
+    private static final String HOST_PTSC = "ptsc32d.clouda.sat.gob.mx";
+    private static final String RUTA_REPORTE = "reporteOpinion32DContribuyente";
+    private static final long ESPERA_PDF_SEGUNDOS = 120;
 
     /** PDF en línea que el SPA renderiza tras el login. */
     public static final By PDF_IFRAME = By.cssSelector(
@@ -98,12 +105,28 @@ public class MapObjectOpiniónHeadless extends SatDocsBase {
     }
 
     /**
+     * Tras el login, el OAuth del SAT regresa a la raíz de la SPA ({@code #/}) y
+     * descarta la ruta del reporte; el microfrontend queda en su ruta vacía. Se
+     * espera a volver a PTSC y se activa la ruta del reporte por hash.
+     */
+    private void irAlReporte() {
+        new WebDriverWait(driver, Duration.ofSeconds(DEFAULT_TIMEOUT_SECONDS))
+                .until(ExpectedConditions.urlContains(HOST_PTSC));
+        if (!driver.getCurrentUrl().contains(RUTA_REPORTE)) {
+            ((JavascriptExecutor) driver).executeScript("window.location.hash = arguments[0];", "#/" + RUTA_REPORTE);
+        }
+    }
+
+    /**
      * Lee el iframe PDF base64 tras el login y lo guarda en el download dir.
      *
      * @return el PDF de opinión guardado
      */
     public File generarYDescargar() {
-        WebElement iframe = wait.until(ExpectedConditions.presenceOfElementLocated(PDF_IFRAME));
+        irAlReporte();
+        // El SAT tarda variable en generar el PDF ("Procesando"): de segundos a más de 40 s.
+        WebElement iframe = new WebDriverWait(driver, Duration.ofSeconds(ESPERA_PDF_SEGUNDOS))
+                .until(ExpectedConditions.presenceOfElementLocated(PDF_IFRAME));
         String src = iframe.getAttribute("src");
         if (src != null && src.startsWith(PDF_BASE64_PREFIX)) {
             return saveBase64Pdf(src.substring(PDF_BASE64_PREFIX.length()), "opinion32D-");

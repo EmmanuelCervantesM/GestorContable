@@ -14,9 +14,11 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -40,19 +42,21 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import mx.com.rocketnegocios.beans.DespachadorDocumentosSat;
 import mx.com.rocketnegocios.beans.RnGcCertificadosTblFacade;
+import mx.com.rocketnegocios.beans.RnGcDocumentosSatJobTblFacade;
 import mx.com.rocketnegocios.beans.RnGcPerfilesTblFacade;
 import mx.com.rocketnegocios.beans.RnGcTimbresTblFacade;
 import mx.com.rocketnegocios.entities.RnGcCertificadosTbl;
+import mx.com.rocketnegocios.entities.RnGcDocumentosSatJobTbl;
 import mx.com.rocketnegocios.entities.RnGcPerfilesTbl;
 import mx.com.rocketnegocios.entities.RnGcTimbresTbl;
 import mx.com.rocketnegocios.entities.RnGcUsuariosPerfilesTbl;
-import mx.com.rocketnegocios.util.SatDocsAuto.MapObjectConstanciaHeadless;
-import mx.com.rocketnegocios.util.SatDocsAuto.MapObjectOpiniónHeadless;
+import mx.com.rocketnegocios.util.SatDocsAuto.AlmacenDocumentosSat;
+import mx.com.rocketnegocios.util.SatDocsAuto.GeneradorDocumentosSat;
 import mx.com.rocketnegocios.util.TrippleDes;
 import mx.com.rocketnegocios.util.UsuarioFirmado;
 import org.apache.poi.util.IOUtils;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.context.RequestContext;
@@ -83,6 +87,12 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
     @EJB
     private RnGcCertificadosTblFacade certificadosFacade;
 
+    @EJB
+    private DespachadorDocumentosSat despachadorDocumentosSat;
+
+    @EJB
+    private RnGcDocumentosSatJobTblFacade documentosSatJobFacade;
+
     private List<RnGcUsuariosTbl> items = null;
     private RnGcUsuariosTbl selected;
     private UsuarioFirmado usuarioFirmado = new UsuarioFirmado();
@@ -106,10 +116,6 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
     private List<RnGcPerfilesTbl> listaPerfiles = null;
     private RnGcUsuariosTbl usuarioCert, user;
     private String nuevaContrasena;
-    private StreamedContent downLoadConstancia;
-    private StreamedContent downLoadOpinion;
-    private byte[] constanciaBytes;
-    private byte[] opinionBytes;
 
     public String getNuevaContrasena() {
         return nuevaContrasena;
@@ -205,39 +211,74 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
         return user.getRfc();
     }
 
-    public StreamedContent getDownLoadConstancia() {
-        return downLoadConstancia;
-    }
-
-    public void setDownLoadConstancia(StreamedContent downLoadConstancia) {
-        this.downLoadConstancia = downLoadConstancia;
-    }
-
-    public StreamedContent getDownLoadOpinion() {
-        return downLoadOpinion;
-    }
-
-    public void setDownLoadOpinion(StreamedContent downLoadOpinion) {
-        this.downLoadOpinion = downLoadOpinion;
-    }
-
     /**
-     * Preview inline (p:media): stream fresco en cada request desde los bytes
-     * en memoria. El InputStream se consume al primer uso, por eso no se
-     * reusa el DefaultStreamedContent guardado.
+     * Opinión de cumplimiento / Constancia de situación fiscal en segundo
+     * plano: el boton solo registra la solicitud
+     * ({@link DespachadorDocumentosSat}); el PDF se genera fuera de la
+     * peticion y queda en disco temporalmente. Esta sesion no guarda bytes:
+     * cada vista/descarga lee el archivo del ultimo trabajo LISTO y arma un
+     * StreamedContent nuevo (un stream consumido no se puede reusar).
      */
+    public static final String ESTADO_DOC_INACTIVO = "INACTIVO";
+    public static final String ESTADO_DOC_GENERANDO = "GENERANDO";
+    public static final String ESTADO_DOC_LISTO = "LISTO";
+
+    public void solicitarConstancia() {
+        solicitarDocumento(RnGcDocumentosSatJobTbl.TIPO_CONSTANCIA);
+    }
+
+    public void solicitarOpinion() {
+        solicitarDocumento(RnGcDocumentosSatJobTbl.TIPO_OPINION);
+    }
+
+    public void verConstancia() {
+        prepararVista(RnGcDocumentosSatJobTbl.TIPO_CONSTANCIA);
+    }
+
+    public void verOpinion() {
+        prepararVista(RnGcDocumentosSatJobTbl.TIPO_OPINION);
+    }
+
+    public String getEstadoConstancia() {
+        return estadoDocumento(RnGcDocumentosSatJobTbl.TIPO_CONSTANCIA);
+    }
+
+    public String getEstadoOpinion() {
+        return estadoDocumento(RnGcDocumentosSatJobTbl.TIPO_OPINION);
+    }
+
+    public String getLeyendaConstancia() {
+        return leyendaDocumento(RnGcDocumentosSatJobTbl.TIPO_CONSTANCIA);
+    }
+
+    public String getLeyendaOpinion() {
+        return leyendaDocumento(RnGcDocumentosSatJobTbl.TIPO_OPINION);
+    }
+
+    public String getDisponibleHastaConstancia() {
+        return disponibleHasta(RnGcDocumentosSatJobTbl.TIPO_CONSTANCIA);
+    }
+
+    public String getDisponibleHastaOpinion() {
+        return disponibleHasta(RnGcDocumentosSatJobTbl.TIPO_OPINION);
+    }
+
+    /** Preview inline (p:media): stream nuevo en cada request. */
     public StreamedContent getPreviewConstancia() {
-        if (constanciaBytes == null) {
-            return null;
-        }
-        return new DefaultStreamedContent(new ByteArrayInputStream(constanciaBytes), "application/pdf");
+        return contenidoPdf(RnGcDocumentosSatJobTbl.TIPO_CONSTANCIA, null);
     }
 
     public StreamedContent getPreviewOpinion() {
-        if (opinionBytes == null) {
-            return null;
-        }
-        return new DefaultStreamedContent(new ByteArrayInputStream(opinionBytes), "application/pdf");
+        return contenidoPdf(RnGcDocumentosSatJobTbl.TIPO_OPINION, null);
+    }
+
+    /** Descarga (p:fileDownload): stream nuevo en cada request. */
+    public StreamedContent getDownLoadConstancia() {
+        return contenidoPdf(RnGcDocumentosSatJobTbl.TIPO_CONSTANCIA, "ConstanciaSituacionFiscal.pdf");
+    }
+
+    public StreamedContent getDownLoadOpinion() {
+        return contenidoPdf(RnGcDocumentosSatJobTbl.TIPO_OPINION, "OpinionCumplimiento.pdf");
     }
 
     /**
@@ -245,7 +286,7 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
      * nunca archivos locales. Usa {@code obtenerFielVigente} (filtra
      * {@code tipo='FIEL'}): un CSD activo no sirve para el login e.firma del
      * SAT, asi que no se devuelve. Sin FIEL el caller muestra el mensaje
-     * especifico sin quemar una corrida de Selenium.
+     * especifico sin encolar una corrida de Selenium.
      */
     private RnGcCertificadosTbl obtenerCertificadoActivo() {
         RnGcUsuariosTbl usuario = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
@@ -255,123 +296,122 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
         return certificadosFacade.obtenerFielVigente(usuario);
     }
 
-    /**
-     * Generates the Constancia de Situación Fiscal PDF for preview in browser
-     * (no auto-download). Runs the SAT e.firma automation synchronously in
-     * this request (no async job queue exists in this project): the click
-     * blocks until the headless browser finishes, up to
-     * MapObjectConstanciaHeadless.DEFAULT_DOWNLOAD_TIMEOUT_SECONDS.
-     * The FIEL (.cer/.key/password) comes from {@link #obtenerCertificadoActivo()}
-     * (database), never from local files. Bytes stay in memory for
-     * {@link #getPreviewConstancia()}; the per-request temp dir is deleted.
-     */
-    public void descargarConstancia() {
-        RnGcCertificadosTbl certificado = obtenerCertificadoActivo();
-        if (certificado == null) {
-            RequestContext.getCurrentInstance().addCallbackParam("ok", false);
-            JsfUtil.addErrorMessage("Sin FIEL vigente",
-                    "No tiene una FIEL activa y vigente registrada. Cárguela primero en Certificados antes de descargar la Constancia.");
-            return;
-        }
-        ChromeDriver driver = null;
-        Path tempDownloadDir = null;
+    private void solicitarDocumento(String tipo) {
+        String nombre = RnGcDocumentosSatJobTbl.nombreDocumento(tipo);
         try {
-            tempDownloadDir = Files.createTempDirectory("constancia-dl-");
-            driver = MapObjectConstanciaHeadless.buildChromeDriverConDescargas(tempDownloadDir.toString());
-            MapObjectConstanciaHeadless page = new MapObjectConstanciaHeadless(driver, tempDownloadDir.toString());
-            page.irAlEjecutor().loginConEFirma(
-                    certificado.getCertificadoSelloDigital(),
-                    certificado.getLlavePrivada(),
-                    certificado.getContraseniaLlavePrivada());
-            File pdf = page.generarYDescargar();
-            byte[] pdfBytes = Files.readAllBytes(pdf.toPath());
-            constanciaBytes = pdfBytes;
-            downLoadConstancia = new DefaultStreamedContent(new ByteArrayInputStream(pdfBytes),
-                    "application/pdf", "ConstanciaSituacionFiscal.pdf");
-            RequestContext.getCurrentInstance().addCallbackParam("ok", true);
-        } catch (Exception e) {
-            constanciaBytes = null;
-            downLoadConstancia = null;
-            RequestContext.getCurrentInstance().addCallbackParam("ok", false);
-            Logger.getLogger(RnGcDocumentosFiscalesTblController.class.getName())
-                    .log(Level.SEVERE, "Error al generar la Constancia de Situación Fiscal", e);
-            JsfUtil.addErrorMessage("No se pudo generar la Constancia",
-                    "No se pudo generar la Constancia de Situación Fiscal. Verifique que su FIEL esté vigente e intente de nuevo.");
-        } finally {
-            if (driver != null) {
-                try {
-                    driver.quit();
-                } catch (Exception ignored) {
-                    // Best effort close.
-                }
+            RnGcCertificadosTbl certificado = obtenerCertificadoActivo();
+            if (certificado == null) {
+                JsfUtil.addErrorMessage("Sin FIEL vigente",
+                        "No tiene una FIEL activa y vigente registrada. Cárguela primero en Certificados antes de solicitar la " + nombre + ".");
+                return;
             }
-            borrarDirectorioTemporal(tempDownloadDir);
+            // Sin mensaje de confirmacion: la leyenda de la tarjeta ya indica que se esta generando.
+            despachadorDocumentosSat.solicitar(usuarioFirmado.obtenerIdUsuario(), tipo);
+        } catch (RuntimeException e) {
+            Logger.getLogger(RnGcDocumentosFiscalesTblController.class.getName())
+                    .log(Level.SEVERE, "Error al solicitar la " + nombre, e);
+            JsfUtil.addErrorMessage("No se pudo solicitar el documento",
+                    "No se pudo registrar la solicitud de la " + nombre + ". Intente de nuevo.");
+        } finally {
+            olvidarTrabajosDocumentos();
+        }
+    }
+
+    /** Antes de abrir el dialogo: confirma que el PDF sigue disponible. */
+    private void prepararVista(String tipo) {
+        olvidarTrabajosDocumentos();
+        boolean ok = pdfDisponible(tipo) != null;
+        RequestContext.getCurrentInstance().addCallbackParam("ok", ok);
+        if (!ok) {
+            JsfUtil.addErrorMessage("Documento no disponible",
+                    "La " + RnGcDocumentosSatJobTbl.nombreDocumento(tipo)
+                    + " ya expiró o no está disponible. Solicítela de nuevo.");
         }
     }
 
     /**
-     * Generates the Opinión de Cumplimiento PDF for preview in browser
-     * (no auto-download). Same synchronous/DB-sourced-FIEL model as
-     * {@link #descargarConstancia()}; bytes stay in memory for
-     * {@link #getPreviewOpinion()}.
+     * Ultimo trabajo del usuario para ese tipo, consultado una sola vez por
+     * peticion (los getters de la vista se evaluan varias veces).
      */
-    public void descargarOpinion() {
-        RnGcCertificadosTbl certificado = obtenerCertificadoActivo();
-        if (certificado == null) {
-            RequestContext.getCurrentInstance().addCallbackParam("ok", false);
-            JsfUtil.addErrorMessage("Sin FIEL vigente",
-                    "No tiene una FIEL activa y vigente registrada. Cárguela primero en Certificados antes de descargar la Opinión de Cumplimiento.");
-            return;
-        }
-        ChromeDriver driver = null;
-        Path tempDownloadDir = null;
-        try {
-            tempDownloadDir = Files.createTempDirectory("opinion-dl-");
-            driver = MapObjectOpiniónHeadless.buildChromeDriverConDescargas(tempDownloadDir.toString());
-            MapObjectOpiniónHeadless page = new MapObjectOpiniónHeadless(driver, tempDownloadDir.toString());
-            page.open().loginConEFirma(
-                    certificado.getCertificadoSelloDigital(),
-                    certificado.getLlavePrivada(),
-                    certificado.getContraseniaLlavePrivada());
-            File pdf = page.generarYDescargar();
-            byte[] pdfBytes = Files.readAllBytes(pdf.toPath());
-            opinionBytes = pdfBytes;
-            downLoadOpinion = new DefaultStreamedContent(new ByteArrayInputStream(pdfBytes),
-                    "application/pdf", "OpinionCumplimiento.pdf");
-            RequestContext.getCurrentInstance().addCallbackParam("ok", true);
-        } catch (Exception e) {
-            opinionBytes = null;
-            downLoadOpinion = null;
-            RequestContext.getCurrentInstance().addCallbackParam("ok", false);
-            Logger.getLogger(RnGcDocumentosFiscalesTblController.class.getName())
-                    .log(Level.SEVERE, "Error al generar la Opinión de Cumplimiento", e);
-            JsfUtil.addErrorMessage("No se pudo generar la Opinión",
-                    "No se pudo generar la Opinión de Cumplimiento. Verifique que su FIEL esté vigente e intente de nuevo.");
-        } finally {
-            if (driver != null) {
-                try {
-                    driver.quit();
-                } catch (Exception ignored) {
-                    // Best effort close.
-                }
+    private RnGcDocumentosSatJobTbl ultimoTrabajo(String tipo) {
+        Map<Object, Object> atributos = FacesContext.getCurrentInstance().getAttributes();
+        String clave = "docsSat.ultimo." + tipo;
+        if (!atributos.containsKey(clave)) {
+            RnGcDocumentosSatJobTbl job = null;
+            try {
+                job = documentosSatJobFacade.obtenerUltimo(usuarioFirmado.obtenerIdUsuario(), tipo);
+            } catch (RuntimeException e) {
+                Logger.getLogger(RnGcDocumentosFiscalesTblController.class.getName())
+                        .log(Level.WARNING, "No se pudo consultar el estado de los documentos SAT", e);
             }
-            borrarDirectorioTemporal(tempDownloadDir);
+            atributos.put(clave, job);
         }
+        return (RnGcDocumentosSatJobTbl) atributos.get(clave);
     }
 
-    /** Best-effort recursive delete of the per-request Selenium download dir. */
-    private void borrarDirectorioTemporal(Path dir) {
-        if (dir == null) {
-            return;
+    private void olvidarTrabajosDocumentos() {
+        Map<Object, Object> atributos = FacesContext.getCurrentInstance().getAttributes();
+        atributos.remove("docsSat.ultimo." + RnGcDocumentosSatJobTbl.TIPO_CONSTANCIA);
+        atributos.remove("docsSat.ultimo." + RnGcDocumentosSatJobTbl.TIPO_OPINION);
+    }
+
+    private boolean vigente(RnGcDocumentosSatJobTbl job) {
+        return job != null && job.isListo() && job.getFechaExpira() != null
+                && job.getFechaExpira().after(new Date());
+    }
+
+    private String estadoDocumento(String tipo) {
+        RnGcDocumentosSatJobTbl job = ultimoTrabajo(tipo);
+        if (job != null && job.isActivo()) {
+            return ESTADO_DOC_GENERANDO;
         }
-        File folder = dir.toFile();
-        File[] files = folder.listFiles();
-        if (files != null) {
-            for (File f : files) {
-                f.delete();
-            }
+        return vigente(job) ? ESTADO_DOC_LISTO : ESTADO_DOC_INACTIVO;
+    }
+
+    private String leyendaDocumento(String tipo) {
+        RnGcDocumentosSatJobTbl job = ultimoTrabajo(tipo);
+        if (job == null) {
+            return "Se genera en segundo plano y puede tardar unos minutos.";
         }
-        folder.delete();
+        if (job.isActivo()) {
+            return "Generando… puede tardar unos minutos. Te avisaremos en cuanto termine.";
+        }
+        if (vigente(job)) {
+            return "Disponible hasta las " + new SimpleDateFormat("HH:mm").format(job.getFechaExpira()) + ".";
+        }
+        if (RnGcDocumentosSatJobTbl.ESTADO_ERROR.equals(job.getEstado())) {
+            return "No se pudo generar. " + (job.getMensaje() == null ? "" : job.getMensaje());
+        }
+        return "El documento anterior expiró. Puedes solicitarlo de nuevo.";
+    }
+
+    private String disponibleHasta(String tipo) {
+        RnGcDocumentosSatJobTbl job = ultimoTrabajo(tipo);
+        if (!vigente(job)) {
+            return "";
+        }
+        return "Disponible hasta las " + new SimpleDateFormat("HH:mm").format(job.getFechaExpira())
+                + " (se elimina " + AlmacenDocumentosSat.ttlMinutos() + " minutos después de generarse).";
+    }
+
+    /** Bytes del PDF del ultimo trabajo LISTO y vigente; null si no hay. */
+    private byte[] pdfDisponible(String tipo) {
+        RnGcDocumentosSatJobTbl job = ultimoTrabajo(tipo);
+        if (!vigente(job)) {
+            return null;
+        }
+        return GeneradorDocumentosSat.leerSiExiste(job.getRutaArchivo());
+    }
+
+    private StreamedContent contenidoPdf(String tipo, String nombreArchivo) {
+        byte[] pdf = pdfDisponible(tipo);
+        if (pdf == null) {
+            return null;
+        }
+        if (nombreArchivo == null) {
+            return new DefaultStreamedContent(new ByteArrayInputStream(pdf), "application/pdf");
+        }
+        return new DefaultStreamedContent(new ByteArrayInputStream(pdf), "application/pdf", nombreArchivo);
     }
 
     protected void setEmbeddableKeys() {
@@ -882,8 +922,9 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
         td = new TrippleDes();
         String encrypted = td.encrypt(plainPwd);
 
-        System.out.println("String To Encrypt: " + plainPwd);
-        System.out.println("Encrypted String:" + encrypted);
+        // LOGIN.1: comentado para no escribir contrasenas (en claro o cifradas con 3DES reversible) en server.log
+        // System.out.println("String To Encrypt: " + plainPwd);
+        // System.out.println("Encrypted String:" + encrypted);
 
         return encrypted;
     }
@@ -893,8 +934,9 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
         td = new TrippleDes();
         String decrypted = td.decrypt(encryptedPwd);
 
-        System.out.println("String To Decrypt: " + encryptedPwd);
-        System.out.println("Decrypted String:" + decrypted);
+        // LOGIN.1: comentado para no escribir contrasenas (en claro o cifradas con 3DES reversible) en server.log
+        // System.out.println("String To Decrypt: " + encryptedPwd);
+        // System.out.println("Decrypted String:" + decrypted);
 
         return decrypted;
     }

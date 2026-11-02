@@ -4,10 +4,15 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.UnhandledAlertException;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -19,6 +24,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  */
 public class MapObjectConstanciaHeadless extends SatDocsBase {
 
+    private static final Logger LOG = Logger.getLogger(MapObjectConstanciaHeadless.class.getName());
+
     /** URL aplicacion heredada; responde 302 a la página informativa, solo referencia. */
     public static final String URL_FUNCIONAL = "https://www.sat.gob.mx/aplicacion/53027/genera-tu-constancia-de-situacion-fiscal";
 
@@ -27,6 +34,18 @@ public class MapObjectConstanciaHeadless extends SatDocsBase {
 
     /** Timeout de espera del PDF en disco, en segundos. */
     public static final long DEFAULT_DOWNLOAD_TIMEOUT_SECONDS = 120L;
+
+    /**
+     * Tope para que aparezca el formulario e.firma. El portal tarda ~40 s en frío y
+     * puede recargar la página completa (destruye el iframe) mientras carga.
+     */
+    private static final long LOGIN_FORM_TIMEOUT_SECONDS = 120L;
+
+    /** Tope para que la app post-login (SessionBroker) muestre "Generar Constancia". */
+    private static final long POST_LOGIN_TIMEOUT_SECONDS = 90L;
+
+    /** Pausa mínima entre clics a la pestaña e.firma mientras el formulario carga. */
+    private static final long EFIRMA_CLICK_INTERVAL_MILLIS = 5000L;
 
     /** Intervalo de sondeo del sistema de archivos, en milisegundos. */
     private static final long DOWNLOAD_POLL_MILLIS = 1000L;
@@ -140,25 +159,7 @@ public class MapObjectConstanciaHeadless extends SatDocsBase {
             throw new IllegalArgumentException("e.firma private-key password must not be empty");
         }
 
-        // La app de auth renderiza en iframe; si el formulario va en línea se usa top.
-        try {
-            shortWait.until(
-                    ExpectedConditions.frameToBeAvailableAndSwitchToIt(LOGIN_IFRAME));
-        } catch (TimeoutException noFrame) {
-            driver.switchTo().defaultContent();
-        }
-
-        seleccionarEFirma();
-        try {
-            // Vía rápida: el formulario aparece al segundo de un clic efectivo. Si el
-            // clic pierde la carrera contra el arranque Angular, un segundo clic recupera
-            // sin quemar los 30 s de espera en una página muerta.
-            shortWait.until(ExpectedConditions.presenceOfElementLocated(CER_INPUT));
-        } catch (TimeoutException maybeLostClick) {
-            seleccionarEFirma();
-        }
-
-        WebElement cerInput = wait.until(ExpectedConditions.presenceOfElementLocated(CER_INPUT));
+        WebElement cerInput = esperarInputCertificado();
         unhideFileInput(cerInput);
         cerInput.sendKeys(cerFile.getAbsolutePath());
 
@@ -173,6 +174,51 @@ public class MapObjectConstanciaHeadless extends SatDocsBase {
         WebElement submit = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT_BUTTON));
         submit.click();
         return this;
+    }
+
+    /**
+     * Espera el input del *.cer re-entrando al iframe de login en cada sondeo: si el
+     * portal recarga la página, el frame anterior muere y una sola entrada dejaría a
+     * Selenium buscando en un documento destruido. Clic a la pestaña e.firma
+     * (espaciado) hasta que el formulario aparezca.
+     *
+     * @return el input del *.cer, con el contexto de frames ya en su documento
+     */
+    private WebElement esperarInputCertificado() {
+        long limite = System.currentTimeMillis() + LOGIN_FORM_TIMEOUT_SECONDS * 1000L;
+        long ultimoClic = 0L;
+        while (true) {
+            try {
+                driver.switchTo().defaultContent();
+                List<WebElement> frames = driver.findElements(LOGIN_IFRAME);
+                if (!frames.isEmpty()) {
+                    driver.switchTo().frame(frames.get(0));
+                }
+                List<WebElement> cer = driver.findElements(CER_INPUT);
+                if (!cer.isEmpty()) {
+                    return cer.get(0);
+                }
+                List<WebElement> tabs = driver.findElements(EFIRMA_TAB);
+                long ahora = System.currentTimeMillis();
+                if (!tabs.isEmpty() && tabs.get(0).isDisplayed() && ahora - ultimoClic >= EFIRMA_CLICK_INTERVAL_MILLIS) {
+                    tabs.get(0).click();
+                    ultimoClic = ahora;
+                }
+            } catch (WebDriverException recargando) {
+                // Frame o elemento destruido por una recarga en curso; se reintenta.
+            }
+            if (System.currentTimeMillis() > limite) {
+                driver.switchTo().defaultContent();
+                throw new TimeoutException("El formulario e.firma del SAT no aparecio en "
+                        + LOGIN_FORM_TIMEOUT_SECONDS + " s (url: " + driver.getCurrentUrl() + ")");
+            }
+            try {
+                Thread.sleep(DOWNLOAD_POLL_MILLIS);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new IllegalStateException("Interrupted while waiting for the e.firma login form", e);
+            }
+        }
     }
 
     /**
@@ -201,7 +247,37 @@ public class MapObjectConstanciaHeadless extends SatDocsBase {
     public File generarYDescargar() {
         // El login ocurre en iframe; el contenido post-login puede ir en top,
         // así que siempre se reinicia el contexto de frames primero.
-        driver.switchTo().defaultContent();
+        String avisoSat = volverAlDocumentoPrincipal();
+        try {
+            return generarYDescargarSinAviso();
+        } catch (RuntimeException e) {
+            if (avisoSat == null) {
+                throw e;
+            }
+            throw new IllegalStateException("El SAT mostro un aviso tras el login: " + avisoSat, e);
+        }
+    }
+
+    /**
+     * Reinicia el contexto de frames tolerando el alert que el SAT puede abrir tras
+     * el login. Con unhandledPromptBehavior "dismiss and notify" Chrome ya lo cerró
+     * al lanzar la excepción; como en el flujo manual ("Aceptar"), se continúa.
+     *
+     * @return el texto del aviso, o null si no hubo
+     */
+    private String volverAlDocumentoPrincipal() {
+        try {
+            driver.switchTo().defaultContent();
+            return null;
+        } catch (UnhandledAlertException aviso) {
+            String texto = aviso.getAlertText();
+            LOG.log(Level.WARNING, "Aviso del SAT tras el login de constancia (se continua): {0}", texto);
+            driver.switchTo().defaultContent();
+            return texto == null ? "(sin texto)" : texto;
+        }
+    }
+
+    private File generarYDescargarSinAviso() {
         int pdfCountBefore = countPdfs(downloadDir);
         try {
             // Espera corta a propósito: varios flujos SAT omiten este paso tras el login.
@@ -241,22 +317,15 @@ public class MapObjectConstanciaHeadless extends SatDocsBase {
      *         usa la rama heredada)
      */
     private File tryGenerarEnSessionBroker(int pdfCountBefore) {
-        try {
-            shortWait.until(
-                    ExpectedConditions.frameToBeAvailableAndSwitchToIt(SESSION_BROKER_IFRAME));
-        } catch (TimeoutException noInnerFrame) {
+        WebElement generar = buscarEnFrame(SESSION_BROKER_IFRAME, INNER_GENERATE_BUTTON, POST_LOGIN_TIMEOUT_SECONDS);
+        if (generar == null) {
+            LOG.log(Level.WARNING, "Constancia: sin boton Generar en SessionBroker tras {0} s; {1}",
+                    new Object[]{POST_LOGIN_TIMEOUT_SECONDS, describirPagina()});
             driver.switchTo().defaultContent();
             return null;
         }
         String mainHandle = driver.getWindowHandle();
         try {
-            WebElement generar;
-            try {
-                generar = shortWait.until(
-                        ExpectedConditions.elementToBeClickable(INNER_GENERATE_BUTTON));
-            } catch (TimeoutException noButton) {
-                return null;
-            }
             int handlesBefore = driver.getWindowHandles().size();
             generar.click();
             waitForPopupOrDownload(handlesBefore, pdfCountBefore, downloadTimeoutSeconds);
@@ -268,6 +337,75 @@ public class MapObjectConstanciaHeadless extends SatDocsBase {
             closeNewWindows(mainHandle);
             driver.switchTo().defaultContent();
         }
+    }
+
+    /**
+     * Busca un elemento visible dentro del frame, re-entrando en cada sondeo para
+     * sobrevivir recargas del portal (igual que {@link #esperarInputCertificado()}).
+     *
+     * @return el elemento con el contexto ya en su frame, o null al agotar el tiempo
+     */
+    private WebElement buscarEnFrame(By frameLocator, By objetivo, long timeoutSeconds) {
+        long limite = System.currentTimeMillis() + timeoutSeconds * 1000L;
+        while (true) {
+            try {
+                driver.switchTo().defaultContent();
+                List<WebElement> frames = driver.findElements(frameLocator);
+                if (!frames.isEmpty()) {
+                    driver.switchTo().frame(frames.get(0));
+                    for (WebElement candidato : driver.findElements(objetivo)) {
+                        if (candidato.isDisplayed() && candidato.isEnabled()) {
+                            return candidato;
+                        }
+                    }
+                }
+            } catch (WebDriverException recargando) {
+                // Frame o elemento destruido por una recarga en curso; se reintenta.
+            }
+            if (System.currentTimeMillis() > limite) {
+                return null;
+            }
+            try {
+                Thread.sleep(DOWNLOAD_POLL_MILLIS);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new IllegalStateException("Interrupted while waiting for the constancia page", e);
+            }
+        }
+    }
+
+    /** Resumen para el log: URL principal, frames y textos de botones/enlaces del frame. */
+    private String describirPagina() {
+        StringBuilder sb = new StringBuilder();
+        try {
+            driver.switchTo().defaultContent();
+            sb.append("url=").append(driver.getCurrentUrl());
+            List<WebElement> frames = driver.findElements(SESSION_BROKER_IFRAME);
+            for (WebElement frame : driver.findElements(By.tagName("iframe"))) {
+                sb.append(" | iframe=").append(frame.getAttribute("src"));
+            }
+            if (!frames.isEmpty()) {
+                driver.switchTo().frame(frames.get(0));
+                sb.append(" | frameUrl=").append(driver.getCurrentUrl()).append(" | acciones=[");
+                int n = 0;
+                for (WebElement e : driver.findElements(By.cssSelector("button, a, input[type='button'], input[type='submit']"))) {
+                    String texto = e.getText().trim().isEmpty() ? e.getAttribute("value") : e.getText().trim();
+                    if (texto != null && !texto.trim().isEmpty() && n++ < 25) {
+                        sb.append(texto.length() > 40 ? texto.substring(0, 40) : texto).append("; ");
+                    }
+                }
+                sb.append(']');
+            }
+        } catch (WebDriverException e) {
+            sb.append(" | (diagnostico incompleto: ").append(e.getClass().getSimpleName()).append(')');
+        } finally {
+            try {
+                driver.switchTo().defaultContent();
+            } catch (WebDriverException ignorada) {
+                // Solo diagnóstico.
+            }
+        }
+        return sb.toString();
     }
 
     /**

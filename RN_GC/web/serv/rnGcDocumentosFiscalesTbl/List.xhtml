@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-    <ui:composition template="/templateRN.xhtml">
+<ui:composition template="/templateRN.xhtml">
 
-        <ui:define name="title">
-            <h:outputText value="Servicios SAT"/>
-        </ui:define>
+    <ui:define name="title">
+        <h:outputText value="Servicios SAT" />
+    </ui:define>
 
-        <ui:define name="body">
+    <ui:define name="body">
 
-            <h:form id="formDocumentos">
+        <h:form id="formDocumentos">
 
-                <!-- BOTONES SUPERIORES -->
-                <div style="
+            <!-- BOTONES SUPERIORES -->
+            <div style="
                      display:flex;
                      gap:15px;
                      margin-bottom:25px;
@@ -28,28 +24,88 @@
                      flex-wrap:wrap;
                      ">
 
-                    <!-- CTR-04/CTR-05: bloque Cambiar Contraseña SAT deshabilitado - solo e.firma, se elimina entrada CIEC -->
-                    <!--
+                <!-- CTR-04/CTR-05: bloque Cambiar Contraseña SAT deshabilitado - solo e.firma, se elimina entrada CIEC -->
+                <!-- Se usa ui:remove y no un comentario HTML: Facelets evalua el EL dentro de los comentarios y ejecutaba cambiarContrasena() en cada carga de la pagina -->
+                <ui:remove>
                     /*
-                    <p:commandButton
-                        value="Cambiar Contraseña"
-                        icon="pi pi-key"
-                        type="button"
-                        onclick="PF('dlgCambiarContrasena').show()"
-                        styleClass="ui-button-warning"/>
+                    <p:commandButton value="Cambiar Contraseña" icon="fa fa-key" type="button"
+                        onclick="PF('dlgCambiarContrasena').show()" styleClass="ui-button-warning" />
                     */
-                    -->
+                </ui:remove>
+
+            </div>
+
+            <!-- CARDS -->
+            <div class="ui-g" style="display:flex; flex-wrap:wrap;">
+
+                <!-- CONSTANCIA -->
+                <div class="ui-g-12 ui-md-6 ui-lg-4">
+
+                    <p:panel style="
+                                 border-radius:12px;
+                                 text-align:center;
+                                 padding:20px;
+                                 box-shadow:0 4px 12px rgba(0,0,0,.10);
+                                 min-height:260px;
+                                 ">
+
+                        <div style="
+                                 font-size:60px;
+                                 margin-bottom:15px;">
+                            🧾
+                        </div>
+
+                        <h2 style="margin-top:0">
+                            Constancia de Situación Fiscal
+                        </h2>
+
+                        <p style="
+                               color:#666;
+                               margin-bottom:20px;
+                               line-height:1.6;">
+                            Genera tu constancia del SAT.
+                        </p>
+
+                        <h:panelGroup id="estadoConstancia" layout="block">
+                            <p:commandButton id="btnSolicitarConstancia" value="Generar" icon="fa fa-cogs"
+                                rendered="#{rnGcDocumentosFiscalesTblController.estadoConstancia eq 'INACTIVO'}"
+                                action="#{rnGcDocumentosFiscalesTblController.solicitarConstancia()}"
+                                oncomplete="docsSatIniciarAvisos();"
+                                update=":formDocumentos:estadoConstancia :formDocumentos:estadoOpinion :formDocumentos:msgs"
+                                styleClass="ui-button-info" />
+
+                            <p:commandButton id="btnGenerandoConstancia" value="Generando..."
+                                icon="fa fa-spinner fa-spin" type="button" disabled="true"
+                                rendered="#{rnGcDocumentosFiscalesTblController.estadoConstancia eq 'GENERANDO'}"
+                                styleClass="ui-button-info" />
+
+                            <p:commandButton id="btnVerConstancia" value="Ver/Descargar" icon="fa fa-eye"
+                                rendered="#{rnGcDocumentosFiscalesTblController.estadoConstancia eq 'LISTO'}"
+                                action="#{rnGcDocumentosFiscalesTblController.verConstancia()}"
+                                oncomplete="PF('dlgVerOpinion').hide(); if (args.ok) { PF('dlgVerConstancia').show(); }"
+                                update=":formDocumentos:dlgVerConstancia :formDocumentos:estadoConstancia :formDocumentos:msgs"
+                                styleClass="ui-button-success" />
+
+                            <p:commandButton id="btnRegenerarConstancia" value="Generar de nuevo" icon="fa fa-refresh"
+                                rendered="#{rnGcDocumentosFiscalesTblController.estadoConstancia eq 'LISTO'}"
+                                action="#{rnGcDocumentosFiscalesTblController.solicitarConstancia()}"
+                                oncomplete="docsSatIniciarAvisos();"
+                                update=":formDocumentos:estadoConstancia :formDocumentos:estadoOpinion :formDocumentos:msgs"
+                                styleClass="ui-button-secondary" style="margin-left:8px;" />
+
+                            <div style="color:#666; font-size:12px; margin-top:10px;">
+                                <h:outputText value="#{rnGcDocumentosFiscalesTblController.leyendaConstancia}" />
+                            </div>
+                        </h:panelGroup>
+
+                    </p:panel>
 
                 </div>
 
-                <!-- CARDS -->
-                <div class="ui-g"
-                     style="display:flex; flex-wrap:wrap;">
+                <!-- OPINION DE CUMPLIMIENTO -->
+                <div class="ui-g-12 ui-md-6 ui-lg-4">
 
-                    <!-- CONSTANCIA -->
-                    <div class="ui-g-12 ui-md-6 ui-lg-4">
-
-                        <p:panel style="
+                    <p:panel style="
                                  border-radius:12px;
                                  text-align:center;
                                  padding:20px;
@@ -57,88 +113,63 @@
                                  min-height:260px;
                                  ">
 
-                            <div style="
+                        <div style="
                                  font-size:60px;
                                  margin-bottom:15px;">
-                                🧾
-                            </div>
+                            📄
+                        </div>
 
-                            <h2 style="margin-top:0">
-                                Constancia de Situación Fiscal
-                            </h2>
+                        <h2 style="margin-top:0">
+                            Opinión de Cumplimiento SAT
+                        </h2>
 
-                            <p style="
+                        <p style="
                                color:#666;
                                margin-bottom:20px;
                                line-height:1.6;">
-                                 Visualiza tu constancia del SAT en el navegador.
-                            </p>
+                            Genera tu opinión de cumplimiento SAT.
+                        </p>
 
-                            <p:commandButton
-                                id="btnVerConstancia"
-                                value="Ver"
-                                icon="pi pi-eye"
-                                action="#{rnGcDocumentosFiscalesTblController.descargarConstancia()}"
-                                onstart="document.getElementById('formDocumentos:btnVerConstancia').disabled=true;"
-                                oncomplete="document.getElementById('formDocumentos:btnVerConstancia').disabled=false; PF('dlgVerOpinion').hide(); if (args.ok) { PF('dlgVerConstancia').show(); }"
-                                onerror="document.getElementById('formDocumentos:btnVerConstancia').disabled=false;"
-                                update=":formDocumentos:dlgVerConstancia :formDocumentos:msgs"
-                                styleClass="ui-button-info">
-                            </p:commandButton>
+                        <h:panelGroup id="estadoOpinion" layout="block">
+                            <p:commandButton id="btnSolicitarOpinion" value="Generar" icon="fa fa-cogs"
+                                rendered="#{rnGcDocumentosFiscalesTblController.estadoOpinion eq 'INACTIVO'}"
+                                action="#{rnGcDocumentosFiscalesTblController.solicitarOpinion()}"
+                                oncomplete="docsSatIniciarAvisos();"
+                                update=":formDocumentos:estadoConstancia :formDocumentos:estadoOpinion :formDocumentos:msgs"
+                                styleClass="ui-button-info" />
 
-                        </p:panel>
+                            <p:commandButton id="btnGenerandoOpinion" value="Generando..." icon="fa fa-spinner fa-spin"
+                                type="button" disabled="true"
+                                rendered="#{rnGcDocumentosFiscalesTblController.estadoOpinion eq 'GENERANDO'}"
+                                styleClass="ui-button-info" />
 
-                    </div>
+                            <p:commandButton id="btnVerOpinion" value="Ver/Descargar" icon="fa fa-eye"
+                                rendered="#{rnGcDocumentosFiscalesTblController.estadoOpinion eq 'LISTO'}"
+                                action="#{rnGcDocumentosFiscalesTblController.verOpinion()}"
+                                oncomplete="PF('dlgVerConstancia').hide(); if (args.ok) { PF('dlgVerOpinion').show(); }"
+                                update=":formDocumentos:dlgVerOpinion :formDocumentos:estadoOpinion :formDocumentos:msgs"
+                                styleClass="ui-button-success" />
 
-                    <!-- OPINION DE CUMPLIMIENTO -->
-                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+                            <p:commandButton id="btnRegenerarOpinion" value="Generar de nuevo" icon="fa fa-refresh"
+                                rendered="#{rnGcDocumentosFiscalesTblController.estadoOpinion eq 'LISTO'}"
+                                action="#{rnGcDocumentosFiscalesTblController.solicitarOpinion()}"
+                                oncomplete="docsSatIniciarAvisos();"
+                                update=":formDocumentos:estadoConstancia :formDocumentos:estadoOpinion :formDocumentos:msgs"
+                                styleClass="ui-button-secondary" style="margin-left:8px;" />
 
-                        <p:panel style="
-                                 border-radius:12px;
-                                 text-align:center;
-                                 padding:20px;
-                                 box-shadow:0 4px 12px rgba(0,0,0,.10);
-                                 min-height:260px;
-                                 ">
-
-                            <div style="
-                                 font-size:60px;
-                                 margin-bottom:15px;">
-                                📄
+                            <div style="color:#666; font-size:12px; margin-top:10px;">
+                                <h:outputText value="#{rnGcDocumentosFiscalesTblController.leyendaOpinion}" />
                             </div>
+                        </h:panelGroup>
 
-                            <h2 style="margin-top:0">
-                                Opinión de Cumplimiento SAT
-                            </h2>
+                    </p:panel>
 
-                            <p style="
-                               color:#666;
-                               margin-bottom:20px;
-                               line-height:1.6;">
-                                 Visualiza tu opinión de cumplimiento SAT en el navegador.
-                            </p>
+                </div>
 
-                            <p:commandButton
-                                id="btnVerOpinion"
-                                value="Ver"
-                                icon="pi pi-eye"
-                                action="#{rnGcDocumentosFiscalesTblController.descargarOpinion()}"
-                                onstart="document.getElementById('formDocumentos:btnVerOpinion').disabled=true;"
-                                oncomplete="document.getElementById('formDocumentos:btnVerOpinion').disabled=false; PF('dlgVerConstancia').hide(); if (args.ok) { PF('dlgVerOpinion').show(); }"
-                                onerror="document.getElementById('formDocumentos:btnVerOpinion').disabled=false;"
-                                update=":formDocumentos:dlgVerOpinion :formDocumentos:msgs"
-                                styleClass="ui-button-info">
-                            </p:commandButton>
+                <!-- FEC Y CONTRASEÑA -->
+                <div class="ui-g-12 ui-md-6 ui-lg-4" style="margin-left:auto;">
 
-                        </p:panel>
-
-                    </div>
-
-                    <!-- FEC Y CONTRASEÑA -->
-                    <div class="ui-g-12 ui-md-6 ui-lg-4"
-                         style="margin-left:auto;">
-
-                        <p:panel style="
+                    <p:panel style="
                                  border-radius:12px;
                                  text-align:center;
                                  padding:20px;
@@ -147,26 +178,26 @@
                                  background:#fafafa;
                                  ">
 
-                            <div style="
+                        <div style="
                                  font-size:60px;
                                  margin-bottom:15px;">
-                                🔐
-                            </div>
+                            🔐
+                        </div>
 
-                            <h2 style="margin-top:0">
-                                FEC y Contraseña
-                            </h2>
+                        <h2 style="margin-top:0">
+                            FEC y Contraseña
+                        </h2>
 
-                            <p style="
+                        <p style="
                                color:#666;
                                margin-bottom:20px;
                                line-height:1.6;">
-                                Administra tu contraseña y accesos
-                                relacionados con los servicios SAT.
-                            </p>
+                            Administra tu contraseña y accesos
+                            relacionados con los servicios SAT.
+                        </p>
 
-                            <!-- DATOS -->
-                            <div style="
+                        <!-- DATOS -->
+                        <div style="
                                  text-align:left;
                                  margin-bottom:20px;
                                  background:#f5f5f5;
@@ -174,65 +205,53 @@
                                  border-radius:10px;
                                  ">
 
-                                <div style="margin-bottom:10px;">
+                            <div style="margin-bottom:10px;">
 
-                                    <strong>RFC:</strong>
+                                <strong>RFC:</strong>
 
-                                    <span style="color:#1976d2;">
-                                        #{rnGcDocumentosFiscalesTblController.getUsuarioRfc()}
-                                    </span>
-
-                                </div>
-
-                                <div>
-
-                                    <strong>Contraseña:</strong>
-
-                                    <span style="color:#d32f2f;">
-                                        #{rnGcDocumentosFiscalesTblController.getUsuarioContrasena()}
-                                    </span>
-
-                                </div>
+                                <span style="color:#1976d2;">
+                                    #{rnGcDocumentosFiscalesTblController.getUsuarioRfc()}
+                                </span>
 
                             </div>
 
-                        </p:panel>
+                            <div>
 
-                    </div>
+                                <strong>Contraseña:</strong>
+
+                                <span style="color:#d32f2f;">
+                                    #{rnGcDocumentosFiscalesTblController.getUsuarioContrasena()}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </p:panel>
 
                 </div>
 
-                <!-- MODAL CAMBIAR CONTRASEÑA -->
-                <!-- CTR-04/CTR-05: modal Cambiar Contraseña SAT deshabilitado - solo e.firma, se elimina entrada CIEC -->
-                <!--
+            </div>
+
+            <!-- MODAL CAMBIAR CONTRASEÑA -->
+            <!-- CTR-04/CTR-05: modal Cambiar Contraseña SAT deshabilitado - solo e.firma, se elimina entrada CIEC -->
+            <!-- Se usa ui:remove y no un comentario HTML: Facelets evalua el EL dentro de los comentarios y ejecutaba cambiarContrasena() en cada carga de la pagina -->
+            <ui:remove>
                 /*
-                <p:dialog
-                    header="Cambiar Contraseña SAT"
-                    widgetVar="dlgCambiarContrasena"
-                    appendTo="@(body)"
-                    modal="false"
-                    closable="true"
-                    resizable="false"
-                    width="400"
-                    responsive="true">
+                <p:dialog header="Cambiar Contraseña SAT" widgetVar="dlgCambiarContrasena" appendTo="@(body)"
+                    modal="false" closable="true" resizable="false" width="400" responsive="true">
 
                     <div style="padding:10px;">
 
                         <div style="margin-bottom:20px;">
 
-                            <p:outputLabel
-                                value="Nueva Contraseña"
-                                style="
+                            <p:outputLabel value="Nueva Contraseña" style="
                                 font-weight:bold;
                                 display:block;
-                                margin-bottom:8px;"/>
+                                margin-bottom:8px;" />
 
-                            <p:password
-                                value="#{rnGcDocumentosFiscalesTblController.nuevaContrasena}"
-                                feedback="false"
-                                redisplay="true"
-                                placeholder="Ingrese nueva contraseña"
-                                style="width:100%;"/>
+                            <p:password value="#{rnGcDocumentosFiscalesTblController.nuevaContrasena}" feedback="false"
+                                redisplay="true" placeholder="Ingrese nueva contraseña" style="width:100%;" />
 
                         </div>
 
@@ -241,20 +260,13 @@
                              justify-content:flex-end;
                              gap:10px;">
 
-                            <p:commandButton
-                                value="Cancelar"
-                                type="button"
-                                icon="pi pi-times"
-                                onclick="PF('dlgCambiarContrasena').hide()"
-                                styleClass="ui-button-secondary"/>
+                            <p:commandButton value="Cancelar" type="button" icon="fa fa-times"
+                                onclick="PF('dlgCambiarContrasena').hide()" styleClass="ui-button-secondary" />
 
-                            <p:commandButton
-                                value="Guardar"
-                                icon="pi pi-save"
+                            <p:commandButton value="Guardar" icon="fa fa-save"
                                 action="#{rnGcDocumentosFiscalesTblController.cambiarContrasena()}"
-                                update="formDocumentos"
-                                oncomplete="PF('dlgCambiarContrasena').hide()"
-                                styleClass="ui-button-success"/>
+                                update="formDocumentos" oncomplete="PF('dlgCambiarContrasena').hide()"
+                                styleClass="ui-button-success" />
 
                         </div>
 
@@ -262,89 +274,67 @@
 
                 </p:dialog>
                 */
-                -->
+            </ui:remove>
 
-                <p:messages id="msgs" showDetail="true" closable="true"/>
+            <p:messages id="msgs" showDetail="true" closable="true" />
 
-                <!-- PREVIEW CONSTANCIA (inline, sin descarga automatica) -->
-                <p:dialog
-                    id="dlgVerConstancia"
-                    header="Constancia de Situación Fiscal"
-                    widgetVar="dlgVerConstancia"
-                    appendTo="@(body)"
-                    modal="true"
-                    closable="true"
-                    resizable="false"
-                    width="80%"
-                    responsive="true">
+            <!-- El aviso global (templateRN) la invoca cuando termina un lote para refrescar los botones -->
+            <p:remoteCommand name="docsSatRefrescar" process="@this" global="false"
+                update=":formDocumentos:estadoConstancia :formDocumentos:estadoOpinion" />
 
-                    <p:media
-                        value="#{rnGcDocumentosFiscalesTblController.previewConstancia}"
-                        player="pdf"
-                        width="100%"
-                        height="550px"/>
+            <!-- PREVIEW CONSTANCIA (inline, sin descarga automatica) -->
+            <p:dialog id="dlgVerConstancia" header="Constancia de Situación Fiscal" widgetVar="dlgVerConstancia"
+                appendTo="@(body)" modal="true" closable="true" resizable="false" width="80%" responsive="true">
 
-                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
-                        <p:commandButton
-                            value="Descargar PDF"
-                            icon="pi pi-download"
-                            ajax="false"
-                            styleClass="ui-button-secondary">
-                            <f:passThroughAttribute name="form" value="formDocumentos"/>
-                            <p:fileDownload value="#{rnGcDocumentosFiscalesTblController.downLoadConstancia}" contentDisposition="attachment"/>
-                        </p:commandButton>
+                <p:media value="#{rnGcDocumentosFiscalesTblController.previewConstancia}" player="pdf" cache="false"
+                    width="100%" height="550px" />
 
-                        <p:commandButton
-                            value="Cerrar"
-                            type="button"
-                            icon="pi pi-times"
-                            onclick="PF('dlgVerConstancia').hide()"
-                            styleClass="ui-button-secondary"/>
-                    </div>
+                <div style="color:#666; margin-top:10px;">
+                    <h:outputText value="#{rnGcDocumentosFiscalesTblController.disponibleHastaConstancia}" />
+                </div>
 
-                </p:dialog>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+                    <p:commandButton value="Descargar PDF" icon="fa fa-download" ajax="false"
+                        styleClass="ui-button-secondary">
+                        <f:passThroughAttribute name="form" value="formDocumentos" />
+                        <p:fileDownload value="#{rnGcDocumentosFiscalesTblController.downLoadConstancia}"
+                            contentDisposition="attachment" />
+                    </p:commandButton>
 
-                <!-- PREVIEW OPINION (inline, sin descarga automatica) -->
-                <p:dialog
-                    id="dlgVerOpinion"
-                    header="Opinión de Cumplimiento SAT"
-                    widgetVar="dlgVerOpinion"
-                    appendTo="@(body)"
-                    modal="true"
-                    closable="true"
-                    resizable="false"
-                    width="80%"
-                    responsive="true">
+                    <p:commandButton value="Cerrar" type="button" icon="fa fa-times"
+                        onclick="PF('dlgVerConstancia').hide()" styleClass="ui-button-secondary" />
+                </div>
 
-                    <p:media
-                        value="#{rnGcDocumentosFiscalesTblController.previewOpinion}"
-                        player="pdf"
-                        width="100%"
-                        height="550px"/>
+            </p:dialog>
 
-                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
-                        <p:commandButton
-                            value="Descargar PDF"
-                            icon="pi pi-download"
-                            ajax="false"
-                            styleClass="ui-button-secondary">
-                            <f:passThroughAttribute name="form" value="formDocumentos"/>
-                            <p:fileDownload value="#{rnGcDocumentosFiscalesTblController.downLoadOpinion}" contentDisposition="attachment"/>
-                        </p:commandButton>
+            <!-- PREVIEW OPINION (inline, sin descarga automatica) -->
+            <p:dialog id="dlgVerOpinion" header="Opinión de Cumplimiento SAT" widgetVar="dlgVerOpinion"
+                appendTo="@(body)" modal="true" closable="true" resizable="false" width="80%" responsive="true">
 
-                        <p:commandButton
-                            value="Cerrar"
-                            type="button"
-                            icon="pi pi-times"
-                            onclick="PF('dlgVerOpinion').hide()"
-                            styleClass="ui-button-secondary"/>
-                    </div>
+                <p:media value="#{rnGcDocumentosFiscalesTblController.previewOpinion}" player="pdf" cache="false"
+                    width="100%" height="550px" />
 
-                </p:dialog>
-            </h:form>
+                <div style="color:#666; margin-top:10px;">
+                    <h:outputText value="#{rnGcDocumentosFiscalesTblController.disponibleHastaOpinion}" />
+                </div>
 
-        </ui:define>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+                    <p:commandButton value="Descargar PDF" icon="fa fa-download" ajax="false"
+                        styleClass="ui-button-secondary">
+                        <f:passThroughAttribute name="form" value="formDocumentos" />
+                        <p:fileDownload value="#{rnGcDocumentosFiscalesTblController.downLoadOpinion}"
+                            contentDisposition="attachment" />
+                    </p:commandButton>
 
-    </ui:composition>
+                    <p:commandButton value="Cerrar" type="button" icon="fa fa-times"
+                        onclick="PF('dlgVerOpinion').hide()" styleClass="ui-button-secondary" />
+                </div>
+
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
 
 </html>
