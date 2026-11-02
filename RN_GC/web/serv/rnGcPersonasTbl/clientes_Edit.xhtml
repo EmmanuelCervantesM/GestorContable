@@ -66,11 +66,12 @@
                                                var="paisItem"
                                                itemLabel="#{paisItem.CPais} - #{paisItem.descripcion}"
                                                itemValue="#{paisItem.CPais} - #{paisItem.descripcion}"/>
+                                <p:ajax update="estado codigoPostal"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_estado}" for="estado" />
                              <p:selectOneMenu id="estado" style="width: 160px" filter="true" filterMatchMode="contains" value="#{rnGcPersonas_clientesTblController.selected.estado}" title="#{bundle.CreateRnGcPersonasTblTitle_estado}" required="true" requiredMessage="#{bundle.CreateRnGcPersonasTblRequiredMessage_estado}">
                                 <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                                <f:selectItems value="#{rnGcEstadosTblController.itemsAvailableSelectOne}"
+                                <f:selectItems value="#{rnGcEstadosTblController.getEstadosPorPais(rnGcPersonas_clientesTblController.selected.pais)}"
                                                var="estado"
                                                itemLabel="#{estado.CEstado} - #{estado.nombreEstado}"
                                                itemValue="#{estado.CEstado}"/>

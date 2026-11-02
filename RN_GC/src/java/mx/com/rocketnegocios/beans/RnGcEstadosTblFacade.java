@@ -5,6 +5,7 @@
  */
 package mx.com.rocketnegocios.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +29,11 @@ public class RnGcEstadosTblFacade extends AbstractFacade<RnGcEstadosTbl> {
     public RnGcEstadosTblFacade() {
         super(RnGcEstadosTbl.class);
     }
-    
+
+    public List<RnGcEstadosTbl> findByCPais(String cPais) {
+        return em.createNamedQuery("RnGcEstadosTbl.findByCPais", RnGcEstadosTbl.class)
+                .setParameter("cPais", cPais)
+                .getResultList();
+    }
+
 }

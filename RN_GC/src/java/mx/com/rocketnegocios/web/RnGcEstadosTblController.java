@@ -129,6 +129,15 @@ public class RnGcEstadosTblController implements Serializable {
         return getFacade().findAll();
     }
 
+    public List<RnGcEstadosTbl> getEstadosPorPais(String pais) {
+        String cPais = "MEX";
+        if (pais != null && !pais.trim().isEmpty()) {
+            int sep = pais.indexOf(" - ");
+            cPais = (sep > 0 ? pais.substring(0, sep) : pais).trim();
+        }
+        return getFacade().findByCPais(cPais);
+    }
+
     @FacesConverter(forClass = RnGcEstadosTbl.class)
     public static class RnGcEstadosTblControllerConverter implements Converter {
 
