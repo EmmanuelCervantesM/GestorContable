@@ -13,9 +13,9 @@
                 <h:panelGroup id="display">
                     <p:panelGrid columns="4" rendered="#{rnGcListaNegraTblController.selected != null}">
                         <p:outputLabel value="#{bundle.CreateRnGcListaNegraTblLabel_rfc}" for="rfc" />
-                        <p:inputText id="rfc" value="#{rnGcListaNegraTblController.selected.rfc}" title="#{bundle.CreateRnGcListaNegraTblTitle_rfc}" />
+                        <p:inputText id="rfc" value="#{rnGcListaNegraTblController.selected.rfc}" title="#{bundle.CreateRnGcListaNegraTblTitle_rfc}" required="true" requiredMessage="El RFC es obligatorio."/>
                         <p:outputLabel value="#{bundle.CreateRnGcListaNegraTblLabel_nombreContribuyente}" for="nombreContribuyente" />
-                        <p:inputText id="nombreContribuyente" value="#{rnGcListaNegraTblController.selected.nombreContribuyente}" title="#{bundle.CreateRnGcListaNegraTblTitle_nombreContribuyente}" />
+                        <p:inputText id="nombreContribuyente" value="#{rnGcListaNegraTblController.selected.nombreContribuyente}" title="#{bundle.CreateRnGcListaNegraTblTitle_nombreContribuyente}" required="true" requiredMessage="El nombre del contribuyente es obligatorio."/>
                         <p:outputLabel value="#{bundle.CreateRnGcListaNegraTblLabel_situacionContribuyente}" for="situacionContribuyente" />
                         <p:inputText id="situacionContribuyente" value="#{rnGcListaNegraTblController.selected.situacionContribuyente}" title="#{bundle.CreateRnGcListaNegraTblTitle_situacionContribuyente}" />
                         <p:outputLabel value="#{bundle.CreateRnGcListaNegraTblLabel_numeroFechaOficioGlobalPresuncionSAT}" for="numeroFechaOficioGlobalPresuncionSAT" />

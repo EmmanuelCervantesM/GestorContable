@@ -21,6 +21,7 @@ import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -166,8 +167,13 @@ public class RnGcListaNegraTblController implements Serializable {
 
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RnGcListaNegraTblCreated"));
-        if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
+        FacesMessage.Severity max = FacesContext.getCurrentInstance().getMaximumSeverity();
+        boolean ok = max == null || max.compareTo(FacesMessage.SEVERITY_ERROR) < 0;
+        if (!JsfUtil.isValidationFailed() && ok) {
+            items = null;    // Invalida la lista de items para forzar un re-query.
+            // CTR-12.1: persist() hace merge sin recuperar el nuevo id, por eso un segundo
+            // submit (doble clic) del mismo objeto insertaría una fila duplicada.
+            selected = null;
         }
     }
 
@@ -279,16 +285,48 @@ public class RnGcListaNegraTblController implements Serializable {
             System.out.println("La lista con el folio publicacion " + tipoListaNegra.getFolioPublicacion() + " ya se encuentra registrada");
             RequestContext.getCurrentInstance().execute("PF('RnGcListaNegraTblDocDialog').hide();");
             JsfUtil.addErrorMessage("La lista con el folio publicacion " + tipoListaNegra.getFolioPublicacion() + " ya se encuentra registrada");
+            selected = null;
         } else {
             tipoListaNegra = tipoListaNegraFacade.refreshFromDB(tipoListaNegra);
             crearListaNegra(event, tipoListaNegra);
             RequestContext.getCurrentInstance().execute("PF('RnGcListaNegraTblDocDialog').hide();");
-            JsfUtil.addSuccessMessage("La lista con el folio publicacion " + tipoListaNegra.getFolioPublicacion() + " se registro con exito");
+            // CTR-12.1: Reporta que es lo que en realidad se cargó en lugar de un éxito incondicional
+            String folio = tipoListaNegra.getFolioPublicacion();
+            if (plantillaError != null) {
+                JsfUtil.addErrorMessage("La carga del folio " + folio + " se interrumpió en la fila " + plantillaFilaError
+                        + " (" + plantillaError + "). Se alcanzaron a cargar " + plantillaCargados + " registros.");
+            } else {
+                String resumen = "La lista con el folio publicacion " + folio + " se registro con exito: "
+                        + plantillaCargados + (plantillaCargados == 1 ? " registro cargado" : " registros cargados");
+                if (plantillaVacias > 0) {
+                    resumen += ", " + plantillaVacias + (plantillaVacias == 1 ? " fila vacía omitida" : " filas vacías omitidas");
+                }
+                JsfUtil.addSuccessMessage(resumen + ".");
+            }
+            if (!plantillaSinRfc.isEmpty()) {
+                String filas = plantillaSinRfc.toString().replaceAll("[\\[\\]]", "");
+                JsfUtil.addWarningMessage(plantillaSinRfc.size() == 1
+                        ? "La fila " + filas + " tiene datos pero no tiene RFC; no se cargó."
+                        : "Las filas " + filas + " tienen datos pero no tienen RFC; no se cargaron.");
+            }
             selected = null;
         }
     }
 
+    // Resultado de la ultima carga de plantilla (CTR-12.1)
+    private int plantillaCargados;
+    private int plantillaVacias;
+    private List<Integer> plantillaSinRfc = new ArrayList<>();
+    private String plantillaError;
+    private int plantillaFilaError;
+
     public void crearListaNegra(FileUploadEvent event, RnGcTipoListaNegraTbl tipoLN) {
+        plantillaCargados = 0;
+        plantillaVacias = 0;
+        plantillaSinRfc = new ArrayList<>();
+        plantillaError = null;
+        plantillaFilaError = 0;
+        int filaExcel = 0;
         try {
             int i = 1;
             XSSFWorkbook excel = new XSSFWorkbook(event.getFile().getInputstream());
@@ -300,9 +338,14 @@ public class RnGcListaNegraTblController implements Serializable {
                 Iterator<Cell> cellIterator = row.cellIterator();
                 Cell cell;
                 if (row.getRowNum() >= 5) {
+                    filaExcel = row.getRowNum() + 1;
+                    boolean tieneDatos = false;
                     prepareCreate();
                     while (cellIterator.hasNext()) {
                         cell = cellIterator.next();
+                        if (cell.getColumnIndex() >= 2 && !cell.toString().trim().isEmpty()) {
+                            tieneDatos = true;
+                        }
                         if (cell.getColumnIndex() == 1) {
                             selected.setRfc(cell.toString());
                         }
@@ -356,13 +399,25 @@ public class RnGcListaNegraTblController implements Serializable {
                         }
                     }
                     //System.out.println("LN: " + i + " | " + selected.getRfc() + " | " + selected.getNombreContribuyente() + " | " + selected.getSituacionContribuyente());
+                    // CTR-12.1: las filas con solo la columna "No" (o en blanco) antes se guardaban como registros vacios
+                    if (selected.getRfc() == null || selected.getRfc().trim().isEmpty()) {
+                        if (tieneDatos) {
+                            plantillaSinRfc.add(filaExcel);
+                        } else {
+                            plantillaVacias++;
+                        }
+                        continue;
+                    }
                     selected.setIdTipoLista(tipoLN);
                     setEmbeddableKeys();
                     getFacade().edit(selected);
+                    plantillaCargados++;
                     i++;
                 }
             }
         } catch (Exception ex) {
+            plantillaError = ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : ex.getClass().getSimpleName();
+            plantillaFilaError = filaExcel;
             System.out.println("Error en la lectura de la plantilla: " + ex.getLocalizedMessage());
         }
     }
