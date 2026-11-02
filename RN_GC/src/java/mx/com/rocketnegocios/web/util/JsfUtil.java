@@ -43,40 +43,46 @@ public class JsfUtil {
     }
 
     public static void addErrorMessage(String msg) {
-        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
+        // El texto va solo en el resumen; el detalle queda en null para que
+        // p:growl/p:messages con showDetail="true" lo muestre una sola vez.
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null);
         FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
-    
-    public static void addWarningMessage(String msg) {
-        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_WARN, msg, msg);
-        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
-    }
-    
-    
 
-    // SE AGREGA METODO PERSONALIZADO PARA ENVIO DE MENSAJES EMMANUEL 
+    public static void addWarningMessage(String msg) {
+        // Igual que arriba: solo resumen, sin duplicar el detalle.
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_WARN, msg, null);
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
+    }
+
+    // SE AGREGA METODO PERSONALIZADO PARA ENVIO DE MENSAJES
     public static void addErrorMessage(String title, String detail) {
-    FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, title, detail);
-    FacesContext.getCurrentInstance().addMessage(null, facesMsg);
-}
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, title, detail);
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
+    }
 
     public static void addSuccessMessage(String msg) {
-        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
-        FacesContext.getCurrentInstance().addMessage("successInfo", facesMsg);
+        // Solo resumen (detalle en null) para no duplicar el texto; clientId
+        // global (null) para que lo muestre cualquier p:growl/p:messages sin `for`,
+        // como los errores.
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null);
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
 
     public static String getRequestParameter(String key) {
         return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(key);
     }
 
-    public static Object getObjectFromRequestParameter(String requestParameterName, Converter converter, UIComponent component) {
+    public static Object getObjectFromRequestParameter(String requestParameterName, Converter converter,
+            UIComponent component) {
         String theId = JsfUtil.getRequestParameter(requestParameterName);
         return converter.getAsObject(FacesContext.getCurrentInstance(), component, theId);
     }
 
-    public static void addWarnMessage(String no_puedes_eliminar_un_periodo_abierto_Cié) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    // Codigo muerto: metodo sin uso que solo lanza UnsupportedOperationException.
+    // public static void addWarnMessage(String msg) {
+    // throw new UnsupportedOperationException("Not supported yet.");
+    // }
 
     public static enum PersistAction {
         CREATE,
