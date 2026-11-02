@@ -3807,9 +3807,10 @@ public class FacturarController implements Serializable {
         }
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
         for (RnGcCertificadosTbl certificado : obtenerCertificadosPorVencer()) {
-            mensajes.add("Tu " + ("FIEL".equals(certificado.getTipo()) ? "firma" : "sello")
-                    + " esta por vencer " + formatoFecha.format(certificado.getFechaVencimiento()) + ". "
-                    + "Renuévalo directamente en el portal del SAT antes de esa fecha.");
+            boolean esFiel = "FIEL".equals(certificado.getTipo());
+            mensajes.add("Tu " + (esFiel ? "e.firma (FIEL)" : "sello digital (CSD)")
+                    + " está por vencer el " + formatoFecha.format(certificado.getFechaVencimiento()) + ". "
+                    + (esFiel ? "Renuévala" : "Renuévalo") + " directamente en el portal del SAT antes de esa fecha.");
         }
         return mensajes;
     }
@@ -5788,7 +5789,8 @@ public class FacturarController implements Serializable {
                     nombreFigura.setValue(cartaPorte.getConductorId().getNombre() + " " + cartaPorte.getConductorId().getApellidoPaterno() + " " + cartaPorte.getConductorId().getApellidoMaterno());
                     tipos.setAttributeNode(nombreFigura);
 
-                    if (cartaPorte.getConductorId().getClaveFigura().equals("02") && cartaPorte.getConductorId().getClaveFigura().equals("03")) {
+                    if ((cartaPorte.getConductorId().getClaveFigura().equals("02") || cartaPorte.getConductorId().getClaveFigura().equals("03"))
+                            && cartaPorte.getDirConductorId() != null) {
                         Element domicilioC = doc.createElement("cartaporte31:Domicilio");
                         tipos.appendChild(domicilioC);
 
@@ -6276,7 +6278,8 @@ public class FacturarController implements Serializable {
             nombreFigura.setValue(cartaPorte.getConductorId().getNombre() + " " + cartaPorte.getConductorId().getApellidoPaterno() + " " + cartaPorte.getConductorId().getApellidoMaterno());
             tipos.setAttributeNode(nombreFigura);
 
-            if (cartaPorte.getConductorId().getClaveFigura().equals("02") && cartaPorte.getConductorId().getClaveFigura().equals("03")) {
+            if ((cartaPorte.getConductorId().getClaveFigura().equals("02") || cartaPorte.getConductorId().getClaveFigura().equals("03"))
+                    && cartaPorte.getDirConductorId() != null) {
                 Element domicilioC = doc.createElement("cartaporte31:Domicilio");
                 tipos.appendChild(domicilioC);
 
