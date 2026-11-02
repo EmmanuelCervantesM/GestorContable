@@ -85,11 +85,11 @@
                                 <f:convertNumber type="currency" currencySymbol="$" />
                             </h:outputText>
                         </p:column>
-                        <p:column filterBy="#{item.email1}" filterMatchMode="contains">
+                        <p:column filterBy="#{item.sindicalizado eq 'S' ? 'Sí' : 'No'}" filterMatchMode="contains">
                             <f:facet name="header">
-                                <h:outputText value="E-mail"/>
+                                <h:outputText value="#{bundle.ListRnGcTrabajadoresTblTitle_sindicalizado}"/>
                             </f:facet>
-                            <h:outputText value="#{item.email1}"/>
+                            <h:outputText value="#{item.sindicalizado eq 'S' ? 'Sí' : 'No'}"/>
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcTrabajadoresTblController.prepareCreate}" update=":RnGcTrabajadoresTblCreateForm" oncomplete="PF('RnGcTrabajadoresTblCreateDialog').show()"/>

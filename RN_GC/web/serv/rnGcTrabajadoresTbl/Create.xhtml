@@ -26,7 +26,7 @@
     <!-- ⬇️ AQUÍ VA el p:ajax -->
     <p:ajax event="change"
             listener="#{rnGcTrabajadoresTblController.cambiarTipoEmpleado}"
-            update="nss salarioBase sdi fechaInicioLaboral riesgoPuesto tipoJornada sindicalizado regimenContratacion tipoContrato entidadFederativa" />
+            update="nss salarioBase sdi fechaInicioLaboral riesgoPuesto puesto tipoJornada sindicalizado regimenContratacion tipoContrato entidadFederativa" />
 
 </p:selectOneMenu>
                         
@@ -109,6 +109,9 @@
                                            itemLabel="#{riesgoPuesto.cveRiesgoPuesto} - #{riesgoPuesto.descripcion}"
                                            itemValue="#{riesgoPuesto}"/>
                         </p:selectOneMenu>
+                        
+                        <p:outputLabel value="#{bundle.CreateRnGcTrabajadoresTblLabel_puesto}" for="puesto" />
+                        <p:inputText id="puesto" value="#{rnGcTrabajadoresTblController.selected.puesto}" title="#{bundle.CreateRnGcTrabajadoresTblTitle_puesto}" maxlength="100" required="#{rnGcTrabajadoresTblController.esSalariado()}"/>
                         
                         <p:outputLabel value="Tipo de Jornada" for="tipoJornada" />
                         <p:selectOneMenu id="tipoJornada"  value="#{rnGcTrabajadoresTblController.selected.tipoJornadaTblId}"  style="width: 120px" title="#{bundle.CreateRnGcTrabajadoresTblTitle_tipoPersona}" required="#{rnGcTrabajadoresTblController.esSalariado()}" >

@@ -278,8 +278,13 @@ public class RnGcTrabajadoresTblController implements Serializable {
         }
     }
 
+    private static final int MAX_MENSAJES_RECHAZO = 20;
+
     public void leerPlantilla(FileUploadEvent event) throws IOException {
         System.out.println("Archivo recibido: " + event.getFile().getFileName());
+
+        List<String> rechazos = new ArrayList<>();
+        int insertados = 0;
 
         try {
             XSSFWorkbook workbook = new XSSFWorkbook(event.getFile().getInputstream());
@@ -288,11 +293,12 @@ public class RnGcTrabajadoresTblController implements Serializable {
 
             if (sheet == null) {
                 System.out.println("No se encontró una hoja llamada 'Trabajadores'.");
+                JsfUtil.addErrorMessage("El archivo no contiene una hoja llamada 'Trabajadores'.");
                 return;
             }
 
             //int firstRow = sheet.getFirstRowNum();
-            int firstRow = 5; // Fila 7 en Excel
+            int firstRow = 5; // Encabezado en la fila 6 de Excel; los datos inician en la fila 7
             int lastRow = sheet.getLastRowNum();
 
             for (int i = firstRow + 1; i <= lastRow; i++) { // omitir encabezado
@@ -300,6 +306,7 @@ public class RnGcTrabajadoresTblController implements Serializable {
                 if (row == null) {
                     continue;
                 }
+                int filaExcel = i + 1;
 
                 String sysAsim = getCellValue(row.getCell(0)).trim();
                 String nombre = getCellValue(row.getCell(1)).trim();
@@ -321,8 +328,17 @@ public class RnGcTrabajadoresTblController implements Serializable {
                 String sindicalizado = getCellValue(row.getCell(17)).trim();
                 String email = getCellValue(row.getCell(18)).trim();
                 String observaciones = getCellValue(row.getCell(19)).trim();
+                String puesto = getCellValue(row.getCell(20)).trim();
 
-                System.out.println("Fila " + (i + 1) + " - Valores:");
+                // Filas sin ningun dato (formato o validaciones de la plantilla): se ignoran sin mensaje
+                if ((sysAsim + nombre + apellidoPaterno + apellidoMaterno + curp + rfc + regimenFiscal + nss
+                        + fechaInicioLaboral + salarioBase + salarioDiarioIntegrado + entidadFederativa + codigoPostal
+                        + regimenContratacion + riesgoPuesto + tipoContrato + tipoJornada + sindicalizado + email
+                        + observaciones + puesto).isEmpty()) {
+                    continue;
+                }
+
+                System.out.println("Fila " + filaExcel + " - Valores:");
                 System.out.println(
                         "Tipo: " + sysAsim + ", "
                         + "Nombre: " + nombre + ", "
@@ -343,63 +359,50 @@ public class RnGcTrabajadoresTblController implements Serializable {
                         + "Tipo Jornada: " + tipoJornada + ", "
                         + "Sindicalizado: " + sindicalizado + ", "
                         + "Email: " + email + ", "
-                        + "Observaciones: " + observaciones
+                        + "Observaciones: " + observaciones + ", "
+                        + "Puesto: " + puesto
                 );
 
-                if (sysAsim == null || (!sysAsim.equalsIgnoreCase("Salariado") && !sysAsim.equalsIgnoreCase("Asimilado"))) {
-                    System.out.println("Trabajador no tiene tipo de trabajador válido");
+                if (!sysAsim.equalsIgnoreCase("Salariado") && !sysAsim.equalsIgnoreCase("Asimilado")) {
+                    rechazarFila(rechazos, filaExcel, "el tipo de trabajador debe ser 'Salariado' o 'Asimilado' (valor: '" + sysAsim + "').");
                     continue;
                 }
 
+                // Validación de campos obligatorios
+                List<String> faltantes = new ArrayList<>();
+                validarObligatorio(faltantes, nombre, "Nombre");
+                validarObligatorio(faltantes, apellidoPaterno, "Apellido paterno");
+                validarObligatorio(faltantes, apellidoMaterno, "Apellido materno");
+                validarLongitud(faltantes, curp, 18, "CURP");
+                validarLongitud(faltantes, rfc, 13, "RFC");
+                validarObligatorio(faltantes, regimenFiscal, "Régimen fiscal");
+                validarObligatorio(faltantes, entidadFederativa, "Entidad federativa");
+                validarObligatorio(faltantes, codigoPostal, "Código postal");
+                validarObligatorio(faltantes, regimenContratacion, "Régimen de contratación");
+                validarObligatorio(faltantes, tipoContrato, "Tipo de contrato");
+
                 if (sysAsim.equalsIgnoreCase("Salariado")) {
-                    if (nombre == null || nombre.isEmpty()
-                            || apellidoPaterno == null || apellidoPaterno.isEmpty()
-                            || apellidoMaterno == null || apellidoMaterno.isEmpty()
-                            || curp == null || curp.isEmpty() || curp.length() != 18
-                            || rfc == null || rfc.isEmpty() || rfc.length() != 13
-                            || regimenFiscal == null || regimenFiscal.isEmpty()
-                            || nss == null || nss.isEmpty() || nss.length() != 11
-                            || fechaInicioLaboral == null || fechaInicioLaboral.isEmpty()
-                            || salarioBase == null || salarioBase.isEmpty()
-                            || salarioDiarioIntegrado == null || salarioDiarioIntegrado.isEmpty()
-                            || entidadFederativa == null || entidadFederativa.isEmpty()
-                            || codigoPostal == null || codigoPostal.isEmpty()
-                            || regimenContratacion == null || regimenContratacion.isEmpty()
-                            || riesgoPuesto == null || riesgoPuesto.isEmpty()
-                            || tipoContrato == null || tipoContrato.isEmpty()
-                            || tipoJornada == null || tipoJornada.isEmpty()
-                            || sindicalizado == null || sindicalizado.isEmpty()
-                            || !(sindicalizado.equalsIgnoreCase("si") || sindicalizado.equalsIgnoreCase("no"))) {
-
-                        System.out.println("Trabajador de tipo salariado no cumple con los campos obligatorios");
-                        continue;
+                    validarLongitud(faltantes, nss, 11, "NSS");
+                    validarObligatorio(faltantes, fechaInicioLaboral, "Fecha inicio laboral");
+                    validarObligatorio(faltantes, salarioBase, "Salario base");
+                    validarObligatorio(faltantes, salarioDiarioIntegrado, "Salario diario integrado");
+                    validarObligatorio(faltantes, riesgoPuesto, "Riesgo del puesto");
+                    validarObligatorio(faltantes, tipoJornada, "Tipo de jornada");
+                    if (!(sindicalizado.equalsIgnoreCase("si") || sindicalizado.equalsIgnoreCase("no"))) {
+                        faltantes.add("Sindicalizado (Si/No)");
                     }
+                    validarObligatorio(faltantes, puesto, "Puesto");
                 }
 
-                if (sysAsim.equalsIgnoreCase("Asimilado")) {
-                    System.out.println("Entro a Asimilado");
-                    if (nombre == null || nombre.isEmpty()
-                            || apellidoPaterno == null || apellidoPaterno.isEmpty()
-                            || apellidoMaterno == null || apellidoMaterno.isEmpty()
-                            || curp == null || curp.isEmpty() || curp.length() != 18
-                            || rfc == null || rfc.isEmpty() || rfc.length() != 13
-                            || regimenFiscal == null || regimenFiscal.isEmpty()
-                            || entidadFederativa == null || entidadFederativa.isEmpty()
-                            || codigoPostal == null || codigoPostal.isEmpty()
-                            || regimenContratacion == null || regimenContratacion.isEmpty()
-                            || tipoContrato == null || tipoContrato.isEmpty()) {
-
-                        System.out.println("Trabajador de tipo asimilado no cumple con los campos obligatorios");
-                        continue;
-                    }
+                if (!faltantes.isEmpty()) {
+                    rechazarFila(rechazos, filaExcel, "trabajador " + sysAsim.toLowerCase() + " con campos obligatorios faltantes o inválidos: " + String.join(", ", faltantes) + ".");
+                    continue;
                 }
 
-                //usuarioFirmado.obtenerIdUsuario();
-                // Validación existencia en base de datos
-                System.out.println("Usuario id: " + usuarioFirmado.obtenerIdUsuario());
-                long existe = ejbFacade.contarTrabajador(curp, rfc, nss, usuarioFirmado.obtenerIdUsuario());
-                if (existe > 0) {
-                    System.out.println("Fila " + (i + 1) + ": Ya existe trabajador con CURP, RFC, NSS o ID.");
+                // Validación existencia en base de datos (solo se comparan CURP, RFC y NSS con valor)
+                String campoDuplicado = ejbFacade.obtenerCampoDuplicado(curp, rfc, nss, usuarioFirmado.obtenerIdUsuario());
+                if (campoDuplicado != null) {
+                    rechazarFila(rechazos, filaExcel, "ya existe un trabajador con el mismo " + campoDuplicado + ".");
                     continue; // Salta inserción
                 }
 
@@ -412,14 +415,14 @@ public class RnGcTrabajadoresTblController implements Serializable {
                     try {
                         fechaInicioLaboralDate = sdf.parse(fechaInicioLaboral);
                     } catch (ParseException e) {
-                        System.out.println("Fecha inicio laboral inválida en la fila " + i + ": " + fechaInicioLaboral);
+                        rechazarFila(rechazos, filaExcel, "fecha inicio laboral inválida '" + fechaInicioLaboral + "' (formato esperado aaaa-mm-dd).");
                         continue; // Sigue con la siguiente fila
                     }
 
                     RnGcNomTiporegimenTbl regimenFiscalTbl = ejbFacadeRegimen.obternerRegimenByDescripcion(regimenFiscal);
                     // Validar si el resultado o la clave son nulas
                     if (regimenFiscalTbl == null || regimenFiscalTbl.getCveTipoRegimen() == null) {
-                        System.out.println("Regimen fiscal no válido para el trabajador en la fila " + i);
+                        rechazarFila(rechazos, filaExcel, "régimen fiscal no válido '" + regimenFiscal + "'.");
                         continue; // pasa a la siguiente fila del archivo
                     }
 
@@ -430,39 +433,40 @@ public class RnGcTrabajadoresTblController implements Serializable {
                     RnGcNomEstadosTbl entidadFederativaTbl = ejbFacadeEstado.obtenerByNombre(entidadFederativa);
                     // Validar si el resultado o la clave son nulas
                     if (entidadFederativaTbl == null || entidadFederativaTbl.getNombre() == null) {
-                        System.out.println("Estado no válido para el trabajador en la fila " + i);
+                        rechazarFila(rechazos, filaExcel, "entidad federativa no válida '" + entidadFederativa + "'.");
                         continue; // pasa a la siguiente fila del archivo
                     }
 
                     RnGcNomRiesgopuestoTbl riesgoPuestoTbl = ejbFacadeRiesgoPuesto.obtenerByDescripcion(riesgoPuesto);
                     // Validar si el resultado o la clave son nulas
                     if (riesgoPuestoTbl == null || riesgoPuestoTbl.getCveRiesgoPuesto() == null) {
-                        System.out.println("Rueso de puesto no válido para el trabajador en la fila " + i);
+                        rechazarFila(rechazos, filaExcel, "riesgo del puesto no válido '" + riesgoPuesto + "'.");
                         continue; // pasa a la siguiente fila del archivo
                     }
 
                     RnGcNomTipocontratoTbl tipoContratoTbl = ejbFacadeTipoContrato.obtenerByDescripcion(tipoContrato);
                     // Validar si el resultado o la clave son nulas
                     if (tipoContratoTbl == null || tipoContratoTbl.getCveTipoContrato() == null) {
-                        System.out.println("Tipo de contrato no válido para el trabajador en la fila " + i);
+                        rechazarFila(rechazos, filaExcel, "tipo de contrato no válido '" + tipoContrato + "'.");
                         continue; // pasa a la siguiente fila del archivo
                     }
 
                     RnGcNomTipojornadaTbl tipoJornadaTbl = ejbFacadeJornada.obtenerByDescripcion(tipoJornada);
                     // Validar si el resultado o la clave son nulas
                     if (tipoJornadaTbl == null || tipoJornadaTbl.getCveTipoJornada() == null) {
-                        System.out.println("Tipo de Jornada no válido para el trabajador en la fila " + i);
+                        rechazarFila(rechazos, filaExcel, "tipo de jornada no válido '" + tipoJornada + "'.");
                         continue; // pasa a la siguiente fila del archivo
                     }
 
                     RnGcNomTiporegimencontratacionTbl regimenContratacionTbl = ejbFacadeTipoContratacion.obternerRegimenContratacionByDescripcion(regimenContratacion);
                     // Validar si el resultado o la clave son nulas
                     if (regimenContratacionTbl == null || regimenContratacionTbl.getCveTipoRegimenContratacion() == null) {
-                        System.out.println("Regimen contratación no válido para el trabajador en la fila " + i);
+                        rechazarFila(rechazos, filaExcel, "régimen de contratación no válido '" + regimenContratacion + "'.");
                         continue; // pasa a la siguiente fila del archivo
                     }
 
                     RnGcTrabajadoresTbl nuevoTrabajador = new RnGcTrabajadoresTbl();
+                    nuevoTrabajador.setTipoEmpleado("Salariado");
                     nuevoTrabajador.setNombre(nombre.toUpperCase());
                     nuevoTrabajador.setApPaterno(apellidoPaterno.toUpperCase());
                     nuevoTrabajador.setApMaterno(apellidoMaterno.toUpperCase());
@@ -484,6 +488,7 @@ public class RnGcTrabajadoresTblController implements Serializable {
                     nuevoTrabajador.setSindicalizado(
                             "si".equalsIgnoreCase(sindicalizado) ? "S" : "N"
                     );
+                    nuevoTrabajador.setPuesto(puesto);
                     nuevoTrabajador.setEmail1(email.toLowerCase());
                     nuevoTrabajador.setObservaciones(observaciones);
                     nuevoTrabajador.setNoTrabajador(ejbFacade.obtenerSiguienteNoTrabajador(usuarioFirmado.obtenerIdUsuario()));
@@ -498,13 +503,8 @@ public class RnGcTrabajadoresTblController implements Serializable {
                     String nombreCompleto = nombre.toUpperCase() + " " + apellidoPaterno.toUpperCase() + " " + apellidoMaterno.toUpperCase();
                     nuevoTrabajador.setNombreCompleto(nombreCompleto);
 
-                    try {
-                        System.out.println("Trabajador : " + nuevoTrabajador);
-                        getFacade().create(nuevoTrabajador);
-                        System.out.println("ID generado: " + nuevoTrabajador.getId());
-                        System.out.println("Trabajador insertado exitosamente en la fila " + (i + 1));
-                    } catch (Exception ex) {
-                        System.err.println("Error al insertar trabajador en la fila " + (i + 1) + ": " + ex.getMessage());
+                    if (insertarTrabajador(nuevoTrabajador, filaExcel, rechazos)) {
+                        insertados++;
                     }
                 }
 
@@ -512,31 +512,15 @@ public class RnGcTrabajadoresTblController implements Serializable {
                 if ("Asimilado".equalsIgnoreCase(sysAsim)) {
                     System.out.println("Entro a Asimilado");
 
-                    // Validar campos obligatorios
-                    boolean camposInvalidos = nombre == null || nombre.isEmpty()
-                            || apellidoPaterno == null || apellidoPaterno.isEmpty()
-                            || apellidoMaterno == null || apellidoMaterno.isEmpty()
-                            || curp == null || curp.isEmpty() || curp.length() != 18
-                            || rfc == null || rfc.isEmpty() || rfc.length() != 13
-                            || regimenFiscal == null || regimenFiscal.isEmpty()
-                            || codigoPostal == null || codigoPostal.isEmpty()
-                            || regimenContratacion == null || regimenContratacion.isEmpty()
-                            || tipoContrato == null || tipoContrato.isEmpty();
-
-                    if (camposInvalidos) {
-                        System.out.println("Trabajador de tipo asimilado no cumple con los campos obligatorios en la fila " + i);
-                        continue; // pasa a la siguiente fila
-                    }
-
                     // Parsear fecha de inicio laboral solo si tiene valor
                     Date fechaInicioLaboralDate = null;
-                    if (fechaInicioLaboral != null && !fechaInicioLaboral.trim().isEmpty()) {
+                    if (!fechaInicioLaboral.isEmpty()) {
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         sdf.setLenient(false); // No aceptar fechas inválidas
                         try {
                             fechaInicioLaboralDate = sdf.parse(fechaInicioLaboral);
                         } catch (ParseException e) {
-                            System.out.println("Fecha inicio laboral inválida en la fila " + i + ": " + fechaInicioLaboral);
+                            rechazarFila(rechazos, filaExcel, "fecha inicio laboral inválida '" + fechaInicioLaboral + "' (formato esperado aaaa-mm-dd).");
                             continue; // pasa a la siguiente fila
                         }
                     }
@@ -546,47 +530,51 @@ public class RnGcTrabajadoresTblController implements Serializable {
                     RnGcNomTiporegimencontratacionTbl regimenContratacionTbl = ejbFacadeTipoContratacion.obternerRegimenContratacionByDescripcion(regimenContratacion);
 
                     // Validar obligatorios (entidades)
-                    if (regimenFiscalTbl == null || regimenFiscalTbl.getCveTipoRegimen() == null
-                            || regimenContratacionTbl == null || regimenContratacionTbl.getCveTipoRegimenContratacion() == null) {
-                        System.out.println("Regimen fiscal o contratación no válido en la fila " + i);
+                    if (regimenFiscalTbl == null || regimenFiscalTbl.getCveTipoRegimen() == null) {
+                        rechazarFila(rechazos, filaExcel, "régimen fiscal no válido '" + regimenFiscal + "'.");
+                        continue;
+                    }
+                    if (regimenContratacionTbl == null || regimenContratacionTbl.getCveTipoRegimenContratacion() == null) {
+                        rechazarFila(rechazos, filaExcel, "régimen de contratación no válido '" + regimenContratacion + "'.");
                         continue;
                     }
 
                     // Obtener entidades opcionales si tienen valor
                     RnGcNomEstadosTbl entidadFederativaTbl = null;
-                    if (entidadFederativa != null && !entidadFederativa.isEmpty()) {
+                    if (!entidadFederativa.isEmpty()) {
                         entidadFederativaTbl = ejbFacadeEstado.obtenerByNombre(entidadFederativa);
                         if (entidadFederativaTbl == null) {
-                            System.out.println("Estado no encontrado, se dejará null para la fila " + i);
+                            System.out.println("Estado no encontrado, se dejará null para la fila " + filaExcel);
                         }
                     }
 
                     RnGcNomRiesgopuestoTbl riesgoPuestoTbl = null;
-                    if (riesgoPuesto != null && !riesgoPuesto.isEmpty()) {
+                    if (!riesgoPuesto.isEmpty()) {
                         riesgoPuestoTbl = ejbFacadeRiesgoPuesto.obtenerByDescripcion(riesgoPuesto);
                         if (riesgoPuestoTbl == null) {
-                            System.out.println("Riesgo de puesto no encontrado, se dejará null para la fila " + i);
+                            System.out.println("Riesgo de puesto no encontrado, se dejará null para la fila " + filaExcel);
                         }
                     }
 
                     RnGcNomTipocontratoTbl tipoContratoTbl = null;
-                    if (tipoContrato != null && !tipoContrato.isEmpty()) {
+                    if (!tipoContrato.isEmpty()) {
                         tipoContratoTbl = ejbFacadeTipoContrato.obtenerByDescripcion(tipoContrato);
                         if (tipoContratoTbl == null) {
-                            System.out.println("Tipo de contrato no encontrado, se dejará null para la fila " + i);
+                            System.out.println("Tipo de contrato no encontrado, se dejará null para la fila " + filaExcel);
                         }
                     }
 
                     RnGcNomTipojornadaTbl tipoJornadaTbl = null;
-                    if (tipoJornada != null && !tipoJornada.isEmpty()) {
+                    if (!tipoJornada.isEmpty()) {
                         tipoJornadaTbl = ejbFacadeJornada.obtenerByDescripcion(tipoJornada);
                         if (tipoJornadaTbl == null) {
-                            System.out.println("Tipo de jornada no encontrado, se dejará null para la fila " + i);
+                            System.out.println("Tipo de jornada no encontrado, se dejará null para la fila " + filaExcel);
                         }
                     }
 
                     // Crear el trabajador
                     RnGcTrabajadoresTbl nuevoTrabajador = new RnGcTrabajadoresTbl();
+                    nuevoTrabajador.setTipoEmpleado("Asimilado");
                     nuevoTrabajador.setNombre(nombre.toUpperCase());
                     nuevoTrabajador.setApPaterno(apellidoPaterno.toUpperCase());
                     nuevoTrabajador.setApMaterno(apellidoMaterno.toUpperCase());
@@ -594,7 +582,7 @@ public class RnGcTrabajadoresTblController implements Serializable {
                     nuevoTrabajador.setRfc(rfc.toUpperCase());
                     nuevoTrabajador.setTipoPersona(regimenFiscalTbl.getCveTipoRegimen());
                     nuevoTrabajador.setRegimenFicalId(regimenFiscalTbl);
-                    nuevoTrabajador.setNss(nss != null ? nss.toUpperCase() : null);
+                    nuevoTrabajador.setNss(nss.toUpperCase());
                     nuevoTrabajador.setFechaInicio(fechaInicioLaboralDate);
                     nuevoTrabajador.setSalarioBase(salarioBase);
                     nuevoTrabajador.setSdi(salarioDiarioIntegrado);
@@ -606,7 +594,8 @@ public class RnGcTrabajadoresTblController implements Serializable {
                     nuevoTrabajador.setTipoContratoId(tipoContratoTbl != null ? tipoContratoTbl.getId() : null);
                     nuevoTrabajador.setTipoJornadaTblId(tipoJornadaTbl);
                     nuevoTrabajador.setSindicalizado("si".equalsIgnoreCase(sindicalizado) ? "S" : "N");
-                    nuevoTrabajador.setEmail1(email != null ? email.toLowerCase() : null);
+                    nuevoTrabajador.setPuesto(puesto.isEmpty() ? null : puesto);
+                    nuevoTrabajador.setEmail1(email.toLowerCase());
                     nuevoTrabajador.setObservaciones(observaciones);
                     nuevoTrabajador.setNoTrabajador(ejbFacade.obtenerSiguienteNoTrabajador(usuarioFirmado.obtenerIdUsuario()));
 
@@ -621,14 +610,8 @@ public class RnGcTrabajadoresTblController implements Serializable {
                     String nombreCompleto = nombre.toUpperCase() + " " + apellidoPaterno.toUpperCase() + " " + apellidoMaterno.toUpperCase();
                     nuevoTrabajador.setNombreCompleto(nombreCompleto);
 
-                    // Persistir
-                    try {
-                        System.out.println("Trabajador : " + nuevoTrabajador);
-                        getFacade().create(nuevoTrabajador);
-                        System.out.println("ID generado: " + nuevoTrabajador.getId());
-                        System.out.println("Trabajador insertado exitosamente en la fila " + (i + 1));
-                    } catch (Exception ex) {
-                        System.err.println("Error al insertar trabajador en la fila " + (i + 1) + ": " + ex.getMessage());
+                    if (insertarTrabajador(nuevoTrabajador, filaExcel, rechazos)) {
+                        insertados++;
                     }
                 }
 
@@ -636,6 +619,58 @@ public class RnGcTrabajadoresTblController implements Serializable {
         } catch (Exception e) {
             System.err.println("Error al leer la plantilla: " + e.getMessage());
             e.printStackTrace();
+            JsfUtil.addErrorMessage("Error al leer la plantilla: " + e.getMessage());
+        }
+
+        mostrarResumenCarga(insertados, rechazos);
+    }
+
+    private boolean insertarTrabajador(RnGcTrabajadoresTbl nuevoTrabajador, int filaExcel, List<String> rechazos) {
+        try {
+            System.out.println("Trabajador : " + nuevoTrabajador);
+            getFacade().create(nuevoTrabajador);
+            System.out.println("ID generado: " + nuevoTrabajador.getId());
+            System.out.println("Trabajador insertado exitosamente en la fila " + filaExcel);
+            return true;
+        } catch (Exception ex) {
+            System.err.println("Error al insertar trabajador en la fila " + filaExcel + ": " + ex.getMessage());
+            rechazarFila(rechazos, filaExcel, "error al guardar el trabajador (" + ex.getMessage() + ").");
+            return false;
+        }
+    }
+
+    private void rechazarFila(List<String> rechazos, int filaExcel, String motivo) {
+        String mensaje = "Fila " + filaExcel + ": " + motivo;
+        System.out.println(mensaje);
+        rechazos.add(mensaje);
+    }
+
+    private void validarObligatorio(List<String> faltantes, String valor, String campo) {
+        if (valor == null || valor.isEmpty()) {
+            faltantes.add(campo);
+        }
+    }
+
+    private void validarLongitud(List<String> faltantes, String valor, int longitud, String campo) {
+        if (valor == null || valor.length() != longitud) {
+            faltantes.add(campo + " (" + longitud + " caracteres)");
+        }
+    }
+
+    private void mostrarResumenCarga(int insertados, List<String> rechazos) {
+        String resumen = "Carga de trabajadores terminada: " + insertados + " insertados, " + rechazos.size() + " rechazados.";
+        System.out.println(resumen);
+        if (rechazos.isEmpty()) {
+            JsfUtil.addSuccessMessage(resumen);
+            return;
+        }
+        JsfUtil.addWarningMessage(resumen);
+        int mostrados = Math.min(rechazos.size(), MAX_MENSAJES_RECHAZO);
+        for (int k = 0; k < mostrados; k++) {
+            JsfUtil.addErrorMessage(rechazos.get(k));
+        }
+        if (rechazos.size() > MAX_MENSAJES_RECHAZO) {
+            JsfUtil.addErrorMessage("... y " + (rechazos.size() - MAX_MENSAJES_RECHAZO) + " filas rechazadas más.");
         }
     }
 

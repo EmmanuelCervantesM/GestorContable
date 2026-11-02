@@ -139,6 +139,10 @@ public class RnGcTrabajadoresTbl implements Serializable {
     @Column(name = "sindicalizado")
     private String sindicalizado;
     
+    @Size(max = 100)
+    @Column(name = "puesto")
+    private String puesto;
+    
     @ManyToOne
     @JoinColumn(name = "tipoJornadaTblId", referencedColumnName = "id")
     private RnGcNomTipojornadaTbl  tipoJornadaTblId;
@@ -260,6 +264,14 @@ public class RnGcTrabajadoresTbl implements Serializable {
 
     public void setSindicalizado(String sindicalizado) {
         this.sindicalizado = sindicalizado;
+    }
+
+    public String getPuesto() {
+        return puesto;
+    }
+
+    public void setPuesto(String puesto) {
+        this.puesto = puesto;
     }
     
     public int getCreadoPor() {

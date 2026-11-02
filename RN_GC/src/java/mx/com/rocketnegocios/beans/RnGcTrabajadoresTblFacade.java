@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import mx.com.rocketnegocios.entities.RnGcTrabajadoresTbl;
 
 /**
@@ -56,13 +57,64 @@ public class RnGcTrabajadoresTblFacade extends AbstractFacade<RnGcTrabajadoresTb
     }
     /// Agregrando funcion para contar 
     
+    // Solo compara los campos que traen valor: un NSS vacio (asimilados) no debe
+    // coincidir con otro trabajador que tambien tenga el NSS vacio.
     public Long contarTrabajador(String curp, String rfc, String nss, Integer idUsuario){
-        return em.createNamedQuery("RnGcTrabajadoresTbl.countTrabajador", Long.class)
-                 .setParameter("curp", curp)
-                 .setParameter("rfc", rfc)
-                 .setParameter("nss", nss)
-                 .setParameter("idUsuario", idUsuario)
-                 .getSingleResult();
+        StringBuilder jpql = new StringBuilder("SELECT COUNT(r) FROM RnGcTrabajadoresTbl r WHERE r.creadoPor = :idUsuario AND (");
+        List<String> condiciones = new ArrayList<>();
+        if (tieneValor(curp)) {
+            condiciones.add("r.curp = :curp");
+        }
+        if (tieneValor(rfc)) {
+            condiciones.add("r.rfc = :rfc");
+        }
+        if (tieneValor(nss)) {
+            condiciones.add("r.nss = :nss");
+        }
+        if (condiciones.isEmpty()) {
+            return 0L;
+        }
+        jpql.append(String.join(" OR ", condiciones)).append(")");
+        TypedQuery<Long> query = em.createQuery(jpql.toString(), Long.class)
+                .setParameter("idUsuario", idUsuario);
+        if (tieneValor(curp)) {
+            query.setParameter("curp", curp.trim());
+        }
+        if (tieneValor(rfc)) {
+            query.setParameter("rfc", rfc.trim());
+        }
+        if (tieneValor(nss)) {
+            query.setParameter("nss", nss.trim());
+        }
+        return query.getSingleResult();
+    }
+
+    /**
+     * Indica que campo (CURP, RFC o NSS) ya existe para el usuario, comparando
+     * solo los campos con valor. Regresa null si no hay duplicado.
+     */
+    public String obtenerCampoDuplicado(String curp, String rfc, String nss, Integer idUsuario) {
+        if (tieneValor(curp) && contarPorCampo("curp", curp.trim(), idUsuario) > 0) {
+            return "CURP";
+        }
+        if (tieneValor(rfc) && contarPorCampo("rfc", rfc.trim(), idUsuario) > 0) {
+            return "RFC";
+        }
+        if (tieneValor(nss) && contarPorCampo("nss", nss.trim(), idUsuario) > 0) {
+            return "NSS";
+        }
+        return null;
+    }
+
+    private Long contarPorCampo(String campo, String valor, Integer idUsuario) {
+        return em.createQuery("SELECT COUNT(r) FROM RnGcTrabajadoresTbl r WHERE r.creadoPor = :idUsuario AND r." + campo + " = :valor", Long.class)
+                .setParameter("idUsuario", idUsuario)
+                .setParameter("valor", valor)
+                .getSingleResult();
+    }
+
+    private boolean tieneValor(String valor) {
+        return valor != null && !valor.trim().isEmpty();
     }
     
    
