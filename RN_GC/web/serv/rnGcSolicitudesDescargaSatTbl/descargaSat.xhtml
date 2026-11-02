@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/templateRN.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Descarga Masiva SAT"/>
+        </ui:define>
+
+        <ui:define name="body">
+
+            <!-- CTR-06: al abrir la pantalla se refresca la lista y se dan por vistos los avisos del banner -->
+            <f:event type="preRenderView" listener="#{rnGcSolicitudesDescargaSatTblController.alCargarPagina()}"/>
+
+            <style type="text/css">
+                .ctr06-etiqueta { width: 130px; text-align: right; vertical-align: middle; white-space: nowrap; }
+                .ctr06-campo { vertical-align: middle; }
+                .ctr06-campo .ui-selectonemenu { min-width: 200px; }
+                .ctr06-campo .ui-calendar input { width: 200px; }
+            </style>
+
+            <!-- Sin autoUpdate: el aviso global (poll de templateRN) ya sale en el growl y aqui se duplicaba -->
+            <p:messages id="msgs" showDetail="false" closable="true" globalOnly="true"/>
+
+            <h:form id="formSolicitud">
+                <p:panel header="Solicitar descarga de CFDI (XML)" style="margin-bottom:20px;">
+
+                    <p style="color:#666; margin-top:0;">
+                        La solicitud se presenta al SAT con tu e.firma. El SAT puede tardar de minutos a horas en
+                        prepararla; te avisaremos en cuanto esté lista, aunque estés en otra pantalla, y podrás descargar el ZIP desde
+                        esta pantalla. Los paquetes solo están disponibles en el SAT por tiempo limitado (aprox. 72 horas).
+                    </p>
+
+                    <!-- Emitidos: rango de fecha y hora. Recibidos: año/mes obligatorios, dia opcional.
+                         Tope: hoy 23:59:59 (el SAT rechaza una FechaFinal posterior con 301). Sin comentarios dentro del panelGrid: Facelets los
+                         cuenta como celdas y desalinea etiquetas e inputs. -->
+                    <h:panelGrid id="filtros" columns="2" cellpadding="6" columnClasses="ctr06-etiqueta,ctr06-campo">
+
+                        <p:outputLabel value="Tipo:" for="tipo"/>
+                        <p:selectOneRadio id="tipo" value="#{rnGcSolicitudesDescargaSatTblController.tipo}">
+                            <f:selectItem itemValue="EMITIDOS" itemLabel="Emitidos"/>
+                            <f:selectItem itemValue="RECIBIDOS" itemLabel="Recibidos"/>
+                            <p:ajax update="filtros"/>
+                        </p:selectOneRadio>
+
+                        <p:outputLabel value="Fecha inicial:" for="fechaInicial"
+                                       rendered="#{not rnGcSolicitudesDescargaSatTblController.recibidos}"/>
+                        <p:calendar id="fechaInicial" rendered="#{not rnGcSolicitudesDescargaSatTblController.recibidos}"
+                                    value="#{rnGcSolicitudesDescargaSatTblController.fechaInicial}"
+                                    pattern="dd/MM/yyyy" navigator="true"
+                                    mindate="#{rnGcSolicitudesDescargaSatTblController.fechaMinima}"
+                                    maxdate="#{rnGcSolicitudesDescargaSatTblController.fechaMaxima}"/>
+
+                        <p:outputLabel value="Fecha final:" for="fechaFinal"
+                                       rendered="#{not rnGcSolicitudesDescargaSatTblController.recibidos}"/>
+                        <p:calendar id="fechaFinal" rendered="#{not rnGcSolicitudesDescargaSatTblController.recibidos}"
+                                    value="#{rnGcSolicitudesDescargaSatTblController.fechaFinal}"
+                                    pattern="dd/MM/yyyy" navigator="true"
+                                    mindate="#{rnGcSolicitudesDescargaSatTblController.fechaMinima}"
+                                    maxdate="#{rnGcSolicitudesDescargaSatTblController.fechaMaxima}"/>
+
+                        <p:outputLabel value="Estado:" for="estado"
+                                       rendered="#{not rnGcSolicitudesDescargaSatTblController.recibidos}"/>
+                        <p:selectOneMenu id="estado" rendered="#{not rnGcSolicitudesDescargaSatTblController.recibidos}"
+                                         value="#{rnGcSolicitudesDescargaSatTblController.estadoComprobante}">
+                            <f:selectItem itemValue="Todos" itemLabel="Todos"/>
+                            <f:selectItem itemValue="Vigente" itemLabel="Vigente"/>
+                            <f:selectItem itemValue="Cancelado" itemLabel="Cancelado"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Año:" for="anio" rendered="#{rnGcSolicitudesDescargaSatTblController.recibidos}"/>
+                        <p:selectOneMenu id="anio" rendered="#{rnGcSolicitudesDescargaSatTblController.recibidos}"
+                                         value="#{rnGcSolicitudesDescargaSatTblController.anio}">
+                            <f:selectItem itemLabel="Selecciona" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{rnGcSolicitudesDescargaSatTblController.aniosDisponibles}"/>
+                            <p:ajax listener="#{rnGcSolicitudesDescargaSatTblController.alCambiarPeriodo()}" update="mes dia"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Mes:" for="mes" rendered="#{rnGcSolicitudesDescargaSatTblController.recibidos}"/>
+                        <p:selectOneMenu id="mes" rendered="#{rnGcSolicitudesDescargaSatTblController.recibidos}"
+                                         value="#{rnGcSolicitudesDescargaSatTblController.mes}">
+                            <f:selectItem itemLabel="Selecciona" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{rnGcSolicitudesDescargaSatTblController.mesesDisponibles}"/>
+                            <p:ajax listener="#{rnGcSolicitudesDescargaSatTblController.alCambiarPeriodo()}" update="dia"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Día (opcional):" for="dia" rendered="#{rnGcSolicitudesDescargaSatTblController.recibidos}"/>
+                        <p:selectOneMenu id="dia" rendered="#{rnGcSolicitudesDescargaSatTblController.recibidos}"
+                                         value="#{rnGcSolicitudesDescargaSatTblController.dia}">
+                            <f:selectItem itemLabel="Todo el mes" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{rnGcSolicitudesDescargaSatTblController.diasDisponibles}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Estado:" rendered="#{rnGcSolicitudesDescargaSatTblController.recibidos}"/>
+                        <h:outputText rendered="#{rnGcSolicitudesDescargaSatTblController.recibidos}"
+                                      value="Vigente (el SAT solo entrega XML de recibidos vigentes)"/>
+                    </h:panelGrid>
+
+                    <div style="display:flex; gap:10px; margin-top:15px;">
+                        <p:commandButton id="btnSolicitar" value="Solicitar descarga" icon="fa fa-cloud-download"
+                                         action="#{rnGcSolicitudesDescargaSatTblController.solicitarDescarga()}"
+                                         onstart="PF('wvBtnSolicitar').disable();" oncomplete="PF('wvBtnSolicitar').enable(); docsSatIniciarAvisos();"
+                                         widgetVar="wvBtnSolicitar"
+                                         update=":formSolicitudes:tablaSolicitudes :msgs"/>
+                        <p:commandButton value="Actualizar estado" icon="fa fa-refresh" styleClass="ui-button-secondary"
+                                         action="#{rnGcSolicitudesDescargaSatTblController.actualizarEstado()}"
+                                         update=":formSolicitudes:tablaSolicitudes :msgs"/>
+                    </div>
+                </p:panel>
+            </h:form>
+
+            <h:form id="formSolicitudes">
+                <!-- El aviso global (templateRN) la invoca cuando una solicitud cambia de estado -->
+                <p:remoteCommand name="descargaSatRefrescar" global="false" process="@this"
+                                 actionListener="#{rnGcSolicitudesDescargaSatTblController.recargarSolicitudes()}"
+                                 update="tablaSolicitudes"/>
+                <p:dataTable id="tablaSolicitudes" var="s" value="#{rnGcSolicitudesDescargaSatTblController.solicitudes}"
+                             rows="10" paginator="true" emptyMessage="Aún no tienes solicitudes de descarga.">
+                    <f:facet name="header">Mis solicitudes de descarga</f:facet>
+
+                    <p:column headerText="Solicitada">
+                        <h:outputText value="#{s.fechaSolicitud}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="#{rnGcSolicitudesDescargaSatTblController.zonaHoraria}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Tipo">
+                        <h:outputText value="#{s.tipo eq 'RECIBIDOS' ? 'Recibidos' : 'Emitidos'}"/>
+                    </p:column>
+                    <p:column headerText="Periodo">
+                        <h:outputText value="#{s.fechaInicial}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="#{rnGcSolicitudesDescargaSatTblController.zonaHoraria}"/>
+                        </h:outputText>
+                        <h:outputText value=" - "/>
+                        <h:outputText value="#{s.fechaFinal}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="#{rnGcSolicitudesDescargaSatTblController.zonaHoraria}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Estado CFDI">
+                        <h:outputText value="#{s.estadoComprobante}"/>
+                    </p:column>
+                    <p:column headerText="Estado solicitud">
+                        <h:outputText value="#{s.estadoSolicitudTexto}"/>
+                    </p:column>
+                    <p:column headerText="CFDI">
+                        <!-- Mientras esta en proceso el SAT devuelve 0: se muestra un guion para no confundir -->
+                        <h:outputText value="#{s.pendiente ? '—' : s.numeroCfdis}"/>
+                    </p:column>
+                    <p:column headerText="Mensaje SAT">
+                        <h:outputText value="#{s.mensajeSat}"/>
+                    </p:column>
+                    <p:column headerText="Paquetes">
+                        <ui:repeat value="#{s.listaPaquetes}" var="paq" varStatus="st">
+                            <p:commandButton value="ZIP #{st.index + 1}" icon="fa fa-download" ajax="false"
+                                             title="#{paq}" style="margin:2px;">
+                                <p:fileDownload value="#{rnGcSolicitudesDescargaSatTblController.descargarPaquete(s, paq)}"/>
+                            </p:commandButton>
+                        </ui:repeat>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>

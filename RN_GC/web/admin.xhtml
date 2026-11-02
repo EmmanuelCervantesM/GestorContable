@@ -22,12 +22,21 @@
             <!-- CTR-03 (v2.27): banner de timbres bajos / certificados por vencer.
                  Se recalcula en vivo en cada carga de admin.xhtml (landing tras login),
                  sin persistencia de "ya mostrado". -->
+            <!-- CTR-06: se suman los avisos de Descarga Masiva SAT en estado final
+                 (Terminada/Error/Rechazada/Vencida) hasta que el usuario abre la pantalla. -->
             <p:dialog header="Aviso" widgetVar="dlgAlertaTimbresCert" modal="true" closable="true"
-                      resizable="false" appendTo="@(body)" visible="#{facturarContoller.mostrarAlertaTimbresCert}">
+                      resizable="false" appendTo="@(body)"
+                      visible="#{facturarContoller.mostrarAlertaTimbresCert or rnGcSolicitudesDescargaSatTblController.mostrarAlertaDescargaSat}">
                 <h:panelGroup rendered="#{facturarContoller.mostrarAlertaTimbresCert}">
                     <ui:repeat value="#{facturarContoller.obtenerMensajesAlertaTimbresCert()}" var="mensajeAlerta">
                         <p>#{mensajeAlerta}</p>
                     </ui:repeat>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{rnGcSolicitudesDescargaSatTblController.mostrarAlertaDescargaSat}">
+                    <ui:repeat value="#{rnGcSolicitudesDescargaSatTblController.obtenerAvisosDescargaSat()}" var="avisoDescarga">
+                        <p>#{rnGcSolicitudesDescargaSatTblController.mensajeAviso(avisoDescarga)}</p>
+                    </ui:repeat>
+                    <p><h:link outcome="/serv/rnGcSolicitudesDescargaSatTbl/descargaSat" value="Ir a Descarga Masiva SAT"/></p>
                 </h:panelGroup>
             </p:dialog>
         </ui:define>

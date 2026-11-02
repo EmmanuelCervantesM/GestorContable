@@ -25,6 +25,9 @@ public class Login implements Serializable {
     @EJB
     private RnGcUsuariosPerfilesTblFacade rnGeUsuarioPerfilesTblFacade;
 
+    @EJB
+    private VerificadorDescargaSat verificadorDescargaSat;
+
     private static final long serialVersionUID = 109480182528386363L;
 
     @EJB
@@ -209,6 +212,13 @@ public class Login implements Serializable {
             }
             session.setAttribute("usuarioId", usuarioId);
             session.setAttribute("listaPerfiles", listaPerfiles);
+            // CTR-06: verificacion en segundo plano de descargas SAT pendientes;
+            // no debe impedir el login si falla.
+            try {
+                verificadorDescargaSat.verificarPendientesAsync(usuarioId);
+            } catch (RuntimeException ex) {
+                java.util.logging.Logger.getLogger(getClass().getName()).log(Level.WARNING, "CTR-06: no se pudo lanzar la verificacion SAT", ex);
+            }
         }
         System.out.println("listaPerfiles: " + usuarioId + listaPerfiles);
     }
@@ -229,9 +239,10 @@ public class Login implements Serializable {
         td = new TrippleDes();
         String encrypted=td.encrypt(plainPwd);
 
-        System.out.println("Texto para Encryptar: "+ plainPwd);
-        System.out.println("Texto Encryptado:" + encrypted);
-        desencriptarPwd();
+        // LOGIN.1: comentado para no escribir contrasenas (en claro o cifradas con 3DES reversible) en server.log
+        // System.out.println("Texto para Encryptar: "+ plainPwd);
+        // System.out.println("Texto Encryptado:" + encrypted);
+        // desencriptarPwd();
         
         return encrypted;
     }
@@ -241,7 +252,8 @@ public class Login implements Serializable {
             TrippleDes td;
             td = new TrippleDes();
             String decrypted = td.decrypt(encryptedPwd);
-            System.out.println("Texto Encryptado:" + decrypted);
+            // LOGIN.1: comentado para no escribir contrasenas (en claro o cifradas con 3DES reversible) en server.log
+            // System.out.println("Texto Encryptado:" + decrypted);
             return decrypted;
         }         
          /*temporal*/
