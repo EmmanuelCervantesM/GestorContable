@@ -1514,12 +1514,8 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             Attr regimenFiscalReceptor = doc.createAttribute("RegimenFiscalReceptor");
             //regimenFiscalReceptor.setValue(String.valueOf(solicitudTrabajador.getTrabajadorId().getRegimenFicalId().getClaveRegimenFiscal()));
             //regimenFiscalReceptor.setValue(String.valueOf(solicitudTrabajador.getTrabajadorId().getRegimenFicalId().getCveTipoRegimen()));
-            if ("02".equals(String.valueOf(
-                    solicitudTrabajador.getTrabajadorId()
-                            .getRegimenFicalId()
-                            .getCveTipoRegimen()))) {
-                regimenFiscalReceptor.setValue("605");
-            }
+            // CTR-15.1: los receptores de nomina siempre son 605 (Sueldos y Asimilados), segun los CFDI reales del cliente
+            regimenFiscalReceptor.setValue("605");
             receptor.setAttributeNode(regimenFiscalReceptor);
             System.out.println("tipoContrato es3  null");
             Attr rfcReceptor = doc.createAttribute("Rfc");
