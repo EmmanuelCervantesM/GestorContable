@@ -200,9 +200,24 @@ public class RnGcNomNominasTblController implements Serializable {
     }
 
     public void setSelected(RnGcNomNominasTbl selected) {
+        // Sin selección se limpian las fechas y se sale sin consultar el facade
+        if (selected == null) {
+            periodoNomina = null;
+            setFechaInicioPago(null);
+            setFechaFinPago(null);
+            this.selected = null;
+            return;
+        }
         periodoNomina = null;
         periodoNomina = periodoNominaFacade.obtenerXNomina(selected);
 
+        // Nómina sin periodo: se limpian las fechas en vez de dereferenciar null
+        if (periodoNomina == null) {
+            setFechaInicioPago(null);
+            setFechaFinPago(null);
+            this.selected = selected;
+            return;
+        }
         setFechaInicioPago(periodoNomina.getFechaInicio());
         setFechaFinPago(periodoNomina.getFechaFin());
         this.selected = selected;
@@ -1845,6 +1860,12 @@ public class RnGcNomNominasTblController implements Serializable {
     public void descargaPlantilla() {
         try {
             File plantilla = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Archivos/Plantilla_Nomina.xlsx"));
+            // La plantilla debe existir y ser un archivo antes de intentar leerla
+            if (!plantilla.exists() || !plantilla.isFile()) {
+                System.err.println("Ocurrio un error al descargar la plantilla de nomina: no se encontro el archivo");
+                JsfUtil.addErrorMessage("No se encontró la plantilla de nómina para descargar");
+                return;
+            }
             byte[] aux = FileUtils.readFileToByteArray(plantilla);
             InputStream streamPlantilla = new ByteArrayInputStream(aux);
             downLoadFile = new DefaultStreamedContent(streamPlantilla,
@@ -1852,6 +1873,7 @@ public class RnGcNomNominasTblController implements Serializable {
                     "plantilla_nomina_" + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()).concat(".xlsx"));
         } catch (Exception ex) {
             System.err.println("Ocurrio un error al descargar la plantilla de nomina");
+            JsfUtil.addErrorMessage("Ocurrió un error al descargar la plantilla de nómina");
         }
     }
 

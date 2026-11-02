@@ -39,6 +39,11 @@ public class RnGcNomPeriodonominaTblFacade extends AbstractFacade<RnGcNomPeriodo
     
     public RnGcNomPeriodonominaTbl obtenerXNomina(RnGcNomNominasTbl nomina){
         RnGcNomPeriodonominaTbl periodoNomina = null;
+        // Sin nómina o sin id no hay nada que buscar, se retorna null sin tocar el EntityManager
+        if (nomina == null || nomina.getId() == null) {
+            System.err.println("No se puede buscar periodo: la nomina es nula o no tiene id");
+            return null;
+        }
         try{
             System.out.print("Buscando la nomina con id: " + nomina.getId());
             periodoNomina = em.createNamedQuery("RnGcNomPeriodonominaTbl.findByNomina", RnGcNomPeriodonominaTbl.class)

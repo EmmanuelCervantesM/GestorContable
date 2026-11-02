@@ -65,7 +65,7 @@
                         </f:facet>
 
                         <f:facet name="header">
-                            <p:commandButton id="download" icon="ui-icon-arrowthickstop-1-s" value="Descargar Plantilla Nómina" actionListener="#{rnGcNomNominasTblController.descargaPlantilla()}" ajax="false">
+                            <p:commandButton id="download" icon="ui-icon-arrowthickstop-1-s" value="Descargar Plantilla Nómina" actionListener="#{rnGcNomNominasTblController.descargaPlantilla()}" ajax="false" process="@this" immediate="true">
                                 <p:fileDownload value="#{rnGcNomNominasTblController.downLoadFile}"/>
                             </p:commandButton>
                         </f:facet>
@@ -171,7 +171,8 @@
 
                             <!-- Fila nueva para Select + Botón juntos -->
 
-                            <!--  <h:outputText value="" /> 
+                            <!-- Se usa ui:remove y no un comentario HTML: Facelets evalua el EL dentro de los comentarios y ejecutaba agregarTrabajador() en cada render -->
+                            <ui:remove>  <h:outputText value="" /> 
                               <p:outputLabel style="font-weight: 900; margin-right: 8px;" value="Agregar Trabajador:" for="agregarTrabajador" />
                               <h:panelGroup layout="block" style="display: flex; align-items: center; gap: 8px;">
                                   <p:selectOneMenu id="agregarTrabajador"
@@ -190,7 +191,7 @@
                                                    actionListener="#{rnGcNomSolicitudTrabajadorTblController.agregarTrabajador()}"
                                                    ajax="true" update="RnGcNomNominasTblListForm:datalist, RnGcSolicitudTrabajadorTblListForm:datalist"
                                                    />
-                              </h:panelGroup>  -->
+                              </h:panelGroup>  </ui:remove>
 
                             <!-- Colocar elementos vacíos para completar las columnas -->
                             <h:outputText value="" />
