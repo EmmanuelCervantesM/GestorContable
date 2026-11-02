@@ -625,7 +625,8 @@
                         </p:dataTable>
                     </p:panel>
 
-                    <!--<p:commandButton value="Agregar CFDI Relacionado" actionListener="#{facturarContoller.agregarRelacionados()}" update="datosFacturaForm, datosFacturaForm:addRelacionados" oncomplete="handleSubmit(args, 'addRelacionadoDialog');"/>-->
+                    <!-- Se usa ui:remove y no un comentario HTML: Facelets evalua el EL dentro de los comentarios y ejecutaba agregarRelacionados() en cada render -->
+                    <ui:remove><p:commandButton value="Agregar CFDI Relacionado" actionListener="#{facturarContoller.agregarRelacionados()}" update="datosFacturaForm, datosFacturaForm:addRelacionados" oncomplete="handleSubmit(args, 'addRelacionadoDialog');"/></ui:remove>
                     <p:commandButton value="Cancelar" onclick="addRelacionadoDialog.hide()"/>
                 </h:form>
             </p:dialog>
@@ -637,7 +638,8 @@
                         <p:outputLabel value="Quieres eliminar el CFDI Relacionado"/>
                         <p:outputLabel value="#{facturarContoller.cfdiRelacionado.uuid}?" style="font-weight: 900"/>
                     </h:panelGrid>
-                    <!--<p:commandButton value="Eliminar" actionListener="#{facturarContoller.eliminarRelacionados()}" update="datosFacturaForm:addRelacionados:relacionadosList" oncomplete="handleSubmit(args, 'deleteRelacionadoDialog');"/>-->
+                    <!-- Se usa ui:remove y no un comentario HTML: Facelets evalua el EL dentro de los comentarios y ejecutaba eliminarRelacionados() en cada render -->
+                    <ui:remove><p:commandButton value="Eliminar" actionListener="#{facturarContoller.eliminarRelacionados()}" update="datosFacturaForm:addRelacionados:relacionadosList" oncomplete="handleSubmit(args, 'deleteRelacionadoDialog');"/></ui:remove>
                     <p:commandButton value="Cancelar" onclick="deleteRelacionadoDialog.hide()"/>
                 </h:form>
             </p:dialog>
