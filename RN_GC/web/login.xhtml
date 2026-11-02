@@ -56,7 +56,8 @@
                          <br></br><br></br>
 
                          <h:outputLabel value="Contraseña:" />
-                         <!--<p:password id="password" value="#{login.pwd}" required="true" requiredMessage="Favor de ingresar la contraseña"></p:password>-->
+                         <!-- Se usa ui:remove y no un comentario HTML: Facelets evalua el EL dentro de los comentarios y escribia login.pwd (contrasena cifrada) en el HTML -->
+                         <ui:remove><p:password id="password" value="#{login.pwd}" required="true" requiredMessage="Favor de ingresar la contraseña"></p:password></ui:remove>
                          <p:password id="password" value="#{login.pwd}" style="width: 185px"></p:password>
                          <br></br><br></br>
 

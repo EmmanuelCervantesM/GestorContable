@@ -750,8 +750,9 @@ public class RnGcUsuariosTblController implements Serializable {
         td = new TrippleDes();
         String encrypted = td.encrypt(plainPwd);
 
-        System.out.println("String To Encrypt: " + plainPwd);
-        System.out.println("Encrypted String:" + encrypted);
+        // Evita escribir contrasenas en server.log
+        // System.out.println("String To Encrypt: " + plainPwd);
+        // System.out.println("Encrypted String:" + encrypted);
 
         return encrypted;
     }
@@ -761,8 +762,9 @@ public class RnGcUsuariosTblController implements Serializable {
         td = new TrippleDes();
         String decrypted = td.decrypt(encryptedPwd);
 
-        System.out.println("String To Decrypt: " + encryptedPwd);
-        System.out.println("Decrypted String:" + decrypted);
+        // Evita escribir contrasenas en server.log
+        // System.out.println("String To Decrypt: " + encryptedPwd);
+        // System.out.println("Decrypted String:" + decrypted);
 
         return decrypted;
     }
