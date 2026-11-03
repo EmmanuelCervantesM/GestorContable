@@ -48,6 +48,9 @@ public class RnGcPeriodoContableTblController implements Serializable {
 
     @EJB
     private RnGcPeriodosTblFacade ejbFacade;
+
+    @EJB
+    private mx.com.rocketnegocios.beans.RnGcTipoPolizaFacade tipoPolizaFacade;
     private UsuarioFirmado usuarioFirmado = new UsuarioFirmado();
     
     @Inject
@@ -201,12 +204,12 @@ public class RnGcPeriodoContableTblController implements Serializable {
     }
     
     public void toggleEstatusSelected() {
-        facturarController.notificarCambio();
         if (selected == null) {
             FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_WARN, "Atención", "No hay registro seleccionado."));
             return;
         }
+        if (!validarPropietario(selected)) return;
 
         // alterna A <-> C
         String nuevo = "A".equals(selected.getEstatus()) ? "C" : "A";
@@ -216,6 +219,7 @@ public class RnGcPeriodoContableTblController implements Serializable {
 
         ejbFacade.edit(selected);   // persiste en BD
         items = null;               // recarga la tabla
+        facturarController.notificarCambio();
 
         FacesContext.getCurrentInstance().addMessage(null,
             new FacesMessage(FacesMessage.SEVERITY_INFO, "Listo",
@@ -429,13 +433,33 @@ private boolean esAbierto(RnGcPeriodosTbl p) {
 
     public List<RnGcPeriodosTbl> getItems() {
         if (items == null) {
-            items = ejbFacade.findAll();
+            items = cargarItemsUsuario();
         }
         return items;
     }
 
     public void recargarItems() {
-        items = ejbFacade.findAll();
+        items = cargarItemsUsuario();
+    }
+
+    // Solo los periodos del usuario de la sesion
+    private List<RnGcPeriodosTbl> cargarItemsUsuario() {
+        RnGcUsuariosTbl user = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
+        if (user == null) return new ArrayList<>();
+        return ejbFacade.findByUsuario(user);
+    }
+
+    // Rechaza cambios de estado en periodos que no pertenecen al usuario de la sesion
+    private boolean validarPropietario(RnGcPeriodosTbl p) {
+        Integer uid = usuarioFirmado.obtenerIdUsuario();
+        if (p == null || p.getUsuariosId() == null || !uid.equals(p.getUsuariosId().getId())) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_WARN, "No permitido",
+                    "El periodo no pertenece al usuario de la sesión."));
+            FacesContext.getCurrentInstance().validationFailed();
+            return false;
+        }
+        return true;
     }
 
     private void cargarAniosDisponibles() {
@@ -595,6 +619,17 @@ public void setModoSeleccionLibre(boolean b) { this.modoSeleccionLibre = b; }
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Periodo guardado."));
             items = null; // recargar tabla
             facturarController.notificarCambio();
+
+            // Tipos de póliza por defecto; un fallo aquí no debe revertir el periodo
+            try {
+                tipoPolizaFacade.crearTiposPorDefectoSiFaltan(user);
+            } catch (Exception ex) {
+                sop("ERROR al crear tipos de póliza por defecto: " + rootCause(ex));
+                ex.printStackTrace(System.out);
+                FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso",
+                        "El periodo se guardó, pero no se pudieron crear los tipos de póliza por defecto."));
+            }
         } catch (Exception e) {
             Throwable rc = rootCause(e);
             sop("ERROR al guardar: " + rc);
@@ -610,13 +645,13 @@ public void setModoSeleccionLibre(boolean b) { this.modoSeleccionLibre = b; }
 
     /** Revisa si hay un periodo ‘A’ para el usuario */
     private boolean existePeriodoActivo(RnGcUsuariosTbl user) {
-        List<RnGcPeriodosTbl> l = ejbFacade.obtenerPeriodoIdDesc(user);
-        return l.stream().anyMatch(p -> "A".equalsIgnoreCase(p.getEstatus()));
+        // obtenerPeriodoIdDesc() solo devuelve la ultima fila; mejor contar todos los periodos abiertos
+        return ejbFacade.existeAbierto(user);
     }
 
     
     private void persist(PersistAction persistAction, String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); //Para cambiar el cuerpo de los metodos generados, elija Herramientas | Plantillas.
     }
     
     
@@ -633,6 +668,7 @@ public void setModoSeleccionLibre(boolean b) { this.modoSeleccionLibre = b; }
                 new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "No hay periodo seleccionado."));
             return;
         }
+        if (!validarPropietario(selected)) return;
         try {
             // regla de negocio: sólo cerrar si realmente está abierto
             if (!"A".equalsIgnoreCase(selected.getEstatus())) {
@@ -655,6 +691,7 @@ public void setModoSeleccionLibre(boolean b) { this.modoSeleccionLibre = b; }
             FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Periodo cerrado."));
             items = null; // forzar recarga de la tabla (y por ende de hayPeriodoAbierto)
+            facturarController.notificarCambio();
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo cerrar el periodo."));
@@ -665,6 +702,7 @@ public void setModoSeleccionLibre(boolean b) { this.modoSeleccionLibre = b; }
     // (Opcional) Reabrir el periodo seleccionado
     public void reabrirSelected() {
         if (selected == null) return;
+        if (!validarPropietario(selected)) return;
         try {
             if (!"C".equalsIgnoreCase(selected.getEstatus())) {
                 FacesContext.getCurrentInstance().addMessage(null,
@@ -690,6 +728,7 @@ public void setModoSeleccionLibre(boolean b) { this.modoSeleccionLibre = b; }
             FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Periodo reabierto."));
             items = null;
+            facturarController.notificarCambio();
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo reabrir el periodo."));
@@ -710,6 +749,7 @@ public String msgConfirm(RnGcPeriodosTbl p) {
 // Botón: alterna A<->C sobre la fila recibida
 public void cambiarEstatus(RnGcPeriodosTbl row) {
     if (row == null) return;
+    if (!validarPropietario(row)) return;
     try {
         String nuevo = "A".equalsIgnoreCase(row.getEstatus()) ? "C" : "A";
         row.setEstatus(nuevo);
@@ -721,6 +761,7 @@ public void cambiarEstatus(RnGcPeriodosTbl row) {
             new FacesMessage(FacesMessage.SEVERITY_INFO, "OK",
                 "Periodo " + ("A".equals(nuevo) ? "abierto" : "cerrado") + "."));
         items = null; // refrescar lista
+        facturarController.notificarCambio();
     } catch (Exception e) {
         FacesContext.getCurrentInstance().addMessage(null,
             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
@@ -732,7 +773,7 @@ public void cambiarEstatus(RnGcPeriodosTbl row) {
     @PostConstruct
     public void init() {
         try {
-            items = ejbFacade.findAll();
+            items = cargarItemsUsuario();
             selected = new RnGcPeriodosTbl();
         } catch (Exception e) {
             // log simple para ver si algo truena aquí
@@ -743,6 +784,7 @@ public void cambiarEstatus(RnGcPeriodosTbl row) {
     // ya lo tienes (adaptado de tu cambiarEstatus)
     public void eliminar(RnGcPeriodosTbl row) {
         if (row == null || row.getId() == null) return;
+        if (!validarPropietario(row)) return;
 
         try {
             // regla opcional: no borrar abiertos

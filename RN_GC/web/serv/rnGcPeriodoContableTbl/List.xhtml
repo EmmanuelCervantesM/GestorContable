@@ -93,13 +93,19 @@
 
        </p:column>
           <f:facet name="footer">
+              
           <p:commandButton id="createBtn"
                  icon="ui-icon-plus"
                  value="Inicio Periodo"
                  actionListener="#{rnGcPeriodoContableTblController.prepareCreate}"
                  process="@this"
                  update=":periodoCreatePanel"
-                 oncomplete="PF('rnGcPeriodoContableTblCreated').show()"
+                 oncomplete="var dlg = PF('rnGcPeriodoContableTblCreateDialog');
+                             if (dlg) {
+                                 dlg.show();
+                             } else {
+                                 console.error('No existe el widget rnGcPeriodoContableTblCreateDialog');
+                             }"
                  disabled="#{rnGcPeriodoContableTblController.hayPeriodoAbierto}"
                  styleClass="#{rnGcPeriodoContableTblController.hayPeriodoAbierto ? 'btn-trans' : ''}"/>
           </f:facet>

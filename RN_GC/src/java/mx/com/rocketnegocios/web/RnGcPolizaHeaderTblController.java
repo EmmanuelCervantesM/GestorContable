@@ -542,11 +542,17 @@ public class RnGcPolizaHeaderTblController implements Serializable {
                 System.out.println("Creo encabezado de poliza: " + selected.getId());
                 guardarAciento();
                 obtenerpolizasPorUsuario();
+            } else {
+                // actualizarNumeroPoliza() ya agrego el mensaje de error
+                FacesContext.getCurrentInstance().validationFailed();
+                return;
             }
             itemsPolizaLineas = new ArrayList<>();
             selected = new RnGcPolizaHeaderTbl();
         } catch(Exception e){
             System.out.print("ErrorCrearPoliza: "+ e.getLocalizedMessage());
+            JsfUtil.addErrorMessage("No se pudo guardar la póliza: " + e.getLocalizedMessage());
+            FacesContext.getCurrentInstance().validationFailed();
         }
     }
 
@@ -845,6 +851,7 @@ public class RnGcPolizaHeaderTblController implements Serializable {
                     "Debes capturar al menos un asiento en la póliza."
             );
             FacesContext.getCurrentInstance().addMessage(null, msg);
+            FacesContext.getCurrentInstance().validationFailed();
             return false;
         }
 
@@ -862,6 +869,7 @@ public class RnGcPolizaHeaderTblController implements Serializable {
                     "El total de cargos debe ser igual al total de abonos. " + detalle
             );
             FacesContext.getCurrentInstance().addMessage(null, msg);
+            FacesContext.getCurrentInstance().validationFailed();
             return false;
         }
 
@@ -882,11 +890,32 @@ public class RnGcPolizaHeaderTblController implements Serializable {
                 JsfUtil.addErrorMessage("Los cargos ($" + cargos +
                         ") y abonos ($" + abonos +
                         ") no cuadran. Verifique los montos antes de guardar.");
+                FacesContext.getCurrentInstance().validationFailed();
                 return;
             }
 
             if (selected == null) {
                 JsfUtil.addErrorMessage("No existe una póliza seleccionada.");
+                FacesContext.getCurrentInstance().validationFailed();
+                return;
+            }
+
+            // Re-query del periodo activo al guardar (no confiar en prepareCreate)
+            Integer uid = usuarioFirmado.obtenerIdUsuario();
+            RnGcUsuariosTbl user = (uid != null) ? usuariosFacade.obtenerUsuarioPorId(uid) : null;
+            RnGcPeriodosTbl periodo = (user != null) ? periodosFacade.findActivo(user) : null;
+            if (periodo == null) {
+                JsfUtil.addErrorMessage("Se debe activar un periodo");
+                FacesContext.getCurrentInstance().validationFailed();
+                return;
+            }
+            selected.setPeriodoId(periodo);
+            if (!fechaDentroDePeriodo(selected.getFecha(), periodo)) {
+                SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+                JsfUtil.addErrorMessage("La fecha de la póliza debe estar dentro del periodo activo ("
+                        + fmt.format(periodo.getFechaInicioPeriodo()) + " - "
+                        + fmt.format(periodo.getFechaFinPeriodo()) + ").");
+                FacesContext.getCurrentInstance().validationFailed();
                 return;
             }
 
@@ -900,6 +929,7 @@ public class RnGcPolizaHeaderTblController implements Serializable {
             } else {
                 System.out.println("ERROR: tipoPolizaIdSeleccionado viene NULL");
                 JsfUtil.addErrorMessage("Debe seleccionar un tipo de póliza");
+                FacesContext.getCurrentInstance().validationFailed();
                 return;
             }
 
@@ -927,7 +957,28 @@ public class RnGcPolizaHeaderTblController implements Serializable {
             System.out.println("=== ERROR EN guardarPoliza() ===");
             e.printStackTrace();
             System.out.println("Mensaje: " + e.getMessage());
+            JsfUtil.addErrorMessage("No se pudo guardar la póliza.");
+            FacesContext.getCurrentInstance().validationFailed();
         }
+    }
+
+    // Compares calendar dates only (time ignored)
+    private boolean fechaDentroDePeriodo(Date fecha, RnGcPeriodosTbl p) {
+        if (fecha == null || p.getFechaInicioPeriodo() == null || p.getFechaFinPeriodo() == null) {
+            return false;
+        }
+        long f = soloFecha(fecha);
+        return f >= soloFecha(p.getFechaInicioPeriodo()) && f <= soloFecha(p.getFechaFinPeriodo());
+    }
+
+    private long soloFecha(Date d) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(d);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        return c.getTimeInMillis();
     }
    
     private void actualizarSaldoCatalogo(RnGcPolizaLineasTbl linea) {

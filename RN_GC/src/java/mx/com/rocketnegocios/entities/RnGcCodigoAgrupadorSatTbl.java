@@ -56,13 +56,12 @@ public class RnGcCodigoAgrupadorSatTbl implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
+    @Size(max = 45)
     @Column(name = "nivel")
     private String nivel;
-    @Basic(optional = true)
+    @Basic(optional = false)
     @NotNull
-    @Size(max = 45)
+    @Size(min = 1, max = 50)
     @Column(name = "codigoAgrupador")
     private String codigoAgrupador;
     @Basic(optional = false)
