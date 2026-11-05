@@ -119,11 +119,16 @@ public class RnGcPersonas_proveedoresTblController implements Serializable {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
+                    if (obtenerProveedores(selected) && persistAction.equals(PersistAction.CREATE)) {
+                        JsfUtil.addErrorMessage("El Proveedor" + selected.getRfc() + " ya esta registrado en el sistema");
+                    } else {
+                        getFacade().edit(selected);
+                        JsfUtil.addSuccessMessage(successMessage);
+                    }
                 } else {
                     getFacade().remove(selected);
+                    JsfUtil.addSuccessMessage(successMessage);
                 }
-                JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {
                 String msg = "";
                 Throwable cause = ex.getCause();
@@ -189,6 +194,19 @@ public class RnGcPersonas_proveedoresTblController implements Serializable {
             }
         }
 
+    }
+    // Verifica si el RFC del proveedor que se intenta registrar ya existe en la lista de personas 
+    // registradas, si existe, se muestra un mensaje de error y no se permite registrar el proveedor
+    public boolean obtenerProveedores(RnGcPersonasTbl persona){
+        List<RnGcPersonasTbl> listaPersonas = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
+        if (listaPersonas != null){
+            for (RnGcPersonasTbl p : listaPersonas){
+                if (selected.getRfc().toUpperCase().equals(p.getRfc())){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
             
 }

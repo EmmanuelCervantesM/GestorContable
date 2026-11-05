@@ -150,5 +150,20 @@ public class RnGcPersonasTblFacade extends AbstractFacade<RnGcPersonasTbl> {
         }
         return lista; 
     }
+
+    // metodo para obtener creado por lista de tipo 
+    public List<RnGcPersonasTbl> obtenerCreadoPorListaTipo(List<Integer> ids, String tipoPersona){
+    List<RnGcPersonasTbl> lista = null;
+    try {
+        lista = em.createQuery("SELECT r FROM RnGcPersonasTbl r WHERE r.creadoPor IN :ids AND r.tipoPersona = :tipoPersona", RnGcPersonasTbl.class)
+                .setParameter("ids", ids)
+                .setParameter("tipoPersona", tipoPersona)
+                .getResultList();
+    } catch (NoResultException ex) {
+        System.out.println("No hay personas de ese tipo para ese grupo de usuarios");
+    }
+    return lista;
+}
+
     
 }

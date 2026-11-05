@@ -89,6 +89,19 @@ public class RnGcProductserviciosTblFacade extends AbstractFacade<RnGcProductser
         }
         return listaProducServicios;
     }
+    // Busca un producto o servicio por su descripción y el id del usuario que lo creó, si no lo encuentra, devuelve null
+    public RnGcProductserviciosTbl obtenerCreadoPorListaDescripcion (List<Integer> ids, String descripcion){
+        RnGcProductserviciosTbl producto = null; 
+        try {
+            producto = em.createQuery("SELECT p FROM RnGcProductserviciosTbl p WHERE p.creadoPor IN :ids AND p.descripcion = :descripcion", RnGcProductserviciosTbl.class)
+                    .setParameter("ids", ids)
+                    .setParameter("descripcion", descripcion)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            System.out.println("No hay Productos con los ids y la descripcion: " + ids + " | " + descripcion);
+        }
+        return producto;
+    }
     
     
 }

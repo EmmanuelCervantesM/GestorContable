@@ -32,8 +32,8 @@
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{rnGcCodigospostalesTblController.itemsSinRepetir()}"
                                            var="codigoItem"
-                                           itemLabel="#{codigoItem.CCodigoPostal}"
-                                           itemValue="#{codigoItem.CCodigoPostal}"/>
+                                           itemLabel="#{codigoItem}"
+                                           itemValue="#{codigoItem}"/>
                             <p:ajax update="localidad"/>
                             <p:ajax update="ciudad"/>
                         </p:selectOneMenu>
@@ -56,7 +56,7 @@
                         <p:outputLabel value="#{bundle.CreateRnGcPersonasTblLabel_email}" for="email" />
                         <p:inputText id="email" value="#{rnGcPersonas_proveedoresTblController.selected.email}" title="#{bundle.CreateRnGcPersonasTblTitle_email}" />                                            
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{rnGcPersonas_proveedoresTblController.create()}" value="#{bundle.Save}" update="display,:RnGcPersonasTblListForm:datalist,:growl" oncomplete="handleSubmit(args,'RnGcPersonasTblCreateDialog');"/>
+                    <p:commandButton actionListener="#{rnGcPersonas_proveedoresTblController.create()}" value="#{bundle.Save}" update="display,:RnGcPersonasTblListForm,:growl" oncomplete="handleSubmit(args,'RnGcPersonasTblCreateDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="RnGcPersonasTblCreateDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
