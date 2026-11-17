@@ -29,7 +29,12 @@ public class AuthorizationFilter implements Filter {
 
     // Excepciones: pantallas dentro de esas carpetas que SI puede usar cualquier usuario logueado
     private static final String[] EXCEPCIONES = {
-        "/serv/rnGcUsuariosTbl/cambioPwd.xhtml"
+        "/serv/rnGcUsuariosTbl/cambioPwd.xhtml",
+        // CTR-12 (v2.80): la consultora/usuario solo recibe avisos de sus RFC;
+        // la lista completa, la importación y la edición siguen siendo de admin.
+        "/serv/rnGcListaNegraTbl/Comparacion.xhtml",
+        "/serv/rnGcListaNegraTbl/SemaforoListaNegra.xhtml",
+        "/serv/rnGcListaNegraTbl/AlertaListaNegra.xhtml"
     };
 
     public AuthorizationFilter() {
@@ -85,8 +90,13 @@ public class AuthorizationFilter implements Filter {
     }
 
     private boolean esExcepcion(String reqURI) {
-        for (String ruta : EXCEPCIONES) {
-            if (reqURI.contains(ruta)) {
+        // Se quitan los parámetros de ruta (";jsessionid=..." u otros) y se exige que la
+        // URI TERMINE en la pantalla exceptuada; con contains() bastaba con agregar
+        // ";x=/ruta/exceptuada.xhtml" a cualquier pantalla de admin para saltar el filtro.
+        int puntoYComa = reqURI.indexOf(';');
+        String ruta = puntoYComa >= 0 ? reqURI.substring(0, puntoYComa) : reqURI;
+        for (String excepcion : EXCEPCIONES) {
+            if (ruta.endsWith(excepcion)) {
                 return true;
             }
         }
