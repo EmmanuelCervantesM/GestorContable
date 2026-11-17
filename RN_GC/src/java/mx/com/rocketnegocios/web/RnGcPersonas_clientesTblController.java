@@ -7,6 +7,7 @@ import mx.com.rocketnegocios.beans.RnGcPersonasTblFacade;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -16,6 +17,7 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -25,6 +27,9 @@ import mx.com.rocketnegocios.entities.RnGcDireccionesTbl;
 import mx.com.rocketnegocios.entities.RnGcTipospersonasTbl;
 import mx.com.rocketnegocios.entities.RnGcUsuariosTbl;
 import mx.com.rocketnegocios.util.UsuarioFirmado;
+import mx.com.rocketnegocios.beans.ListaNegraService;
+import org.primefaces.context.RequestContext;
+import mx.com.rocketnegocios.util.listanegra.CoincidenciaListaNegra;
 
 @ManagedBean(name = "rnGcPersonas_clientesTblController")
 @SessionScoped
@@ -45,6 +50,10 @@ public class RnGcPersonas_clientesTblController implements Serializable {
     private RnGcDireccionesTbl direcciones;
     private RnGcUsuariosTbl usuarioId;
     private UsuarioFirmado usuarioFirmado = new UsuarioFirmado();
+    @EJB
+    private ListaNegraService listaNegraService;
+    // CTR-12: coincidencias en listas negras del último RFC registrado
+    private List<CoincidenciaListaNegra> alertaListaNegra = new ArrayList<>();
     private List<RnGcPersonasTbl> filteredPersonas;
 
     private List<RnGcDireccionesTbl> itemsDirecciones = null;
@@ -99,6 +108,35 @@ public class RnGcPersonas_clientesTblController implements Serializable {
             itemsCliente = null;
         }
         System.out.println("Creado");
+        verificarListaNegra();
+    }
+
+    public List<CoincidenciaListaNegra> getAlertaListaNegra() {
+        return alertaListaNegra;
+    }
+
+    /**
+     * CTR-12: al registrar, revisa si el RFC está en alguna lista negra y muestra el aviso.
+     * Solo avisa; el registro ya se guardó (regla v2.34: en operación manual no bloquea).
+     */
+    private void verificarListaNegra() {
+        alertaListaNegra = new ArrayList<>();
+        FacesMessage.Severity max = FacesContext.getCurrentInstance().getMaximumSeverity();
+        boolean guardado = max == null || max.compareTo(FacesMessage.SEVERITY_ERROR) < 0;
+        if (!guardado || JsfUtil.isValidationFailed() || selected == null) {
+            return;
+        }
+        try {
+            alertaListaNegra = listaNegraService.coincidencias(selected.getRfc());
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "CTR-12: no se pudo revisar listas negras", ex);
+            JsfUtil.addWarningMessage("No se pudo revisar si el RFC está en listas negras. Revíselo en Listas Negras > Comparación.");
+            return;
+        }
+        if (!alertaListaNegra.isEmpty()) {
+            RequestContext.getCurrentInstance().update("AlertaListaNegraForm");
+            RequestContext.getCurrentInstance().execute("PF('AlertaListaNegraDialog').show()");
+        }
     }
 
     public void update() {

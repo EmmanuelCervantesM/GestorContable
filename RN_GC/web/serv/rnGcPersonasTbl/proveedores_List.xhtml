@@ -122,6 +122,9 @@
             </h:form>
 
             <ui:include src="proveedores_Create.xhtml"/>
+            <ui:include src="/serv/rnGcListaNegraTbl/AlertaListaNegra.xhtml">
+                <ui:param name="coincidencias" value="#{rnGcPersonas_proveedoresTblController.alertaListaNegra}"/>
+            </ui:include>
             <ui:include src="proveedores_Edit.xhtml"/>
             <ui:include src="proveedores_View.xhtml"/>
         </ui:define>

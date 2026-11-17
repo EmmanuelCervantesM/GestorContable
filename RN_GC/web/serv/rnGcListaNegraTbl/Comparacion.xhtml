@@ -13,6 +13,7 @@
         </ui:define>
         
         <ui:define name="body">
+            <f:event type="preRenderView" listener="#{rnGcListaNegraTblController.alEntrarComparacion}"/>
             <h:form id="RnGcListaNegraTblListFormAuto">
                 <p:panel header="#{bundle.ListRnGcListaNegraTblTitle} Búsqueda Manual" collapsed="true" toggleable="true">
                     <p:dataTable id="datalist" value="#{rnGcListaNegraTblController.busqeudaManual}" var="item"
@@ -68,56 +69,46 @@
                 </p:panel>
             </h:form>
             <p:separator/>
-            <h:form id="RnGcListaNegraTblListForm">
-                <p:panel header="#{bundle.ListRnGcListaNegraTblTitle} Búsqueda Automática">
-                    <p:dataTable id="datalist" value="#{rnGcListaNegraTblController.listaPersonaLN}" var="item"
-                                 selectionMode="single" selection="#{rnGcListaNegraTblController.personaLN}"
-                                 paginator="true"  scrollable="true"
-                                 rowKey="#{item.persona}"
-                                 rows="10" resizableColumns="true"
-                                 rowsPerPageTemplate="10,20,30,40,50"
-                                 >
-                        
-                        <p:column filterBy="#{item.persona.tipoPersona}" filterMatchMode="contains">
-                            <f:facet name="header">
-                                <h:outputText value="Tipo Persona"/>
-                            </f:facet>
-                            <h:outputText value="#{item.persona.tipoPersona}" />
+            <h:form id="AvisosListaNegraForm">
+                <p:panel header="Avisos de listas negras" rendered="#{not empty rnGcListaNegraTblController.avisos}">
+                    <p:dataTable value="#{rnGcListaNegraTblController.avisos}" var="a" rows="10" paginator="true" paginatorAlwaysVisible="false">
+                        <p:column headerText="Fecha" style="width:140px">
+                            <h:outputText value="#{a.fechaAviso}"><f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/Mexico_City"/></h:outputText>
                         </p:column>
-                        <p:column filterBy="#{item.persona.nombre}" filterMatchMode="contains">
-                            <f:facet name="header">
-                                <h:outputText value="Nombre"/>
-                            </f:facet>
-                            <h:outputText value="#{item.persona.nombre}" />
+                        <p:column headerText="Cliente / proveedor">
+                            <h:outputText value="#{a.nombre}"/>
                         </p:column>
-                        <p:column filterBy="#{item.persona.rfc}" filterMatchMode="contains">
-                            <f:facet name="header">
-                                <h:outputText value="RFC"/>
-                            </f:facet>
-                            <h:outputText value="#{item.persona.rfc}" />
+                        <p:column headerText="RFC" style="width:130px">
+                            <h:outputText value="#{a.rfc}"/>
                         </p:column>
-                        <p:column filterBy="#{item.listaNegra.idTipoLista.tipoLista}" filterMatchMode="contains">
-                            <f:facet name="header">
-                                <h:outputText value="Tipo Lista"/>
-                            </f:facet>
-                            <h:outputText value="#{item.listaNegra.idTipoLista.tipoLista}" />
+                        <p:column headerText="Lista" style="width:90px">
+                            <h:outputText value="#{a.tipoLista}"/>
                         </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Fecha Publicación"/>
-                            </f:facet>
-                            <h:outputText value="#{item.listaNegra.idTipoLista.fechaPublicacion}">
-                                <f:convertDateTime pattern="dd/MM/yyyy"/>
-                            </h:outputText>
+                        <p:column headerText="Cambio">
+                            <h:outputText value="Entró a la lista: " rendered="#{empty a.estadoAnterior}"/>
+                            <h:panelGroup rendered="#{not empty a.estadoAnterior}">
+                                <span class="ln-semaforo ln-#{rnGcListaNegraTblController.colorDe(a.estadoAnterior)}"></span>
+                                <h:outputText value="#{a.estadoAnterior} → "/>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{not empty a.estadoNuevo}">
+                                <span class="ln-semaforo ln-#{rnGcListaNegraTblController.colorDe(a.estadoNuevo)}"></span>
+                                <h:outputText value="#{a.estadoNuevo}" style="font-weight:bold"/>
+                            </h:panelGroup>
+                            <h:outputText value="Ya no aparece en el listado del SAT" rendered="#{empty a.estadoNuevo}" style="font-weight:bold"/>
                         </p:column>
-                        <p:column filterBy="#{item.listaNegra.idTipoLista.folioPublicacion}" filterMatchMode="contains">
-                            <f:facet name="header">
-                                <h:outputText value="Folio Publicación"/>
-                            </f:facet>
-                            <h:outputText value="#{item.listaNegra.idTipoLista.folioPublicacion}" />
-                        </p:column>
-                        
                     </p:dataTable>
+                    <p:commandButton value="Marcar como vistos" icon="ui-icon-check" actionListener="#{rnGcListaNegraTblController.marcarAvisosVistos}"
+                                     update="@form" style="margin-top:8px"/>
+                </p:panel>
+            </h:form>
+            <h:form id="RnGcListaNegraTblListForm">
+                <p:panel header="#{bundle.ListRnGcListaNegraTblTitle} Búsqueda Automática (mis clientes y proveedores)">
+                    <p:commandButton value="Actualizar" icon="ui-icon-refresh" actionListener="#{rnGcListaNegraTblController.refrescarCoincidencias}"
+                                     update="@form :AvisosListaNegraForm" style="margin-bottom:8px"/>
+                    <ui:include src="/serv/rnGcListaNegraTbl/SemaforoListaNegra.xhtml">
+                        <ui:param name="coincidencias" value="#{rnGcListaNegraTblController.coincidenciasUsuario}"/>
+                        <ui:param name="mostrarPersona" value="#{true}"/>
+                    </ui:include>
                 </p:panel>
             </h:form>
         </ui:define>

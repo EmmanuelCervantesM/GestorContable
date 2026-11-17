@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    CTR-12: tabla de coincidencias en listas negras con semáforo y ligas al DOF.
+    Parámetros (ui:param):
+      coincidencias  lista de CoincidenciaListaNegra
+      mostrarPersona true para mostrar la columna del cliente/proveedor
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <style type="text/css">
+        .ln-semaforo { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: middle; margin-right: 6px; border: 1px solid rgba(0,0,0,.25); }
+        .ln-rojo { background: #d32f2f; }
+        .ln-ambar { background: #f5a623; }
+        .ln-verde { background: #2e7d32; }
+        .ln-gris { background: #78909c; }
+        .ln-vigente { animation: ln-titilar 1s ease-in-out infinite alternate; }
+        @keyframes ln-titilar { from { opacity: 1; } to { opacity: .25; } }
+        @media (prefers-reduced-motion: reduce) { .ln-vigente { animation: none; } }
+        .ln-ref { display: block; font-size: .85em; color: #555; }
+    </style>
+
+    <p:dataTable value="#{coincidencias}" var="c" emptyMessage="Sin coincidencias en listas negras."
+                 rows="10" paginator="#{coincidencias.size() gt 10}" paginatorAlwaysVisible="false">
+        <p:column headerText="Cliente / proveedor" rendered="#{mostrarPersona}" filterBy="#{c.nombrePersona}" filterMatchMode="contains">
+            <h:outputText value="#{c.nombrePersona}"/>
+            <h:outputText styleClass="ln-ref" value="#{c.tipoPersona}"/>
+        </p:column>
+        <p:column headerText="RFC" filterBy="#{c.rfc}" filterMatchMode="contains" style="width:130px">
+            <h:outputText value="#{c.rfc}"/>
+        </p:column>
+        <p:column headerText="Lista" style="width:90px">
+            <h:outputText value="#{c.lista}"/>
+        </p:column>
+        <p:column headerText="Estado" style="width:170px">
+            <span class="ln-semaforo ln-#{c.color} #{c.vigente ? 'ln-vigente' : ''}" title="#{c.situacion}"></span>
+            <h:outputText value="#{c.situacion}" style="font-weight:bold"/>
+        </p:column>
+        <p:column headerText="Entró a la lista">
+            <h:panelGroup rendered="#{not empty c.entrada}">
+                <h:outputLink value="#{c.entrada.url}" target="_blank">
+                    <h:outputText value="#{c.entrada.directo ? 'Ver nota del DOF' : 'Ver índice del DOF del día'}"/>
+                </h:outputLink>
+                <h:outputText styleClass="ln-ref" value="#{c.entrada.etapa}: #{c.entrada.texto}"/>
+            </h:panelGroup>
+            <h:outputText rendered="#{empty c.entrada}" value="Sin publicación en el DOF"/>
+        </p:column>
+        <p:column headerText="Salió de la lista">
+            <h:panelGroup rendered="#{not empty c.salida}">
+                <h:outputLink value="#{c.salida.url}" target="_blank">
+                    <h:outputText value="#{c.salida.directo ? 'Ver nota del DOF' : 'Ver índice del DOF del día'}"/>
+                </h:outputLink>
+                <h:outputText styleClass="ln-ref" value="#{c.salida.etapa}: #{c.salida.texto}"/>
+            </h:panelGroup>
+            <h:outputText rendered="#{empty c.salida}" value="Sigue en la lista"/>
+        </p:column>
+    </p:dataTable>
+</ui:composition>

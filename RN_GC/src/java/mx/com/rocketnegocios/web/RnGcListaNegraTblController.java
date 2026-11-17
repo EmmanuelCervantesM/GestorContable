@@ -37,6 +37,13 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import mx.com.rocketnegocios.beans.ListaNegraService;
+import mx.com.rocketnegocios.entities.RnGcListaNegraAvisoTbl;
+import mx.com.rocketnegocios.util.listanegra.CoincidenciaListaNegra;
+import mx.com.rocketnegocios.util.listanegra.ListaNegraCsv;
+import mx.com.rocketnegocios.util.listanegra.TipoListaNegra;
 
 @Named("rnGcListaNegraTblController")
 @SessionScoped
@@ -50,6 +57,15 @@ public class RnGcListaNegraTblController implements Serializable {
 
     @EJB
     private RnGcPersonasTblFacade personasFacade;
+
+    @EJB
+    private ListaNegraService listaNegraService;
+
+    // CTR-12: carga de CSV del SAT, revisión del DOF (49 Bis X), cruce y avisos
+    private String tipoImportar = TipoListaNegra.LISTA_69B.getEtiqueta();
+    private Date fecha49BisX;
+    private List<CoincidenciaListaNegra> coincidenciasUsuario = null;
+    private List<RnGcListaNegraAvisoTbl> avisos = null;
 
     private List<RnGcListaNegraTbl> items = null;
     private RnGcListaNegraTbl selected;
@@ -190,7 +206,10 @@ public class RnGcListaNegraTblController implements Serializable {
     }
 
     public List<RnGcListaNegraTbl> getItems() {
-        items = getFacade().findAll();
+        // CTR-12: solo registros activos; las cargas viejas y los RFC que salieron quedan inactivos
+        if (items == null) {
+            items = getFacade().obtenerActivos();
+        }
         return items;
     }
 
@@ -470,6 +489,164 @@ public class RnGcListaNegraTblController implements Serializable {
             busqeudaManual = new ArrayList<>();
         }
         return busqeudaManual;
+    }
+
+
+    // ------------------------------------------------------------------ CTR-12
+
+    public String getTipoImportar() {
+        return tipoImportar;
+    }
+
+    public void setTipoImportar(String tipoImportar) {
+        this.tipoImportar = tipoImportar;
+    }
+
+    public Date getFecha49BisX() {
+        return fecha49BisX;
+    }
+
+    public void setFecha49BisX(Date fecha49BisX) {
+        this.fecha49BisX = fecha49BisX;
+    }
+
+    /** Listas que se cargan desde el CSV del SAT. */
+    public List<String> getTiposCsv() {
+        return Arrays.asList(TipoListaNegra.LISTA_69B.getEtiqueta(), TipoListaNegra.LISTA_69B_BIS.getEtiqueta());
+    }
+
+    /** Carga el CSV del SAT de la lista elegida (69-B o 69-B Bis). */
+    public void importarCsv(FileUploadEvent event) {
+        TipoListaNegra tipo = TipoListaNegra.porEtiqueta(tipoImportar);
+        if (tipo == null || tipo.getColumnasCsv() == 0) {
+            JsfUtil.addErrorMessage("Elija la lista 69-B o 69-B Bis antes de cargar el archivo.");
+            return;
+        }
+        ListaNegraCsv.Resultado lectura;
+        try (InputStream in = event.getFile().getInputstream()) {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buf = new byte[8192];
+            int n;
+            while ((n = in.read(buf)) != -1) {
+                out.write(buf, 0, n);
+            }
+            lectura = ListaNegraCsv.leer(out.toByteArray(), tipo);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "CTR-12: error al leer el CSV", ex);
+            JsfUtil.addErrorMessage("No se pudo leer el archivo: " + ex.getLocalizedMessage());
+            return;
+        }
+        if (lectura.getError() != null) {
+            JsfUtil.addErrorMessage(lectura.getError());
+            return;
+        }
+        if (lectura.getFilas().isEmpty()) {
+            JsfUtil.addErrorMessage("El archivo no trae registros con RFC válido; no se cargó nada.");
+            return;
+        }
+        ListaNegraService.Resumen r;
+        try {
+            String folio = "CSV " + tipo.getEtiqueta() + " " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+            r = listaNegraService.importar(tipo, lectura.getFilas(), usuarioFirmado.obtenerIdUsuario(), folio, new Date(), true);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "CTR-12: error al cargar el CSV", ex);
+            JsfUtil.addErrorMessage("La carga falló y no se guardó nada: " + ex.getLocalizedMessage());
+            return;
+        }
+        items = null;
+        coincidenciasUsuario = null;
+        avisos = null;
+        JsfUtil.addSuccessMessage("Lista " + tipo.getEtiqueta() + " cargada: " + lectura.getFilas().size() + " RFC ("
+                + r.getNuevos() + " nuevos, " + r.getActualizados() + " actualizados, " + r.getCambiosEstado()
+                + " con cambio de estado, " + r.getBajas() + " ya no aparecen). Avisos generados: " + r.getAvisos() + ".");
+        if (!lectura.getErrores().isEmpty()) {
+            JsfUtil.addWarningMessage(lectura.getErrores().size() + " registros del archivo no se cargaron. "
+                    + resumirLista(lectura.getErrores()));
+        }
+        if (!lectura.getRepetidos().isEmpty()) {
+            JsfUtil.addWarningMessage(lectura.getRepetidos().size() + " RFC venían repetidos; se tomó el episodio más reciente. "
+                    + resumirLista(lectura.getRepetidos()));
+        }
+    }
+
+    /** Revisa las ediciones MAT y VES de la fecha elegida y carga los oficios de 49 Bis fracción X. */
+    public void revisar49BisX() {
+        if (fecha49BisX == null) {
+            JsfUtil.addErrorMessage("Elija la fecha del DOF a revisar.");
+            return;
+        }
+        ListaNegraService.Resumen49BisX r;
+        try {
+            r = listaNegraService.importar49BisX(fecha49BisX, usuarioFirmado.obtenerIdUsuario());
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "CTR-12: error al revisar el DOF", ex);
+            JsfUtil.addErrorMessage("La revisión del DOF falló y no se guardó nada: " + ex.getLocalizedMessage());
+            return;
+        }
+        items = null;
+        coincidenciasUsuario = null;
+        avisos = null;
+        String fecha = new SimpleDateFormat("dd/MM/yyyy").format(fecha49BisX);
+        if (r.getCargados().isEmpty() && r.getOmitidos().isEmpty() && r.getErrores().isEmpty()) {
+            JsfUtil.addSuccessMessage("Sin oficios 49 Bis X en las ediciones matutina y vespertina del DOF del " + fecha + ".");
+        }
+        if (!r.getCargados().isEmpty()) {
+            JsfUtil.addSuccessMessage("DOF del " + fecha + ": " + r.getRegistros() + " contribuyentes cargados. "
+                    + String.join(" ", r.getCargados()) + " Avisos generados: " + r.getAvisos() + ".");
+        }
+        if (!r.getOmitidos().isEmpty()) {
+            JsfUtil.addWarningMessage(String.join(" ", r.getOmitidos()));
+        }
+        for (String e : r.getErrores()) {
+            JsfUtil.addErrorMessage(e);
+        }
+    }
+
+    private static String resumirLista(List<String> lineas) {
+        int max = 5;
+        String muestra = String.join(" ", lineas.subList(0, Math.min(max, lineas.size())));
+        return lineas.size() > max ? muestra + " (y " + (lineas.size() - max) + " más)" : muestra;
+    }
+
+    /** Clientes y proveedores del usuario que están en alguna lista, con semáforo y ligas al DOF. */
+    public List<CoincidenciaListaNegra> getCoincidenciasUsuario() {
+        if (coincidenciasUsuario == null) {
+            coincidenciasUsuario = listaNegraService.coincidenciasDeUsuario(usuarioFirmado.obtenerIdUsuario());
+        }
+        return coincidenciasUsuario;
+    }
+
+    public void refrescarCoincidencias() {
+        coincidenciasUsuario = null;
+        avisos = null;
+    }
+
+    /**
+     * El controlador es de sesión: sin esto, al volver a Comparación se veían las
+     * coincidencias y avisos de la primera visita, aunque una carga posterior los cambiara.
+     */
+    public void alEntrarComparacion() {
+        if (!FacesContext.getCurrentInstance().isPostback()) {
+            refrescarCoincidencias();
+        }
+    }
+
+    /** Avisos sin ver: clientes o proveedores que entraron, cambiaron de estado o salieron de una lista. */
+    public List<RnGcListaNegraAvisoTbl> getAvisos() {
+        if (avisos == null) {
+            avisos = listaNegraService.avisosNoVistos(usuarioFirmado.obtenerIdUsuario());
+        }
+        return avisos;
+    }
+
+    public void marcarAvisosVistos() {
+        listaNegraService.marcarAvisosVistos(usuarioFirmado.obtenerIdUsuario());
+        avisos = null;
+    }
+
+    public String colorDe(String situacion) {
+        String c = mx.com.rocketnegocios.util.listanegra.SemaforoListaNegra.color(situacion);
+        return c == null ? "gris" : c;
     }
 
 }

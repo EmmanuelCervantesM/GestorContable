@@ -57,6 +57,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnGcListaNegraTbl.findByCreadoPor", query = "SELECT r FROM RnGcListaNegraTbl r WHERE r.creadoPor = :creadoPor")
     , @NamedQuery(name = "RnGcListaNegraTbl.findByFechaCreacion", query = "SELECT r FROM RnGcListaNegraTbl r WHERE r.fechaCreacion = :fechaCreacion")
     , @NamedQuery(name = "RnGcListaNegraTbl.findByUltimaActualizacionPor", query = "SELECT r FROM RnGcListaNegraTbl r WHERE r.ultimaActualizacionPor = :ultimaActualizacionPor")
+    , @NamedQuery(name = "RnGcListaNegraTbl.findActivosByTipoLista", query = "SELECT r FROM RnGcListaNegraTbl r WHERE r.idTipoLista.tipoLista = :tipoLista AND r.estado = 'A'")
+    , @NamedQuery(name = "RnGcListaNegraTbl.findActivosByRfcs", query = "SELECT r FROM RnGcListaNegraTbl r WHERE r.rfc IN :rfcs AND r.estado = 'A'")
     , @NamedQuery(name = "RnGcListaNegraTbl.findByUltimaFechaActualizacion", query = "SELECT r FROM RnGcListaNegraTbl r WHERE r.ultimaFechaActualizacion = :ultimaFechaActualizacion")})
 public class RnGcListaNegraTbl implements Serializable {
 
@@ -131,6 +133,16 @@ public class RnGcListaNegraTbl implements Serializable {
     private RnGcTipoListaNegraTbl idTipoLista;
     @Column(name = "estado")
     private String estado;
+    // CTR-12: datos propios de la lista 49 Bis fraccion X (anexo del oficio en el DOF)
+    @Size(max = 200)
+    @Column(name = "oficioResolucion")
+    private String oficioResolucion;
+    @Size(max = 100)
+    @Column(name = "notificacionBuzon")
+    private String notificacionBuzon;
+    @Size(max = 100)
+    @Column(name = "notificacionEstrados")
+    private String notificacionEstrados;
     @NotNull
 
     public RnGcListaNegraTbl() {
@@ -351,6 +363,30 @@ public class RnGcListaNegraTbl implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getOficioResolucion() {
+        return oficioResolucion;
+    }
+
+    public void setOficioResolucion(String oficioResolucion) {
+        this.oficioResolucion = oficioResolucion;
+    }
+
+    public String getNotificacionBuzon() {
+        return notificacionBuzon;
+    }
+
+    public void setNotificacionBuzon(String notificacionBuzon) {
+        this.notificacionBuzon = notificacionBuzon;
+    }
+
+    public String getNotificacionEstrados() {
+        return notificacionEstrados;
+    }
+
+    public void setNotificacionEstrados(String notificacionEstrados) {
+        this.notificacionEstrados = notificacionEstrados;
     }
 
     @Override

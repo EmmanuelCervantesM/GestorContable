@@ -43,9 +43,10 @@
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListRnGcListaNegraTblTitle_situacionContribuyente}"/>
                             </f:facet>
+                            <span class="ln-semaforo ln-#{rnGcListaNegraTblController.colorDe(item.situacionContribuyente)}"></span>
                             <h:outputText value="#{item.situacionContribuyente}"/>
                         </p:column>
-                        <p:column>
+                        <p:column filterBy="#{item.idTipoLista.tipoLista}" filterMatchMode="exact" style="width:110px">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListRnGcListaNegraTblTitle_idTipoLista}"/>
                             </f:facet>
@@ -66,6 +67,8 @@
                         <f:facet name="header">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcListaNegraTblController.prepareCreate}" update=":RnGcListaNegraTblCreateForm" oncomplete="PF('RnGcListaNegraTblCreateDialog').show()"/>
                             <p:commandButton id="cargarArchivo" icon="ui-icon-plus" value="Usar Plantilla" actionListener="#{rnGcListaNegraTblController.prepareCreate()}" update="RnGcListaNegraTblDocForm" oncomplete="PF('RnGcListaNegraTblDocDialog').show()"/>
+                            <p:commandButton id="importarCsvButton" icon="ui-icon-arrowthick-1-n" value="Importar CSV del SAT" update=":ImportarCsvForm" oncomplete="PF('ImportarCsvDialog').show()"/>
+                            <p:commandButton id="revisarDofButton" icon="ui-icon-calendar" value="Revisar DOF (49 Bis X)" update=":RevisarDofForm" oncomplete="PF('RevisarDofDialog').show()"/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcListaNegraTblViewForm" oncomplete="PF('RnGcListaNegraTblViewDialog').show()" disabled="#{empty rnGcListaNegraTblController.selected}"/>
                             <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcListaNegraTblEditForm" oncomplete="PF('RnGcListaNegraTblEditDialog').show()" disabled="#{empty rnGcListaNegraTblController.selected}"/>
                             <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcListaNegraTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcListaNegraTblController.selected}"/>
@@ -77,6 +80,48 @@
             <ui:include src="Create.xhtml"/>
             <ui:include src="Edit.xhtml"/>
             <ui:include src="View.xhtml"/>
+
+            <style type="text/css">
+                .ln-semaforo { display: inline-block; width: 12px; height: 12px; border-radius: 50%; vertical-align: middle; margin-right: 6px; border: 1px solid rgba(0,0,0,.25); }
+                .ln-rojo { background: #d32f2f; }
+                .ln-ambar { background: #f5a623; }
+                .ln-verde { background: #2e7d32; }
+                .ln-gris { background: #78909c; }
+            </style>
+
+            <!-- CTR-12: carga de los listados completos del SAT -->
+            <p:dialog id="ImportarCsvDlg" widgetVar="ImportarCsvDialog" modal="true" resizable="false" appendTo="@(body)" header="Importar CSV del SAT" width="620">
+                <h:form id="ImportarCsvForm">
+                    <p style="margin-top:0">
+                        Descargue el listado completo desde
+                        <h:outputLink value="https://www.sat.gob.mx/minisitio/DatosAbiertos/contribuyentes_publicados.html" target="_blank">Datos Abiertos del SAT</h:outputLink>
+                        y cárguelo sin modificar. El archivo reemplaza el estado de cada RFC de esa lista; los RFC que ya no vienen quedan inactivos.
+                    </p>
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="Lista" for="tipoImportar"/>
+                        <p:selectOneMenu id="tipoImportar" value="#{rnGcListaNegraTblController.tipoImportar}">
+                            <f:selectItems value="#{rnGcListaNegraTblController.tiposCsv}"/>
+                            <p:ajax/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:fileUpload id="archivoCsv" fileUploadListener="#{rnGcListaNegraTblController.importarCsv}" label="Buscar" cancelLabel="Cancelar" uploadLabel="Cargar"
+                                  mode="advanced" update=":RnGcListaNegraTblListForm:datalist, :growl" fileLimit="1" sizeLimit="30000000"
+                                  allowTypes="/(\.|\/)(csv)$/" invalidFileMessage="Solo se aceptan archivos .csv" oncomplete="PF('ImportarCsvDialog').hide()"/>
+                </h:form>
+            </p:dialog>
+
+            <!-- CTR-12: 49 Bis fracción X se lee de los oficios del DOF -->
+            <p:dialog id="RevisarDofDlg" widgetVar="RevisarDofDialog" modal="true" resizable="false" appendTo="@(body)" header="Revisar DOF (49 Bis fracción X)" width="520">
+                <h:form id="RevisarDofForm">
+                    <p style="margin-top:0">Se revisan las ediciones matutina y vespertina de la fecha elegida y se cargan los oficios de la fracción X del artículo 49 Bis.</p>
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="Fecha del DOF" for="fecha49"/>
+                        <p:calendar id="fecha49" value="#{rnGcListaNegraTblController.fecha49BisX}" pattern="dd/MM/yyyy" required="true" requiredMessage="Elija la fecha del DOF."/>
+                    </p:panelGrid>
+                    <p:commandButton value="Revisar" icon="ui-icon-search" actionListener="#{rnGcListaNegraTblController.revisar49BisX}"
+                                     update=":RnGcListaNegraTblListForm:datalist, :growl" oncomplete="if (!args.validationFailed) PF('RevisarDofDialog').hide()" style="margin-top:10px"/>
+                </h:form>
+            </p:dialog>
 
             <p:dialog id="RnGcListaNegraTblDocDlg" widgetVar="RnGcListaNegraTblDocDialog" modal="true" resizable="false" appendTo="@(body)" header="Cargar Lista Negra">
                 <h:form id="RnGcListaNegraTblDocForm">
