@@ -97,7 +97,15 @@
                             <p:inputText id="noInt" style="width: 160px" value="#{rnGcPersonas_clientesTblController.selected.noInt}" title="#{bundle.CreateRnGcPersonasTblTitle_noInt}" />
                         </p:panelGrid>
                     </p:panel>
-                    <p:commandButton actionListener="#{rnGcPersonas_clientesTblController.create()}" value="#{bundle.Save}" update="display,:RnGcPersonasTblListForm,:growl" oncomplete="handleSubmit(args,'RnGcPersonasTblCreateDialog');"/>
+                    <!--
+                        La tabla de clientes se refresca en una petición aparte (refrescarListaClientes).
+                        Si se actualiza junto con "display" en la misma respuesta, Mojarra 2.3 escribe mal
+                        las etiquetas de cierre (pila elementNames del HtmlResponseWriter tras los <option>),
+                        el XML parcial llega mal formado y el diálogo no se cierra ni muestra mensajes
+                        ni el aviso de listas negras.
+                    -->
+                    <p:remoteCommand name="refrescarListaClientes" process="@this" update=":RnGcPersonasTblListForm"/>
+                    <p:commandButton actionListener="#{rnGcPersonas_clientesTblController.create()}" value="#{bundle.Save}" update="display,:growl" oncomplete="handleSubmit(args,'RnGcPersonasTblCreateDialog'); if (!args.validationFailed) { refrescarListaClientes(); }"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="RnGcPersonasTblCreateDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
