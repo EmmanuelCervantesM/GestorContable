@@ -44,8 +44,8 @@ public abstract class SatDocsBase {
     /** Directorio de descarga por defecto. */
     public static final String DEFAULT_DOWNLOAD_DIR = "docs/downloads/";
 
-    /** Binario Brave por defecto; si no existe se usa el Chrome por defecto sin fallar. */
-    public static final String DEFAULT_BRAVE_BINARY = "/opt/brave.com/brave/brave-browser";
+    /** Binario de Google Chrome por defecto (el que usan pruebas y produccion); si no existe, Selenium usa el Chrome del sistema sin fallar. */
+    public static final String DEFAULT_WEB_BINARY = "/opt/google/chrome/chrome";
 
     /** Espera explícita por defecto para interacciones DOM, en segundos. */
     public static final long DEFAULT_TIMEOUT_SECONDS = 30L;
@@ -240,7 +240,7 @@ public abstract class SatDocsBase {
      * @param downloadDirAbsoluteOrRelative se resuelve a absoluta y se crea
      */
     public static ChromeDriver buildChromeDriverConDescargas(String downloadDirAbsoluteOrRelative) {
-        return buildChromeDriverConDescargas(downloadDirAbsoluteOrRelative, DEFAULT_BRAVE_BINARY);
+        return buildChromeDriverConDescargas(downloadDirAbsoluteOrRelative, DEFAULT_WEB_BINARY);
     }
 
     /**
@@ -267,7 +267,7 @@ public abstract class SatDocsBase {
      * para esta corrida. Ver {@link #cerrarNavegador(WebDriver, Path)}.
      */
     public static ChromeDriver buildChromeDriverConDescargas(String downloadDirAbsoluteOrRelative, Path perfilDir) {
-        return buildChromeDriverConDescargas(downloadDirAbsoluteOrRelative, DEFAULT_BRAVE_BINARY, true, perfilDir);
+        return buildChromeDriverConDescargas(downloadDirAbsoluteOrRelative, DEFAULT_WEB_BINARY, true, perfilDir);
     }
 
     /**
