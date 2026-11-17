@@ -227,14 +227,12 @@ public class RnGcCertificadosTblFacade extends AbstractFacade<RnGcCertificadosTb
     }
     // busca un certificado por su numero y lo devuelve 
     public RnGcCertificadosTbl obtenerPorNumeroCertificado(String numeroCertificado){
-        RnGcCertificadosTbl certificado =null; 
-        try {
-            certificado = em.createNamedQuery("RnGcCertificadosTbl.findByNumeroCertificado", RnGcCertificadosTbl.class)
-            .setParameter("numeroCertificado", numeroCertificado)
-            .getSingleResult();
-        } catch (NoResultException ex){
-            System.out.println("No existe certificadocon ese numero.");
-        }
-        return certificado;
+        // Puede haber duplicados historicos con el mismo numero: se toma el primero
+        // en vez de getSingleResult(), que lanzaria NonUniqueResultException.
+        List<RnGcCertificadosTbl> encontrados = em.createNamedQuery("RnGcCertificadosTbl.findByNumeroCertificado", RnGcCertificadosTbl.class)
+                .setParameter("numeroCertificado", numeroCertificado)
+                .setMaxResults(1)
+                .getResultList();
+        return encontrados.isEmpty() ? null : encontrados.get(0);
     }
 }
