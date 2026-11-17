@@ -1,5 +1,6 @@
 package mx.com.rocketnegocios.web;
 
+import mx.com.rocketnegocios.entities.RnGcListaNegraRevisionTbl;
 import mx.com.rocketnegocios.entities.RnGcListaNegraTbl;
 import mx.com.rocketnegocios.web.util.JsfUtil;
 import mx.com.rocketnegocios.web.util.JsfUtil.PersistAction;
@@ -39,6 +40,7 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import mx.com.rocketnegocios.beans.ActualizadorListasNegras;
 import mx.com.rocketnegocios.beans.ListaNegraService;
 import mx.com.rocketnegocios.entities.RnGcListaNegraAvisoTbl;
 import mx.com.rocketnegocios.util.listanegra.CoincidenciaListaNegra;
@@ -60,6 +62,9 @@ public class RnGcListaNegraTblController implements Serializable {
 
     @EJB
     private ListaNegraService listaNegraService;
+    @EJB
+    private ActualizadorListasNegras actualizadorListasNegras;
+    private List<RnGcListaNegraRevisionTbl> revisiones = null;
 
     // CTR-12: carga de CSV del SAT, revisión del DOF (49 Bis X), cruce y avisos
     private String tipoImportar = TipoListaNegra.LISTA_69B.getEtiqueta();
@@ -513,6 +518,25 @@ public class RnGcListaNegraTblController implements Serializable {
     /** Listas que se cargan desde el CSV del SAT. */
     public List<String> getTiposCsv() {
         return Arrays.asList(TipoListaNegra.LISTA_69B.getEtiqueta(), TipoListaNegra.LISTA_69B_BIS.getEtiqueta());
+    }
+
+    /** Últimas revisiones de la actualización automática (solo administrador). */
+    public List<RnGcListaNegraRevisionTbl> getRevisiones() {
+        if (revisiones == null) {
+            revisiones = listaNegraService.revisionesRecientes(200);
+        }
+        return revisiones;
+    }
+
+    public void refrescarRevisiones() {
+        revisiones = null;
+    }
+
+    /** Corre en segundo plano la revisión de los CSV, del DOF y el cruce con CFDI. */
+    public void revisarAhora() {
+        actualizadorListasNegras.revisarTodo();
+        revisiones = null;
+        JsfUtil.addSuccessMessage("Se inició la revisión en segundo plano. Pulse \"Actualizar tabla\" en unos minutos para ver el resultado.");
     }
 
     /** Carga el CSV del SAT de la lista elegida (69-B o 69-B Bis). */

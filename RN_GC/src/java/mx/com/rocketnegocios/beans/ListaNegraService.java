@@ -21,6 +21,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import mx.com.rocketnegocios.entities.RnGcListaNegraAvisoTbl;
 import mx.com.rocketnegocios.entities.RnGcListaNegraDofTbl;
+import mx.com.rocketnegocios.entities.RnGcListaNegraRevisionTbl;
 import mx.com.rocketnegocios.entities.RnGcListaNegraTbl;
 import mx.com.rocketnegocios.entities.RnGcPersonasTbl;
 import mx.com.rocketnegocios.entities.RnGcTipoListaNegraTbl;
@@ -29,6 +30,7 @@ import mx.com.rocketnegocios.util.listanegra.DofHttp;
 import mx.com.rocketnegocios.util.listanegra.DofParser;
 import mx.com.rocketnegocios.util.listanegra.EnlaceDof;
 import mx.com.rocketnegocios.util.listanegra.ListaNegraCsv;
+import mx.com.rocketnegocios.util.listanegra.SemaforoListaNegra;
 import mx.com.rocketnegocios.util.listanegra.TipoListaNegra;
 
 /**
@@ -197,7 +199,211 @@ public class ListaNegraService {
         }
         em.flush();
         resumen.avisos = generarAvisos(tipo, cambios, ahora);
+        Set<String> entraron = new HashSet<>();
+        for (Cambio c : cambios) {
+            if (c.nuevo != null && SemaforoListaNegra.vigente(c.nuevo)) {
+                entraron.add(c.rfc);
+            }
+        }
+        resumen.avisos += cruzarCfdiDeRfcs(entraron, ahora);
         return resumen;
+    }
+
+    /** Registros vigentes (estado 'A') de una lista. */
+    public long contarActivos(TipoListaNegra tipo) {
+        return em.createQuery("SELECT COUNT(r) FROM RnGcListaNegraTbl r WHERE r.idTipoLista.tipoLista = :tipoLista AND r.estado = 'A'", Long.class)
+                .setParameter("tipoLista", tipo.getEtiqueta()).getSingleResult();
+    }
+
+    // ------------------------------------------------------------ cruce con CFDI
+
+    /*
+     * CTR-12 (S14): los CFDI del usuario (creadoPor) cuya contraparte está en una lista. Entran
+     * los timbrados (también los viejos con estatus NULL, que sí traen UUID) y los que están
+     * "En proceso", para avisar antes de terminar; no entran los cancelados, los guardados sin
+     * timbrar ni la nómina (la contraparte es el trabajador).
+     */
+    private static final String SELECT_CFDI = "SELECT c.id, c.creadoPor, c.uuid, c.fechaExpedicion, c.fechaCreacion,"
+            + " c.rfcEmisor, c.nombreEmisor, c.rfcReceptor, c.nombreReceptor, c.estatus FROM RnGcCfdisTbl c WHERE ";
+    private static final String FILTRO_CFDI = " AND (c.estatus IS NULL OR c.estatus IN ('Timbrado', 'En proceso'))"
+            + " AND (c.tipoComprobante IS NULL OR c.tipoComprobante <> 'N')";
+
+    /** Cruza contra las listas los CFDI que tienen como emisor o receptor alguno de estos RFC. */
+    private int cruzarCfdiDeRfcs(Set<String> rfcs, Date ahora) {
+        List<String> todos = new ArrayList<>(rfcs);
+        int total = 0;
+        for (int i = 0; i < todos.size(); i += LOTE) {
+            List<String> lote = todos.subList(i, Math.min(i + LOTE, todos.size()));
+            total += cruzarCfdi(em.createQuery(SELECT_CFDI + "(c.rfcEmisor IN :rfcs OR c.rfcReceptor IN :rfcs)" + FILTRO_CFDI, Object[].class)
+                    .setParameter("rfcs", lote).getResultList(), ahora);
+        }
+        return total;
+    }
+
+    /**
+     * Cruza contra las listas los CFDI creados o modificados desde esa fecha. Con la fecha 0
+     * revisa todo el histórico. Regresa cuántos avisos generó.
+     */
+    public int cruzarCfdiDesde(Date desde) {
+        Date ahora = new Date();
+        int total = 0;
+        for (int inicio = 0;; inicio += LOTE) {
+            List<Object[]> filas = em.createQuery(SELECT_CFDI + "c.ultimaFechaActualizacion >= :desde" + FILTRO_CFDI + " ORDER BY c.id", Object[].class)
+                    .setParameter("desde", desde).setFirstResult(inicio).setMaxResults(LOTE).getResultList();
+            total += cruzarCfdi(filas, ahora);
+            if (filas.size() < LOTE) {
+                return total;
+            }
+        }
+    }
+
+    private int cruzarCfdi(List<Object[]> filas, Date ahora) {
+        if (filas.isEmpty()) {
+            return 0;
+        }
+        Set<Integer> usuarios = new HashSet<>();
+        List<Integer> ids = new ArrayList<>();
+        for (Object[] f : filas) {
+            ids.add((Integer) f[0]);
+            usuarios.add(((Number) f[1]).intValue());
+        }
+        Map<Integer, String> rfcUsuario = new HashMap<>();
+        for (Object[] u : em.createQuery("SELECT u.id, u.rfc FROM RnGcUsuariosTbl u WHERE u.id IN :ids", Object[].class)
+                .setParameter("ids", new ArrayList<>(usuarios)).getResultList()) {
+            rfcUsuario.put((Integer) u[0], ListaNegraCsv.limpiarRfc((String) u[1]));
+        }
+        Map<String, List<RnGcListaNegraTbl>> listas = new HashMap<>();
+        Set<String> contrapartes = new HashSet<>();
+        for (Object[] f : filas) {
+            String contraparte = contraparte(f, rfcUsuario);
+            if (contraparte != null) {
+                contrapartes.add(contraparte);
+            }
+        }
+        if (contrapartes.isEmpty()) {
+            return 0;
+        }
+        for (RnGcListaNegraTbl ln : em.createNamedQuery("RnGcListaNegraTbl.findActivosByRfcs", RnGcListaNegraTbl.class)
+                .setParameter("rfcs", new ArrayList<>(contrapartes)).getResultList()) {
+            if (SemaforoListaNegra.vigente(ln.getSituacionContribuyente())) {
+                listas.computeIfAbsent(ListaNegraCsv.limpiarRfc(ln.getRfc()), k -> new ArrayList<>()).add(ln);
+            }
+        }
+        if (listas.isEmpty()) {
+            return 0;
+        }
+        Set<String> existentes = new HashSet<>();
+        for (Object[] a : em.createNamedQuery("RnGcListaNegraAvisoTbl.findClavesCfdi", Object[].class)
+                .setParameter("ids", ids).getResultList()) {
+            existentes.add(claveCfdi((Integer) a[0], (String) a[1], (String) a[2]));
+        }
+        int total = 0;
+        for (Object[] f : filas) {
+            String contraparte = contraparte(f, rfcUsuario);
+            List<RnGcListaNegraTbl> enListas = contraparte == null ? null : listas.get(contraparte);
+            if (enListas == null) {
+                continue;
+            }
+            Integer idCfdi = (Integer) f[0];
+            boolean emitido = !contraparte.equals(ListaNegraCsv.limpiarRfc((String) f[5]));
+            Date fechaCfdi = f[3] != null ? (Date) f[3] : (Date) f[4];
+            for (RnGcListaNegraTbl ln : enListas) {
+                String tipoLista = ln.getIdTipoLista().getTipoLista();
+                if (!existentes.add(claveCfdi(idCfdi, tipoLista, ln.getSituacionContribuyente()))) {
+                    continue;
+                }
+                Date entrada = ListaNegraCsv.fechaEntrada(ln);
+                RnGcListaNegraAvisoTbl aviso = new RnGcListaNegraAvisoTbl();
+                aviso.setIdUsuario(((Number) f[1]).intValue());
+                aviso.setRfc(contraparte);
+                aviso.setNombre((String) (emitido ? f[8] : f[6]));
+                aviso.setTipoLista(tipoLista);
+                aviso.setEstadoNuevo(ln.getSituacionContribuyente());
+                aviso.setFechaAviso(ahora);
+                aviso.setVisto("N");
+                aviso.setIdCfdi(idCfdi);
+                aviso.setUuid((String) f[2]);
+                aviso.setFechaCfdi(fechaCfdi);
+                aviso.setRolCfdi(emitido ? "Emitido" : "Recibido");
+                aviso.setEstatusCfdi(f[9] != null ? (String) f[9] : "Timbrado");
+                aviso.setMomento(entrada == null || fechaCfdi == null ? null : (fechaCfdi.before(entrada) ? "ANTES" : "DURANTE"));
+                em.persist(aviso);
+                total++;
+            }
+        }
+        return total;
+    }
+
+    /** RFC de la otra parte del CFDI; null si el usuario no es ni emisor ni receptor. */
+    private static String contraparte(Object[] f, Map<Integer, String> rfcUsuario) {
+        String propio = rfcUsuario.get(((Number) f[1]).intValue());
+        String emisor = ListaNegraCsv.limpiarRfc((String) f[5]);
+        String receptor = ListaNegraCsv.limpiarRfc((String) f[7]);
+        if (propio == null || propio.isEmpty()) {
+            return null;
+        }
+        if (propio.equals(emisor)) {
+            return receptor.isEmpty() ? null : receptor;
+        }
+        if (propio.equals(receptor)) {
+            return emisor.isEmpty() ? null : emisor;
+        }
+        return null;
+    }
+
+    private static String claveCfdi(Integer idCfdi, String tipoLista, String estado) {
+        return idCfdi + "|" + tipoLista + "|" + normal(estado);
+    }
+
+    // ------------------------------------------------------------ bitácora de revisiones
+
+    /** Revisiones del DOF desde esa fecha, por día (aaaa-MM-dd). */
+    public Map<String, RnGcListaNegraRevisionTbl> revisionesDof(Date desde) {
+        Map<String, RnGcListaNegraRevisionTbl> porDia = new HashMap<>();
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        for (RnGcListaNegraRevisionTbl r : em.createNamedQuery("RnGcListaNegraRevisionTbl.findByFuenteDesde", RnGcListaNegraRevisionTbl.class)
+                .setParameter("fuente", RnGcListaNegraRevisionTbl.FUENTE_DOF).setParameter("desde", desde).getResultList()) {
+            porDia.put(f.format(r.getFecha()), r);
+        }
+        return porDia;
+    }
+
+    /** La revisión de una fuente sin fecha (CSV o CFDI), o null si nunca se ha hecho. */
+    public RnGcListaNegraRevisionTbl revision(String fuente) {
+        List<RnGcListaNegraRevisionTbl> l = em.createNamedQuery("RnGcListaNegraRevisionTbl.findByFuenteSinFecha", RnGcListaNegraRevisionTbl.class)
+                .setParameter("fuente", fuente).setMaxResults(1).getResultList();
+        return l.isEmpty() ? null : l.get(0);
+    }
+
+    /**
+     * Guarda el resultado de una revisión. Un ERROR suma un intento; un OK los reinicia. Con
+     * marca null se conserva la anterior (p. ej. el ETag del último CSV que sí se cargó).
+     */
+    public void registrarRevision(String fuente, Date fecha, String estado, String marca, String mensaje) {
+        List<RnGcListaNegraRevisionTbl> l = fecha == null
+                ? em.createNamedQuery("RnGcListaNegraRevisionTbl.findByFuenteSinFecha", RnGcListaNegraRevisionTbl.class)
+                        .setParameter("fuente", fuente).setMaxResults(1).getResultList()
+                : em.createNamedQuery("RnGcListaNegraRevisionTbl.findByFuenteFecha", RnGcListaNegraRevisionTbl.class)
+                        .setParameter("fuente", fuente).setParameter("fecha", fecha).setMaxResults(1).getResultList();
+        RnGcListaNegraRevisionTbl r = l.isEmpty() ? new RnGcListaNegraRevisionTbl() : l.get(0);
+        r.setFuente(fuente);
+        r.setFecha(fecha);
+        r.setEstado(estado);
+        r.setIntentos(RnGcListaNegraRevisionTbl.ERROR.equals(estado) ? r.getIntentos() + 1 : 0);
+        if (marca != null) {
+            r.setMarca(marca);
+        }
+        r.setMensaje(mensaje != null && mensaje.length() > 4000 ? mensaje.substring(0, 4000) + "…" : mensaje);
+        r.setFechaRevision(new Date());
+        if (r.getId() == null) {
+            em.persist(r);
+        }
+    }
+
+    /** Las últimas revisiones, para la pantalla del administrador. */
+    public List<RnGcListaNegraRevisionTbl> revisionesRecientes(int maximo) {
+        return em.createNamedQuery("RnGcListaNegraRevisionTbl.findRecientes", RnGcListaNegraRevisionTbl.class)
+                .setMaxResults(maximo).getResultList();
     }
 
     private static String normal(String situacion) {

@@ -69,6 +69,8 @@
                             <p:commandButton id="cargarArchivo" icon="ui-icon-plus" value="Usar Plantilla" actionListener="#{rnGcListaNegraTblController.prepareCreate()}" update="RnGcListaNegraTblDocForm" oncomplete="PF('RnGcListaNegraTblDocDialog').show()"/>
                             <p:commandButton id="importarCsvButton" icon="ui-icon-arrowthick-1-n" value="Importar CSV del SAT" update=":ImportarCsvForm" oncomplete="PF('ImportarCsvDialog').show()"/>
                             <p:commandButton id="revisarDofButton" icon="ui-icon-calendar" value="Revisar DOF (49 Bis X)" update=":RevisarDofForm" oncomplete="PF('RevisarDofDialog').show()"/>
+                            <p:commandButton id="automaticaButton" icon="ui-icon-clock" value="Actualización automática" actionListener="#{rnGcListaNegraTblController.refrescarRevisiones}"
+                                             update=":AutomaticaForm" oncomplete="PF('AutomaticaDialog').show()"/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":RnGcListaNegraTblViewForm" oncomplete="PF('RnGcListaNegraTblViewDialog').show()" disabled="#{empty rnGcListaNegraTblController.selected}"/>
                             <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcListaNegraTblEditForm" oncomplete="PF('RnGcListaNegraTblEditDialog').show()" disabled="#{empty rnGcListaNegraTblController.selected}"/>
                             <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcListaNegraTblController.destroy}" update=":growl,datalist" disabled="#{empty rnGcListaNegraTblController.selected}"/>
@@ -120,6 +122,40 @@
                     </p:panelGrid>
                     <p:commandButton value="Revisar" icon="ui-icon-search" actionListener="#{rnGcListaNegraTblController.revisar49BisX}"
                                      update=":RnGcListaNegraTblListForm:datalist, :growl" oncomplete="if (!args.validationFailed) PF('RevisarDofDialog').hide()" style="margin-top:10px"/>
+                </h:form>
+            </p:dialog>
+
+            <!-- CTR-12: bitácora de la actualización automática (DOF, CSV del SAT y cruce con CFDI) -->
+            <p:dialog id="AutomaticaDlg" widgetVar="AutomaticaDialog" modal="true" resizable="false" appendTo="@(body)" header="Actualización automática" width="900">
+                <h:form id="AutomaticaForm">
+                    <p style="margin-top:0">
+                        El sistema revisa solo: los CSV del SAT (69-B y 69-B Bis) diario a las 6:30, y solo los carga si el archivo cambió;
+                        el DOF (49 Bis X) cada hora, día por día desde el 01/01/2026; y cada hora cruza los CFDI nuevos o modificados
+                        contra las listas. Los días del DOF con error se reintentan hasta 5 veces.
+                    </p>
+                    <p:dataTable value="#{rnGcListaNegraTblController.revisiones}" var="r" rows="10" paginator="true" paginatorAlwaysVisible="false"
+                                 emptyMessage="Todavía no corre ninguna revisión.">
+                        <p:column headerText="Fuente" style="width:100px">
+                            <h:outputText value="#{r.fuente}"/>
+                        </p:column>
+                        <p:column headerText="Día" style="width:85px">
+                            <h:outputText value="#{r.fecha}"><f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Mexico_City"/></h:outputText>
+                        </p:column>
+                        <p:column headerText="Estado" style="width:70px">
+                            <h:outputText value="#{r.estado}" style="#{r.estado eq 'ERROR' ? 'color:#d32f2f;font-weight:bold' : ''}"/>
+                            <h:outputText value=" (#{r.intentos})" rendered="#{r.intentos gt 0}"/>
+                        </p:column>
+                        <p:column headerText="Revisado" style="width:120px">
+                            <h:outputText value="#{r.fechaRevision}"><f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/Mexico_City"/></h:outputText>
+                        </p:column>
+                        <p:column headerText="Resultado">
+                            <h:outputText value="#{r.mensaje}"/>
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Revisar ahora" icon="ui-icon-refresh" actionListener="#{rnGcListaNegraTblController.revisarAhora}"
+                                     update=":growl" style="margin-top:8px"/>
+                    <p:commandButton value="Actualizar tabla" icon="ui-icon-arrowrefresh-1-s" actionListener="#{rnGcListaNegraTblController.refrescarRevisiones}"
+                                     update="@form" style="margin-top:8px"/>
                 </h:form>
             </p:dialog>
 

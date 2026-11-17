@@ -85,7 +85,8 @@
                             <h:outputText value="#{a.tipoLista}"/>
                         </p:column>
                         <p:column headerText="Cambio">
-                            <h:outputText value="Entró a la lista: " rendered="#{empty a.estadoAnterior}"/>
+                            <h:outputText value="Entró a la lista: " rendered="#{empty a.estadoAnterior and empty a.idCfdi}"/>
+                            <h:outputText value="Está en la lista: " rendered="#{not empty a.idCfdi}"/>
                             <h:panelGroup rendered="#{not empty a.estadoAnterior}">
                                 <span class="ln-semaforo ln-#{rnGcListaNegraTblController.colorDe(a.estadoAnterior)}"></span>
                                 <h:outputText value="#{a.estadoAnterior} → "/>
@@ -95,6 +96,19 @@
                                 <h:outputText value="#{a.estadoNuevo}" style="font-weight:bold"/>
                             </h:panelGroup>
                             <h:outputText value="Ya no aparece en el listado del SAT" rendered="#{empty a.estadoNuevo}" style="font-weight:bold"/>
+                        </p:column>
+                        <p:column headerText="CFDI">
+                            <h:panelGroup rendered="#{not empty a.idCfdi}">
+                                <h:outputText value="#{a.rolCfdi} "/>
+                                <h:outputText value="#{a.fechaCfdi}"><f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Mexico_City"/></h:outputText>
+                                <h:outputText value=" (#{a.estatusCfdi})" style="#{a.estatusCfdi eq 'En proceso' ? 'color:#d32f2f;font-weight:bold' : ''}"/>
+                                <br/>
+                                <h:outputText value="#{a.uuid}" style="font-size:85%;color:#666"/>
+                                <br/>
+                                <h:outputText value="Se hizo estando ya publicado en la lista" rendered="#{a.momento eq 'DURANTE'}" style="font-weight:bold"/>
+                                <h:outputText value="Se hizo antes de que lo publicaran" rendered="#{a.momento eq 'ANTES'}"/>
+                                <h:outputText value="Todavía no se timbra: revíselo antes de terminarlo" rendered="#{a.estatusCfdi eq 'En proceso'}" style="display:block;color:#d32f2f"/>
+                            </h:panelGroup>
                         </p:column>
                     </p:dataTable>
                     <p:commandButton value="Marcar como vistos" icon="ui-icon-check" actionListener="#{rnGcListaNegraTblController.marcarAvisosVistos}"

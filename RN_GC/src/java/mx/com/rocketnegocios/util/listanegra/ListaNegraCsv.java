@@ -145,6 +145,35 @@ public final class ListaNegraCsv {
         return min == Long.MAX_VALUE ? 0 : min;
     }
 
+    /**
+     * Fecha en que el contribuyente entró a la lista: la publicación más antigua de presunción
+     * o, si no tiene (69-B Bis, 49 Bis X), la del definitivo. Null si no trae fechas válidas.
+     */
+    public static java.util.Date fechaEntrada(RnGcListaNegraTbl ln) {
+        long min = Long.MAX_VALUE;
+        for (String f : new String[]{ln.getPublicacionSATpresuntos(), ln.getPublicacionDOFpresuntos()}) {
+            long t = fecha(f);
+            if (t > 0 && t < min) {
+                min = t;
+            }
+        }
+        if (min == Long.MAX_VALUE) {
+            for (String f : new String[]{ln.getPublicacionSATdefinitivos(), ln.getPublicacionDOFdefinitivos()}) {
+                long t = fecha(f);
+                if (t > 0 && t < min) {
+                    min = t;
+                }
+            }
+        }
+        if (min == Long.MAX_VALUE) {
+            return null;
+        }
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.clear();
+        cal.set((int) (min / 10000), (int) (min / 100 % 100) - 1, (int) (min % 100));
+        return cal.getTime();
+    }
+
     /** dd/mm/aaaa como aaaammdd, 0 si no es fecha. */
     static long fecha(String ddMmAaaa) {
         if (ddMmAaaa == null || !ddMmAaaa.trim().matches("\\d{2}/\\d{2}/\\d{4}")) {

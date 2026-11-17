@@ -6,16 +6,25 @@ package mx.com.rocketnegocios.util.listanegra;
  */
 public enum TipoListaNegra {
 
-    LISTA_69B("69-B", 20),
-    LISTA_69B_BIS("69-B Bis", 12),
-    LISTA_49BIS_X("49 Bis X", 0);
+    LISTA_69B("69-B", 20,
+            "https://wu1agsprosta001.blob.core.windows.net/agsc-publicaciones/Datos_abiertos/Documents_AGAFF/Listado_completo_69-B.csv"),
+    LISTA_69B_BIS("69-B Bis", 12,
+            "https://wu1agsprosta001.blob.core.windows.net/agsc-publicaciones/Datos_abiertos/Documents_AGGC/Listado_69_B_Bis_Completo.csv"),
+    LISTA_49BIS_X("49 Bis X", 0, null);
 
     private final String etiqueta;
     private final int columnasCsv;
+    private final String urlCsv;
 
-    TipoListaNegra(String etiqueta, int columnasCsv) {
+    TipoListaNegra(String etiqueta, int columnasCsv, String urlCsv) {
         this.etiqueta = etiqueta;
         this.columnasCsv = columnasCsv;
+        this.urlCsv = urlCsv;
+    }
+
+    /** Liga fija del listado completo que publica el SAT en datos abiertos (null = no tiene CSV). */
+    public String getUrlCsv() {
+        return urlCsv;
     }
 
     public String getEtiqueta() {

@@ -15,12 +15,14 @@ import javax.persistence.TemporalType;
 
 /**
  * CTR-12: aviso para un usuario cuando uno de sus clientes o proveedores entra a una
- * lista negra, cambia de estado en ella o sale de ella.
+ * lista negra, cambia de estado en ella o sale de ella, o cuando uno de sus CFDI (emitido o
+ * recibido) tiene como contraparte a un contribuyente que está en una lista (idCfdi lleno).
  */
 @Entity
 @Table(name = "rn_gc_listaNegraAviso_tbl")
 @NamedQueries({
     @NamedQuery(name = "RnGcListaNegraAvisoTbl.findNoVistosByUsuario", query = "SELECT r FROM RnGcListaNegraAvisoTbl r WHERE r.idUsuario = :idUsuario AND r.visto = 'N' ORDER BY r.fechaAviso DESC, r.id DESC"),
+    @NamedQuery(name = "RnGcListaNegraAvisoTbl.findClavesCfdi", query = "SELECT r.idCfdi, r.tipoLista, r.estadoNuevo FROM RnGcListaNegraAvisoTbl r WHERE r.idCfdi IN :ids"),
     @NamedQuery(name = "RnGcListaNegraAvisoTbl.marcarVistosByUsuario", query = "UPDATE RnGcListaNegraAvisoTbl r SET r.visto = 'S' WHERE r.idUsuario = :idUsuario AND r.visto = 'N'")})
 public class RnGcListaNegraAvisoTbl implements Serializable {
 
@@ -49,6 +51,19 @@ public class RnGcListaNegraAvisoTbl implements Serializable {
     private Date fechaAviso;
     @Column(name = "visto")
     private String visto;
+    @Column(name = "idCfdi")
+    private Integer idCfdi;
+    @Column(name = "uuid")
+    private String uuid;
+    @Column(name = "fechaCfdi")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCfdi;
+    @Column(name = "rolCfdi")
+    private String rolCfdi;
+    @Column(name = "estatusCfdi")
+    private String estatusCfdi;
+    @Column(name = "momento")
+    private String momento;
 
     public Integer getId() {
         return id;
@@ -128,6 +143,55 @@ public class RnGcListaNegraAvisoTbl implements Serializable {
 
     public void setVisto(String visto) {
         this.visto = visto;
+    }
+
+    public Integer getIdCfdi() {
+        return idCfdi;
+    }
+
+    public void setIdCfdi(Integer idCfdi) {
+        this.idCfdi = idCfdi;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public Date getFechaCfdi() {
+        return fechaCfdi;
+    }
+
+    public void setFechaCfdi(Date fechaCfdi) {
+        this.fechaCfdi = fechaCfdi;
+    }
+
+    public String getRolCfdi() {
+        return rolCfdi;
+    }
+
+    public void setRolCfdi(String rolCfdi) {
+        this.rolCfdi = rolCfdi;
+    }
+
+    public String getEstatusCfdi() {
+        return estatusCfdi;
+    }
+
+    public void setEstatusCfdi(String estatusCfdi) {
+        this.estatusCfdi = estatusCfdi;
+    }
+
+    /** ANTES: el CFDI es anterior a la publicación; DURANTE: se hizo ya publicado en la lista. */
+    public String getMomento() {
+        return momento;
+    }
+
+    public void setMomento(String momento) {
+        this.momento = momento;
     }
 
     @Override
