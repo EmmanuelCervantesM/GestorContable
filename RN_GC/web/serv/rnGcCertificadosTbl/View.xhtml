@@ -12,10 +12,10 @@
             <h:form id="RnGcCertificadosTblViewForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="4" rendered="#{rnGcCertificadosTblController.selected != null}">
-                        <h:outputText value="Certificado Sello Digital"/>
-                        <h:outputText value="#{rnGcCertificadosTblController.selected.certificadoSelloDigital}"/>
-                        <h:outputText value="Llave Privada"/>
-                        <h:outputText value="#{rnGcCertificadosTblController.selected.llavePrivada}"/>
+                        <h:outputText value="Certificado (.cer)"/>
+                        <h:outputText value="#{rnGcCertificadosTblController.tieneCertificado ? 'Cargado' : 'No cargado'}"/>
+                        <h:outputText value="Llave Privada (.key)"/>
+                        <h:outputText value="#{rnGcCertificadosTblController.tieneLlave ? 'Cargada' : 'No cargada'}"/>
                         <h:outputText value="Contraseña LLave Privada "/>
                         <h:outputText value="#{rnGcCertificadosTblController.selected.contraseniaLlavePrivada}"/>
                         <h:outputText value="No. Certificado"/>

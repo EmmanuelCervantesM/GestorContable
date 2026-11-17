@@ -34,6 +34,7 @@ import org.apache.commons.ssl.PKCS8Key;
 import org.apache.poi.util.IOUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
+import javax.faces.application.FacesMessage; // NUEVO para certificados 
 
 @Named("rnGcCertificadosTblController")
 @SessionScoped
@@ -48,8 +49,17 @@ public class RnGcCertificadosTblController implements Serializable {
     private RnGcCertificadosTbl selected;
     private UsuarioFirmado usuarioFirmado = new UsuarioFirmado();
     private UploadedFile file;
+    private String nombreArchivoCer; // CERTIFICADOS 
+    private String nombreArchivoKey; // CERTIFICADOS 
     private RnGcUsuariosTbl usuarioId;
     private List<RnGcCertificadosTbl> itemsUsuarios = null;
+
+    //certificados 
+    public String getNombreArchivoCer(){
+        return nombreArchivoCer;}
+    
+    public String getNombreArchivoKey(){ return nombreArchivoKey;}
+
 
     public RnGcCertificadosTblController() {
     }
@@ -60,6 +70,8 @@ public class RnGcCertificadosTblController implements Serializable {
 
     public void setSelected(RnGcCertificadosTbl selected) {
         this.selected = selected;
+        nombreArchivoCer = null;
+        nombreArchivoKey = null;  
     }
 
     protected void setEmbeddableKeys() {
@@ -290,7 +302,8 @@ public class RnGcCertificadosTblController implements Serializable {
 
     }
 
-    public void fileUpload(FileUploadEvent event) throws Exception {
+    //Carga y Validación de Certificados CSD
+     public void fileUpload(FileUploadEvent event) throws Exception {
         byte[] certificado = null;
         byte[] llave = null;
         if (event != null) {
@@ -312,13 +325,22 @@ public class RnGcCertificadosTblController implements Serializable {
                 }
                 selected.setCertificadoSelloDigital(certificado);
                 byte[] byteArray = certificate.getSerialNumber().toByteArray();
-                selected.setNumeroCertificado(new String(byteArray));
+                String numeroCertificado = new String(byteArray);
+
+                RnGcCertificadosTbl existente = ejbFacade.obtenerPorNumeroCertificado(numeroCertificado);
+                if (existente != null && (selected.getId() == null || !existente.getId().equals(selected.getId()))) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este certificado ya está registrado", "No se puede subir el mismo certificado dos veces :)"));
+                    return;
+                }
+                selected.setCertificadoSelloDigital(certificado);
+                selected.setNumeroCertificado(numeroCertificado);
                 selected.setFechaVencimiento(certificate.getNotAfter());
                 String tipo = CertificadoTipoUtil.determinarTipo(certificate);
                 selected.setTipo(tipo);
                 if (tipo == null) {
                     JsfUtil.addErrorMessage("No se pudo determinar si el certificado es FIEL o CSD");
                 }
+                nombreArchivoCer = event.getFile().getFileName();
                 System.out.println("getNotAfter: " + certificate.getNotAfter() + " | tipo: " + tipo);
             } else if (nombreArchivo.endsWith(".key")) {
                 llave = IOUtils.toByteArray(event.getFile().getInputstream());
@@ -327,6 +349,7 @@ public class RnGcCertificadosTblController implements Serializable {
                     return;
                 }
                 selected.setLlavePrivada(llave);
+                nombreArchivoKey = event.getFile().getFileName();
             } else {
                 JsfUtil.addErrorMessage("Solo se permiten archivos .cer y .key");
                 return;
@@ -363,17 +386,19 @@ public class RnGcCertificadosTblController implements Serializable {
     }
     
     public boolean validarFechaVencimiento(){
-        boolean bool = true;
         if(selected != null && selected.getFechaVencimiento() != null){
-            Date fecha = selected.getFechaVencimiento();
-            System.out.println("fecha: " + fecha + " | " + new Date());
-            int bool2 = fecha.compareTo(new Date());
-            System.out.println("bool2: " + bool2);
-            if(bool2 > 0)
-                bool = false;
+            return selected.getFechaVencimiento().after(new Date());
         }
-        System.out.println("bool: " + bool);
-        return bool;
+        return true; 
+    }
+
+    // Nuevos metodos para ver los certificados 
+    public boolean isTieneCertificado(){
+        return selected != null && selected.getCertificadoSelloDigital() != null && selected.getCertificadoSelloDigital().length > 0; 
+    }
+
+    public boolean isTieneLlave(){
+        return selected != null && selected.getLlavePrivada() != null && selected.getLlavePrivada().length > 0;
     }
 
     public Date fechaVencimiento() {

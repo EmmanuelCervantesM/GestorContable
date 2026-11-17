@@ -107,13 +107,13 @@
                             <f:facet name="header">
                                 <h:outputText value="Certificado Sello Digital"/>
                             </f:facet>
-                            <h:outputText value="#{item.certificadoSelloDigital}"/>
+                            <h:outputText value="#{item.certificadoSelloDigital != null ? 'Sí' : 'No'}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="Llave Privada"/>
                             </f:facet>
-                            <h:outputText value="#{item.llavePrivada}"/>
+                            <h:outputText value="#{item.llavePrivada != null ? 'Sí' : 'No'}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
