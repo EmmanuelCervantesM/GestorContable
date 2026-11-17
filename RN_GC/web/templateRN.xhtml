@@ -187,8 +187,8 @@
             $(function () {
             colorizarTimbresBajos();
 
-            // cuando se abre el panel
-            $(document).on('click', '#' + PF('wvProveedor').jqId + ' .ui-selectonemenu-trigger', function () {
+            // cuando se abre el panel (fix: jqId ya incluye #, no duplicar)
+            $(document).on('click', PF('wvProveedor').jqId + ' .ui-selectonemenu-trigger', function () {
             setTimeout(colorizarTimbresBajos, 0);
             });
 

@@ -271,11 +271,11 @@ public class RnGcPeriodosTbl implements Serializable {
     }
 
     public Object getActivo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.estatus;
     }
 
     public Object getIdPeri() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.periodoId;
     }
     
 }

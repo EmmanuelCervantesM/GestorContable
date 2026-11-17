@@ -79,6 +79,9 @@ public class RnGcCatalogoCuentasTbl implements Serializable {
     @Size(max = 45)
     @Column(name = "subtipo")
     private String subtipo;
+
+    @Column(name = "subCuenta")
+    private double subCuenta;
     
     @Column(name = "saldoInicial")
     private BigDecimal saldoInicial;
@@ -181,6 +184,18 @@ public class RnGcCatalogoCuentasTbl implements Serializable {
 
     public String getSubtipo() {
         return subtipo;
+    }
+
+    public double getSubCuenta() {
+        return subCuenta;
+    }
+
+    public void setSubCuenta(double subCuenta) {
+        this.subCuenta = subCuenta;
+    }
+
+    public void setSubCuenta(int subCuenta) {
+        this.subCuenta = subCuenta;
     }
 
     public BigDecimal getSaldoInicial() {
