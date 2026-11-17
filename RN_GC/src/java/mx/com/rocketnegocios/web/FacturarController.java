@@ -63,6 +63,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -1535,6 +1536,14 @@ public class FacturarController implements Serializable {
             setEmbeddableKeysExist();
             try {
                 if (persistAction != PersistAction.DELETE) {
+                    // CTR-08.6: antes de consultar timbres y sin pasar por la rama de error, que limpia toda la captura.
+                    List<String> erroresCfdi = erroresReglasCfdi();
+                    if (!erroresCfdi.isEmpty()) {
+                        JsfUtil.addErrorMessages(erroresCfdi);
+                        // El bean es de sesión: un zip de la factura anterior taparía estos mensajes con una descarga vacía.
+                        downLoadFile3 = null;
+                        return;
+                    }
                     usuario = usuariosFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
                     System.out.println("Usuario: " + usuario + " | " + usuarioFirmado.obtenerIdUsuario()
                             + " | " + cfdisId.getProveedorTimbres());
@@ -2097,7 +2106,7 @@ public class FacturarController implements Serializable {
                 if (cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null) {
                     objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
                 }
-                if (objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")) {
+                if (declaraImpuestoEnConcepto(objClave, "Traslado", "002")) {
                     if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("002") && cfdisLineas.get(i).getTipoImpuesto().equals("Traslado") && cfdisLineas.get(i).getTipoFactor().equals("Exento")) {
                         trasladosIva += cfdisLineas.get(i).getBase();
                     }
@@ -2124,7 +2133,7 @@ public class FacturarController implements Serializable {
                 if (cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null) {
                     objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
                 }
-                if (objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")) {
+                if (declaraImpuestoEnConcepto(objClave, "Traslado", "002")) {
                     if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("002") && cfdisLineas.get(i).getTipoImpuesto().equals("Traslado") && !cfdisLineas.get(i).getTipoFactor().equals("Exento")) {
                         trasladosIva += cfdisLineas.get(i).getImporteimpuesto();
                     }
@@ -2151,7 +2160,7 @@ public class FacturarController implements Serializable {
                 if (cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null) {
                     objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
                 }
-                if (objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")) {
+                if (declaraImpuestoEnConcepto(objClave, "Traslado", "001")) {
                     if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("001") && cfdisLineas.get(i).getTipoImpuesto().equals("Traslado")) {
                         trasladosIsr += cfdisLineas.get(i).getImporteimpuesto();
                     }
@@ -2178,7 +2187,7 @@ public class FacturarController implements Serializable {
                 if (cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null) {
                     objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
                 }
-                if (objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")) {
+                if (declaraImpuestoEnConcepto(objClave, "Traslado", "003")) {
                     if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("003") && cfdisLineas.get(i).getTipoImpuesto().equals("Traslado")) {
                         trasladadosIEPS += cfdisLineas.get(i).getImporteimpuesto();
                     }
@@ -2205,7 +2214,7 @@ public class FacturarController implements Serializable {
                 if (cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null) {
                     objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
                 }
-                if (objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")) {
+                if (declaraImpuestoEnConcepto(objClave, "Retención", "002")) {
                     if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("002") && cfdisLineas.get(i).getTipoImpuesto().equals("Retención")) {
                         retenidosIva += cfdisLineas.get(i).getImporteimpuesto();
                     }
@@ -2232,7 +2241,7 @@ public class FacturarController implements Serializable {
                 if (cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null) {
                     objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
                 }
-                if (objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")) {
+                if (declaraImpuestoEnConcepto(objClave, "Retención", "001")) {
                     if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("001") && cfdisLineas.get(i).getTipoImpuesto().equals("Retención")) {
                         retenidosIsr += cfdisLineas.get(i).getImporteimpuesto();
                     }
@@ -2259,7 +2268,7 @@ public class FacturarController implements Serializable {
                 if (cfdisLineas.get(i).getProductoId() != null && cfdisLineas.get(i).getProductoId().getObjetoImpId() != null) {
                     objClave = cfdisLineas.get(i).getProductoId().getObjetoImpId().getClave();
                 }
-                if (objClave.equals("02") || objClave.equals("06") || objClave.equals("07") || objClave.equals("08")) {
+                if (declaraImpuestoEnConcepto(objClave, "Retención", "003")) {
                     if (cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("003") && cfdisLineas.get(i).getTipoImpuesto().equals("Retención")) {
                         retenidosIEPS += cfdisLineas.get(i).getImporteimpuesto();
                     }
@@ -2351,6 +2360,65 @@ public class FacturarController implements Serializable {
             return false;
         }
         return true;
+    }
+
+    // CTR-08.6: reglas que se pueden revisar sin el PAC; solo Ingreso y Egreso.
+    private List<String> erroresReglasCfdi() {
+        List<String> errores = new ArrayList<>();
+        if (!"I".equals(cfdisId.getTipoComprobante()) && !"E".equals(cfdisId.getTipoComprobante())) {
+            return errores;
+        }
+        String formaPago = cfdisId.getFormaPago();
+        if ("PPD".equals(cfdisId.getMetodoPago()) && !"99".equals(formaPago)) { // CFDI40105
+            errores.add("Con método de pago PPD la forma de pago debe ser 99 (Por definir)");
+        }
+        if ("PUE".equals(cfdisId.getMetodoPago()) && (formaPago == null || formaPago.isEmpty() || "99".equals(formaPago))) {
+            errores.add("Con método de pago PUE la forma de pago debe ser distinta de 99");
+        }
+        String moneda = cfdisId.getMoneda();
+        if (moneda != null && !"MXN".equals(moneda) && !"XXX".equals(moneda)
+                && (cfdisId.getTipoCambio() == null || cfdisId.getTipoCambio() <= 0)) { // CFDI40115
+            errores.add("La moneda " + moneda + " requiere un tipo de cambio mayor a 0");
+        }
+        if (personas.getNombre() == null || personas.getNombre().trim().isEmpty()) {
+            errores.add("El receptor no tiene nombre");
+        }
+        if (personas.getcodigoPostal() == null || !personas.getcodigoPostal().matches("\\d{5}")) {
+            errores.add("El código postal del receptor debe tener 5 dígitos");
+        }
+        for (int i = 0; i < cfdisLineas.size(); i++) {
+            RnGcCfdisLineasTbl linea = cfdisLineas.get(i);
+            String concepto = "Concepto " + (i + 1) + ": ";
+            if (linea.getValorUnit() <= 0) { // CFDI40166
+                errores.add(concepto + "el valor unitario debe ser mayor a 0");
+            }
+            if (linea.getDescuento() != null && linea.getDescuento() > linea.getImporte()) {
+                errores.add(concepto + "el descuento no puede ser mayor al importe");
+            }
+            if ("07".equals(objetoImpDeLinea(linea)) && !trasladaIeps(linea)) { // CFDI140227
+                errores.add(concepto + "el objeto de impuesto 07 requiere un traslado de IEPS");
+            }
+        }
+        return errores;
+    }
+
+    private boolean trasladaIeps(RnGcCfdisLineasTbl linea) {
+        return esTrasladoIeps(linea.getTipoImpuesto(), linea.getImpuesto())
+                || esTrasladoIeps(linea.getTipoImpuesto2(), linea.getImpuesto2())
+                || esTrasladoIeps(linea.getTipoImpuesto3(), linea.getImpuesto3())
+                || esTrasladoIeps(linea.getTipoImpuesto4(), linea.getImpuesto4());
+    }
+
+    private boolean esTrasladoIeps(String tipoImpuesto, String impuesto) {
+        return "Traslado".equals(tipoImpuesto) && "003".equals(impuesto);
+    }
+
+    // CFDI40114 admite 1 con MXN; CFDI40116 prohíbe el atributo con XXX.
+    private String tipoCambioSat() {
+        if ("XXX".equals(cfdisId.getMoneda())) {
+            return null;
+        }
+        return "MXN".equals(cfdisId.getMoneda()) ? "1" : String.valueOf(cfdisId.getTipoCambio());
     }
 
     public boolean crearXML() throws Exception {
@@ -4062,7 +4130,7 @@ public class FacturarController implements Serializable {
                 rootElement.appendChild(relacionados);
                 //Attributos CfdiRelacionados
                 Attr tipoRelacion = doc.createAttribute("TipoRelacion");
-                tipoRelacion.setValue(cfdisId.getTipoRelacion());
+                tipoRelacion.setValue(tipoRelacionSat(cfdisId.getTipoRelacion()));
                 relacionados.setAttributeNode(tipoRelacion);
                 for (int i = 0; i < listaCfdisRelacionados.size(); i++) {
                     Element relacionado = doc.createElement("cfdi:CfdiRelacionado");//NodoCfdiRelacionado
@@ -4774,13 +4842,11 @@ public class FacturarController implements Serializable {
             moneda.setValue(cfdisId.getMoneda());
             rootElement.setAttributeNode(moneda);
             if (cfdisId.getMoneda().equals("MXN") || cfdisId.getMoneda().equals("XXX")) {
-                Attr tipoCambio = doc.createAttribute("TipoCambio");
-                tipoCambio.setValue("1");
-                rootElement.setAttributeNode(tipoCambio);
                 cfdisId.setTipoCambio(1.0);
-            } else {
+            }
+            if (tipoCambioSat() != null) {
                 Attr tipoCambio = doc.createAttribute("TipoCambio");
-                tipoCambio.setValue(String.valueOf(cfdisId.getTipoCambio()));
+                tipoCambio.setValue(tipoCambioSat());
                 rootElement.setAttributeNode(tipoCambio);
             }
             Attr total = doc.createAttribute("Total");
@@ -4825,11 +4891,7 @@ public class FacturarController implements Serializable {
                 rootElement.appendChild(relacionados);
                 //Attributos CfdiRelacionados
                 Attr tipoRelacion = doc.createAttribute("TipoRelacion");
-                if (cfdisId.getTipoRelacion().length() > 1) {
-                    tipoRelacion.setValue(cfdisId.getTipoRelacion());
-                } else {
-                    tipoRelacion.setValue("0" + cfdisId.getTipoRelacion());
-                }
+                tipoRelacion.setValue(tipoRelacionSat(cfdisId.getTipoRelacion()));
                 relacionados.setAttributeNode(tipoRelacion);
                 for (int i = 0; i < listaCfdisRelacionados.size(); i++) {
                     Element relacionado = doc.createElement("cfdi:CfdiRelacionado");//NodoCfdiRelacionado
@@ -4936,12 +4998,7 @@ public class FacturarController implements Serializable {
                             if (cfdisLineas.get(i).getTipoImpuesto() != null && cfdisLineas.get(i).getTipoImpuesto().equals("Traslado")) {
                                 System.out.println("1T");
                                 //nodo traslado
-                                boolean validarObjeto = false;
-                                if (objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto()))) {
-                                    validarObjeto = true;
-                                } else if (objClave.equals("02")) {
-                                    validarObjeto = true;
-                                }
+                                boolean validarObjeto = declaraImpuestoEnConcepto(objClave, "Traslado", cfdisLineas.get(i).getImpuesto());
                                 if (validarObjeto) {
                                     Element traslado = doc.createElement("cfdi:Traslado");
                                     traslados.appendChild(traslado);
@@ -4975,12 +5032,7 @@ public class FacturarController implements Serializable {
                             if (cfdisLineas.get(i).getTipoImpuesto2() != null && cfdisLineas.get(i).getTipoImpuesto2().equals("Traslado")) {
                                 System.out.println("2T");
                                 //nodo traslado
-                                boolean validarObjeto = false;
-                                if (objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto2()))) {
-                                    validarObjeto = true;
-                                } else if (objClave.equals("02")) {
-                                    validarObjeto = true;
-                                }
+                                boolean validarObjeto = declaraImpuestoEnConcepto(objClave, "Traslado", cfdisLineas.get(i).getImpuesto2());
                                 if (validarObjeto) {
                                     Element traslado = doc.createElement("cfdi:Traslado");
                                     traslados.appendChild(traslado);
@@ -5014,12 +5066,7 @@ public class FacturarController implements Serializable {
                             if (cfdisLineas.get(i).getTipoImpuesto3() != null && cfdisLineas.get(i).getTipoImpuesto3().equals("Traslado")) {
                                 System.out.println("3T");
                                 //nodo traslado
-                                boolean validarObjeto = false;
-                                if (objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto3()))) {
-                                    validarObjeto = true;
-                                } else if (objClave.equals("02")) {
-                                    validarObjeto = true;
-                                }
+                                boolean validarObjeto = declaraImpuestoEnConcepto(objClave, "Traslado", cfdisLineas.get(i).getImpuesto3());
                                 if (validarObjeto) {
                                     Element traslado = doc.createElement("cfdi:Traslado");
                                     traslados.appendChild(traslado);
@@ -5053,12 +5100,7 @@ public class FacturarController implements Serializable {
                             if (cfdisLineas.get(i).getTipoImpuesto4() != null && cfdisLineas.get(i).getTipoImpuesto4().equals("Traslado")) {
                                 System.out.println("4T");
                                 //nodo traslado
-                                boolean validarObjeto = false;
-                                if (objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto4()))) {
-                                    validarObjeto = true;
-                                } else if (objClave.equals("02")) {
-                                    validarObjeto = true;
-                                }
+                                boolean validarObjeto = declaraImpuestoEnConcepto(objClave, "Traslado", cfdisLineas.get(i).getImpuesto4());
                                 if (validarObjeto) {
                                     Element traslado = doc.createElement("cfdi:Traslado");
                                     traslados.appendChild(traslado);
@@ -5102,14 +5144,7 @@ public class FacturarController implements Serializable {
                         if (cfdisLineas.get(i).getTipoImpuesto() != null && cfdisLineas.get(i).getTipoImpuesto().equals("Retención")) {
                             System.out.println("1R");
                             //nodo retencion
-                            boolean validarObjeto = false;
-                            if ((objClave.equals("06") || objClave.equals("08") || objClave.equals("07")) && "001".equals(String.valueOf(cfdisLineas.get(i).getImpuesto()))) {
-                                validarObjeto = true;
-                            } else if (objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto()))) {
-                                validarObjeto = true;
-                            } else if (objClave.equals("02")) {
-                                validarObjeto = true;
-                            }
+                            boolean validarObjeto = declaraImpuestoEnConcepto(objClave, "Retención", cfdisLineas.get(i).getImpuesto());
                             if (validarObjeto) {
                                 Element retencion = doc.createElement("cfdi:Retencion");
                                 retenciones.appendChild(retencion);
@@ -5141,14 +5176,7 @@ public class FacturarController implements Serializable {
                         if (cfdisLineas.get(i).getTipoImpuesto2() != null && cfdisLineas.get(i).getTipoImpuesto2().equals("Retención")) {
                             System.out.println("2R");
                             //nodo retencion
-                            boolean validarObjeto = false;
-                            if ((objClave.equals("06") || objClave.equals("08") || objClave.equals("07")) && "001".equals(String.valueOf(cfdisLineas.get(i).getImpuesto2()))) {
-                                validarObjeto = true;
-                            } else if (objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto2()))) {
-                                validarObjeto = true;
-                            } else if (objClave.equals("02")) {
-                                validarObjeto = true;
-                            }
+                            boolean validarObjeto = declaraImpuestoEnConcepto(objClave, "Retención", cfdisLineas.get(i).getImpuesto2());
                             if (validarObjeto) {
                                 Element retencion = doc.createElement("cfdi:Retencion");
                                 retenciones.appendChild(retencion);
@@ -5180,14 +5208,7 @@ public class FacturarController implements Serializable {
                         if (cfdisLineas.get(i).getTipoImpuesto3() != null && cfdisLineas.get(i).getTipoImpuesto3().equals("Retención")) {
                             System.out.println("3R");
                             //nodo retencion
-                            boolean validarObjeto = false;
-                            if ((objClave.equals("06") || objClave.equals("08") || objClave.equals("07")) && "001".equals(String.valueOf(cfdisLineas.get(i).getImpuesto3()))) {
-                                validarObjeto = true;
-                            } else if (objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto3()))) {
-                                validarObjeto = true;
-                            } else if (objClave.equals("02")) {
-                                validarObjeto = true;
-                            }
+                            boolean validarObjeto = declaraImpuestoEnConcepto(objClave, "Retención", cfdisLineas.get(i).getImpuesto3());
                             if (validarObjeto) {
                                 Element retencion = doc.createElement("cfdi:Retencion");
                                 retenciones.appendChild(retencion);
@@ -5219,14 +5240,7 @@ public class FacturarController implements Serializable {
                         if (cfdisLineas.get(i).getTipoImpuesto4() != null && cfdisLineas.get(i).getTipoImpuesto4().equalsIgnoreCase("Retención")) {
                             System.out.println("4R");
                             //nodo retencion
-                            boolean validarObjeto = false;
-                            if ((objClave.equals("06") || objClave.equals("08") || objClave.equals("07")) && "001".equals(String.valueOf(cfdisLineas.get(i).getImpuesto4()))) {
-                                validarObjeto = true;
-                            } else if (objClave.equals("07") && "003".equals(String.valueOf(cfdisLineas.get(i).getImpuesto4()))) {
-                                validarObjeto = true;
-                            } else if (objClave.equals("02")) {
-                                validarObjeto = true;
-                            }
+                            boolean validarObjeto = declaraImpuestoEnConcepto(objClave, "Retención", cfdisLineas.get(i).getImpuesto4());
                             if (validarObjeto) {
                                 Element retencion = doc.createElement("cfdi:Retencion");
                                 retenciones.appendChild(retencion);
@@ -5256,6 +5270,7 @@ public class FacturarController implements Serializable {
                         }
                         System.out.println("dato8");
                     }
+                    quitarImpuestosVacios(concepto, impuestos);
                 }
                 if (complementoSeleccionado != null && !complementoSeleccionado.isEmpty() && complementoSeleccionado.equals("educativo")) {
                     // Creamos el nodo <cfdi:ComplementoConcepto>
@@ -5449,6 +5464,7 @@ public class FacturarController implements Serializable {
                     factor0.setValue("Exento");
                     traslado0.setAttributeNode(factor0);
                 }
+                agregarTrasladosIeps(doc, traslados);
             }
             //Complemento
             if (listaImpuestosCfdis != null || (confirmacion && tipoCartaPorte.equals("Ingreso"))) {
@@ -6664,11 +6680,105 @@ public class FacturarController implements Serializable {
         }
     }
 
+    // CTR-08.4: criterio único por ObjetoImp para conceptos y totales (matriz del SAT: CFDI40172, CFDI140226 y CFDI140227).
+    // 02 declara todo; 06, 07 y 08 solo retención de ISR; 07 además IEPS. Las demás claves no llevan nodo Impuestos.
+    private boolean declaraImpuestoEnConcepto(String objClave, String tipoImpuesto, String impuesto) {
+        if ("02".equals(objClave)) {
+            return true;
+        }
+        if ("Retención".equals(tipoImpuesto) && "001".equals(impuesto)
+                && ("06".equals(objClave) || "07".equals(objClave) || "08".equals(objClave))) {
+            return true;
+        }
+        return "07".equals(objClave) && "003".equals(impuesto);
+    }
+
+    // CTR-08.3: el Traslado de IVA del comprobante solo suma lo que declaran los conceptos.
+    private boolean declaraIvaEnConcepto(RnGcCfdisLineasTbl linea) {
+        return declaraImpuestoEnConcepto(objetoImpDeLinea(linea), "Traslado", "002");
+    }
+
+    private String objetoImpDeLinea(RnGcCfdisLineasTbl linea) {
+        if (linea.getProductoId() == null || linea.getProductoId().getObjetoImpId() == null) {
+            return "02";
+        }
+        return linea.getProductoId().getObjetoImpId().getClave();
+    }
+
+    // CTR-08.4: con 06, 07 u 08 puede quedar un nodo sin hijos, y el XSD no acepta Traslados ni Retenciones vacíos.
+    private void quitarImpuestosVacios(Element concepto, Element impuestos) {
+        NodeList hijos = impuestos.getChildNodes();
+        for (int i = hijos.getLength() - 1; i >= 0; i--) {
+            if (!hijos.item(i).hasChildNodes()) {
+                impuestos.removeChild(hijos.item(i));
+            }
+        }
+        if (!impuestos.hasChildNodes()) {
+            concepto.removeChild(impuestos);
+        }
+    }
+
+    // CTR-08.4: el IEPS cuenta en TotalImpuestosTrasladados, así que necesita su Traslado por TipoFactor y TasaOCuota (CFDI40205).
+    private void agregarTrasladosIeps(Document doc, Element traslados) {
+        Map<String, double[]> grupos = new LinkedHashMap<>();
+        for (RnGcCfdisLineasTbl linea : cfdisLineas) {
+            acumularIeps(grupos, linea, linea.getTipoImpuesto(), linea.getImpuesto(), linea.getTipoFactor(), linea.getTipoTasa(), linea.getImporteimpuesto());
+            acumularIeps(grupos, linea, linea.getTipoImpuesto2(), linea.getImpuesto2(), linea.getTipoFactor2(), linea.getTipoTasa2(), linea.getImporteImpuesto2());
+            acumularIeps(grupos, linea, linea.getTipoImpuesto3(), linea.getImpuesto3(), linea.getTipoFactor3(), linea.getTipoTasa3(), linea.getImporteImpuesto3());
+            acumularIeps(grupos, linea, linea.getTipoImpuesto4(), linea.getImpuesto4(), linea.getTipoFactor4(), linea.getTipoTasa4(), linea.getImporteImpuesto4());
+        }
+        for (Map.Entry<String, double[]> grupo : grupos.entrySet()) {
+            String[] llave = grupo.getKey().split("\\|");
+            Element traslado = doc.createElement("cfdi:Traslado");
+            traslados.appendChild(traslado);
+            traslado.setAttribute("Base", new DecimalFormat("0.00").format(grupo.getValue()[0]));
+            traslado.setAttribute("Impuesto", "003");
+            traslado.setAttribute("TipoFactor", llave[0]);
+            traslado.setAttribute("TasaOCuota", llave[1]);
+            traslado.setAttribute("Importe", new DecimalFormat("0.00").format(grupo.getValue()[1]));
+        }
+    }
+
+    private void acumularIeps(Map<String, double[]> grupos, RnGcCfdisLineasTbl linea, String tipoImpuesto, String impuesto, String tipoFactor, Double tasa, Double importe) {
+        // Exento no lleva TasaOCuota ni Importe, y no suma a TotalImpuestosTrasladados.
+        if (!esTrasladoIeps(tipoImpuesto, impuesto) || "Exento".equals(tipoFactor)
+                || !declaraImpuestoEnConcepto(objetoImpDeLinea(linea), tipoImpuesto, impuesto)) {
+            return;
+        }
+        // Mismo formato de TasaOCuota que el Traslado del concepto, para que agrupen igual.
+        String tasaOCuota = "0" + new DecimalFormat(".000000").format(tasa > 1.0 ? tasa / 100 : tasa);
+        double[] acumulado = grupos.computeIfAbsent(tipoFactor + "|" + tasaOCuota, k -> new double[2]);
+        acumulado[0] += linea.getBase();
+        acumulado[1] += importe;
+    }
+
+    // CTR-08.5: la BD guarda 4 y el catálogo c_TipoRelacion usa 04.
+    private String tipoRelacionSat(String tipoRelacion) {
+        return tipoRelacion.length() > 1 ? tipoRelacion : "0" + tipoRelacion;
+    }
+
+    private boolean trasladaIvaConTasa(RnGcCfdisLineasTbl linea, double tasaPorcentaje) {
+        return esTrasladoIvaConTasa(linea.getTipoImpuesto(), linea.getImpuesto(), linea.getTipoFactor(), linea.getTipoTasa(), tasaPorcentaje)
+                || esTrasladoIvaConTasa(linea.getTipoImpuesto2(), linea.getImpuesto2(), linea.getTipoFactor2(), linea.getTipoTasa2(), tasaPorcentaje)
+                || esTrasladoIvaConTasa(linea.getTipoImpuesto3(), linea.getImpuesto3(), linea.getTipoFactor3(), linea.getTipoTasa3(), tasaPorcentaje)
+                || esTrasladoIvaConTasa(linea.getTipoImpuesto4(), linea.getImpuesto4(), linea.getTipoFactor4(), linea.getTipoTasa4(), tasaPorcentaje);
+    }
+
+    private boolean esTrasladoIvaConTasa(String tipoImpuesto, String impuesto, String tipoFactor, Double tasa, double tasaPorcentaje) {
+        return "Traslado".equals(tipoImpuesto) && "002".equals(impuesto) && "Tasa".equals(tipoFactor)
+                && tasa != null && (tasa == tasaPorcentaje || tasa == tasaPorcentaje / 100);
+    }
+
     public Double iva16() {
         Double iva16 = 0.0;
         baseT16 = 0.0;
         for (int i = 0; i < cfdisLineas.size(); i++) {
-            baseT16 += cfdisLineas.get(i).getBase();
+            if (!declaraIvaEnConcepto(cfdisLineas.get(i))) {
+                continue;
+            }
+            if (trasladaIvaConTasa(cfdisLineas.get(i), 16.0)) {
+                baseT16 += cfdisLineas.get(i).getBase();
+            }
             if (cfdisLineas.get(i).getTipoTasa() != null && cfdisLineas.get(i).getTipoTasa() > 1.0) {
                 if (cfdisLineas.get(i).getTipoImpuesto() != null && cfdisLineas.get(i).getTipoImpuesto().equals("Traslado")
                         && cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("002")
@@ -6738,7 +6848,12 @@ public class FacturarController implements Serializable {
         Double iva0 = 0.0;
         boolean valor = false;
         for (int i = 0; i < cfdisLineas.size(); i++) {
-            baseT0 += cfdisLineas.get(i).getBase();
+            if (!declaraIvaEnConcepto(cfdisLineas.get(i))) {
+                continue;
+            }
+            if (trasladaIvaConTasa(cfdisLineas.get(i), 0.0)) {
+                baseT0 += cfdisLineas.get(i).getBase();
+            }
             if (cfdisLineas.get(i).getTipoTasa() != null && cfdisLineas.get(i).getTipoTasa() == 0.0) {
                 if (cfdisLineas.get(i).getTipoImpuesto() != null && cfdisLineas.get(i).getTipoImpuesto().equals("Traslado")
                         && cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("002")
@@ -6783,7 +6898,12 @@ public class FacturarController implements Serializable {
         Double iva8 = 0.0;
         baseT8 = 0.0;
         for (int i = 0; i < cfdisLineas.size(); i++) {
-            baseT8 += cfdisLineas.get(i).getBase();
+            if (!declaraIvaEnConcepto(cfdisLineas.get(i))) {
+                continue;
+            }
+            if (trasladaIvaConTasa(cfdisLineas.get(i), 8.0)) {
+                baseT8 += cfdisLineas.get(i).getBase();
+            }
             if (cfdisLineas.get(i).getTipoTasa() != null && cfdisLineas.get(i).getTipoTasa() > 1.0) {
                 if (cfdisLineas.get(i).getTipoImpuesto() != null && cfdisLineas.get(i).getTipoImpuesto().equals("Traslado")
                         && cfdisLineas.get(i).getImpuesto() != null && cfdisLineas.get(i).getImpuesto().equals("002")
