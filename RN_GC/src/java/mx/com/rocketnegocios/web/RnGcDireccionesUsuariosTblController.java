@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
+import javax.persistence.NoResultException;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -85,9 +86,12 @@ public class RnGcDireccionesUsuariosTblController implements Serializable {
         }
     }
 
+    // decide qué registros mostrar según el perfil y el ID del usuario conectado
     public List<RnGcDireccionesUsuariosTbl> getItems() {
-        if (items == null) {
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
             items = getFacade().findAll();
+        } else {
+            items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
         }
         return items;
     }

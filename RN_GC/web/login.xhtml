@@ -56,15 +56,28 @@
                          <br></br><br></br>
 
                          <h:outputLabel value="Contraseña:" />
-                         <!-- Se usa ui:remove y no un comentario HTML: Facelets evalua el EL dentro de los comentarios y escribia login.pwd (contrasena cifrada) en el HTML -->
-                         <ui:remove><p:password id="password" value="#{login.pwd}" required="true" requiredMessage="Favor de ingresar la contraseña"></p:password></ui:remove>
                          <p:password id="password" value="#{login.pwd}" style="width: 185px"></p:password>
                          <br></br><br></br>
 
-                         <p:commandButton id="loginButton" action="#{login.validateUsernamePassword()}" value="Ingresar" accesskey="I"></p:commandButton>                        
+                         <p:selectBooleanCheckbox id="chkAcepto" value="#{login.aceptaCheckbox}">
+                             <p:ajax update="loginButton" />
+                         </p:selectBooleanCheckbox>
+                         <h:outputLabel for="chkAcepto" value=" He leído y acepto los "/>
+                         <p:commandLink value="Términos y Condiciones" onclick="PF('dlgTerminos').show(); return false;" style="font-weight:bold;"/>
+                         <br></br><br></br>
+
+                         <p:commandButton id="loginButton" action="#{login.validateUsernamePassword()}" value="Ingresar" accesskey="I"></p:commandButton>
                          <br/><br/>
                         <p:commandLink id="modifPwd" action="#{login.modificarPassword()}" value="¿Olvidaste tu contraseña?"></p:commandLink>
-                     </h:form>
+                        <br/><br/>
+                        <h:link outcome="/public/crearCuenta.xhtml" value="¿No tienes cuenta?" />
+
+                        <p:dialog widgetVar="dlgTerminos" header="Términos y Condiciones" modal="true" width="700" height="500" closable="true" appendTo="@(body)">
+                            <div style="text-align:left; max-height:420px; overflow-y:auto; padding:10px; line-height:1.5; white-space:pre-line;">
+                                    <h:outputText value="#{login.terminosVigentesContenido}" escape="false" />
+                            </div>
+                        </p:dialog>
+                    </h:form>
                 </div>
             </p:layoutUnit>     
         </p:layout>

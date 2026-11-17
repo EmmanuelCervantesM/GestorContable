@@ -12,6 +12,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import mx.com.rocketnegocios.entities.RnGcArchivosTbl;
 import mx.com.rocketnegocios.entities.RnGcCfdisTbl;
+import mx.com.rocketnegocios.entities.RnGcPersonasTbl;
 
 /**
  *
@@ -81,5 +82,27 @@ public class RnGcArchivosTblFacade extends AbstractFacade<RnGcArchivosTbl> {
             e.printStackTrace();
             return null;
         }
+    }
+
+    // Nuevo metodo para que no vean todos las pantallas 
+    public List<RnGcArchivosTbl> obtenerCreadoPor(int creadoPor){
+        List<RnGcArchivosTbl> lista = null; 
+        try {
+            lista = em.createNamedQuery("RnGcArchivosTbl.findByCreadoPor", RnGcArchivosTbl.class).setParameter("creadoPor", creadoPor).getResultList();
+        } catch (NoResultException ex) {
+            System.out.println("No hay archivos para ese usuario :)");
+        }
+        return lista;
+    }
+    //Este método consulta y devuelve las personas de la tabla RnGcPersonasTbl cuyo campo creadoPor coincide con alguno de los identificadores incluidos en la lista ids
+    public List<RnGcArchivosTbl> obtenerCreadoPorLista(List<Integer>ids){
+        List<RnGcArchivosTbl> lista =null;
+        try {
+            lista = em.createQuery("SELECT r FROM RnGcArchivosTbl r WHERE r.creadoPor IN:ids", RnGcArchivosTbl.class).setParameter("ids", ids).getResultList();
+        } catch (NoResultException ex){
+            System.out.println("No hay archivos para ese grupo de usuarios"); 
+
+        }
+        return lista;
     }
 }

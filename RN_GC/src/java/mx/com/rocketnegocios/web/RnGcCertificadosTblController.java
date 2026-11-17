@@ -189,7 +189,7 @@ public class RnGcCertificadosTblController implements Serializable {
     }
 
     public List<RnGcCertificadosTbl> getItemsUsuarios() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINSITRADOR")) {
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
             itemsUsuarios = getFacade().findAll();
         } else {
             itemsUsuarios = getFacade().obtenerCreadoPor(usuarioFirmado.obtenerIdUsuario());
@@ -198,7 +198,7 @@ public class RnGcCertificadosTblController implements Serializable {
     }
 
     public List<RnGcCertificadosTbl> certificadosCreadoPor() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINSITRADOR")) {
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
             itemsUsuarios = getFacade().findAll();
         } else {
             itemsUsuarios = getFacade().obtenerCreadoPor(usuarioFirmado.obtenerIdUsuario());

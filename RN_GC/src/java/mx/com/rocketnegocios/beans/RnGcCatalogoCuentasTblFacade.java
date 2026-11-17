@@ -1334,4 +1334,13 @@ public class RnGcCatalogoCuentasTblFacade extends AbstractFacade<RnGcCatalogoCue
             || c.startsWith("6")
             || c.startsWith("7");
     }
+    public List<RnGcCatalogoCuentasTbl> obtenerCreadoPorLista(List<Integer> ids){
+        List<RnGcCatalogoCuentasTbl> lista = null; 
+        try {
+            lista = em.createQuery("SELECT r FROM RnGcCatalogoCuentasTbl r WHERE r.creadorPor IN :ids", RnGcCatalogoCuentasTbl.class).setParameter("ids", ids).getResultList();
+        } catch (NoResultException ex){
+            System.out.println("No hay cuentas para ese grupo de usuarios :(");
+        }
+        return lista; 
+    }
 }

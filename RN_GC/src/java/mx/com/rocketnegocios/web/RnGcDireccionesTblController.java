@@ -92,13 +92,14 @@ public class RnGcDireccionesTblController implements Serializable {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
-
+    // Mejora para las pantallas de los usuarios 
     public List<RnGcDireccionesTbl> getItems() {
-        /*if (items == null) {
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
             items = getFacade().findAll();
-        }*/
-        items = getFacade().findAll();
-        return items;
+        } else {
+            items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
+        }
+        return items; 
     }
 
     private void persist(PersistAction persistAction, String successMessage) {

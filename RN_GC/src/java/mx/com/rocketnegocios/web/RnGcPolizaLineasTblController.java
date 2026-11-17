@@ -141,10 +141,12 @@ public class RnGcPolizaLineasTblController implements Serializable {
     }
 
     public List<RnGcPolizaLineasTbl> getItems() {
-        if (items == null) {
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
             items = getFacade().findAll();
+        } else {
+            items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
         }
-        return items;
+        return items; 
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
@@ -180,11 +182,17 @@ public class RnGcPolizaLineasTblController implements Serializable {
     }
 
     public List<RnGcPolizaLineasTbl> getItemsAvailableSelectMany() {
+       if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
         return getFacade().findAll();
+       }
+       return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
     }
 
     public List<RnGcPolizaLineasTbl> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+            return getFacade().findAll();
+        }
+        return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
     }
 
     @FacesConverter(forClass = RnGcPolizaLineasTbl.class)

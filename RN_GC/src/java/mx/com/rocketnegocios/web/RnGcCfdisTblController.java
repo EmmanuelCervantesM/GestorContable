@@ -319,12 +319,20 @@ public class RnGcCfdisTblController implements Serializable {
         return getFacade().find(id);
     }
 
+    //Ambos métodos devuelven los CFDI disponibles para seleccionar uno o varios registros, 
+    // mostrando todos si el usuario es administrador y únicamente los creados por el usuario autenticado si tiene otro perfil.
     public List<RnGcCfdisTbl> getItemsAvailableSelectMany() {
-        return getFacade().findAll();
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+            return getFacade().findAll();
+        }
+        return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
     }
 
     public List<RnGcCfdisTbl> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+            return getFacade().findAll();
+        }
+        return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
     }
 
     @FacesConverter(forClass = RnGcCfdisTbl.class)
@@ -459,7 +467,7 @@ public class RnGcCfdisTblController implements Serializable {
             if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
                 items = getFacade().findAll();
             } else {
-                items = getFacade().obtenerCreadoPor(usuarioFirmado.obtenerIdUsuario());
+                items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
             }
         } catch (ClassFormatError ex) {
             System.out.println("Error: " + ex.getMessage());

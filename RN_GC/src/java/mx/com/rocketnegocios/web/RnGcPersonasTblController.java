@@ -83,12 +83,14 @@ public class RnGcPersonasTblController implements Serializable {
         }
     }
 
+    // Nuevo metodo para que solo el administrdor vea sus metodos 
     public List<RnGcPersonasTbl> getItems() {
-        /*if (items == null) {
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
             items = getFacade().findAll();
-        }*/
-        items = getFacade().findAll();
-        return items;
+        }else {
+            items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
+        }
+        return items; 
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
@@ -176,7 +178,7 @@ public class RnGcPersonasTblController implements Serializable {
         if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
             items = getFacade().findAll();
         } else {
-            items = getFacade().obtenerCreadoPor(usuarioFirmado.obtenerIdUsuario());
+            items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
         }
         return items;
     }

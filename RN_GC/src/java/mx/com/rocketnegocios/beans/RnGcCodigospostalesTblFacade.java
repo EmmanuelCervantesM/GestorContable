@@ -36,7 +36,7 @@ public class RnGcCodigospostalesTblFacade extends AbstractFacade<RnGcCodigospost
         
         try{
             listaCodigos = em.createNamedQuery("RnGcCodigospostalesTbl.findByCCodigoPostal", RnGcCodigospostalesTbl.class)
-                    .setParameter("cCodigoPostal", codigoPostal)
+                    .setParameter("cCodigoPostal", String.valueOf(codigoPostal))
                     .getResultList();
             System.out.println("listaCodigos: " + listaCodigos);
         } catch(NoResultException ex){
@@ -83,6 +83,19 @@ public class RnGcCodigospostalesTblFacade extends AbstractFacade<RnGcCodigospost
             System.out.println("No hay codigos " + ex);
         }
         return codigo;
+    }
+    // metodo para buscar un codigo postal por su id, si no lo encuentra devuelve null
+    public List<RnGcCodigospostalesTbl> buscarporCodigo(String codigoPostal){
+        List<RnGcCodigospostalesTbl> listaCodigos = null; 
+        try{
+            listaCodigos = em.createNamedQuery("RnGcCodigospostalesTbl.findByCCodigoPostal", RnGcCodigospostalesTbl.class)
+                    .setParameter("cCodigoPostal", codigoPostal)
+                    .getResultList();
+            System.out.println("listaCodigos: " + listaCodigos);
+        } catch(NoResultException ex){
+            System.out.println("No hay codigos postales");
+        }
+        return listaCodigos;
     }
     
 }

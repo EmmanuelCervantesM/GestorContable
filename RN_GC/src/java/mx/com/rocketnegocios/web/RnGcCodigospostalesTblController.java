@@ -90,10 +90,11 @@ public class RnGcCodigospostalesTblController implements Serializable {
         return items;
     }
 
-    public List<RnGcCodigospostalesTbl> busquedaporCodigo(double codigo) {
-        int codigoPostal = (int) codigo;
-        listaCodigos = getFacade().buscarporCodigo(codigoPostal);
-
+    public List<RnGcCodigospostalesTbl> busquedaporCodigo(String codigo) {
+     if (codigo == null || codigo.isEmpty()) {
+        return null; 
+     }
+     listaCodigos = getFacade().buscarporCodigo(codigo);
         return listaCodigos;
     }
 

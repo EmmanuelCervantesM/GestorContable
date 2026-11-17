@@ -93,5 +93,15 @@ public class RnGcPolizaLineasTblFacade extends AbstractFacade<RnGcPolizaLineasTb
                  .setParameter("header", header)
                  .getResultList();
     }
+    // nuevo metodo para el administrador 
+    public List<RnGcPolizaLineasTbl> obtenerCreadoPorLista (List<Integer>ids ){
+        List<RnGcPolizaLineasTbl> lista = null;
+        try {
+            lista = em.createQuery("SELECT r FROM RnGcPolizaLineasTbl r WHERE r.creadorPor IN ids", RnGcPolizaLineasTbl.class).setParameter("ids", ids).getResultList();
+        } catch (NoResultException ex){
+            System.out.println("No hay lienas de poliza para ese grupo de usuario");
+        }
+        return lista; 
+    }
 
 }

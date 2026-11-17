@@ -375,7 +375,13 @@ public class MenuView {
         listaPerfilesUsuario = usuarioPerfilFacade.obtenerPerfilesPorUsuario(usuarioId);
         for (int i = 0; i < listaPerfilesUsuario.size(); i++) {
             if (listaPerfilesUsuario.get(i).getFechaFinal() == null || validarFecha(listaPerfilesUsuario.get(i).getFechaFinal()) >= 0) {
+                                RnGcUsuariosPerfilesTbl up = listaPerfilesUsuario.get(i);
+                System.out.println("DEBUG menu -> up: " + up + " | perfilesId: " + up.getPerfilesId());
+                if (up.getPerfilesId() != null) {
+                    System.out.println("DEBUG menu -> menuId: " + up.getPerfilesId().getMenuId());
+                }
                 if (listaPerfilesUsuario.get(i).getPerfilesId().getMenuId().getId() != null) {
+
                     listaMenuslineas = menufuncionesFacade.obtenerFuncionesPorMenu(listaPerfilesUsuario.get(i).getPerfilesId().getMenuId());
                     DefaultSubMenu moduloSubmenu = new DefaultSubMenu(listaPerfilesUsuario.get(i).getPerfilesId().getMenuId().getMenuNombre());
                     for (int j = 0; j < listaMenuslineas.size(); j++) {

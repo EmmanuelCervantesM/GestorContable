@@ -61,6 +61,13 @@
                     <table style="width: 100%; border-collapse: collapse;">
                         <tbody>
                             <tr>
+                                <td style="width: 16.66665%; text-align: center; vertical-align: middle;">
+                                    <h:form>
+                                        <!-- ajax desactivado para hacer un navegacion completa hacia el menu principal -->
+                                        <p:commandLink value="Menu Principal" action="/faces/admin.xhtml" ajax="false" style="text-decoration: none; font-weight:bold;" />
+                                        <br/>
+                                    </h:form>
+                                </td>
                                 <!-- Se usa ui:remove y no un comentario HTML: Facelets evalua el EL dentro de los comentarios y ejecutaba byteToImage() en cada pagina -->
                                 <ui:remove><td style="width: 16.66665%;"><p:graphicImage id="graficosImagen" value="#{rnGcImagenesTblController.byteToImage(facturarContoller.obtenerRFCUsuario())}"  height="70" width="75" cache="false"/></td></ui:remove>
                                 <td style="width: 16.66665%;">
@@ -69,6 +76,8 @@
                                         <h:outputText value="#{facturarContoller.obtenerNombreCompletoUsuario()}" />
                                         <h:outputText value="RFC:" style="font-weight: bold"/>
                                         <h:outputText value="#{facturarContoller.obtenerRFCUsuario()}"/>
+                                        <h:outputText value="ID Despacho:" style="font-weight: bold;" rendered="#{login.esDespacho}"/>
+                                        <h:outputText value="#{login.idDespachoActual}" rendered="#{login.esDespacho}"/>
                                     </h:panelGrid> 
                                 </td>
                                 <td style="width: 33.3333%; text-align: center;"><h1>Bienvenido #{sessionScope['nombreCompleto']}</h1></td>

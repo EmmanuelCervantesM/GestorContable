@@ -94,39 +94,43 @@ public class RnGcProductserviciosTblController implements Serializable {
         return items;
     }
     
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            System.out.println(selected.getTipoProdServ() + " | " + selected.getClaveProductServ() + " | "
-                    + selected.getNoIdentificacion() + " | " + selected.getClaveUnidad() + " | "
-                    + selected.getUnidad() + " | " + selected.getDescripcion() + " | "
-                    + selected.getValorunitario() + " | " + selected.getTipoImpuesto() + " | "
-                    + selected.getImpuesto() + " | " + selected.getTipofactor() + " | "
-                    + selected.getTipoTasa());
-            try {
-                if (persistAction != PersistAction.DELETE) {
+   private void persist(PersistAction persistAction, String successMessage) {
+    if (selected != null) {
+        setEmbeddableKeys();
+        try {
+            if (persistAction.equals(PersistAction.CREATE)) {
+                RnGcProductserviciosTbl existente = getFacade().obtenerCreadoPorListaDescripcion(usuarioFirmado.obtenerIdsAlcance(), selected.getDescripcion());
+                if (existente != null) {
+                    JsfUtil.addErrorMessage("El producto/servicio \"" + selected.getDescripcion() + "\" ya esta registrado en el sistema");
+                } else {
                     getFacade().edit(selected);
-                } else {
-                    getFacade().remove(selected);
+                    JsfUtil.addSuccessMessage(successMessage);
                 }
+            } else if (persistAction.equals(PersistAction.UPDATE)) {
+                getFacade().edit(selected);
                 JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            } else {
+                getFacade().remove(selected);
+                JsfUtil.addSuccessMessage(successMessage);
+            }
+        } catch (EJBException ex) {
+            String msg = "";
+            Throwable cause = ex.getCause();
+            if (cause != null) {
+                msg = cause.getLocalizedMessage();
+            }
+            if (msg.length() > 0) {
+                JsfUtil.addErrorMessage(msg);
+            } else {
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             }
         }
     }
+
     
     public RnGcProductserviciosTbl getRnGcProductserviciosTbl(java.lang.Integer id) {
         return getFacade().find(id);

@@ -548,10 +548,12 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
     }
 
     public List<RnGcCatalogoCuentasTbl> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
-        return items;
+       if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        items = getFacade().findAll();
+       }else {
+        items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
+       }
+       return items;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
@@ -581,17 +583,22 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
             }
         }
     }
-
-    public RnGcCatalogoCuentasTbl getRnGcCatalogoCuentasTbl(java.lang.Integer id) {
+    public RnGcCatalogoCuentasTbl getRnGcCatalogoCuentasTbl (java.lang.Integer id){
         return getFacade().find(id);
     }
 
     public List<RnGcCatalogoCuentasTbl> getItemsAvailableSelectMany() {
-        return getFacade().findAll();
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+            return getFacade().findAll();
+        }
+        return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
     }
 
     public List<RnGcCatalogoCuentasTbl> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
+        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+            return getFacade().findAll();
+        }
+        return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
     }
     
     public void moverRechazadasAValidas() {
