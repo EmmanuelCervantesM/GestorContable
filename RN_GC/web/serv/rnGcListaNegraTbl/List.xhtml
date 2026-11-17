@@ -66,7 +66,6 @@
                         </p:column>
                         <f:facet name="header">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcListaNegraTblController.prepareCreate}" update=":RnGcListaNegraTblCreateForm" oncomplete="PF('RnGcListaNegraTblCreateDialog').show()"/>
-                            <p:commandButton id="cargarArchivo" icon="ui-icon-plus" value="Usar Plantilla" actionListener="#{rnGcListaNegraTblController.prepareCreate()}" update="RnGcListaNegraTblDocForm" oncomplete="PF('RnGcListaNegraTblDocDialog').show()"/>
                             <p:commandButton id="importarCsvButton" icon="ui-icon-arrowthick-1-n" value="Importar CSV del SAT" update=":ImportarCsvForm" oncomplete="PF('ImportarCsvDialog').show()"/>
                             <p:commandButton id="revisarDofButton" icon="ui-icon-calendar" value="Revisar DOF (49 Bis X)" update=":RevisarDofForm" oncomplete="PF('RevisarDofDialog').show()"/>
                             <p:commandButton id="automaticaButton" icon="ui-icon-clock" value="Actualización automática" actionListener="#{rnGcListaNegraTblController.refrescarRevisiones}"
@@ -156,20 +155,6 @@
                                      update=":growl" style="margin-top:8px"/>
                     <p:commandButton value="Actualizar tabla" icon="ui-icon-arrowrefresh-1-s" actionListener="#{rnGcListaNegraTblController.refrescarRevisiones}"
                                      update="@form" style="margin-top:8px"/>
-                </h:form>
-            </p:dialog>
-
-            <p:dialog id="RnGcListaNegraTblDocDlg" widgetVar="RnGcListaNegraTblDocDialog" modal="true" resizable="false" appendTo="@(body)" header="Cargar Lista Negra">
-                <h:form id="RnGcListaNegraTblDocForm">
-                    <p:panel header="Buscar plantilla (.xlsx)">
-                        <f:facet name="header">
-                            <p:outputLabel value="Selecciona Plantilla"/>
-                        </f:facet>
-                        <p:fileUpload id="plantilla" fileUploadListener="#{rnGcListaNegraTblController.leerPlantilla}" fileLimitMessage="Número máximo de archivos excedido" label="Buscar" cancelLabel="Cancelar" uploadLabel="Cargar" sequential="true"
-                                      mode="advanced" update=":RnGcListaNegraTblListForm:datalist, :growl, :RnGcListaNegraTblDocForm" dragDropSupport="true" sizeLimit="1000000" fileLimit="1" allowTypes="/(\.|\/)(xlsx)$/">
-                            <p:growl life="5000" showDetail="true"/>      
-                        </p:fileUpload>
-                    </p:panel>
                 </h:form>
             </p:dialog>
 
