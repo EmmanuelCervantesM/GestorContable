@@ -77,7 +77,7 @@
                         <p:inputNumber id="cuentaBancaria" value="#{rnGcTrabajadoresTblController.selected.cuentaBancaria}" title="Cuenta Bancaria" required="false" decimalPlaces="0" thousandSeparator=""/>
                         
                         <p:outputLabel value="Correo Electronico" for="email" />
-                        <p:inputText id="email" value="#{rnGcTrabajadoresTblController.selected.email1}" title="Correo electronico" required="true"/>
+                        <p:inputText id="email" value="#{rnGcTrabajadoresTblController.selected.email1}" title="Correo electronico"/>
                         
                         <p:outputLabel value="Fecha Inicio Laboral" for="fechaInicioLaboral" />
                         <p:calendar id="fechaInicioLaboral" value="#{rnGcTrabajadoresTblController.selected.fechaInicio}" title="Fecha Inicio Laboral" pattern="dd/MM/yyyy" navigator="true" required="#{rnGcTrabajadoresTblController.esSalariado()}"/>

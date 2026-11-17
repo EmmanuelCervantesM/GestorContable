@@ -1103,10 +1103,14 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
     public void obtenerSeleccionados() throws ParseException, IOException {
         archivosZipGlobal.clear();
         List<File> archivosGenerados = new ArrayList<>();
+        // CTR-15.3: cada trabajador se procesa aislado; si uno falla, el resto del lote sigue
+        int timbrados = 0;
+        List<String> errores = new ArrayList<>();
         try {
             //  if (timbre != null && !timbre.isEmpty()) {
             Integer folio1 = 0;
             for (RnGcNomSolicitudTrabajadorTbl soliTrabajador : seleccionados) {
+              try {
                 if (cfdisId2.getSerie() != null) {
                     cfdisId.setSerie(cfdisId2.getSerie());
                 }
@@ -1152,21 +1156,31 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                         }
                         inicializarDatos();
                     }
+                    soliTrabajador.setEstatus("T");
+                    soliTrabajador = ejbFacade.refreshFromDB(soliTrabajador);
+                    timbrados++;
                 } else {
                     timbre.get(0).setTimbresRestantes(timbre.get(0).getTimbresTotal());
                     timbre.get(0).setTimbresUsados(timbre.get(0).getTimbresUsados() + 1);
                     timbresFacade.edit(timbre.get(0));
                     inicializarDatos();
-                    JsfUtil.addErrorMessage("Ocurrio un eror durante el timbrado");
+                    errores.add(nombreTrabajador(soliTrabajador) + ": ocurrió un error durante el timbrado");
                 }
-                JsfUtil.addSuccessMessage("Facturado de forma correcta");
-
-                soliTrabajador.setEstatus("T");
-                soliTrabajador = ejbFacade.refreshFromDB(soliTrabajador);
+              } catch (Exception e) {
+                e.printStackTrace();
+                errores.add(nombreTrabajador(soliTrabajador) + ": " + e.getMessage());
+                inicializarDatos();
+              }
             }
             /*if (!archivosZipGlobal.isEmpty()) {
                 descargarZip();
             }*/
+            if (timbrados > 0) {
+                JsfUtil.addSuccessMessage("Timbrados correctamente: " + timbrados);
+            }
+            for (String error : errores) {
+                JsfUtil.addErrorMessage(error);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1181,6 +1195,20 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                 }
             }
         }
+    }
+
+    private String nombreTrabajador(RnGcNomSolicitudTrabajadorTbl soliTrabajador) {
+        if (soliTrabajador == null || soliTrabajador.getTrabajadorId() == null) {
+            return "Trabajador";
+        }
+        return "Trabajador " + soliTrabajador.getTrabajadorId().getNoTrabajador() + " " + soliTrabajador.getTrabajadorId().getNombre();
+    }
+
+    private String descripcionRiesgoPuesto(RnGcTrabajadoresTbl trabajador) {
+        if (trabajador == null || trabajador.getRiesgoPuestoTblId() == null) {
+            return "";
+        }
+        return trabajador.getRiesgoPuestoTblId().getCveRiesgoPuesto() + " - " + trabajador.getRiesgoPuestoTblId().getDescripcion();
     }
 
     private void descargarArchivo(File archivo, String tipoMime) {
@@ -1658,7 +1686,15 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                 receptorNom.setAttributeNode(tipoJornada);
             }
 
-            // 
+            // Puesto es opcional para el SAT: solo se emite si está capturado
+            String puestoTrabajador = solicitudTrabajador.getTrabajadorId().getPuesto();
+            if (puestoTrabajador != null && !puestoTrabajador.trim().isEmpty()) {
+                Attr puesto = doc.createAttribute("Puesto");
+                puesto.setValue(puestoTrabajador.trim());
+                receptorNom.setAttributeNode(puesto);
+            }
+
+            //
             Attr numSeguridadSocial = doc.createAttribute("NumSeguridadSocial");
             numSeguridadSocial.setValue(String.valueOf(solicitudTrabajador.getTrabajadorId().getNss()));
             receptorNom.setAttributeNode(numSeguridadSocial);
@@ -2013,9 +2049,10 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
             String xml = new String(bytes, "UTF-8");
             System.out.println("PARTE 2");
 
-            Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
+            // TEMP-QA CTR-15.3: PAC de pruebas; volver a Produccion antes de commitear
+            //Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
 
-            //Sefactura sf = new Sefactura("http://pruebas.sefactura.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo
+            Sefactura sf = new Sefactura("http://pruebas.sefactura.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo
             //Sefactura sf = new Sefactura("http://www.jonima.com.mx:3014", "VICA840114RZ41", "VICA840114RZ41"); //Desarrollo Emmanuel
             // Este el de producción
             //Sefactura sf = new Sefactura("https://www.sefactura.com.mx", "AFC060520V16", "AFC060520V16"); //Produccion
@@ -2102,6 +2139,8 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
 
             // === PEGA AQUÍ TU XML REAL TIMBRADO ===
             String xmlTimbrado = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><cfdi:Comprobante xmlns:cfdi=\"http://www.sat.gob.mx/cfd/4\" xmlns:nomina12=\"http://www.sat.gob.mx/nomina12\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" Certificado=\"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\" Descuento=\"403.26\" Exportacion=\"01\" Fecha=\"2026-02-19T10:40:46\" LugarExpedicion=\"74030\" MetodoPago=\"PUE\" Moneda=\"MXN\" NoCertificado=\"00001000000720404915\" Sello=\"hyYStwFzr3+oz1FwxFVbt4SxqiBFEVeIbSYX11vRl5h+APtrOeyq18ErkFKlUYcPs+tsWmOkCnRcwVeNW1BC2rCQQPDfAqVZanndvJ7Qxdy5/7ciU89JdthYo7eU9oK2vTcVfx8cHyR5eOuzaKZ2/OvH20fo6BrYSvoWa9uKodPfN1I1JYdnt+yWMztfGm6c19GpHQ1qiGgCrxIyc3/ydzP6UvHWbzJvSargbjd/NkyuQmyFublVVVOIGdgV912iOmli4E6QZJ4iaTsPnOK1aMkuOvBmMomsltcYedE1zU8WbDovJhix/Rihns8Fl8Uyd/ibL+4OkK4LmMcKDpEdsg==\" Serie=\"-\" SubTotal=\"4422.50\" TipoDeComprobante=\"N\" Total=\"4019.24\" Version=\"4.0\" xsi:schemaLocation=\"http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xsd\"><cfdi:Emisor Nombre=\"ASESORES FISCALES Y CONTABLES HEES\" RegimenFiscal=\"601\" Rfc=\"AFC060520V16\"/><cfdi:Receptor DomicilioFiscalReceptor=\"90110\" Nombre=\"EVELYN ALEXANDRA LIMA XOCHIHUA\" RegimenFiscalReceptor=\"605\" Rfc=\"LIXE9603116K4\" UsoCFDI=\"CN01\"/><cfdi:Conceptos><cfdi:Concepto Cantidad=\"1\" ClaveProdServ=\"84111505\" ClaveUnidad=\"ACT\" Descripcion=\"Pago de nómina\" Descuento=\"403.26\" Importe=\"4422.50\" ObjetoImp=\"01\" ValorUnitario=\"4422.50\"/></cfdi:Conceptos><cfdi:Complemento><nomina12:Nomina FechaFinalPago=\"2026-02-15\" FechaInicialPago=\"2026-02-01\" FechaPago=\"2026-02-16\" NumDiasPagados=\"15\" TipoNomina=\"O\" TotalDeducciones=\"403.26\" TotalOtrosPagos=\"237.50\" TotalPercepciones=\"4185.00\" Version=\"1.2\"><nomina12:Emisor RegistroPatronal=\"F1114501100\"/><nomina12:Receptor Antigüedad=\"P19W\" ClaveEntFed=\"TLA\" Curp=\"LIXE960311MTLMCV00\" FechaInicioRelLaboral=\"2025-10-01\" NumEmpleado=\"1\" NumSeguridadSocial=\"01199666049\" PeriodicidadPago=\"04\" RiesgoPuesto=\"1\" SalarioBaseCotApor=\"292.75\" SalarioDiarioIntegrado=\"292.75\" Sindicalizado=\"No\" TipoContrato=\"04\" TipoJornada=\"01\" TipoRegimen=\"02\"/><nomina12:Percepciones TotalExento=\"0.00\" TotalGravado=\"4185.00\" TotalSueldos=\"4185.00\"><nomina12:Percepcion Clave=\"Sueldo\" Concepto=\"Sueldo\" ImporteExento=\"0.00\" ImporteGravado=\"4185.0\" TipoPercepcion=\"001\"/></nomina12:Percepciones><nomina12:Deducciones TotalImpuestosRetenidos=\"298.85\" TotalOtrasDeducciones=\"104.41\"><nomina12:Deduccion Clave=\"ISR_Sueldos\" Concepto=\"ISR Sueldos y salarios\" Importe=\"298.85\" TipoDeduccion=\"002\"/><nomina12:Deduccion Clave=\"IMSS\" Concepto=\"IMSS\" Importe=\"54.89\" TipoDeduccion=\"001\"/><nomina12:Deduccion Clave=\"Retencion_RCV\" Concepto=\"Retencion RCV\" Importe=\"49.52\" TipoDeduccion=\"003\"/></nomina12:Deducciones><nomina12:OtrosPagos><nomina12:OtroPago Clave=\"Subsidio\" Concepto=\"Subsidio al empleo\" Importe=\"237.5\" TipoOtroPago=\"002\"><nomina12:SubsidioAlEmpleo SubsidioCausado=\"237.5\"/></nomina12:OtroPago></nomina12:OtrosPagos></nomina12:Nomina><tfd:TimbreFiscalDigital FechaTimbrado=\"2026-02-19T10:41:03\" NoCertificadoSAT=\"00001000000705928441\" RfcProvCertif=\"PPD101129EA3\" SelloCFD=\"hyYStwFzr3+oz1FwxFVbt4SxqiBFEVeIbSYX11vRl5h+APtrOeyq18ErkFKlUYcPs+tsWmOkCnRcwVeNW1BC2rCQQPDfAqVZanndvJ7Qxdy5/7ciU89JdthYo7eU9oK2vTcVfx8cHyR5eOuzaKZ2/OvH20fo6BrYSvoWa9uKodPfN1I1JYdnt+yWMztfGm6c19GpHQ1qiGgCrxIyc3/ydzP6UvHWbzJvSargbjd/NkyuQmyFublVVVOIGdgV912iOmli4E6QZJ4iaTsPnOK1aMkuOvBmMomsltcYedE1zU8WbDovJhix/Rihns8Fl8Uyd/ibL+4OkK4LmMcKDpEdsg==\" SelloSAT=\"Ou4XtMqmbHe1LhcbEN5JRxDF90jLGzOfA1KU7RmdjITGUwjlZQO7Hg2GSc4/HCPfSVQcA41xYhApKT8kWmsHNNUTK1b9uDnj88DcYnRSk2ZBgQ4SCmof1XZCOhFazEjNWL2fujSECE9nFfL1VBcspsmDahegsqIAyOatD5zg/hGlP/uO/JH2wxjwlLKgnrlaW4gfxR/pFJMpQlwbbRXvK+4WjGA+ORTmHGmyfyJd5FouSoFuQknPW/6arMn7moAbq8eul8ufEX7HFHJ7/kORn5wpuwzh5idKojoyIkZQC3JmgLFUp8eR4gzemGfGwwyCh/mezjErFo7/wQk5rzSvyQ==\" UUID=\"491E523A-A0C4-4354-864A-7D5ABB47B196\" Version=\"1.1\" xsi:schemaLocation=\"http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd\" xmlns:tfd=\"http://www.sat.gob.mx/TimbreFiscalDigital\"/></cfdi:Complemento></cfdi:Comprobante>";
+            // TEMP-QA CTR-15.3: UUID distinto por llamada (uuid es UNIQUE en rn_gc_cfdis_tbl); revertir antes de commitear
+            xmlTimbrado = xmlTimbrado.replace("491E523A-A0C4-4354-864A-7D5ABB47B196", java.util.UUID.randomUUID().toString().toUpperCase());
             // Guardarlo en archivo temporal
             File xmltimbrado = File.createTempFile("xmlTimbrado_", ".xml");
 
@@ -2418,7 +2457,8 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
         parametros.put("Total", soliTrsbajador.getImporteNeto());
         parametros.put("CURP_Receptor", soliTrsbajador.getTrabajadorId().getCurp());
         parametros.put("NSS_Receptor", soliTrsbajador.getTrabajadorId().getNss());
-        parametros.put("RiesgoPuesto", soliTrsbajador.getTrabajadorId().getFechaInicio());
+        parametros.put("puesto", soliTrsbajador.getTrabajadorId().getPuesto());
+        parametros.put("riesgoPuesto", descripcionRiesgoPuesto(soliTrsbajador.getTrabajadorId()));
         parametros.put("tipoContrato", tipoContrato.getCveTipoContrato() + " - " + tipoContrato.getDescripcion());
         parametros.put("tipoRegimen", soliTrsbajador.getTrabajadorId().getTipoPersona());
         parametros.put("banco", soliTrsbajador.getTrabajadorId().getBanco());
@@ -2674,7 +2714,8 @@ public class RnGcNomSolicitudTrabajadorTblController implements Serializable {
                     parametros.put("Total", soliTrabajador.getImporteNeto());
                     parametros.put("CURP_Receptor", soliTrabajador.getTrabajadorId().getCurp());
                     parametros.put("NSS_Receptor", soliTrabajador.getTrabajadorId().getNss());
-                    parametros.put("RiesgoPuesto", soliTrabajador.getTrabajadorId().getFechaInicio());
+                    parametros.put("puesto", soliTrabajador.getTrabajadorId().getPuesto());
+                    parametros.put("riesgoPuesto", descripcionRiesgoPuesto(soliTrabajador.getTrabajadorId()));
                     parametros.put("tipoContrato", tipoContrato.getCveTipoContrato() + " - " + tipoContrato.getDescripcion());
                     parametros.put("tipoRegimen", soliTrabajador.getTrabajadorId().getTipoPersona());
                     System.out.println("Parte Media 133");
