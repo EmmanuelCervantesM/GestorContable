@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -295,8 +297,9 @@ public class ListaNegraService {
         Set<String> existentes = new HashSet<>();
         for (Object[] a : em.createNamedQuery("RnGcListaNegraAvisoTbl.findClavesCfdi", Object[].class)
                 .setParameter("ids", ids).getResultList()) {
-            existentes.add(claveCfdi((Integer) a[0], (String) a[1], (String) a[2]));
+            existentes.add(claveCfdi((Integer) a[0], (Integer) a[1], (String) a[2], (String) a[3]));
         }
+        Map<Integer, Integer> despachos = despachosDe(usuarios);
         int total = 0;
         for (Object[] f : filas) {
             String contraparte = contraparte(f, rfcUsuario);
@@ -308,30 +311,56 @@ public class ListaNegraService {
             boolean emitido = !contraparte.equals(ListaNegraCsv.limpiarRfc((String) f[5]));
             Date fechaCfdi = f[3] != null ? (Date) f[3] : (Date) f[4];
             for (RnGcListaNegraTbl ln : enListas) {
-                String tipoLista = ln.getIdTipoLista().getTipoLista();
-                if (!existentes.add(claveCfdi(idCfdi, tipoLista, ln.getSituacionContribuyente()))) {
-                    continue;
+                for (Integer destinatario : destinatarios(((Number) f[1]).intValue(), despachos)) {
+                    String tipoLista = ln.getIdTipoLista().getTipoLista();
+                    if (!existentes.add(claveCfdi(destinatario, idCfdi, tipoLista, ln.getSituacionContribuyente()))) {
+                        continue;
+                    }
+                    Date entrada = ListaNegraCsv.fechaEntrada(ln);
+                    RnGcListaNegraAvisoTbl aviso = new RnGcListaNegraAvisoTbl();
+                    aviso.setIdUsuario(destinatario);
+                    aviso.setRfc(contraparte);
+                    aviso.setNombre((String) (emitido ? f[8] : f[6]));
+                    aviso.setTipoLista(tipoLista);
+                    aviso.setEstadoNuevo(ln.getSituacionContribuyente());
+                    aviso.setFechaAviso(ahora);
+                    aviso.setVisto("N");
+                    aviso.setIdCfdi(idCfdi);
+                    aviso.setUuid((String) f[2]);
+                    aviso.setFechaCfdi(fechaCfdi);
+                    aviso.setRolCfdi(emitido ? "Emitido" : "Recibido");
+                    aviso.setEstatusCfdi(f[9] != null ? (String) f[9] : "Timbrado");
+                    aviso.setMomento(entrada == null || fechaCfdi == null ? null : (fechaCfdi.before(entrada) ? "ANTES" : "DURANTE"));
+                    em.persist(aviso);
+                    total++;
                 }
-                Date entrada = ListaNegraCsv.fechaEntrada(ln);
-                RnGcListaNegraAvisoTbl aviso = new RnGcListaNegraAvisoTbl();
-                aviso.setIdUsuario(((Number) f[1]).intValue());
-                aviso.setRfc(contraparte);
-                aviso.setNombre((String) (emitido ? f[8] : f[6]));
-                aviso.setTipoLista(tipoLista);
-                aviso.setEstadoNuevo(ln.getSituacionContribuyente());
-                aviso.setFechaAviso(ahora);
-                aviso.setVisto("N");
-                aviso.setIdCfdi(idCfdi);
-                aviso.setUuid((String) f[2]);
-                aviso.setFechaCfdi(fechaCfdi);
-                aviso.setRolCfdi(emitido ? "Emitido" : "Recibido");
-                aviso.setEstatusCfdi(f[9] != null ? (String) f[9] : "Timbrado");
-                aviso.setMomento(entrada == null || fechaCfdi == null ? null : (fechaCfdi.before(entrada) ? "ANTES" : "DURANTE"));
-                em.persist(aviso);
-                total++;
             }
         }
         return total;
+    }
+
+    /** Despacho de cada usuario que pertenece a uno (usuario -> despacho). */
+    private Map<Integer, Integer> despachosDe(Collection<Integer> usuarios) {
+        Map<Integer, Integer> salida = new HashMap<>();
+        if (usuarios.isEmpty()) {
+            return salida;
+        }
+        for (Object[] u : em.createQuery("SELECT u.id, u.despachoId.id FROM RnGcUsuariosTbl u"
+                + " WHERE u.id IN :ids AND u.despachoId IS NOT NULL", Object[].class)
+                .setParameter("ids", new ArrayList<>(usuarios)).getResultList()) {
+            salida.put((Integer) u[0], (Integer) u[1]);
+        }
+        return salida;
+    }
+
+    /**
+     * Quién recibe un aviso de este usuario: él y, si pertenece a un despacho, también el
+     * despacho, con su propio renglón para que cada uno lo marque como visto por su lado.
+     */
+    private static List<Integer> destinatarios(int idUsuario, Map<Integer, Integer> despachos) {
+        Integer despacho = despachos.get(idUsuario);
+        return despacho == null || despacho == idUsuario
+                ? Collections.singletonList(idUsuario) : Arrays.asList(idUsuario, despacho);
     }
 
     /** RFC de la otra parte del CFDI; null si el usuario no es ni emisor ni receptor. */
@@ -351,8 +380,8 @@ public class ListaNegraService {
         return null;
     }
 
-    private static String claveCfdi(Integer idCfdi, String tipoLista, String estado) {
-        return idCfdi + "|" + tipoLista + "|" + normal(estado);
+    private static String claveCfdi(Integer idUsuario, Integer idCfdi, String tipoLista, String estado) {
+        return idUsuario + "|" + idCfdi + "|" + tipoLista + "|" + normal(estado);
     }
 
     // ------------------------------------------------------------ bitácora de revisiones
@@ -441,7 +470,10 @@ public class ListaNegraService {
         a.setNotificacionEstrados(de.getNotificacionEstrados());
     }
 
-    /** Un aviso por usuario y RFC cuyo cliente o proveedor entró, cambió o salió de la lista. */
+    /**
+     * Un aviso por usuario y RFC cuyo cliente o proveedor entró, cambió o salió de la lista;
+     * si el usuario pertenece a un despacho, el despacho recibe también el suyo.
+     */
     private int generarAvisos(TipoListaNegra tipo, List<Cambio> cambios, Date ahora) {
         if (cambios.isEmpty()) {
             return 0;
@@ -455,24 +487,35 @@ public class ListaNegraService {
         int total = 0;
         for (int i = 0; i < rfcs.size(); i += LOTE) {
             List<String> lote = rfcs.subList(i, Math.min(i + LOTE, rfcs.size()));
-            for (RnGcPersonasTbl p : personasPorRfc(lote)) {
+            List<RnGcPersonasTbl> personas = personasPorRfc(lote);
+            Set<Integer> duenos = new HashSet<>();
+            for (RnGcPersonasTbl p : personas) {
+                duenos.add(p.getCreadoPor());
+            }
+            Map<Integer, Integer> despachos = despachosDe(duenos);
+            for (RnGcPersonasTbl p : personas) {
                 String rfc = ListaNegraCsv.limpiarRfc(p.getRfc());
                 Cambio c = porRfc.get(rfc);
-                if (c == null || !generados.add(p.getCreadoPor() + "|" + rfc)) {
+                if (c == null) {
                     continue;
                 }
-                RnGcListaNegraAvisoTbl aviso = new RnGcListaNegraAvisoTbl();
-                aviso.setIdUsuario(p.getCreadoPor());
-                aviso.setIdPersona(p.getId());
-                aviso.setRfc(rfc);
-                aviso.setNombre(p.getNombre());
-                aviso.setTipoLista(tipo.getEtiqueta());
-                aviso.setEstadoAnterior(c.anterior);
-                aviso.setEstadoNuevo(c.nuevo);
-                aviso.setFechaAviso(ahora);
-                aviso.setVisto("N");
-                em.persist(aviso);
-                total++;
+                for (Integer destinatario : destinatarios(p.getCreadoPor(), despachos)) {
+                    if (!generados.add(destinatario + "|" + rfc)) {
+                        continue;
+                    }
+                    RnGcListaNegraAvisoTbl aviso = new RnGcListaNegraAvisoTbl();
+                    aviso.setIdUsuario(destinatario);
+                    aviso.setIdPersona(p.getId());
+                    aviso.setRfc(rfc);
+                    aviso.setNombre(p.getNombre());
+                    aviso.setTipoLista(tipo.getEtiqueta());
+                    aviso.setEstadoAnterior(c.anterior);
+                    aviso.setEstadoNuevo(c.nuevo);
+                    aviso.setFechaAviso(ahora);
+                    aviso.setVisto("N");
+                    em.persist(aviso);
+                    total++;
+                }
             }
         }
         return total;
@@ -596,10 +639,13 @@ public class ListaNegraService {
         return salida;
     }
 
-    /** Clientes y proveedores de un usuario que están en alguna lista. */
-    public List<CoincidenciaListaNegra> coincidenciasDeUsuario(int idUsuario) {
-        List<RnGcPersonasTbl> personas = em.createNamedQuery("RnGcPersonasTbl.findByCreadoPor", RnGcPersonasTbl.class)
-                .setParameter("creadoPor", idUsuario).getResultList();
+    /**
+     * Clientes y proveedores que están en alguna lista, de los usuarios del alcance: el propio
+     * usuario o, si es despacho, el despacho y sus contribuyentes.
+     */
+    public List<CoincidenciaListaNegra> coincidenciasDeUsuarios(List<Integer> idsUsuario) {
+        List<RnGcPersonasTbl> personas = em.createQuery("SELECT p FROM RnGcPersonasTbl p WHERE p.creadoPor IN :ids", RnGcPersonasTbl.class)
+                .setParameter("ids", idsUsuario).getResultList();
         Map<String, List<RnGcPersonasTbl>> porRfc = new LinkedHashMap<>();
         for (RnGcPersonasTbl p : personas) {
             String rfc = ListaNegraCsv.limpiarRfc(p.getRfc());

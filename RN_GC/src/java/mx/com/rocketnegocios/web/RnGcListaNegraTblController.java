@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -27,16 +26,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import mx.com.rocketnegocios.beans.RnGcPersonasTblFacade;
-import mx.com.rocketnegocios.beans.RnGcTipoListaNegraTblFacade;
 import mx.com.rocketnegocios.entities.RnGcPersonasTbl;
-import mx.com.rocketnegocios.entities.RnGcTipoListaNegraTbl;
 import mx.com.rocketnegocios.entities.personaListaNegra;
 import mx.com.rocketnegocios.util.UsuarioFirmado;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -55,9 +47,6 @@ public class RnGcListaNegraTblController implements Serializable {
     private mx.com.rocketnegocios.beans.RnGcListaNegraTblFacade ejbFacade;
 
     @EJB
-    private RnGcTipoListaNegraTblFacade tipoListaNegraFacade;
-
-    @EJB
     private RnGcPersonasTblFacade personasFacade;
 
     @EJB
@@ -74,7 +63,6 @@ public class RnGcListaNegraTblController implements Serializable {
 
     private List<RnGcListaNegraTbl> items = null;
     private RnGcListaNegraTbl selected;
-    private RnGcTipoListaNegraTbl tipoListaNegra;
     private UsuarioFirmado usuarioFirmado = new UsuarioFirmado();
     private List<personaListaNegra> listaPersonaLN = null;
     private personaListaNegra personaLN = new personaListaNegra();
@@ -187,6 +175,9 @@ public class RnGcListaNegraTblController implements Serializable {
     }
 
     public void create() {
+        if (!soloAdministrador()) {
+            return;
+        }
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RnGcListaNegraTblCreated"));
         FacesMessage.Severity max = FacesContext.getCurrentInstance().getMaximumSeverity();
         boolean ok = max == null || max.compareTo(FacesMessage.SEVERITY_ERROR) < 0;
@@ -199,10 +190,16 @@ public class RnGcListaNegraTblController implements Serializable {
     }
 
     public void update() {
+        if (!soloAdministrador()) {
+            return;
+        }
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RnGcListaNegraTblUpdated"));
     }
 
     public void destroy() {
+        if (!soloAdministrador()) {
+            return;
+        }
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("RnGcListaNegraTblDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
@@ -298,188 +295,6 @@ public class RnGcListaNegraTblController implements Serializable {
         }
     }
 
-    public void leerPlantilla(FileUploadEvent event) {
-        tipoListaNegra = new RnGcTipoListaNegraTbl();
-        List<RnGcTipoListaNegraTbl> listaTipoListaNegra = new ArrayList<>();
-        crearTipoListaNegra(event);
-        System.out.println("tipoListaNegra2: " + tipoListaNegra.getId() + " | " + tipoListaNegra.getTipoLista() + " | " + tipoListaNegra.getFechaPublicacion() + " | " + tipoListaNegra.getFolioPublicacion()
-                + " | " + tipoListaNegra.getCreadoPor() + " | " + tipoListaNegra.getFechaCreacion() + " | " + tipoListaNegra.getUltimaActualizacionPor() + " | " + tipoListaNegra.getUltimaFechaActualizacion());
-        listaTipoListaNegra = tipoListaNegraFacade.obtenerXFolio(tipoListaNegra.getFolioPublicacion());
-        if (listaTipoListaNegra != null && !listaTipoListaNegra.isEmpty()) {
-            System.out.println("La lista con el folio publicacion " + tipoListaNegra.getFolioPublicacion() + " ya se encuentra registrada");
-            RequestContext.getCurrentInstance().execute("PF('RnGcListaNegraTblDocDialog').hide();");
-            JsfUtil.addErrorMessage("La lista con el folio publicacion " + tipoListaNegra.getFolioPublicacion() + " ya se encuentra registrada");
-            selected = null;
-        } else {
-            tipoListaNegra = tipoListaNegraFacade.refreshFromDB(tipoListaNegra);
-            crearListaNegra(event, tipoListaNegra);
-            RequestContext.getCurrentInstance().execute("PF('RnGcListaNegraTblDocDialog').hide();");
-            // CTR-12.1: Reporta que es lo que en realidad se cargó en lugar de un éxito incondicional
-            String folio = tipoListaNegra.getFolioPublicacion();
-            if (plantillaError != null) {
-                JsfUtil.addErrorMessage("La carga del folio " + folio + " se interrumpió en la fila " + plantillaFilaError
-                        + " (" + plantillaError + "). Se alcanzaron a cargar " + plantillaCargados + " registros.");
-            } else {
-                String resumen = "La lista con el folio publicacion " + folio + " se registro con exito: "
-                        + plantillaCargados + (plantillaCargados == 1 ? " registro cargado" : " registros cargados");
-                if (plantillaVacias > 0) {
-                    resumen += ", " + plantillaVacias + (plantillaVacias == 1 ? " fila vacía omitida" : " filas vacías omitidas");
-                }
-                JsfUtil.addSuccessMessage(resumen + ".");
-            }
-            if (!plantillaSinRfc.isEmpty()) {
-                String filas = plantillaSinRfc.toString().replaceAll("[\\[\\]]", "");
-                JsfUtil.addWarningMessage(plantillaSinRfc.size() == 1
-                        ? "La fila " + filas + " tiene datos pero no tiene RFC; no se cargó."
-                        : "Las filas " + filas + " tienen datos pero no tienen RFC; no se cargaron.");
-            }
-            selected = null;
-        }
-    }
-
-    // Resultado de la ultima carga de plantilla (CTR-12.1)
-    private int plantillaCargados;
-    private int plantillaVacias;
-    private List<Integer> plantillaSinRfc = new ArrayList<>();
-    private String plantillaError;
-    private int plantillaFilaError;
-
-    public void crearListaNegra(FileUploadEvent event, RnGcTipoListaNegraTbl tipoLN) {
-        plantillaCargados = 0;
-        plantillaVacias = 0;
-        plantillaSinRfc = new ArrayList<>();
-        plantillaError = null;
-        plantillaFilaError = 0;
-        int filaExcel = 0;
-        try {
-            int i = 1;
-            XSSFWorkbook excel = new XSSFWorkbook(event.getFile().getInputstream());
-            XSSFSheet sheet = excel.getSheetAt(0);
-            Iterator<Row> rowIterator = sheet.iterator();
-            Row row;
-            while (rowIterator.hasNext()) {
-                row = rowIterator.next();
-                Iterator<Cell> cellIterator = row.cellIterator();
-                Cell cell;
-                if (row.getRowNum() >= 5) {
-                    filaExcel = row.getRowNum() + 1;
-                    boolean tieneDatos = false;
-                    prepareCreate();
-                    while (cellIterator.hasNext()) {
-                        cell = cellIterator.next();
-                        if (cell.getColumnIndex() >= 2 && !cell.toString().trim().isEmpty()) {
-                            tieneDatos = true;
-                        }
-                        if (cell.getColumnIndex() == 1) {
-                            selected.setRfc(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 2) {
-                            selected.setNombreContribuyente(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 3) {
-                            selected.setSituacionContribuyente(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 4) {
-                            selected.setNumeroFechaOficioGlobalPresuncionSAT(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 5) {
-                            selected.setPublicacionSATpresuntos(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 6) {
-                            selected.setNumeroFechaOficioGlobalPresuncionDOF(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 7) {
-                            selected.setPublicacionDOFpresuntos(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 8) {
-                            selected.setPublicacionSATdesvirtuados(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 9) {
-                            selected.setNumeroFechaOficioGlobalDesvirtuadoSAT(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 10) {
-                            selected.setPublicacionDOFdesvirtuados(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 11) {
-                            selected.setNumeroFechaOficioGlobalDefinitivoSAT(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 12) {
-                            selected.setPublicacionSATdefinitivos(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 13) {
-                            selected.setPublicacionDOFdefinitivos(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 14) {
-                            selected.setNumeroFechaOficioGlobalSentenciaSAT(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 15) {
-                            selected.setPublicacionSATsentencia(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 16) {
-                            selected.setNumeroFechaOficioGlobalSentenciaDOF(cell.toString());
-                        }
-                        if (cell.getColumnIndex() == 17) {
-                            selected.setPublicacionDOFsentencia(cell.toString());
-                        }
-                    }
-                    //System.out.println("LN: " + i + " | " + selected.getRfc() + " | " + selected.getNombreContribuyente() + " | " + selected.getSituacionContribuyente());
-                    // CTR-12.1: las filas con solo la columna "No" (o en blanco) antes se guardaban como registros vacios
-                    if (selected.getRfc() == null || selected.getRfc().trim().isEmpty()) {
-                        if (tieneDatos) {
-                            plantillaSinRfc.add(filaExcel);
-                        } else {
-                            plantillaVacias++;
-                        }
-                        continue;
-                    }
-                    selected.setIdTipoLista(tipoLN);
-                    setEmbeddableKeys();
-                    getFacade().edit(selected);
-                    plantillaCargados++;
-                    i++;
-                }
-            }
-        } catch (Exception ex) {
-            plantillaError = ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : ex.getClass().getSimpleName();
-            plantillaFilaError = filaExcel;
-            System.out.println("Error en la lectura de la plantilla: " + ex.getLocalizedMessage());
-        }
-    }
-
-    public void crearTipoListaNegra(FileUploadEvent event) {
-        try {
-            XSSFWorkbook excel = new XSSFWorkbook(event.getFile().getInputstream());
-            XSSFSheet sheet = excel.getSheetAt(0);
-            Iterator<Row> rowIterator = sheet.iterator();
-            Row row;
-            tipoListaNegra.setCreadoPor(usuarioFirmado.obtenerIdUsuario());
-            tipoListaNegra.setFechaCreacion(new Date());
-            tipoListaNegra.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
-            tipoListaNegra.setUltimaFechaActualizacion(new Date());
-            tipoListaNegra.setEstado("A");
-            while (rowIterator.hasNext()) {
-                row = rowIterator.next();
-                Iterator<Cell> cellIterator = row.cellIterator();
-                Cell cell;
-                prepareCreate();
-                while (cellIterator.hasNext()) {
-                    cell = cellIterator.next();
-                    if (cell.getColumnIndex() == 1 && cell.getRowIndex() == 0) {
-                        tipoListaNegra.setTipoLista(cell.toString());
-                    }
-                    if (cell.getColumnIndex() == 1 && cell.getRowIndex() == 1) {
-                        tipoListaNegra.setFechaPublicacion(cell.getDateCellValue());
-                    }
-                    if (cell.getColumnIndex() == 1 && cell.getRowIndex() == 2) {
-                        tipoListaNegra.setFolioPublicacion(cell.toString());
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            System.out.println("Error en la lectura de la plantilla: " + ex.getLocalizedMessage());
-        }
-    }
-
     public List<RnGcListaNegraTbl> busqueda() {
         //System.out.println("Validaciones: " + (rfc == null) + " | " + rfc.isEmpty() + " | " + (nombre == null) + " | " + (nombre.isEmpty()));
         if(rfc != null && !rfc.isEmpty()){
@@ -534,6 +349,9 @@ public class RnGcListaNegraTblController implements Serializable {
 
     /** Corre en segundo plano la revisión de los CSV, del DOF y el cruce con CFDI. */
     public void revisarAhora() {
+        if (!soloAdministrador()) {
+            return;
+        }
         actualizadorListasNegras.revisarTodo();
         revisiones = null;
         JsfUtil.addSuccessMessage("Se inició la revisión en segundo plano. Pulse \"Actualizar tabla\" en unos minutos para ver el resultado.");
@@ -541,6 +359,9 @@ public class RnGcListaNegraTblController implements Serializable {
 
     /** Carga el CSV del SAT de la lista elegida (69-B o 69-B Bis). */
     public void importarCsv(FileUploadEvent event) {
+        if (!soloAdministrador()) {
+            return;
+        }
         TipoListaNegra tipo = TipoListaNegra.porEtiqueta(tipoImportar);
         if (tipo == null || tipo.getColumnasCsv() == 0) {
             JsfUtil.addErrorMessage("Elija la lista 69-B o 69-B Bis antes de cargar el archivo.");
@@ -595,6 +416,9 @@ public class RnGcListaNegraTblController implements Serializable {
 
     /** Revisa las ediciones MAT y VES de la fecha elegida y carga los oficios de 49 Bis fracción X. */
     public void revisar49BisX() {
+        if (!soloAdministrador()) {
+            return;
+        }
         if (fecha49BisX == null) {
             JsfUtil.addErrorMessage("Elija la fecha del DOF a revisar.");
             return;
@@ -632,10 +456,13 @@ public class RnGcListaNegraTblController implements Serializable {
         return lineas.size() > max ? muestra + " (y " + (lineas.size() - max) + " más)" : muestra;
     }
 
-    /** Clientes y proveedores del usuario que están en alguna lista, con semáforo y ligas al DOF. */
+    /**
+     * Clientes y proveedores del usuario (y, si es despacho, de sus contribuyentes) que están
+     * en alguna lista, con semáforo y ligas al DOF.
+     */
     public List<CoincidenciaListaNegra> getCoincidenciasUsuario() {
         if (coincidenciasUsuario == null) {
-            coincidenciasUsuario = listaNegraService.coincidenciasDeUsuario(usuarioFirmado.obtenerIdUsuario());
+            coincidenciasUsuario = listaNegraService.coincidenciasDeUsuarios(usuarioFirmado.obtenerIdsAlcance());
         }
         return coincidenciasUsuario;
     }
@@ -671,6 +498,16 @@ public class RnGcListaNegraTblController implements Serializable {
     public String colorDe(String situacion) {
         String c = mx.com.rocketnegocios.util.listanegra.SemaforoListaNegra.color(situacion);
         return c == null ? "gris" : c;
+    }
+
+
+    /** CTR-12: cambiar las listas negras es solo del administrador (además del AuthorizationFilter). */
+    private boolean soloAdministrador() {
+        if (new UsuarioFirmado().esAdministrador()) {
+            return true;
+        }
+        JsfUtil.addErrorMessage("Solo el administrador puede modificar las listas negras.");
+        return false;
     }
 
 }

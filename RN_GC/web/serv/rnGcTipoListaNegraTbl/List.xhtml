@@ -24,8 +24,8 @@
                                  rowsPerPageTemplate="10,20,30,40,50"
                                  >
 
-                        <p:ajax event="rowSelect"   update="createButton cargarArchivo viewButton editButton deleteButton download"/>
-                        <p:ajax event="rowUnselect" update="createButton cargarArchivo viewButton editButton deleteButton download"/>
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
 
                         <p:column>
                             <f:facet name="header">
@@ -57,16 +57,9 @@
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{rnGcTipoListaNegraTblController.prepareCreate}" update=":RnGcTipoListaNegraTblCreateForm" oncomplete="PF('RnGcTipoListaNegraTblCreateDialog').show()"/>
-                            <p:commandButton id="cargarArchivo" icon="ui-icon-plus" value="Usar Plantilla" actionListener="#{rnGcListaNegraTblController.prepareCreate()}" update="RnGcListaNegraTblDocForm" oncomplete="PF('RnGcListaNegraTblDocDialog').show()"/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" actionListener="#{rnGcTipoListaNegraTblController.prepareListaNegra(rnGcTipoListaNegraTblController.selected)}" update="listaNegraForm:listaNegraTable, listaNegraForm:display" oncomplete="PF('listaNegraDialog').show()" disabled="#{empty rnGcTipoListaNegraTblController.selected}"/>
                             <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":RnGcTipoListaNegraTblEditForm" oncomplete="PF('RnGcTipoListaNegraTblEditDialog').show()" disabled="#{empty rnGcTipoListaNegraTblController.selected}"/>
                             <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{rnGcTipoListaNegraTblController.deleteListaNegra(rnGcTipoListaNegraTblController.selected)}" update=":growl,datalist" disabled="#{empty rnGcTipoListaNegraTblController.selected}"/>
-                        </f:facet>
-                        
-                        <f:facet name="header">
-                            <p:commandButton id="download" icon="ui-icon-arrowthickstop-1-s" value="Descargar Plantilla Lista Negra" actionListener="#{rnGcTipoListaNegraTblController.descargarPlantilla()}" ajax="false">
-                                <p:fileDownload value="#{rnGcTipoListaNegraTblController.downLoadFile}"/>
-                            </p:commandButton>
                         </f:facet>
                     </p:dataTable>
                 </p:panel>
@@ -75,20 +68,6 @@
             <ui:include src="Create.xhtml"/>
             <ui:include src="Edit.xhtml"/>
             <ui:include src="View.xhtml"/>
-            
-            <p:dialog id="RnGcListaNegraTblDocDlg" widgetVar="RnGcListaNegraTblDocDialog" modal="true" resizable="false" appendTo="@(body)" header="Cargar Lista Negra">
-                <h:form id="RnGcListaNegraTblDocForm">
-                    <p:panel header="Buscar plantilla (.xlsx)">
-                        <f:facet name="header">
-                            <p:outputLabel value="Selecciona Plantilla"/>
-                        </f:facet>
-                        <p:fileUpload id="plantilla" fileUploadListener="#{rnGcListaNegraTblController.leerPlantilla}" fileLimitMessage="Número máximo de archivos excedido" label="Buscar" cancelLabel="Cancelar" uploadLabel="Cargar" sequential="true"
-                                      mode="advanced" update=":RnGcTipoListaNegraTblListForm:datalist, :growl, :RnGcListaNegraTblDocForm"  dragDropSupport="true" sizeLimit="3000000" fileLimit="1" allowTypes="/(\.|\/)(xlsx)$/">
-                            <p:growl life="5000" showDetail="true" />      
-                        </p:fileUpload>
-                    </p:panel>
-                </h:form>
-            </p:dialog>
 
             <p:dialog id="listaNegraDlg" widgetVar="listaNegraDialog" modal="true" resizable="false" appendTo="@(body)" header="Contribuyentes Lista Negra">
                 <h:form id="listaNegraForm">

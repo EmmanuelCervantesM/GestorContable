@@ -22,7 +22,7 @@ import javax.persistence.TemporalType;
 @Table(name = "rn_gc_listaNegraAviso_tbl")
 @NamedQueries({
     @NamedQuery(name = "RnGcListaNegraAvisoTbl.findNoVistosByUsuario", query = "SELECT r FROM RnGcListaNegraAvisoTbl r WHERE r.idUsuario = :idUsuario AND r.visto = 'N' ORDER BY r.fechaAviso DESC, r.id DESC"),
-    @NamedQuery(name = "RnGcListaNegraAvisoTbl.findClavesCfdi", query = "SELECT r.idCfdi, r.tipoLista, r.estadoNuevo FROM RnGcListaNegraAvisoTbl r WHERE r.idCfdi IN :ids"),
+    @NamedQuery(name = "RnGcListaNegraAvisoTbl.findClavesCfdi", query = "SELECT r.idUsuario, r.idCfdi, r.tipoLista, r.estadoNuevo FROM RnGcListaNegraAvisoTbl r WHERE r.idCfdi IN :ids"),
     @NamedQuery(name = "RnGcListaNegraAvisoTbl.marcarVistosByUsuario", query = "UPDATE RnGcListaNegraAvisoTbl r SET r.visto = 'S' WHERE r.idUsuario = :idUsuario AND r.visto = 'N'")})
 public class RnGcListaNegraAvisoTbl implements Serializable {
 

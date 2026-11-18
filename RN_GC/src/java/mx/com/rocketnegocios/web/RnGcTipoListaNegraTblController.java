@@ -1,15 +1,11 @@
 package mx.com.rocketnegocios.web;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStream;
 import mx.com.rocketnegocios.entities.RnGcTipoListaNegraTbl;
 import mx.com.rocketnegocios.web.util.JsfUtil;
 import mx.com.rocketnegocios.web.util.JsfUtil.PersistAction;
 import mx.com.rocketnegocios.beans.RnGcTipoListaNegraTblFacade;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,9 +23,6 @@ import javax.faces.convert.FacesConverter;
 import mx.com.rocketnegocios.beans.RnGcListaNegraTblFacade;
 import mx.com.rocketnegocios.entities.RnGcListaNegraTbl;
 import mx.com.rocketnegocios.util.UsuarioFirmado;
-import org.apache.commons.io.FileUtils;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 
 @Named("rnGcTipoListaNegraTblController")
 @SessionScoped
@@ -45,17 +38,8 @@ public class RnGcTipoListaNegraTblController implements Serializable {
     private UsuarioFirmado usuarioFirmado = new UsuarioFirmado();
     private List<RnGcListaNegraTbl> listaNegra = null;
     private RnGcListaNegraTbl itemListaNegra;
-    private StreamedContent downLoadFile;
 
     public RnGcTipoListaNegraTblController() {
-    }
-
-    public StreamedContent getDownLoadFile() {
-        return downLoadFile;
-    }
-
-    public void setDownLoadFile(StreamedContent downLoadFile) {
-        this.downLoadFile = downLoadFile;
     }
 
     public RnGcTipoListaNegraTbl getSelected() {
@@ -88,6 +72,9 @@ public class RnGcTipoListaNegraTblController implements Serializable {
     }
 
     public void create() {
+        if (!soloAdministrador()) {
+            return;
+        }
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RnGcTipoListaNegraTblCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
@@ -95,10 +82,16 @@ public class RnGcTipoListaNegraTblController implements Serializable {
     }
 
     public void update() {
+        if (!soloAdministrador()) {
+            return;
+        }
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RnGcTipoListaNegraTblUpdated"));
     }
 
     public void deleteListaNegra(RnGcTipoListaNegraTbl tipoListaNegra){
+        if (!soloAdministrador()) {
+            return;
+        }
         try{
             List<RnGcListaNegraTbl> itemsListaNegra = new ArrayList<>();
             itemsListaNegra = listaNegraFacade.obtenerXTipoListaNegra(tipoListaNegra);
@@ -117,6 +110,9 @@ public class RnGcTipoListaNegraTblController implements Serializable {
     }
     
     public void destroy() {
+        if (!soloAdministrador()) {
+            return;
+        }
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("RnGcTipoListaNegraTblDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
@@ -240,6 +236,9 @@ public class RnGcTipoListaNegraTblController implements Serializable {
     }
     
     public void deleteListaNegra(){
+        if (!soloAdministrador()) {
+            return;
+        }
         System.out.println("deleteListaNegra: " + itemListaNegra);
         listaNegraFacade.remove(itemListaNegra);
         itemListaNegra = null;
@@ -248,6 +247,9 @@ public class RnGcTipoListaNegraTblController implements Serializable {
     }
     
     public void updateListaNegra(){
+        if (!soloAdministrador()) {
+            return;
+        }
         itemListaNegra.setUltimaActualizacionPor(usuarioFirmado.obtenerIdUsuario());
         itemListaNegra.setUltimaFechaActualizacion(new Date());
         listaNegraFacade.edit(itemListaNegra);
@@ -256,6 +258,9 @@ public class RnGcTipoListaNegraTblController implements Serializable {
     }
     
     public void createListaNegra(){
+        if (!soloAdministrador()) {
+            return;
+        }
         itemListaNegra.setRfc(itemListaNegra.getRfc().toUpperCase());
         itemListaNegra.setNombreContribuyente(iniMayusculas(itemListaNegra.getNombreContribuyente()));
         listaNegraFacade.edit(itemListaNegra);
@@ -297,19 +302,15 @@ public class RnGcTipoListaNegraTblController implements Serializable {
         
         return nombreFin.substring(0, nombreFin.length()-1);
     }
-    
-    public void descargarPlantilla(){
-        try{
-            File plantilla = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/Archivos/Plantilla_Listas_Negras_Conta_Arc.xlsx"));
-            byte[] aux = FileUtils.readFileToByteArray(plantilla);
-            InputStream streamPlantilla = new ByteArrayInputStream(aux);
-            downLoadFile = new DefaultStreamedContent(streamPlantilla, 
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    "Plantilla_Listas_Negras_Conta_Arc_" + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()) + ".xlsx");
-        }catch(Exception ex){
-            ex.printStackTrace();
-            JsfUtil.addErrorMessage("Ocurrio un eror al descargar la plantilla");
+
+
+    /** CTR-12: cambiar las listas negras es solo del administrador (además del AuthorizationFilter). */
+    private boolean soloAdministrador() {
+        if (new UsuarioFirmado().esAdministrador()) {
+            return true;
         }
+        JsfUtil.addErrorMessage("Solo el administrador puede modificar las listas negras.");
+        return false;
     }
 
 }
