@@ -596,7 +596,7 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
     }
 
     public List<RnGcUsuariosTbl> obtenerUsuarios() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             itemsUsuarios = getFacade().findAll();
         } else {
             itemsUsuarios = getFacade().buscaCreadoPor(usuarioFirmado.obtenerIdUsuario());
@@ -605,7 +605,7 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
     }
 
     public List<RnGcUsuariosTbl> usuarioCertifcados() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             itemsUsuarios = getFacade().findAll();
         } else {
             itemsUsuarios = getFacade().obtenerListaUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
@@ -656,7 +656,7 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
 
     public List<RnGcUsuariosTbl> itemCreadoPor() {
         try {
-            if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+            if (usuarioFirmado.esAdministrador()) {
                 itemsUsuarios = getFacade().findAll();
             } else {
                 itemsUsuarios = getFacade().buscaCreadoPor(usuarioFirmado.obtenerIdUsuario());
@@ -778,7 +778,7 @@ public class RnGcDocumentosFiscalesTblController implements Serializable {
     }
 
     public List<RnGcUsuariosTbl> obtenerUsuariosFinales() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             listaFinalFinal = new ArrayList<>();
             listaFinalFinal = getFacade().buscarTodo();
         } else {

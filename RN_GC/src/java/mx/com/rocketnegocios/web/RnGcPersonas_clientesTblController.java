@@ -160,7 +160,7 @@ public class RnGcPersonas_clientesTblController implements Serializable {
     }
 
     public List<RnGcPersonasTbl> getItems() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if (usuarioFirmado.esAdministrador()){
             items = getFacade().findAll();
         } else {
             items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
@@ -232,14 +232,14 @@ public class RnGcPersonas_clientesTblController implements Serializable {
     }
 
     public List<RnGcPersonasTbl> getItemsAvailableSelectMany() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if (usuarioFirmado.esAdministrador()){
             return getFacade().findAll();
         }
         return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
     }
 
     public List<RnGcPersonasTbl> getItemsAvailableSelectOne() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if (usuarioFirmado.esAdministrador()){
             return getFacade().findAll();
         }
         return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
@@ -288,7 +288,7 @@ public class RnGcPersonas_clientesTblController implements Serializable {
 
     public List<RnGcPersonasTbl> itemsCreadoPor() {
         try {
-            if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+            if (usuarioFirmado.esAdministrador()) {
                 items = getFacade().findAll();
             } else {
                 items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());

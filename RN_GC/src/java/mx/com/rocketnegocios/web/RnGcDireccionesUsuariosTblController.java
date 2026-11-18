@@ -88,7 +88,7 @@ public class RnGcDireccionesUsuariosTblController implements Serializable {
 
     // decide qué registros mostrar según el perfil y el ID del usuario conectado
     public List<RnGcDireccionesUsuariosTbl> getItems() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if (usuarioFirmado.esAdministrador()){
             items = getFacade().findAll();
         } else {
             items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());

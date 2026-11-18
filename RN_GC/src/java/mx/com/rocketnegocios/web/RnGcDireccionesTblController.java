@@ -94,7 +94,7 @@ public class RnGcDireccionesTblController implements Serializable {
     }
     // Mejora para las pantallas de los usuarios 
     public List<RnGcDireccionesTbl> getItems() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if (usuarioFirmado.esAdministrador()){
             items = getFacade().findAll();
         } else {
             items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());

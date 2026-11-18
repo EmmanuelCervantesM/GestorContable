@@ -191,7 +191,7 @@ public class RnGcCertificadosTblController implements Serializable {
     }
 
     public List<RnGcCertificadosTbl> itemsXUsuario() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             itemsUsuarios = getFacade().findAll();
         } else {
             usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
@@ -201,7 +201,7 @@ public class RnGcCertificadosTblController implements Serializable {
     }
 
     public List<RnGcCertificadosTbl> getItemsUsuarios() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             itemsUsuarios = getFacade().findAll();
         } else {
             itemsUsuarios = getFacade().obtenerCreadoPor(usuarioFirmado.obtenerIdUsuario());
@@ -210,7 +210,7 @@ public class RnGcCertificadosTblController implements Serializable {
     }
 
     public List<RnGcCertificadosTbl> certificadosCreadoPor() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             itemsUsuarios = getFacade().findAll();
         } else {
             itemsUsuarios = getFacade().obtenerCreadoPor(usuarioFirmado.obtenerIdUsuario());
@@ -415,7 +415,7 @@ public class RnGcCertificadosTblController implements Serializable {
     }
 
     public List<RnGcCertificadosTbl> listaCertificados() {
-        if(usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if(usuarioFirmado.esAdministrador()){
             items = getFacade().findAll();
         }else{
             usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
@@ -425,7 +425,7 @@ public class RnGcCertificadosTblController implements Serializable {
     }
 
     public List<RnGcCertificadosTbl> listaCertificadosActivos() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             items = getFacade().certificadosActivos();
         } else {
             usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
@@ -439,7 +439,7 @@ public class RnGcCertificadosTblController implements Serializable {
      * vigentes y Activos; un FIEL nunca debe listarse aqui.
      */
     public List<RnGcCertificadosTbl> listaCertificadosCsdActivos() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             items = getFacade().certificadosCsdActivos();
         } else {
             usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());

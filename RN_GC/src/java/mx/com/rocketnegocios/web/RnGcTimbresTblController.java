@@ -231,7 +231,7 @@ public class RnGcTimbresTblController implements Serializable {
             try {
                 if (persistAction.equals(PersistAction.CREATE)) {
                     System.out.println("Create");
-                    if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+                    if (usuarioFirmado.esAdministrador()) {
                         selected.setTimbresTotal(totalTimbres);
                         selected.setTimbresRestantes(totalTimbres);
                         getFacade().edit(selected);
@@ -247,7 +247,7 @@ public class RnGcTimbresTblController implements Serializable {
                 }
                 if (persistAction.equals(PersistAction.UPDATE)) {
                     System.out.println("Update");
-                    if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+                    if (usuarioFirmado.esAdministrador()) {
                         selected.setTimbresRestantes(totalTimbres + selected.getTimbresRestantes());
                         selected.setTimbresTotal(selected.getTimbresRestantes());
                         getFacade().edit(selected);

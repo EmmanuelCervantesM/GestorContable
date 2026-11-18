@@ -173,7 +173,7 @@ public class RnGcArchivosTblController implements Serializable {
 
     // Mejora para que solo administrador vea todo 
     public List<RnGcArchivosTbl> getItems() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if (usuarioFirmado.esAdministrador()){
             items = getFacade().findAll();
         } else {
             items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
@@ -279,7 +279,7 @@ public class RnGcArchivosTblController implements Serializable {
     }
 
     public List<RnGcPersonasTbl> personasUsuario() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             listaPersonas = personasFacade.findAll();
         } else {
             usuario = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());

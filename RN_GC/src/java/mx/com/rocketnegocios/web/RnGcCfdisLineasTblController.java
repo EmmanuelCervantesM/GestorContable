@@ -2300,7 +2300,7 @@ public class RnGcCfdisLineasTblController implements Serializable {
     public List<RnGcCfdisTbl> obtenerEmitidos() {
         try {
             usuario = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-            if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+            if (usuarioFirmado.esAdministrador()) {
                 emitidos = cfdisFacade.findAll();
             } else {
                 emitidos = cfdisFacade.obtenerEmitidos(usuario.getRfc());
@@ -2314,7 +2314,7 @@ public class RnGcCfdisLineasTblController implements Serializable {
     public List<RnGcCfdisTbl> obtenerRecibidos() {
         try {
             usuario = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-            if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+            if (usuarioFirmado.esAdministrador()) {
                 recibidos = cfdisFacade.findAll();
             } else {
                 recibidos = cfdisFacade.obtenerRecibidos(usuario.getRfc());

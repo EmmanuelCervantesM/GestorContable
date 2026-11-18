@@ -85,7 +85,7 @@ public class RnGcPersonasTblController implements Serializable {
 
     // Nuevo metodo para que solo el administrdor vea sus metodos 
     public List<RnGcPersonasTbl> getItems() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if (usuarioFirmado.esAdministrador()){
             items = getFacade().findAll();
         }else {
             items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
@@ -175,7 +175,7 @@ public class RnGcPersonasTblController implements Serializable {
     }
 
     public List<RnGcPersonasTbl> itemCreadoPor() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             items = getFacade().findAll();
         } else {
             items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());

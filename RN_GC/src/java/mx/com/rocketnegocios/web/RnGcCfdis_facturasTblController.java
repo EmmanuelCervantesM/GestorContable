@@ -199,7 +199,7 @@ public class RnGcCfdis_facturasTblController implements Serializable {
     }
     
     public List<RnGcCfdisTbl> egresosCreadoPor() {
-        if(usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if(usuarioFirmado.esAdministrador()){
             itemsFacturas = getFacade().obtenerTipoComprobante("E");
         }else {
             itemsFacturas = getFacade().tipoComprobanteCreadoPor("E", usuarioFirmado.obtenerIdUsuario());
@@ -239,7 +239,7 @@ public class RnGcCfdis_facturasTblController implements Serializable {
         if (itemsEmitidos == null) {
             try {
                 usuarioId = usuariosFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-                if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+                if (usuarioFirmado.esAdministrador()) {
                     itemsEmitidos = getFacade().findAll();
                 } else {
                     itemsEmitidos = getFacade().obtenerEmitidos(usuarioId.getRfc());

@@ -189,7 +189,7 @@ public class RnGcTrabajadoresTblController implements Serializable {
     }
 
     public List<RnGcTrabajadoresTbl> getItems() {
-        if (usuarioFirmado.perfilUsuario().equals("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             items = getFacade().findAll();
         } else {
             items = getFacade().trabajadoresCreadoPor(usuarioFirmado.obtenerIdUsuario());

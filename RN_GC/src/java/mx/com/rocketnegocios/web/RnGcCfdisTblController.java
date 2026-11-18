@@ -322,14 +322,14 @@ public class RnGcCfdisTblController implements Serializable {
     //Ambos métodos devuelven los CFDI disponibles para seleccionar uno o varios registros, 
     // mostrando todos si el usuario es administrador y únicamente los creados por el usuario autenticado si tiene otro perfil.
     public List<RnGcCfdisTbl> getItemsAvailableSelectMany() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if (usuarioFirmado.esAdministrador()){
             return getFacade().findAll();
         }
         return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
     }
 
     public List<RnGcCfdisTbl> getItemsAvailableSelectOne() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if (usuarioFirmado.esAdministrador()){
             return getFacade().findAll();
         }
         return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
@@ -464,7 +464,7 @@ public class RnGcCfdisTblController implements Serializable {
 
     public List<RnGcCfdisTbl> itemCreadoPor() {
         try {
-            if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+            if (usuarioFirmado.esAdministrador()) {
                 items = getFacade().findAll();
             } else {
                 items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
@@ -479,7 +479,7 @@ public class RnGcCfdisTblController implements Serializable {
         try {
             usuarioId = new RnGcUsuariosTbl();
             usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-            if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+            if (usuarioFirmado.esAdministrador()) {
                 itemsEmitidos = getFacade().findAll();
             } else {
                 itemsEmitidos = getFacade().obtenerEmitidos(usuarioId.getRfc());
@@ -504,7 +504,7 @@ public class RnGcCfdisTblController implements Serializable {
     public List<RnGcCfdisTbl> obtenerPPD() {
         try {
             usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-            if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+            if (usuarioFirmado.esAdministrador()) {
                 itemsPPD = getFacade().findAll();
             } else {
                 itemsPPD = getFacade().obtenerPPD(usuarioId.getRfc());
@@ -524,7 +524,7 @@ public class RnGcCfdisTblController implements Serializable {
     public List<RnGcCfdisTbl> obtenerRecibidos() {
         try {
             usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-            if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+            if (usuarioFirmado.esAdministrador()) {
                 itemsRecibidos = getFacade().findAll();
             } else {
                 itemsRecibidos = getFacade().obtenerRecibidos(usuarioId.getRfc());
@@ -541,7 +541,7 @@ public class RnGcCfdisTblController implements Serializable {
         DecimalFormat dec = new DecimalFormat("#.00");
 
         usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             itemsRecibidos = getFacade().findAll();
             for (int i = 0; i < itemsRecibidos.size(); i++) {
                 if (itemsRecibidos.get(i).getImporte() > 0) {
@@ -564,7 +564,7 @@ public class RnGcCfdisTblController implements Serializable {
     public Double totalEmitidos() {
         totalEmitidos = 0.0;
         usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             itemsEmitidos = getFacade().findAll();
             for (int i = 0; i < itemsEmitidos.size(); i++) {
                 if (itemsEmitidos.get(i).getImporte() > 0) {

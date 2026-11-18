@@ -290,6 +290,11 @@ public class Login implements Serializable {
             listaUsuarioPerfiles = rnGeUsuarioPerfilesTblFacade.obtenerPerfilesPorUsuario(usuarioTbl);
             for (int i = 0; i < listaUsuarioPerfiles.size(); i++) {
                 RnGcUsuariosPerfilesTbl get = listaUsuarioPerfiles.get(i);
+                // Los perfiles vencidos no dan permisos (antes el menú ya no los mostraba,
+                // pero seguían en listaPerfiles y contaban para el filtro y los controladores).
+                if (!mx.com.rocketnegocios.util.UsuarioFirmado.perfilVigente(get.getFechaFinal())) {
+                    continue;
+                }
                 listaPerfiles = listaPerfiles + "," + get.getPerfilesId().getPerfilNombre();
             }
             session.setAttribute("usuarioId", usuarioId);

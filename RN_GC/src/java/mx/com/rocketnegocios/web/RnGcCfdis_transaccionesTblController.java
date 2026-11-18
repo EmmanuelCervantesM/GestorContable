@@ -191,7 +191,7 @@ public class RnGcCfdis_transaccionesTblController implements Serializable {
     }
     
     public List<RnGcCfdisTbl> ingresosCreadoPor(){
-        if(usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if(usuarioFirmado.esAdministrador()){
             itemsTransacciones = getFacade().obtenerTipoComprobante("I");
         } else {
             itemsTransacciones = getFacade().tipoComprobanteCreadoPor("I", usuarioFirmado.obtenerIdUsuario());

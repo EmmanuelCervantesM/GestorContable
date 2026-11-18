@@ -271,7 +271,7 @@ public class RnGcNomNominasTblController implements Serializable {
     }
 
     public List<RnGcNomNominasTbl> getItems() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             items = getFacade().findAll();
         } else {
             items = getFacade().obtenerNominaCreadoPor(usuarioFirmado.obtenerIdUsuario());
@@ -362,7 +362,7 @@ public class RnGcNomNominasTblController implements Serializable {
 
     public List<RnGcNomNominasTbl> obtenerNominaCreadoPor() {
         List<RnGcNomNominasTbl> listaNominas = new ArrayList<>();
-        if (usuarioFirmado.perfilUsuario().equals("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             listaNominas = getFacade().findAll();
         } else {
             listaNominas = getFacade().obtenerNominaCreadoPor(usuarioFirmado.obtenerIdUsuario());

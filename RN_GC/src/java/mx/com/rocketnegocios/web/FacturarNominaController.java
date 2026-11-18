@@ -2183,7 +2183,7 @@ public class FacturarNominaController implements Serializable {
             }
         }
         if (!personas.getNombre().equals("-") && !personas.getRfc().equals("-")) {
-            if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+            if (usuarioFirmado.esAdministrador()) {
                 JsfUtil.addSuccessMessage("El cliente " + personas.getRfc() + " se ha aactualizado");
             } else {
                 if (!obtenerClientes(personas.getRfc().toUpperCase())) {

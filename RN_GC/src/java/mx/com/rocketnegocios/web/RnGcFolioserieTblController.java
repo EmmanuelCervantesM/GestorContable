@@ -197,7 +197,7 @@ public class RnGcFolioserieTblController implements Serializable {
     }
 
     public List<RnGcFolioserieTbl> obtenerSeriePorUsuario() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             itemsSerie = getFacade().findAll();
         } else {
             itemsSerie = getFacade().serieporUsuario(usuarioLogeado());

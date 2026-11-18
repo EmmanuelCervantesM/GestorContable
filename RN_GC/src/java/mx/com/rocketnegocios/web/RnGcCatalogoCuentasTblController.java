@@ -548,7 +548,7 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
     }
 
     public List<RnGcCatalogoCuentasTbl> getItems() {
-       if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+       if (usuarioFirmado.esAdministrador()){
         items = getFacade().findAll();
        }else {
         items = getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
@@ -588,14 +588,14 @@ public class RnGcCatalogoCuentasTblController implements Serializable {
     }
 
     public List<RnGcCatalogoCuentasTbl> getItemsAvailableSelectMany() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             return getFacade().findAll();
         }
         return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());
     }
 
     public List<RnGcCatalogoCuentasTbl> getItemsAvailableSelectOne() {
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if (usuarioFirmado.esAdministrador()){
             return getFacade().findAll();
         }
         return getFacade().obtenerCreadoPorLista(usuarioFirmado.obtenerIdsAlcance());

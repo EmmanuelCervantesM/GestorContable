@@ -37,9 +37,8 @@ public class RnGcTerminosCondicionesTblController implements Serializable {
     }
 
     public boolean isEsAdministrador() {
-        String listaPerfiles = String.valueOf(
+        return mx.com.rocketnegocios.util.UsuarioFirmado.esAdministrador(
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("listaPerfiles"));
-        return listaPerfiles != null && listaPerfiles.contains("ADMINISTRADOR");
     }
 
     // Carga el formulario para que no se empieze desde 0 

@@ -199,7 +199,7 @@ public class RnGcPerfilesTblController implements Serializable {
 
     public List<RnGcPerfilesTbl> obtenerPerfilesPorUsuario() {
         List<RnGcPerfilesTbl> itemsUsuario = new ArrayList<>();
-        if (usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")) {
+        if (usuarioFirmado.esAdministrador()) {
             itemsUsuario = getFacade().findAll();
         } else if (usuarioFirmado.perfilUsuario().contains("DESPACHO")) {
             items = getFacade().findAll();

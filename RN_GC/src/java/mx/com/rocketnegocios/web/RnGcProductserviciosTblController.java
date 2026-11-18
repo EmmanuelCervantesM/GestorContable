@@ -194,7 +194,7 @@ public class RnGcProductserviciosTblController implements Serializable {
     }    
     
     public List<RnGcProductserviciosTbl> itemscreadoPor(){
-        if(usuarioFirmado.perfilUsuario().contains("ADMINISTRADOR")){
+        if(usuarioFirmado.esAdministrador()){
             itemsProdServ = getFacade().findAll();
         }else{
             itemsProdServ = getFacade().obtenerPorUsuario(usuarioFirmado.obtenerIdUsuario());

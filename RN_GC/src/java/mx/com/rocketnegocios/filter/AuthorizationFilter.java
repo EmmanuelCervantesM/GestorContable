@@ -1,6 +1,11 @@
 package mx.com.rocketnegocios.filter;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -11,9 +16,14 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import mx.com.rocketnegocios.util.UsuarioFirmado;
 
-@WebFilter(filterName = "AuthFilter", urlPatterns = {"*.xhtml"})
+// "/*": todo pasa por aquí. Lo que atiende el FacesServlet ("/faces/...") se autoriza; fuera de
+// él solo se bloquea el código fuente de las vistas (.xhtml) y lo demás (imágenes, css) sigue igual.
+@WebFilter(filterName = "AuthFilter", urlPatterns = {"/*"})
 public class AuthorizationFilter implements Filter {
+
+    private static final Logger LOG = Logger.getLogger(AuthorizationFilter.class.getName());
 
     // Pantallas exclusivas de ADMINISTRADOR
     private static final String[] RUTAS_SOLO_ADMIN = {
@@ -24,7 +34,9 @@ public class AuthorizationFilter implements Filter {
         "/serv/rnGcMenuslineasTbl/",
         "/serv/rnGcFuncionesTbl/",
         "/serv/rnGcTerminosCondicionesTbl/",
-        "/serv/rnGcListaNegraTbl/"
+        "/serv/rnGcListaNegraTbl/",
+        // CTR-12: alta, edición y baja de las listas negras (solo el administrador las maneja)
+        "/serv/rnGcTipoListaNegraTbl/"
     };
 
     // Excepciones: pantallas dentro de esas carpetas que SI puede usar cualquier usuario logueado
@@ -48,64 +60,114 @@ public class AuthorizationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
                     FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest reqt = (HttpServletRequest) request;
+        HttpServletResponse resp = (HttpServletResponse) response;
+        boolean permitir;
         try {
-
-            HttpServletRequest reqt = (HttpServletRequest) request;
-            HttpServletResponse resp = (HttpServletResponse) response;
-            HttpSession ses = reqt.getSession(false);
-
-            String reqURI = reqt.getRequestURI();
-            boolean logueado = ses != null && ses.getAttribute("username") != null;
-
-            if (reqURI.indexOf("/login.xhtml") >= 0
-                            || reqURI.indexOf("/public/") >= 0
-                            || reqURI.contains("javax.faces.resource")) {
-                chain.doFilter(request, response);
-                return;
+            permitir = autorizar(reqt, resp);
+        } catch (RuntimeException e) {
+            // Si no se pudo decidir, no se deja pasar (antes se tragaba el error y la página
+            // salía en blanco, o se seguía de largo).
+            LOG.log(Level.SEVERE, "AuthorizationFilter: no se pudo autorizar " + reqt.getRequestURI(), e);
+            if (!resp.isCommitted()) {
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-
-            if (!logueado) {
-                resp.sendRedirect(reqt.getContextPath() + "/faces/login.xhtml");
-                return;
-            }
-
-            if (esRutaSoloAdmin(reqURI) && !esExcepcion(reqURI) && !esAdministrador(ses)) {
-                resp.sendRedirect(reqt.getContextPath() + "/faces/admin.xhtml");
-                return;
-            }
-
+            return;
+        }
+        if (permitir) {
+            // Fuera del try: los errores de la propia pantalla los maneja y registra el
+            // contenedor como siempre, en lugar de perderse en un System.out.
             chain.doFilter(request, response);
-        } catch (Exception e) {
-                System.out.println(e.getMessage());
         }
     }
 
-    private boolean esRutaSoloAdmin(String reqURI) {
+    /** Decide si la petición sigue; si no, ya dejó la redirección o el error en la respuesta. */
+    private boolean autorizar(HttpServletRequest reqt, HttpServletResponse resp) throws IOException {
+        // Se compara la vista ya decodificada y normalizada, no la URI cruda: con la URI
+        // cruda y contains(), rutas como "/serv/%72nGcUsuariosTbl/", "/serv//rnGc..." o
+        // ".../List.xhtml;/login.xhtml" abrían pantallas de admin (o sin sesión).
+        String vista = vistaNormalizada(reqt);
+
+        if (!"/faces".equals(reqt.getServletPath())) {
+            // Sin el FacesServlet, el servidor regresaba el .xhtml tal cual (código fuente de
+            // las vistas, incluso de login y public/). Se compara en minúsculas: en Windows
+            // "List.XHTML" también lo sirve.
+            if (vista.endsWith(".xhtml")) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return false;
+            }
+            return true;
+        }
+
+        if (vista.equals("/login.xhtml")
+                        || vista.startsWith("/public/")
+                        || vista.startsWith("/javax.faces.resource/")) {
+            return true;
+        }
+
+        HttpSession ses = reqt.getSession(false);
+        boolean logueado = ses != null && ses.getAttribute("username") != null;
+        if (!logueado) {
+            resp.sendRedirect(reqt.getContextPath() + "/faces/login.xhtml");
+            return false;
+        }
+
+        if (esRutaSoloAdmin(vista) && !esExcepcion(vista)
+                        && !UsuarioFirmado.esAdministrador(ses.getAttribute("listaPerfiles"))) {
+            resp.sendRedirect(reqt.getContextPath() + "/faces/admin.xhtml");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Ruta de la vista dentro de la aplicación, sin "/faces", sin parámetros de ruta (";..."),
+     * sin "//", "." ni "..", y en minúsculas (en Windows el sistema de archivos no distingue
+     * mayúsculas). getServletPath() y getPathInfo() ya vienen decodificados por el contenedor.
+     */
+    static String vistaNormalizada(HttpServletRequest reqt) {
+        String ruta = (reqt.getServletPath() == null ? "" : reqt.getServletPath())
+                + (reqt.getPathInfo() == null ? "" : reqt.getPathInfo());
+        Deque<String> partes = new ArrayDeque<>();
+        for (String parte : ruta.replace('\\', '/').split("/")) {
+            int puntoYComa = parte.indexOf(';');
+            if (puntoYComa >= 0) {
+                parte = parte.substring(0, puntoYComa);
+            }
+            if (parte.isEmpty() || parte.equals(".")) {
+                continue;
+            }
+            if (parte.equals("..")) {
+                partes.pollLast();
+                continue;
+            }
+            partes.addLast(parte);
+        }
+        String vista = ("/" + String.join("/", partes)).toLowerCase(Locale.ROOT);
+        // Mojarra quita el prefijo repetido ("/faces/faces/serv/...") y sirve la vista igual,
+        // así que aquí también se quita todas las veces que aparezca.
+        while (vista.startsWith("/faces/")) {
+            vista = vista.substring("/faces".length());
+        }
+        return vista;
+    }
+
+    private boolean esRutaSoloAdmin(String vista) {
         for (String ruta : RUTAS_SOLO_ADMIN) {
-            if (reqURI.contains(ruta)) {
+            if (vista.startsWith(ruta.toLowerCase(Locale.ROOT))) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean esExcepcion(String reqURI) {
-        // Se quitan los parámetros de ruta (";jsessionid=..." u otros) y se exige que la
-        // URI TERMINE en la pantalla exceptuada; con contains() bastaba con agregar
-        // ";x=/ruta/exceptuada.xhtml" a cualquier pantalla de admin para saltar el filtro.
-        int puntoYComa = reqURI.indexOf(';');
-        String ruta = puntoYComa >= 0 ? reqURI.substring(0, puntoYComa) : reqURI;
+    private boolean esExcepcion(String vista) {
         for (String excepcion : EXCEPCIONES) {
-            if (ruta.endsWith(excepcion)) {
+            if (vista.equals(excepcion.toLowerCase(Locale.ROOT))) {
                 return true;
             }
         }
         return false;
-    }
-
-    private boolean esAdministrador(HttpSession ses) {
-        Object listaPerfiles = ses.getAttribute("listaPerfiles");
-        return listaPerfiles != null && String.valueOf(listaPerfiles).contains("ADMINISTRADOR");
     }
 
     @Override

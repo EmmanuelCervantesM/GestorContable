@@ -374,7 +374,7 @@ public class MenuView {
         usuarioId = usuarioFacade.obtenerUsuarioPorId(usuarioFirmado.obtenerIdUsuario());
         listaPerfilesUsuario = usuarioPerfilFacade.obtenerPerfilesPorUsuario(usuarioId);
         for (int i = 0; i < listaPerfilesUsuario.size(); i++) {
-            if (listaPerfilesUsuario.get(i).getFechaFinal() == null || validarFecha(listaPerfilesUsuario.get(i).getFechaFinal()) >= 0) {
+            if (mx.com.rocketnegocios.util.UsuarioFirmado.perfilVigente(listaPerfilesUsuario.get(i).getFechaFinal())) {
                                 RnGcUsuariosPerfilesTbl up = listaPerfilesUsuario.get(i);
                 System.out.println("DEBUG menu -> up: " + up + " | perfilesId: " + up.getPerfilesId());
                 if (up.getPerfilesId() != null) {
