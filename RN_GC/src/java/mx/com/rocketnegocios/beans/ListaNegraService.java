@@ -53,6 +53,7 @@ public class ListaNegraService {
 
         private int nuevos;
         private int actualizados;
+        private int sinCambios;
         private int cambiosEstado;
         private int bajas;
         private int avisos;
@@ -63,6 +64,10 @@ public class ListaNegraService {
 
         public int getActualizados() {
             return actualizados;
+        }
+
+        public int getSinCambios() {
+            return sinCambios;
         }
 
         public int getCambiosEstado() {
@@ -124,8 +129,10 @@ public class ListaNegraService {
     // ------------------------------------------------------------------ carga
 
     /**
-     * Carga una lista dejando un registro vigente por RFC: los registros que ya existían en
-     * la misma lista se actualizan, los RFC nuevos se insertan y, si {@code listadoCompleto}
+     * Carga una lista dejando un registro vigente por RFC: los RFC nuevos se insertan, los que
+     * ya existían en la misma lista se actualizan solo si cambió algún dato (los que vienen
+     * igual no se tocan y se quedan en la publicación donde entraron o cambiaron por última
+     * vez; si la carga no trae nada nuevo ni cambiado, no se crea publicación) y, si {@code listadoCompleto}
      * (un CSV completo del SAT), los RFC que ya no vienen en el archivo se inactivan. Cada
      * entrada, cambio de estado o salida genera un aviso para los usuarios que tienen ese RFC
      * como cliente o proveedor.
@@ -174,6 +181,8 @@ public class ListaNegraService {
                 em.persist(fila);
                 resumen.nuevos++;
                 cambios.add(new Cambio(rfc, null, fila.getSituacionContribuyente()));
+            } else if (mismosDatos(fila, actual)) {
+                resumen.sinCambios++;
             } else {
                 String anterior = actual.getSituacionContribuyente();
                 copiarDatos(fila, actual);
@@ -198,6 +207,9 @@ public class ListaNegraService {
                     resumen.bajas++;
                 }
             }
+        }
+        if (resumen.nuevos == 0 && resumen.actualizados == 0) {
+            em.remove(cabecera); // ningún registro apunta a ella
         }
         em.flush();
         resumen.avisos = generarAvisos(tipo, cambios, ahora);
@@ -443,6 +455,42 @@ public class ListaNegraService {
         ln.setEstado("I");
         ln.setUltimaActualizacionPor(idUsuario);
         ln.setUltimaFechaActualizacion(ahora);
+    }
+
+    /**
+     * true si la fila del archivo trae los mismos datos que el registro guardado. Compara los
+     * mismos campos que {@link #copiarDatos}; si se agrega uno allá, hay que agregarlo aquí.
+     */
+    static boolean mismosDatos(RnGcListaNegraTbl de, RnGcListaNegraTbl a) {
+        return igual(de.getRfc(), a.getRfc())
+                && igual(de.getNombreContribuyente(), a.getNombreContribuyente())
+                && igual(de.getSituacionContribuyente(), a.getSituacionContribuyente())
+                && igual(de.getNumeroFechaOficioGlobalPresuncionSAT(), a.getNumeroFechaOficioGlobalPresuncionSAT())
+                && igual(de.getPublicacionSATpresuntos(), a.getPublicacionSATpresuntos())
+                && igual(de.getNumeroFechaOficioGlobalPresuncionDOF(), a.getNumeroFechaOficioGlobalPresuncionDOF())
+                && igual(de.getPublicacionDOFpresuntos(), a.getPublicacionDOFpresuntos())
+                && igual(de.getNumeroFechaOficioGlobalDesvirtuadoSAT(), a.getNumeroFechaOficioGlobalDesvirtuadoSAT())
+                && igual(de.getPublicacionSATdesvirtuados(), a.getPublicacionSATdesvirtuados())
+                && igual(de.getNumeroFechaOficioGlobalDesvirtuadoDOF(), a.getNumeroFechaOficioGlobalDesvirtuadoDOF())
+                && igual(de.getPublicacionDOFdesvirtuados(), a.getPublicacionDOFdesvirtuados())
+                && igual(de.getNumeroFechaOficioGlobalDefinitivoSAT(), a.getNumeroFechaOficioGlobalDefinitivoSAT())
+                && igual(de.getPublicacionSATdefinitivos(), a.getPublicacionSATdefinitivos())
+                && igual(de.getNumeroFechaOficioGlobalDefinitivoDOF(), a.getNumeroFechaOficioGlobalDefinitivoDOF())
+                && igual(de.getPublicacionDOFdefinitivos(), a.getPublicacionDOFdefinitivos())
+                && igual(de.getNumeroFechaOficioGlobalSentenciaSAT(), a.getNumeroFechaOficioGlobalSentenciaSAT())
+                && igual(de.getPublicacionSATsentencia(), a.getPublicacionSATsentencia())
+                && igual(de.getNumeroFechaOficioGlobalSentenciaDOF(), a.getNumeroFechaOficioGlobalSentenciaDOF())
+                && igual(de.getPublicacionDOFsentencia(), a.getPublicacionDOFsentencia())
+                && igual(de.getOficioResolucion(), a.getOficioResolucion())
+                && igual(de.getNotificacionBuzon(), a.getNotificacionBuzon())
+                && igual(de.getNotificacionEstrados(), a.getNotificacionEstrados());
+    }
+
+    /** Compara sin distinguir null de vacío ni espacios al inicio o al final. */
+    private static boolean igual(String x, String y) {
+        String a = x == null ? "" : x.trim();
+        String b = y == null ? "" : y.trim();
+        return a.equals(b);
     }
 
     private static void copiarDatos(RnGcListaNegraTbl de, RnGcListaNegraTbl a) {

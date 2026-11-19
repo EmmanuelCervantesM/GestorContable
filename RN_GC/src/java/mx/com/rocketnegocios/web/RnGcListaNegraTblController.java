@@ -402,7 +402,8 @@ public class RnGcListaNegraTblController implements Serializable {
         coincidenciasUsuario = null;
         avisos = null;
         JsfUtil.addSuccessMessage("Lista " + tipo.getEtiqueta() + " cargada: " + lectura.getFilas().size() + " RFC ("
-                + r.getNuevos() + " nuevos, " + r.getActualizados() + " actualizados, " + r.getCambiosEstado()
+                + r.getNuevos() + " nuevos, " + r.getActualizados() + " actualizados, " + r.getSinCambios()
+                + " sin cambios, " + r.getCambiosEstado()
                 + " con cambio de estado, " + r.getBajas() + " ya no aparecen). Avisos generados: " + r.getAvisos() + ".");
         if (!lectura.getErrores().isEmpty()) {
             JsfUtil.addWarningMessage(lectura.getErrores().size() + " registros del archivo no se cargaron. "

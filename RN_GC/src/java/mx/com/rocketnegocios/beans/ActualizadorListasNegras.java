@@ -127,7 +127,8 @@ public class ActualizadorListasNegras {
                     "SAT " + tipo.getEtiqueta() + " " + publicado, fechaPublicacion, true);
             servicio.registrarRevision(fuente, null, RnGcListaNegraRevisionTbl.OK, cab.getEtag(),
                     "Cargado el archivo publicado el " + publicado + ": " + lectura.getFilas().size() + " RFC ("
-                    + r.getNuevos() + " nuevos, " + r.getCambiosEstado() + " con cambio de estado, " + r.getBajas()
+                    + r.getNuevos() + " nuevos, " + r.getActualizados() + " actualizados, " + r.getSinCambios()
+                    + " sin cambios, " + r.getCambiosEstado() + " con cambio de estado, " + r.getBajas()
                     + " ya no aparecen). " + lectura.getErrores().size() + " registros con error. Avisos: " + r.getAvisos() + ".");
         } catch (Exception ex) {
             LOG.log(Level.WARNING, "CTR-12: falló la revisión del CSV " + tipo.getEtiqueta(), ex);
